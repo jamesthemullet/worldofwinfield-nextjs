@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import styled from "@emotion/styled";
 
 interface Props {
   title: string;
@@ -14,17 +15,17 @@ interface Props {
 export default function CoverImage({ title, coverImage, slug }: Props) {
   const image = (
     <Image
-      width={2000}
-      height={1000}
       alt={`Cover Image for ${title}`}
       src={coverImage?.node.sourceUrl}
+      fill={true}
+      sizes='(max-width: 400px) 100vw, 400px'
     />
   );
   return (
     <div>
       {slug ? (
         <Link href={`/posts/${slug}`} aria-label={title}>
-          {image}
+          <StyledSpan>{image}</StyledSpan>
         </Link>
       ) : (
         image
@@ -32,3 +33,9 @@ export default function CoverImage({ title, coverImage, slug }: Props) {
     </div>
   );
 }
+
+const StyledSpan = styled.span`
+  border-radius: 5px;
+  position: relative;
+  display: block;
+`;

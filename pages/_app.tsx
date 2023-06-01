@@ -1,7 +1,13 @@
 import { AppProps } from "next/app";
+import Nav from "../components/nav";
 
 function MyApp({ Component, pageProps }: AppProps) {
-  return <Component {...pageProps} />;
+  return (
+    <>
+      <Nav />
+      <Component {...pageProps} />
+    </>
+  );
 }
 
 export default MyApp;
