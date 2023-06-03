@@ -1,6 +1,6 @@
-import { AppProps } from "next/app";
-import Nav from "../components/nav";
-import { Global } from "@emotion/react";
+import { AppProps } from 'next/app';
+import Nav from '../components/nav';
+import { Global } from '@emotion/react';
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (

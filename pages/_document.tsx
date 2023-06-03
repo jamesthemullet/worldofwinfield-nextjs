@@ -1,10 +1,10 @@
-import { Html, Head, Main, NextScript } from "next/document";
-import { Global, css } from "@emotion/react";
-import styled from "@emotion/styled";
+import { Html, Head, Main, NextScript } from 'next/document';
+import { Global, css } from '@emotion/react';
+import styled from '@emotion/styled';
 
 export default function Document() {
   return (
-    <Html lang='en'>
+    <Html lang="en">
       <Head />
       <StyledBody>
         <Main />

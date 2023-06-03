@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import Link from "next/link";
-import styled from "@emotion/styled";
+import React, { useState } from 'react';
+import Link from 'next/link';
+import styled from '@emotion/styled';
 
 export default function Nav() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -16,21 +16,21 @@ export default function Nav() {
         <span></span>
         <span></span>
       </BurgerButton>
-      <ul className={isDropdownOpen ? "open" : ""}>
+      <ul className={isDropdownOpen ? 'open' : ''}>
         <li>
-          <Link href='/'>Home</Link>
+          <Link href="/">Home</Link>
         </li>
         <li>
-          <Link href='/roasts'>Roasts</Link>
+          <Link href="/roasts">Roasts</Link>
         </li>
         <li>
-          <Link href='/music'>Music</Link>
+          <Link href="/music">Music</Link>
         </li>
         <li>
-          <Link href='/travel'>Travel</Link>
+          <Link href="/travel">Travel</Link>
         </li>
         <li>
-          <Link href='/sites'>Sites</Link>
+          <Link href="/sites">Sites</Link>
         </li>
       </ul>
     </StyledNav>
@@ -41,7 +41,7 @@ const StyledNav = styled.nav`
   background-color: #333;
   color: #fff;
   padding: 1rem;
-  font-family: "LovedByTheKing";
+  font-family: 'LovedByTheKing';
   font-weight: 600;
   letter-spacing: 2px;
   ul {
