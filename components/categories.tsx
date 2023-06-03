@@ -3,9 +3,7 @@ export default function Categories({ categories }) {
     <span>
       under
       {categories.edges.length > 0 ? (
-        categories.edges.map((category, index) => (
-          <span key={index}>{category.node.name}</span>
-        ))
+        categories.edges.map((category, index) => <span key={index}>{category.node.name}</span>)
       ) : (
         <span>{categories.edges.node.name}</span>
       )}

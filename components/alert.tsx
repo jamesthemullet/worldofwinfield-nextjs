@@ -1,5 +1,5 @@
-import Container from "./container";
-import { EXAMPLE_PATH } from "../lib/constants";
+import Container from './container';
+import { EXAMPLE_PATH } from '../lib/constants';
 
 export default function Alert({ preview }) {
   return (
@@ -8,8 +8,8 @@ export default function Alert({ preview }) {
         <div>
           {preview ? (
             <>
-              This is a page preview. <a href='/api/exit-preview'>Click here</a>{" "}
-              to exit preview mode.
+              This is a page preview. <a href="/api/exit-preview">Click here</a> to exit preview
+              mode.
             </>
           ) : (
             <></>
