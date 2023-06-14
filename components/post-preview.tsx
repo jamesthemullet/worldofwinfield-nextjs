@@ -2,8 +2,16 @@ import Avatar from './avatar';
 import Date from './date';
 import CoverImage from './cover-image';
 import Link from 'next/link';
+import { PostPreviewProps } from '../lib/types';
 
-export default function PostPreview({ title, coverImage, date, excerpt, author, slug }) {
+export default function PostPreview({
+  title,
+  coverImage,
+  date,
+  excerpt,
+  author,
+  slug,
+}: PostPreviewProps) {
   return (
     <div>
       <div>{coverImage && <CoverImage title={title} coverImage={coverImage} slug={slug} />}</div>

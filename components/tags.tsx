@@ -1,4 +1,6 @@
-export default function Tags({ tags }) {
+import { TagsProps } from '../lib/types';
+
+export default function Tags({ tags }: TagsProps) {
   return (
     <div>
       <p>

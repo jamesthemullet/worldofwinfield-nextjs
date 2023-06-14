@@ -2,8 +2,16 @@ import Avatar from './avatar';
 import Date from './date';
 import CoverImage from './cover-image';
 import Link from 'next/link';
+import { HeroPostProps } from '../lib/types';
 
-export default function HeroPost({ title, coverImage, date, excerpt, author, slug }) {
+export default function HeroPost({
+  title,
+  coverImage,
+  date,
+  excerpt,
+  author,
+  slug,
+}: HeroPostProps) {
   return (
     <section>
       <div>{coverImage && <CoverImage title={title} coverImage={coverImage} slug={slug} />}</div>
