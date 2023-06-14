@@ -118,21 +118,7 @@ export type PostBodyProps = {
 };
 
 export type MoreStoriesProps = {
-  posts: {
-    node: {
-      slug: string;
-      title: string;
-      featuredImage: {
-        node: {
-          sourceUrl: string;
-        };
-      };
-      date: string;
-      author: AuthorProps;
-      content: string;
-      excerpt: string;
-    };
-  }[];
+  posts: string;
 };
 
 export type LayoutProps = {
