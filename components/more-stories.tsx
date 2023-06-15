@@ -1,6 +1,7 @@
 import PostPreview from './post-preview';
+import { MoreStoriesProps } from '../lib/types';
 
-export default function MoreStories({ posts }) {
+export default function MoreStories({ posts }: MoreStoriesProps) {
   return (
     <section>
       <h2>More Stories</h2>

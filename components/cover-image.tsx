@@ -1,6 +1,6 @@
-import Image from "next/image";
-import Link from "next/link";
-import styled from "@emotion/styled";
+import Image from 'next/image';
+import Link from 'next/link';
+import styled from '@emotion/styled';
 
 interface Props {
   title: string;
@@ -18,7 +18,7 @@ export default function CoverImage({ title, coverImage, slug }: Props) {
       alt={`Cover Image for ${title}`}
       src={coverImage?.node.sourceUrl}
       fill={true}
-      sizes='(max-width: 400px) 100vw, 400px'
+      sizes="(max-width: 400px) 100vw, 400px"
     />
   );
   return (

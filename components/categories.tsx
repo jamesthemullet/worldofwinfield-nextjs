@@ -1,11 +1,13 @@
-export default function Categories({ categories }) {
+import { CategoriesProps } from '../lib/types';
+
+export default function Categories({ categories }: CategoriesProps) {
   return (
     <span>
       under
-      {categories.edges.length > 0 ? (
+      {Array.isArray(categories?.edges) ? (
         categories.edges.map((category, index) => <span key={index}>{category.node.name}</span>)
       ) : (
-        <span>{categories.edges.node.name}</span>
+        <span>{categories?.edges.node.name}</span>
       )}
     </span>
   );
