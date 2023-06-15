@@ -26,7 +26,21 @@ export type PostProps = {
     };
   };
   posts: {
-    edges: string;
+    edges: {
+      node: {
+        slug: string;
+        title: string;
+        featuredImage: {
+          node: {
+            sourceUrl: string;
+          };
+        };
+        date: string;
+        author: AuthorProps;
+        content: string;
+        excerpt: string;
+      };
+    }[];
   };
   preview: string;
 };
@@ -118,7 +132,21 @@ export type PostBodyProps = {
 };
 
 export type MoreStoriesProps = {
-  posts: string;
+  posts: {
+    node: {
+      slug: string;
+      title: string;
+      featuredImage: {
+        node: {
+          sourceUrl: string;
+        };
+      };
+      date: string;
+      author: AuthorProps;
+      content: string;
+      excerpt: string;
+    };
+  }[];
 };
 
 export type LayoutProps = {
