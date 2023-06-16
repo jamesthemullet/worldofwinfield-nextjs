@@ -13,6 +13,7 @@ jobs:
         with:
           vercel-token: ${{ secrets.WOW_VERCEL_TOKEN }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
+          vercel-org-id: ${{ secrets.ORG_ID}}
           vercel-project-id: ${{ secrets.WOW_PROJECT_ID}}
       - name: Audit URLs using Lighthouse
         id: lighthouse_audit
