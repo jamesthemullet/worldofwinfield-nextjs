@@ -7,35 +7,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Set up secret file
-        env:
-          DEBUG_PASSWORD: ${{ secrets.WOW_VERCEL_TOKEN }}
-        run: |
-          echo $DEBUG_PASSWORD >> secrets.txt
-      - name: Set env as secret
-        env:
-          MY_VAL: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          import os
-          for q in (os.getenv("MY_VAL")):
-            print(q)
-        shell: python
-      - name: Set env as secret2
-        env:
-          MY_VAL: ${{ secrets.ORG_ID }}
-        run: |
-          import os
-          for q in (os.getenv("MY_VAL")):
-            print(q)
-        shell: python
-      - name: Set env as secret3
-        env:
-          MY_VAL: ${{ secrets.WOW_PROJECT_ID }}
-        run: |
-          import os
-          for q in (os.getenv("MY_VAL")):
-            print(q)
-        shell: python
       - name: Vercel Action
         id: vercel_action
         uses: amondnet/vercel-action@v20
