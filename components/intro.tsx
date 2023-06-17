@@ -8,6 +8,7 @@ const blockColours = [colours.orange, colours.pink, colours.green];
 export default function Intro() {
   return (
     <section>
+      <HiddenHeading>World Of Winfield</HiddenHeading>
       <GridContainer>
         {Array.from('WORLD OFWINFIELD').map((letter, index) => (
           <Block key={index} color={blockColours[getColour(index)]}>
@@ -18,6 +19,12 @@ export default function Intro() {
     </section>
   );
 }
+
+const HiddenHeading = styled.h1`
+  position: absolute;
+  top: -9999px;
+  left: -9999px;
+`;
 
 const GridContainer = styled.div`
   display: grid;
