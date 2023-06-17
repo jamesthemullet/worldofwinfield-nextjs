@@ -17,10 +17,10 @@ jobs:
         id: vercel_action
         uses: amondnet/vercel-action@v20
         with:
-          vercel-token: ${{ env.WOW_VERCEL_TOKEN_DEBUG }}
-          github-token: ${{ env.GITHUB_TOKEN_DEBUG }}
-          vercel-org-id: ${{ env.ORG_ID_DEBUG }}
-          vercel-project-id: ${{ env.WOW_PROJECT_ID_DEBUG }}
+          vercel-token: ${{ env.WOW_VERCEL_TOKEN }}
+          github-token: ${{ env.GITHUB_TOKEN }}
+          vercel-org-id: ${{ env.ORG_ID }}
+          vercel-project-id: ${{ env.WOW_PROJECT_ID }}
       - name: Audit URLs using Lighthouse
         id: lighthouse_audit
         uses: treosh/lighthouse-ci-action@v9
