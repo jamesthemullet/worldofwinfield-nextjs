@@ -1,20 +1,20 @@
 @font-face {
-  font-family: "Karantina";
-  src: url("/fonts/Karantina-Regular.ttf") format("truetype");
+  font-family: 'Karantina';
+  src: url('/fonts/Karantina-Regular.ttf') format('truetype');
 }
 @font-face {
-  font-family: "LovedByTheKing";
-  src: url("/fonts/LovedByTheKing-Regular.ttf") format("truetype");
+  font-family: 'LovedByTheKing';
+  src: url('/fonts/LovedByTheKing-Regular.ttf') format('truetype');
 }
 @font-face {
-  font-family: "Londrina";
-  src: url("/fonts/LondrinaShadow-Regular.ttf") format("truetype");
+  font-family: 'Londrina';
+  src: url('/fonts/LondrinaShadow-Regular.ttf') format('truetype');
 }
 @font-face {
-  font-family: "Mogra";
-  src: url("/fonts/Mogra-Regular.ttf") format("truetype");
+  font-family: 'Mogra';
+  src: url('/fonts/Mogra-Regular.ttf') format('truetype');
 }
 @font-face {
-  font-family: "RampartOne";
-  src: url("/fonts/RampartOne-Regular.ttf") format("truetype");
+  font-family: 'RampartOne';
+  src: url('/fonts/RampartOne-Regular.ttf') format('truetype');
 }

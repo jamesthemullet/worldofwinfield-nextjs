@@ -41,8 +41,7 @@ const StyledNav = styled.nav`
   background-color: #333;
   color: #fff;
   padding: 1rem;
-  font-family: 'LovedByTheKing';
-  font-weight: 600;
+  font-family: 'Oswald', sans-serif;
   letter-spacing: 2px;
   ul {
     display: flex;
