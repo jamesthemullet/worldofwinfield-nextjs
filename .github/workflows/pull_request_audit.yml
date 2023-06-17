@@ -7,18 +7,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Set Environment Variables
+      - name: Debug Secrets
         run: |
-          echo "WOW_VERCEL_TOKEN_DEBUG=${{ secrets.WOW_VERCEL_TOKEN }}" >> $GITHUB_ENV
-          echo "GITHUB_TOKEN_DEBUG=${{ secrets.GITHUB_TOKEN }}" >> $GITHUB_ENV
-          echo "ORG_ID_DEBUG=${{ secrets.ORG_ID }}" >> $GITHUB_ENV
-          echo "WOW_PROJECT_ID_DEBUG=${{ secrets.WOW_PROJECT_ID }}" >> $GITHUB_ENV
-      - name: Echo Tokens
-        run: |
-          echo "WOW_VERCEL_TOKEN: $WOW_VERCEL_TOKEN_DEBUG"
-          echo "GITHUB_TOKEN: $GITHUB_TOKEN_DEBUG"
-          echo "ORG_ID: $ORG_ID_DEBUG"
-          echo "WOW_PROJECT_ID: $WOW_PROJECT_ID_DEBUG"
+          echo "WOW_VERCEL_TOKEN: ${{ secrets.WOW_VERCEL_TOKEN }}"
+          echo "GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}"
+          echo "ORG_ID: ${{ secrets.ORG_ID }}"
+          echo "WOW_PROJECT_ID: ${{ secrets.WOW_PROJECT_ID }}"
       - name: Vercel Action
         id: vercel_action
         uses: amondnet/vercel-action@v20
