@@ -12,6 +12,14 @@ jobs:
           DEBUG_PASSWORD: ${{ secrets.WOW_VERCEL_TOKEN }}
         run: |
           echo $DEBUG_PASSWORD >> secrets.txt
+      - name: Set env as secret
+        env:
+          MY_VAL: ${{ secrets.WOW_VERCEL_TOKEN }}
+        run: |
+          import os
+          for q in (os.getenv("MY_VAL")):
+            print(q)
+        shell: python
       - name: Vercel Action
         id: vercel_action
         uses: amondnet/vercel-action@v20
