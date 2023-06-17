@@ -1,5 +1,3 @@
-env:
-  ACTIONS_STEP_DEBUG: true
 name: CI Tests For World Of Winfield
 on:
   pull_request:
@@ -7,22 +5,27 @@ on:
 jobs:
   lighthouse:
     runs-on: ubuntu-latest
+    env:
+      WOW_VERCEL_TOKEN_DEBUG: ${{ secrets.WOW_VERCEL_TOKEN }}
+      GITHUB_TOKEN_DEBUG: ${{ secrets.GITHUB_TOKEN }}
+      ORG_ID_DEBUG: ${{ secrets.ORG_ID }}
+      WOW_PROJECT_ID_DEBUG: ${{ secrets.WOW_PROJECT_ID }}
     steps:
       - uses: actions/checkout@v2
       - name: Echo Tokens
         run: |
-          echo "WOW_VERCEL_TOKEN: ${{ secrets.WOW_VERCEL_TOKEN }}"
-          echo "GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}"
-          echo "ORG_ID: ${{ secrets.ORG_ID }}"
-          echo "WOW_PROJECT_ID: ${{ secrets.WOW_PROJECT_ID }}"
+          echo "WOW_VERCEL_TOKEN: $WOW_VERCEL_TOKEN_DEBUG"
+          echo "GITHUB_TOKEN: $GITHUB_TOKEN_DEBUG"
+          echo "ORG_ID: $ORG_ID_DEBUG"
+          echo "WOW_PROJECT_ID: $WOW_PROJECT_ID_DEBUG"
       - name: Vercel Action
         id: vercel_action
         uses: amondnet/vercel-action@v20
         with:
-          vercel-token: ${{ secrets.WOW_VERCEL_TOKEN }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          vercel-org-id: ${{ secrets.ORG_ID}}
-          vercel-project-id: ${{ secrets.WOW_PROJECT_ID}}
+          vercel-token: ${{ env.WOW_VERCEL_TOKEN_DEBUG }}
+          github-token: ${{ env.GITHUB_TOKEN_DEBUG }}
+          vercel-org-id: ${{ env.ORG_ID_DEBUG }}
+          vercel-project-id: ${{ env.WOW_PROJECT_ID_DEBUG }}
       - name: Audit URLs using Lighthouse
         id: lighthouse_audit
         uses: treosh/lighthouse-ci-action@v9
