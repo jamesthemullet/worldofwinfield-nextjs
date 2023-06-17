@@ -17,9 +17,9 @@ export default function HeroPost({
       <div>{coverImage && <CoverImage title={title} coverImage={coverImage} slug={slug} />}</div>
       <div>
         <div>
-          <h3>
+          <h2>
             <Link href={`/posts/${slug}`} dangerouslySetInnerHTML={{ __html: title }}></Link>
-          </h3>
+          </h2>
           <div>
             <Date dateString={date} />
           </div>
