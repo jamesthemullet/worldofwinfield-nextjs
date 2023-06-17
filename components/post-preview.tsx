@@ -15,9 +15,9 @@ export default function PostPreview({
   return (
     <div>
       <div>{coverImage && <CoverImage title={title} coverImage={coverImage} slug={slug} />}</div>
-      <h3>
+      <h2>
         <Link href={`/posts/${slug}`} dangerouslySetInnerHTML={{ __html: title }}></Link>
-      </h3>
+      </h2>
       <div>
         <Date dateString={date} />
       </div>
