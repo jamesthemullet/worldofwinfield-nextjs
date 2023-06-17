@@ -1,3 +1,5 @@
+env:
+  ACTIONS_STEP_DEBUG: true
 name: CI Tests For World Of Winfield
 on:
   pull_request:
@@ -7,6 +9,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - name: Echo Tokens
+        run: |
+          echo "WOW_VERCEL_TOKEN: ${{ secrets.WOW_VERCEL_TOKEN }}"
+          echo "GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}"
+          echo "ORG_ID: ${{ secrets.ORG_ID }}"
+          echo "WOW_PROJECT_ID: ${{ secrets.WOW_PROJECT_ID }}"
       - name: Vercel Action
         id: vercel_action
         uses: amondnet/vercel-action@v20
