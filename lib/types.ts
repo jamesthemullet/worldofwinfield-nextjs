@@ -61,6 +61,22 @@ export type AvatarProps = {
   author: AuthorProps;
 };
 
+export type IntroProps = {
+  jamesImages: {
+    edges: {
+      nodes: {
+        title: string;
+        featuredImage: {
+          node: {
+            id: string;
+            uri: string;
+          };
+        };
+      }[];
+    }[];
+  };
+};
+
 export type IndexPageProps = {
   allPosts: {
     edges: {
@@ -80,6 +96,19 @@ export type IndexPageProps = {
     }[];
   };
   preview: string;
+  jamesImages: {
+    edges: {
+      nodes: {
+        title: string;
+        featuredImage: {
+          node: {
+            id: string;
+            uri: string;
+          };
+        };
+      }[];
+    }[];
+  };
 };
 
 export type TagsProps = {

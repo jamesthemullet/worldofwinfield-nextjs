@@ -57,6 +57,46 @@ export async function getAllPostsWithSlug() {
   return data?.posts;
 }
 
+export async function getJamesImages({ first = 10, after = null }) {
+  const data = await fetchAPI(
+    `
+    query JamesImages($first: Int, $after: String) {
+      jamesImages(first: $first, after: $after) {
+        edges {
+          node {
+            title
+            featuredImage {
+              node {
+                id
+                title
+                mediaDetails {
+                  sizes {
+                    sourceUrl
+                    height
+                    width
+                  }
+                }
+              }
+            }
+          }
+        }
+        pageInfo {
+          hasNextPage
+          endCursor
+        }
+      }
+    }
+  `,
+    {
+      variables: {
+        first,
+        after,
+      },
+    }
+  );
+  return data.jamesImages;
+}
+
 export async function getAllPostsForHome(preview) {
   const data = await fetchAPI(
     `
