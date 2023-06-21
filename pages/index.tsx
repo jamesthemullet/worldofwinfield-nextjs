@@ -5,10 +5,10 @@ import MoreStories from '../components/more-stories';
 import HeroPost from '../components/hero-post';
 import Intro from '../components/intro';
 import Layout from '../components/layout';
-import { getAllPostsForHome } from '../lib/api';
+import { getAllPostsForHome, getJamesImages } from '../lib/api';
 import { IndexPageProps } from '../lib/types';
 
-export default function Index({ allPosts: { edges }, preview }: IndexPageProps) {
+export default function Index({ allPosts: { edges }, preview, jamesImages }: IndexPageProps) {
   const heroPost = edges[0]?.node;
   const morePosts = edges.slice(1);
 
@@ -58,7 +58,7 @@ export default function Index({ allPosts: { edges }, preview }: IndexPageProps) 
           rel="stylesheet"
         />
       </Head>
-      <Intro />
+      <Intro jamesImages={jamesImages} />
       <Container>
         {heroPost && (
           <HeroPost
@@ -78,9 +78,10 @@ export default function Index({ allPosts: { edges }, preview }: IndexPageProps) 
 
 export const getStaticProps: GetStaticProps = async ({ preview = false }) => {
   const allPosts = await getAllPostsForHome(preview);
+  const jamesImages = await getJamesImages({ first: 20 });
 
   return {
-    props: { allPosts, preview },
+    props: { allPosts, preview, jamesImages },
     revalidate: 10,
   };
 };

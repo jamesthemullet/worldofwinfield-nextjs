@@ -61,6 +61,30 @@ export type AvatarProps = {
   author: AuthorProps;
 };
 
+export type IntroProps = {
+  jamesImages: {
+    edges: {
+      node: {
+        title: string;
+        featuredImage: {
+          node: {
+            id: string;
+            uri: string;
+            mediaDetails: {
+              height: number;
+              width: number;
+              sizes: {
+                name: string;
+                sourceUrl: string;
+              }[];
+            };
+          };
+        };
+      };
+    }[];
+  };
+};
+
 export type IndexPageProps = {
   allPosts: {
     edges: {
@@ -80,6 +104,27 @@ export type IndexPageProps = {
     }[];
   };
   preview: string;
+  jamesImages: {
+    edges: {
+      node: {
+        title: string;
+        featuredImage: {
+          node: {
+            id: string;
+            uri: string;
+            mediaDetails: {
+              height: number;
+              width: number;
+              sizes: {
+                name: string;
+                sourceUrl: string;
+              }[];
+            };
+          };
+        };
+      };
+    }[];
+  };
 };
 
 export type TagsProps = {
