@@ -64,15 +64,23 @@ export type AvatarProps = {
 export type IntroProps = {
   jamesImages: {
     edges: {
-      nodes: {
+      node: {
         title: string;
         featuredImage: {
           node: {
             id: string;
             uri: string;
+            mediaDetails: {
+              height: number;
+              width: number;
+              sizes: {
+                name: string;
+                sourceUrl: string;
+              }[];
+            };
           };
         };
-      }[];
+      };
     }[];
   };
 };
@@ -98,15 +106,23 @@ export type IndexPageProps = {
   preview: string;
   jamesImages: {
     edges: {
-      nodes: {
+      node: {
         title: string;
         featuredImage: {
           node: {
             id: string;
             uri: string;
+            mediaDetails: {
+              height: number;
+              width: number;
+              sizes: {
+                name: string;
+                sourceUrl: string;
+              }[];
+            };
           };
         };
-      }[];
+      };
     }[];
   };
 };

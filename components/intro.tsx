@@ -13,11 +13,19 @@ const blockColours = [colours.orange, colours.pink, colours.green];
 export default function Intro({ jamesImages }: IntroProps) {
   const [hoveredIndex, setHoveredIndex] = useState(-1);
   const [shuffledImages, setShuffledImages] = useState([]);
+  const [imageUrls, setImageUrls] = useState<string[]>([]);
 
   useEffect(() => {
     // Shuffle the jamesImages array randomly
     const shuffledArray = [...jamesImages.edges].sort(() => Math.random() - 0.5);
     setShuffledImages(shuffledArray);
+
+    // Load the image URLs
+    const urls = shuffledArray.map((image) => {
+      const jamesImage = image?.node.featuredImage?.node;
+      return jamesImage?.mediaDetails.sizes[0].sourceUrl || '';
+    });
+    setImageUrls(urls);
   }, [jamesImages]);
 
   const handleBlockHover = (index) => {
@@ -31,6 +39,7 @@ export default function Intro({ jamesImages }: IntroProps) {
         {Array.from('WORLD OFWINFIELD').map((letter, index) => {
           const jamesImage = shuffledImages[index]?.node.featuredImage?.node;
           const jamesAltTag = shuffledImages[index]?.node.title;
+          const imageUrl = imageUrls[index];
 
           return (
             <Block
@@ -41,8 +50,8 @@ export default function Intro({ jamesImages }: IntroProps) {
               <FlipContainer>
                 <Flipper flipped={hoveredIndex === index}>
                   <Front>{letter}</Front>
-                  {jamesImage && (
-                    <Back src={jamesImage.mediaDetails.sizes[0].sourceUrl} alt={jamesAltTag} />
+                  {jamesImage && imageUrl && hoveredIndex === index && (
+                    <Back src={imageUrl} alt={jamesAltTag} />
                   )}
                 </Flipper>
               </FlipContainer>
