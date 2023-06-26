@@ -21,4 +21,9 @@ module.exports = {
     'react/react-in-jsx-scope': 'off',
     'no-console': 1,
   },
+  settings: {
+    react: {
+      version: 'detect',
+    },
+  },
 };
