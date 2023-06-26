@@ -1,6 +1,6 @@
 const API_URL = process.env.WORDPRESS_API_URL;
 
-async function fetchAPI(query = '', { variables }: Record<string, any> = {}) {
+async function fetchAPI(query = '', { variables }: Record<string, unknown> = {}) {
   const headers = { 'Content-Type': 'application/json' };
 
   if (process.env.WORDPRESS_AUTH_REFRESH_TOKEN) {
@@ -19,6 +19,7 @@ async function fetchAPI(query = '', { variables }: Record<string, any> = {}) {
 
   const json = await res.json();
   if (json.errors) {
+    // eslint-disable-next-line no-console
     console.error(json.errors);
     throw new Error('Failed to fetch API');
   }
