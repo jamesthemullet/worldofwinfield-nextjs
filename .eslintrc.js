@@ -2,6 +2,7 @@ module.exports = {
   env: {
     browser: true,
     es2021: true,
+    node: true,
   },
   extends: [
     'eslint:recommended',
@@ -19,5 +20,10 @@ module.exports = {
   rules: {
     'react/react-in-jsx-scope': 'off',
     'no-console': 1,
+  },
+  settings: {
+    react: {
+      version: 'detect',
+    },
   },
 };

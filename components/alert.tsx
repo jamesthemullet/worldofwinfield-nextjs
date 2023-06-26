@@ -1,5 +1,4 @@
 import Container from './container';
-import { EXAMPLE_PATH } from '../lib/constants';
 import { AlertProps } from '../lib/types';
 
 export default function Alert({ preview }: AlertProps) {

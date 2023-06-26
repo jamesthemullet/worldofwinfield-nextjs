@@ -1,4 +1,3 @@
-import styles from './post-body.module.css';
 import { PostBodyProps } from '../lib/types';
 
 export default function PostBody({ content }: PostBodyProps) {

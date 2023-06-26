@@ -9,7 +9,9 @@ export default function Avatar({ author }: AvatarProps) {
 
   return (
     <div>
-      <div>{/* <Image src={author.node.avatar.url} layout='fill' alt={name} /> */}</div>
+      <div>
+        <Image src={author.node.avatar.url} width={100} height={100} alt={name} />
+      </div>
       <div>{name}</div>
     </div>
   );
