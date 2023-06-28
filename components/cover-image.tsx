@@ -13,29 +13,24 @@ interface Props {
 }
 
 export default function CoverImage({ title, coverImage, slug }: Props) {
+  console.log(1, coverImage);
   const image = (
     <Image
       alt={`Cover Image for ${title}`}
       src={coverImage?.node.sourceUrl}
-      fill={true}
-      sizes="(max-width: 400px) 100vw, 400px"
+      sizes={coverImage?.node.mediaDetails.srcset}
+      fill
     />
   );
   return (
-    <div>
+    <>
       {slug ? (
         <Link href={`/posts/${slug}`} aria-label={title}>
-          <StyledSpan>{image}</StyledSpan>
+          {image}
         </Link>
       ) : (
         image
       )}
-    </div>
+    </>
   );
 }
-
-const StyledSpan = styled.span`
-  border-radius: 5px;
-  position: relative;
-  display: block;
-`;

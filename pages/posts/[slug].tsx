@@ -26,7 +26,6 @@ export default function Post({ post, posts, preview }: PostProps) {
   return (
     <Layout preview={preview}>
       <Container>
-        <Header />
         {router.isFallback ? (
           <PostTitle>Loading…</PostTitle>
         ) : (
@@ -48,7 +47,7 @@ export default function Post({ post, posts, preview }: PostProps) {
             </article>
 
             <SectionSeparator />
-            {morePosts.length > 0 && <MoreStories posts={morePosts} />}
+            {/* {morePosts.length > 0 && <MoreStories posts={morePosts} />} */}
           </>
         )}
       </Container>

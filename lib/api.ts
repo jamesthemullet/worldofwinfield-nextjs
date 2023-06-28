@@ -112,6 +112,10 @@ export async function getAllPostsForHome(preview) {
             featuredImage {
               node {
                 sourceUrl
+                mediaDetails {
+                  height
+                  width
+                }
               }
             }
             author {
@@ -164,6 +168,16 @@ export async function getPostAndMorePosts(slug, preview, previewData) {
       date
       featuredImage {
         node {
+          mediaDetails {
+            sizes {
+              height
+              width
+              sourceUrl
+            }
+            height
+            width
+          }
+          srcSet
           sourceUrl
         }
       }
