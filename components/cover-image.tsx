@@ -1,19 +1,23 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import styled from '@emotion/styled';
 
 interface Props {
   title: string;
   coverImage: {
     node: {
       sourceUrl: string;
+      mediaDetails: {
+        width: number;
+        height: number;
+        sizes: string;
+        srcset: string;
+      };
     };
   };
   slug?: string;
 }
 
 export default function CoverImage({ title, coverImage, slug }: Props) {
-  console.log(1, coverImage);
   const image = (
     <Image
       alt={`Cover Image for ${title}`}

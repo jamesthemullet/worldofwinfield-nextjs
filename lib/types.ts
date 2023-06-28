@@ -5,6 +5,12 @@ export type PostProps = {
     featuredImage: {
       node: {
         sourceUrl: string;
+        mediaDetails: {
+          height: number;
+          width: number;
+          sizes: string;
+          srcset: string;
+        };
       };
     };
     date: string;
@@ -33,6 +39,12 @@ export type PostProps = {
         featuredImage: {
           node: {
             sourceUrl: string;
+            mediaDetails: {
+              height: number;
+              width: number;
+              sizes: string;
+              srcset: string;
+            };
           };
         };
         date: string;
@@ -94,6 +106,12 @@ export type IndexPageProps = {
         featuredImage: {
           node: {
             sourceUrl: string;
+            mediaDetails: {
+              height: number;
+              width: number;
+              sizes: string;
+              srcset: string;
+            };
           };
         };
         date: string;
@@ -138,6 +156,7 @@ export type TagsProps = {
 };
 
 export type PostTitleProps = {
+  backgroundColour?: string;
   children: string;
 };
 
@@ -148,6 +167,12 @@ export type PostPreviewProps = {
   coverImage: {
     node: {
       sourceUrl: string;
+      mediaDetails: {
+        height: number;
+        width: number;
+        sizes: string;
+        srcset: string;
+      };
     };
   };
   excerpt: string;
@@ -159,6 +184,12 @@ export type PostHeaderProps = {
   coverImage: {
     node: {
       sourceUrl: string;
+      mediaDetails: {
+        height: number;
+        width: number;
+        sizes: string;
+        srcset: string;
+      };
     };
   };
   date: string;
@@ -184,6 +215,12 @@ export type MoreStoriesProps = {
       featuredImage: {
         node: {
           sourceUrl: string;
+          mediaDetails: {
+            height: number;
+            width: number;
+            sizes: string;
+            srcset: string;
+          };
         };
       };
       date: string;
@@ -206,6 +243,12 @@ export type HeroPostProps = {
   coverImage: {
     node: {
       sourceUrl: string;
+      mediaDetails: {
+        height: number;
+        width: number;
+        sizes: string;
+        srcset: string;
+      };
     };
   };
   excerpt: string;
