@@ -6,6 +6,5 @@ export default function Container({ children }: ContainerProps) {
 }
 
 const StyledContainer = styled.div`
-  max-width: 60rem;
-  padding: 0 1rem;
+  width: 100vw;
 `;

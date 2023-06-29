@@ -3,6 +3,7 @@ import Date from './date';
 import CoverImage from './cover-image';
 import Link from 'next/link';
 import { HeroPostProps } from '../lib/types';
+import styled from '@emotion/styled';
 
 export default function HeroPost({
   title,
@@ -13,8 +14,10 @@ export default function HeroPost({
   slug,
 }: HeroPostProps) {
   return (
-    <section>
-      <div>{coverImage && <CoverImage title={title} coverImage={coverImage} slug={slug} />}</div>
+    <StyledSection>
+      <ImageContainer>
+        {coverImage && <CoverImage title={title} coverImage={coverImage} slug={slug} />}
+      </ImageContainer>
       <div>
         <div>
           <h2>
@@ -29,6 +32,16 @@ export default function HeroPost({
           <Avatar author={author} />
         </div>
       </div>
-    </section>
+    </StyledSection>
   );
 }
+
+const StyledSection = styled.section`
+  position: relative;
+`;
+
+const ImageContainer = styled.div`
+  position: relative;
+  min-width: 10vw;
+  min-height: 50vw;
+`;
