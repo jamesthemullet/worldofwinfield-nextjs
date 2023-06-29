@@ -32,6 +32,6 @@ export default function PostPreview({
 
 const ImageContainer = styled.div`
   position: relative;
-  min-width: 100vw;
+  min-width: 100%;
   min-height: 50vw;
 `;
