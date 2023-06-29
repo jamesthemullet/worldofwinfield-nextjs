@@ -16,6 +16,15 @@ const ContentContainter = styled.div`
   font-size: 1.125rem;
   line-height: 1.75rem;
   box-sizing: border-box;
+  max-width: 60rem;
+
+  @media (min-width: 768px) {
+    margin: 4rem auto 0;
+  }
+
+  @media (min-width: 1281px) {
+    margin: 4rem auto 0;
+  }
 
   .wp-block-image,
   .wp-block-embed {
@@ -28,6 +37,34 @@ const ContentContainter = styled.div`
     iframe {
       width: 100%;
       height: auto;
+    }
+  }
+
+  .wp-block-heading {
+    font-family: 'Oswald', sans-serif;
+    font-size: 2rem;
+    line-height: 3rem;
+    letter-spacing: 2px;
+
+    @media (min-width: 1281px) {
+      font-size: 3rem;
+      line-height: 4.5rem;
+    }
+  }
+
+  @media screen and (min-width: 760px) {
+    .wp-block-gallery.has-nested-images {
+      margin: 0;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+
+      .wp-block-image {
+        margin: 0 auto;
+        width: calc(50% - 5px);
+        height: auto;
+        padding: 0;
+      }
     }
   }
 `;

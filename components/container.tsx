@@ -6,5 +6,5 @@ export default function Container({ children }: ContainerProps) {
 }
 
 const StyledContainer = styled.div`
-  width: 100vw;
+  width: 100%;
 `;

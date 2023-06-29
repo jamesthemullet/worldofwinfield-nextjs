@@ -39,7 +39,7 @@ export default function PostHeader({ title, coverImage, date }: PostHeaderProps)
 
 const ImageContainer = styled.div<{ aspectRatio: number }>`
   position: relative;
-  min-width: 100vw;
+  min-width: 100%;
   aspect-ratio: ${(props) => props.aspectRatio};
 `;
 
@@ -49,4 +49,11 @@ const PostedContainer = styled.div<{ backgroundColour: string; colour: string }>
   padding: 1rem;
   background-color: ${(props) => props.backgroundColour};
   color: ${(props) => props.colour};
+  font-family: 'Oswald', sans-serif;
+
+  @media (min-width: 1281px) {
+    font-size: 1.5rem;
+    padding: 1rem 5rem;
+    line-height: 2rem;
+  }
 `;
