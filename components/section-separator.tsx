@@ -14,4 +14,5 @@ const StyledHr = styled.hr<{ backgroundColour: string; colour: string }>`
   color: ${(props) => props.colour};
   height: 5px;
   border: none;
+  margin: 0;
 `;
