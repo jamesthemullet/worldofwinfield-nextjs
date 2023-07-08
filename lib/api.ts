@@ -261,3 +261,21 @@ export async function getPostAndMorePosts(slug, preview, previewData) {
 
   return data;
 }
+
+export async function getPage(id, idType = 'DATABASE_ID') {
+  const data = await fetchAPI(
+    `
+    query Page($id: ID!, $idType: PageIdType!) {
+      page(id: $id, idType: $idType) {
+        slug
+        content
+        title
+        date
+      }
+    }`,
+    {
+      variables: { id, idType },
+    }
+  );
+  return data.page;
+}

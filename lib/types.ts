@@ -1,36 +1,38 @@
-export type PostProps = {
-  post: {
-    slug: string;
-    title: string;
-    featuredImage: {
-      node: {
-        sourceUrl: string;
-        mediaDetails: {
-          height: number;
-          width: number;
-          sizes: string;
-          srcset: string;
-        };
+type SinglePostProps = {
+  slug: string;
+  title: string;
+  featuredImage: {
+    node: {
+      sourceUrl: string;
+      mediaDetails: {
+        height: number;
+        width: number;
+        sizes: string;
+        srcset: string;
       };
-    };
-    date: string;
-    content: string;
-    author: AuthorProps;
-    categories: {
-      edges: {
-        node: {
-          name: string;
-        };
-      };
-    };
-    tags: {
-      edges: {
-        node: {
-          name: string;
-        };
-      }[];
     };
   };
+  date: string;
+  content: string;
+  author: AuthorProps;
+  categories: {
+    edges: {
+      node: {
+        name: string;
+      };
+    };
+  };
+  tags: {
+    edges: {
+      node: {
+        name: string;
+      };
+    }[];
+  };
+};
+
+export type PostProps = {
+  post: SinglePostProps;
   posts: {
     edges: {
       node: {
@@ -55,6 +57,10 @@ export type PostProps = {
     }[];
   };
   preview: string;
+};
+
+export type PageProps = {
+  page: SinglePostProps;
 };
 
 type AuthorProps = {
