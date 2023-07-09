@@ -20,7 +20,7 @@ export default function Custom404() {
   const shuffledColours = shuffleArray(blockColours);
 
   return (
-    <Layout preview="">
+    <Layout preview="" seo={null}>
       <Container>
         <article>
           <Head>

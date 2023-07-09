@@ -10,9 +10,10 @@ import { IndexPageProps } from '../lib/types';
 export default function Index({ allPosts: { edges }, preview, jamesImages }: IndexPageProps) {
   const heroPost = edges[0]?.node;
   const morePosts = edges.slice(1);
+  console.log(2, heroPost);
 
   return (
-    <Layout preview={preview}>
+    <Layout preview={preview} seo={null}>
       <Intro jamesImages={jamesImages} />
       <Container>
         {heroPost && (

@@ -1,7 +1,37 @@
 import Head from 'next/head';
-import { CMS_NAME, HOME_OG_IMAGE_URL } from '../lib/constants';
+import { useRouter } from 'next/router';
 
-export default function Meta() {
+type seoProps = {
+  seo?: {
+    canonical: string;
+    focuskw: string;
+    metaDesc: string;
+    metaKeywords: string;
+    opengraphDescription: string;
+    opengraphImage: {
+      uri: string;
+      altText: string;
+      mediaItemUrl: string;
+      mediaDetails: {
+        width: string;
+        height: string;
+      };
+    };
+    opengraphTitle: string;
+    opengraphUrl: string;
+    opengraphSiteName: string;
+    title: string;
+  };
+};
+
+export default function Meta({ seo }: seoProps) {
+  const router = useRouter();
+  const currentUrl = router.asPath;
+  const siteAddress = 'https://www.jameswinfield.co.uk';
+  const defaultImageUrl = '/images/jameswinfieldcover.png';
+
+  const { opengraphImage, opengraphTitle, opengraphDescription, opengraphSiteName } = seo || {};
+  console.log(1, seo);
   return (
     <Head>
       <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png" />
@@ -13,12 +43,40 @@ export default function Meta() {
       <meta name="msapplication-TileColor" content="#000000" />
       <meta name="msapplication-config" content="/favicon/browserconfig.xml" />
       <meta name="theme-color" content="#000" />
+      <meta property="og:locale" content="en_GB" />
+      <meta property="og:type" content="article" />
+      <meta
+        property="og:title"
+        content={opengraphTitle ? opengraphTitle : 'James Winfield Software Engineering Portfolio'}
+      />
+      <meta
+        property="og:description"
+        content={
+          opengraphDescription
+            ? opengraphDescription
+            : 'A senior front-end software engineer in London'
+        }
+      />
+      <meta
+        property="og:site_name"
+        content={opengraphSiteName ? opengraphSiteName : 'James Winfield'}
+      />
+      <meta property="og:url" content={`${siteAddress}${currentUrl}`} />
+      <meta
+        property="og:image"
+        content={opengraphImage?.mediaItemUrl ? opengraphImage?.mediaItemUrl : defaultImageUrl}
+      />
+      <meta property="og:image:width" content={opengraphImage?.mediaDetails?.width} />
+      <meta property="og:image:height" content={opengraphImage?.mediaDetails?.height} />
       <link rel="alternate" type="application/rss+xml" href="/feed.xml" />
       <meta
         name="description"
-        content={`A statically generated blog example using Next.js and ${CMS_NAME}.`}
+        content={
+          opengraphDescription
+            ? opengraphDescription
+            : 'A senior front-end software engineer in London'
+        }
       />
-      <meta property="og:image" content={HOME_OG_IMAGE_URL} />
     </Head>
   );
 }

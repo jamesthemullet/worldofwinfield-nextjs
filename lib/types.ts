@@ -29,6 +29,7 @@ type SinglePostProps = {
       };
     }[];
   };
+  seo: seoProps;
 };
 
 export type PostProps = {
@@ -240,6 +241,7 @@ export type MoreStoriesProps = {
 export type LayoutProps = {
   children: React.ReactNode;
   preview: string;
+  seo?: seoProps | null;
 };
 
 export type HeroPostProps = {
@@ -283,4 +285,25 @@ export type CategoriesProps = {
 
 export type AlertProps = {
   preview: string;
+};
+
+export type seoProps = {
+  canonical: string;
+  focuskw: string;
+  metaDesc: string;
+  metaKeywords: string;
+  opengraphDescription: string;
+  opengraphImage: {
+    uri: string;
+    altText: string;
+    mediaItemUrl: string;
+    mediaDetails: {
+      width: string;
+      height: string;
+    };
+  };
+  opengraphTitle: string;
+  opengraphUrl: string;
+  opengraphSiteName: string;
+  title: string;
 };
