@@ -4,13 +4,11 @@ import Head from 'next/head';
 import { GetStaticProps } from 'next';
 import PostHeader from '../components/post-header';
 import PostBody from '../components/post-body';
-import Tags from '../components/tags';
 import SectionSeparator from '../components/section-separator';
 import { getPage } from '../lib/api';
 import type { PageProps } from '../lib/types';
 
 export default function Music({ page }: PageProps) {
-  console.log(1, page);
   return (
     <Layout preview="">
       <Container>
@@ -28,7 +26,6 @@ export default function Music({ page }: PageProps) {
           />
           <PostBody content={page.content} />
         </article>
-
         <SectionSeparator />
       </Container>
     </Layout>
