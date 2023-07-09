@@ -128,6 +128,29 @@ export async function getAllPostsForHome(preview) {
                 }
               }
             }
+            seo {
+              metaDesc
+              focuskw
+              title
+              canonical
+              metaKeywords
+              opengraphTitle
+              opengraphDescription
+              opengraphUrl
+              opengraphSiteName
+              opengraphImage {
+                uri
+                altText
+                mediaDetails {
+                  file
+                  height
+                  width
+                }
+                mediaItemUrl
+                sourceUrl
+                srcSet
+              }
+            }
           }
         }
       }
@@ -198,6 +221,29 @@ export async function getPostAndMorePosts(slug, preview, previewData) {
           node {
             name
           }
+        }
+      }
+      seo {
+        metaDesc
+        focuskw
+        title
+        canonical
+        metaKeywords
+        opengraphTitle
+        opengraphDescription
+        opengraphUrl
+        opengraphSiteName
+        opengraphImage {
+          uri
+          altText
+          mediaDetails {
+            file
+            height
+            width
+          }
+          mediaItemUrl
+          sourceUrl
+          srcSet
         }
       }
     }
@@ -271,6 +317,29 @@ export async function getPage(id, idType = 'DATABASE_ID') {
         content
         title
         date
+        seo {
+          metaDesc
+          focuskw
+          title
+          canonical
+          metaKeywords
+          opengraphTitle
+          opengraphDescription
+          opengraphUrl
+          opengraphSiteName
+          opengraphImage {
+            uri
+            altText
+            mediaDetails {
+              file
+              height
+              width
+            }
+            mediaItemUrl
+            sourceUrl
+            srcSet
+          }
+        }
       }
     }`,
     {

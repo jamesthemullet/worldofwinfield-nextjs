@@ -10,7 +10,7 @@ import type { PageProps } from '../lib/types';
 
 export default function Music({ page }: PageProps) {
   return (
-    <Layout preview="">
+    <Layout preview="" seo={page.seo}>
       <Container>
         <article>
           <Head>
