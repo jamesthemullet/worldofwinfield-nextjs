@@ -60,6 +60,43 @@ export type PostProps = {
   preview: string;
 };
 
+export type PostsProps = {
+  posts: {
+    id: string;
+    title: string;
+    excerpt: string;
+    date: string;
+    slug: string;
+    featuredImage: {
+      node: {
+        sourceUrl: string;
+        mediaDetails: {
+          height: number;
+          width: number;
+          sizes: string;
+          srcset: string;
+        };
+      };
+    };
+    tags: {
+      edges: {
+        node: {
+          name: string;
+        };
+      }[];
+    };
+    seo: seoProps;
+    author: AuthorProps;
+    categories: {
+      edges: {
+        node: {
+          name: string;
+        };
+      };
+    };
+  }[];
+};
+
 export type PageProps = {
   page: SinglePostProps;
 };
