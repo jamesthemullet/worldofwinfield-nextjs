@@ -12,9 +12,8 @@ async function fetchAPI(query = '', { variables }: Record<string, unknown> = {})
   }
 
   console.log(20, 'API_URL', API_URL);
-  console.log(21, typeof window);
 
-  const apiUrl = typeof window === 'undefined' ? process.env.WORDPRESS_API_URL : API_URL;
+  const apiUrl = process.env.WORDPRESS_API_URL ?? API_URL;
   // WPGraphQL Plugin must be enabled
   const res = await fetch(apiUrl, {
     headers,
@@ -372,6 +371,47 @@ export async function searchBlogPosts(searchTerm) {
     }`,
     {
       variables: { searchTerm },
+    }
+  );
+  return data.posts.nodes;
+}
+
+export async function filterPostsByTag(tag) {
+  const data = await fetchAPI(
+    `
+    query filterPostsByTag($tag: String!) {
+      posts(where: { tag: $tag }, first: 100) {
+        nodes {
+          id
+          title
+          excerpt
+          slug
+          date
+          tags {
+            nodes {
+              name
+            }
+          }
+          featuredImage {
+            node {
+              mediaDetails {
+                sizes {
+                  height
+                  width
+                  sourceUrl
+                }
+                height
+                width
+              }
+              srcSet
+              sourceUrl
+            }
+          }
+        }
+      }
+    }`,
+    {
+      variables: { tag },
     }
   );
   return data.posts.nodes;
