@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import { colours } from '../pages/_app';
 
-const blockColours = [colours.orange, colours.pink, colours.green, colours.purple];
+const blockColours = [colours.pink, colours.green, colours.purple, colours.dark];
 
 export default function HomepageBlock({ props }: any) {
   const randomIndex = Math.floor(Math.random() * blockColours.length);
@@ -33,6 +33,7 @@ const Block = styled.div<{ backgroundColour: string; colour: string }>`
   a {
     font-size: 5rem;
     transition: font-size 0.3s ease;
+    font-weight: 700;
 
     &:hover {
       font-size: 6rem;
