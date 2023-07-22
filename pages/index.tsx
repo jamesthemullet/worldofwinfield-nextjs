@@ -1,4 +1,5 @@
 import { GetStaticProps } from 'next';
+import { useState } from 'react';
 import Container from '../components/container';
 import MoreStories from '../components/more-stories';
 import HeroPost from '../components/hero-post';
@@ -8,15 +9,21 @@ import { getAllPostsForHome, getJamesImages } from '../lib/api';
 import { IndexPageProps } from '../lib/types';
 import HomepageBlock from '../components/homepage-block';
 import styled from '@emotion/styled';
+import SearchBar from '../components/search-bar';
+import SearchResults from '../components/search-results';
 
 import { nanoid } from 'nanoid';
 
 export default function Index({ allPosts: { edges }, preview, jamesImages }: IndexPageProps) {
+  const [searchResults, setSearchResults] = useState([]);
+
+  const handleSearch = (results) => {
+    setSearchResults(results);
+  };
   const heroPost = edges[0]?.node;
   const morePosts = edges.slice(1);
   const tempBlocks = ['travel', 'roasts', 'politics', 'music', 'favourites'];
   const blocks = tempBlocks.length % 2 === 0 ? tempBlocks : [...tempBlocks, '?'];
-  console.log(2, heroPost);
 
   return (
     <Layout preview={preview} seo={null}>
@@ -26,6 +33,8 @@ export default function Index({ allPosts: { edges }, preview, jamesImages }: Ind
           <HomepageBlock key={nanoid()} props={block} />
         ))}
       </HomepageBlocksContainer>
+      <SearchBar onSearch={handleSearch} />
+      <SearchResults searchResults={searchResults} />
       <Container>
         {heroPost && (
           <HeroPost

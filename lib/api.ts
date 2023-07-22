@@ -1,4 +1,8 @@
-const API_URL = process.env.WORDPRESS_API_URL;
+import getConfig from 'next/config';
+
+const { publicRuntimeConfig } = getConfig();
+
+const API_URL = publicRuntimeConfig.NEXT_PUBLIC_WORDPRESS_API_URL;
 
 async function fetchAPI(query = '', { variables }: Record<string, unknown> = {}) {
   const headers = { 'Content-Type': 'application/json' };
@@ -7,8 +11,9 @@ async function fetchAPI(query = '', { variables }: Record<string, unknown> = {})
     headers['Authorization'] = `Bearer ${process.env.WORDPRESS_AUTH_REFRESH_TOKEN}`;
   }
 
+  const apiUrl = typeof window === 'undefined' ? process.env.WORDPRESS_API_URL : API_URL;
   // WPGraphQL Plugin must be enabled
-  const res = await fetch(API_URL, {
+  const res = await fetch(apiUrl, {
     headers,
     method: 'POST',
     body: JSON.stringify({
@@ -347,4 +352,24 @@ export async function getPage(id, idType = 'DATABASE_ID') {
     }
   );
   return data.page;
+}
+
+export async function searchBlogPosts(searchTerm) {
+  const data = await fetchAPI(
+    `
+    query SearchBlogPosts($searchTerm: String!) {
+      posts(where: { search: $searchTerm }, first: 100) {
+        nodes {
+          slug
+          title
+          content
+          date
+        }
+      }
+    }`,
+    {
+      variables: { searchTerm },
+    }
+  );
+  return data.posts.nodes;
 }
