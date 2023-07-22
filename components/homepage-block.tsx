@@ -9,7 +9,7 @@ export default function HomepageBlock({ props }: any) {
 
   return (
     <Block backgroundColour={randomColour} colour={colours.white}>
-      <h3>{props}</h3>
+      <a>{props}</a>
     </Block>
   );
 }
@@ -30,12 +30,12 @@ const Block = styled.div<{ backgroundColour: string; colour: string }>`
     aspect-ratio: 2/1;
   }
 
-  h3 {
-    font-size: 4rem;
+  a {
+    font-size: 5rem;
     transition: font-size 0.3s ease;
 
     &:hover {
-      font-size: 5rem;
+      font-size: 6rem;
     }
   }
 
