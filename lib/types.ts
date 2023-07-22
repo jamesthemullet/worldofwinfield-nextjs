@@ -307,3 +307,15 @@ export type seoProps = {
   opengraphSiteName: string;
   title: string;
 };
+
+export type SearchBarProps = {
+  onSearch: (results: string) => void;
+};
+
+export type SearchResultsProps = {
+  searchResults: {
+    slug: string;
+    title: string;
+    date: string;
+  }[];
+};

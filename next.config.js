@@ -17,4 +17,12 @@ module.exports = {
       'i0.wp.com',
     ],
   },
+  env: {
+    WORDPRESS_API_URL: process.env.WORDPRESS_API_URL,
+    WORDPRESS_AUTH_REFRESH_TOKEN: process.env.WORDPRESS_AUTH_REFRESH_TOKEN,
+  },
+  publicRuntimeConfig: {
+    WORDPRESS_API_URL: process.env.WORDPRESS_API_URL,
+    NEXT_PUBLIC_WORDPRESS_API_URL: process.env.WORDPRESS_API_URL,
+  },
 };
