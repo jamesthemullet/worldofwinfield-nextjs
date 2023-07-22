@@ -4,7 +4,6 @@ import Meta from './meta';
 import { LayoutProps } from '../lib/types';
 
 export default function Layout({ preview, children, seo }: LayoutProps) {
-  console.log(3, seo);
   return (
     <>
       <Meta seo={seo} />

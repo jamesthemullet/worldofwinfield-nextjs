@@ -6,15 +6,26 @@ import Intro from '../components/intro';
 import Layout from '../components/layout';
 import { getAllPostsForHome, getJamesImages } from '../lib/api';
 import { IndexPageProps } from '../lib/types';
+import HomepageBlock from '../components/homepage-block';
+import styled from '@emotion/styled';
+
+import { nanoid } from 'nanoid';
 
 export default function Index({ allPosts: { edges }, preview, jamesImages }: IndexPageProps) {
   const heroPost = edges[0]?.node;
   const morePosts = edges.slice(1);
+  const tempBlocks = ['travel', 'roasts', 'politics', 'music', 'favourites'];
+  const blocks = tempBlocks.length % 2 === 0 ? tempBlocks : [...tempBlocks, '?'];
   console.log(2, heroPost);
 
   return (
     <Layout preview={preview} seo={null}>
       <Intro jamesImages={jamesImages} />
+      <HomepageBlocksContainer>
+        {blocks.map((block) => (
+          <HomepageBlock key={nanoid()} props={block} />
+        ))}
+      </HomepageBlocksContainer>
       <Container>
         {heroPost && (
           <HeroPost
@@ -41,3 +52,17 @@ export const getStaticProps: GetStaticProps = async ({ preview = false }) => {
     revalidate: 10,
   };
 };
+
+const HomepageBlocksContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 0 10px 10px;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    padding: 0;
+    gap: 0;
+  }
+`;

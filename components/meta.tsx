@@ -31,7 +31,6 @@ export default function Meta({ seo }: seoProps) {
   const defaultImageUrl = '/images/jameswinfieldcover.png';
 
   const { opengraphImage, opengraphTitle, opengraphDescription, opengraphSiteName } = seo || {};
-  console.log(1, seo);
   return (
     <Head>
       <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png" />
