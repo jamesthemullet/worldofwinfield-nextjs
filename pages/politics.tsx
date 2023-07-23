@@ -51,11 +51,11 @@ export default function Post({ posts }: PostsProps) {
 }
 
 export const getStaticProps: GetStaticProps = async () => {
-  const musicPosts = await filterPostsByTag('music');
+  const politicsPosts = await filterPostsByTag('politics');
 
   return {
     props: {
-      posts: musicPosts,
+      posts: politicsPosts,
     },
     revalidate: 10,
   };
