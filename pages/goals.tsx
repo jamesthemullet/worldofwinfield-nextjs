@@ -2,13 +2,13 @@ import { useRouter } from 'next/router';
 import ErrorPage from 'next/error';
 import Head from 'next/head';
 import { GetStaticProps } from 'next';
-import Container from '../../components/container';
-import PostHeader from '../../components/post-header';
-import Layout from '../../components/layout';
-import PostTitle from '../../components/post-title';
-import { filterPostsByTag } from '../../lib/api';
-import { CMS_NAME } from '../../lib/constants';
-import { PostsProps } from '../../lib/types';
+import Container from '../components/container';
+import PostHeader from '../components/post-header';
+import Layout from '../components/layout';
+import PostTitle from '../components/post-title';
+import { filterPostsByTag } from '../lib/api';
+import { CMS_NAME } from '../lib/constants';
+import { PostsProps } from '../lib/types';
 import styled from '@emotion/styled';
 
 export default function Post({ posts }: PostsProps) {
@@ -51,11 +51,11 @@ export default function Post({ posts }: PostsProps) {
 }
 
 export const getStaticProps: GetStaticProps = async () => {
-  const travelPosts = await filterPostsByTag('travel');
+  const goalsPosts = await filterPostsByTag('goals');
 
   return {
     props: {
-      posts: travelPosts,
+      posts: goalsPosts,
     },
     revalidate: 10,
   };
