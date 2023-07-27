@@ -69,7 +69,8 @@ jobs:
       - run: yarn install
       - run: yarn run build
       - run: yarn dev & npx wait-on http://localhost:3000
+      - name: Install Puppeteer and Chrome
+        run: yarn add puppeteer@^10.4.0 @axe-core/cli && npx playwright install-deps chrome
+
       - name: Run axe
-        run: |
-          yarn add @axe-core/cli
-          npx axe http://localhost:3000 --exit
+        run: npx axe http://localhost:3000 --exit
