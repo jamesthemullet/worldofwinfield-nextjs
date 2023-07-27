@@ -22,7 +22,7 @@ export default function Index({ allPosts: { edges }, preview, jamesImages }: Ind
   };
   const heroPost = edges[0]?.node;
   const morePosts = edges.slice(1);
-  const tempBlocks = ['travel', 'roasts', 'politics', 'music', 'favourites'];
+  const tempBlocks = ['all the blog', 'travel', 'goals', 'politics', 'music', 'favourites'];
   const blocks = tempBlocks.length % 2 === 0 ? tempBlocks : [...tempBlocks, '?'];
 
   return (

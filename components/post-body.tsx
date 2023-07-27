@@ -18,6 +18,15 @@ const ContentContainter = styled.div`
   box-sizing: border-box;
   max-width: 60rem;
 
+  a {
+    margin: 0 !important;
+  }
+
+  img {
+    max-width: calc(100% - 20px);
+    height: auto;
+  }
+
   @media (min-width: 768px) {
     margin: 4rem auto 0;
   }

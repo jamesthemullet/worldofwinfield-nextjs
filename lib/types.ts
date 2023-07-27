@@ -356,3 +356,9 @@ export type SearchResultsProps = {
     date: string;
   }[];
 };
+
+export type ArchivePageProps = {
+  posts: PostsProps;
+  month: number;
+  year: number;
+};

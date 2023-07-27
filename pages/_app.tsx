@@ -2,6 +2,7 @@ import { AppProps } from 'next/app';
 import Nav from '../components/nav';
 import { Global, css } from '@emotion/react';
 import Head from 'next/head';
+import styled from '@emotion/styled';
 
 export const colours = {
   orange: '#FB8B24',
@@ -30,7 +31,7 @@ export const globalStyles = css`
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <>
+    <StyledContainer>
       <Head>
         <title>World Of Winfield</title>
         <link
@@ -78,8 +79,14 @@ function MyApp({ Component, pageProps }: AppProps) {
       <Global styles={globalStyles} />
       <Nav />
       <Component {...pageProps} />
-    </>
+    </StyledContainer>
   );
 }
 
 export default MyApp;
+
+const StyledContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+`;
