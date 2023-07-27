@@ -11,8 +11,6 @@ async function fetchAPI(query = '', { variables }: Record<string, unknown> = {})
     headers['Authorization'] = `Bearer ${process.env.WORDPRESS_AUTH_REFRESH_TOKEN}`;
   }
 
-  console.log(20, 'API_URL', API_URL);
-
   const apiUrl = process.env.WORDPRESS_API_URL ?? API_URL;
   // WPGraphQL Plugin must be enabled
   const res = await fetch(apiUrl, {
@@ -415,4 +413,27 @@ export async function filterPostsByTag(tag) {
     }
   );
   return data.posts.nodes;
+}
+
+export async function getPostsByDate(month, year) {
+  const data = await fetchAPI(
+    `
+    query GetPostsByDate($month: Int!, $year: Int!) {
+      posts(where: { dateQuery: { month: $month, year: $year } }, first: 100) {
+        nodes {
+          title
+          date
+          slug
+        }
+      }
+    }`,
+    {
+      variables: { month, year },
+    }
+  );
+  return {
+    posts: data.posts.nodes,
+    month,
+    year,
+  };
 }

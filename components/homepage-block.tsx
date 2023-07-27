@@ -1,9 +1,13 @@
 import styled from '@emotion/styled';
 import { colours } from '../pages/_app';
 
+type HomePageBLockTypes = {
+  props: string;
+};
+
 const blockColours = [colours.pink, colours.green, colours.purple, colours.dark];
 
-export default function HomepageBlock({ props }: any) {
+export default function HomepageBlock({ props }: HomePageBLockTypes) {
   const randomIndex = Math.floor(Math.random() * blockColours.length);
   const randomColour = blockColours[randomIndex];
 

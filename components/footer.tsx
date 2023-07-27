@@ -1,6 +1,7 @@
 import Container from './container';
 import { colours } from '../pages/_app';
 import styled from '@emotion/styled';
+import ArchiveDropdown from './archive';
 
 export default function Footer() {
   const blockColours = [colours.orange, colours.pink, colours.green, colours.purple];
@@ -11,6 +12,7 @@ export default function Footer() {
       <Container>
         <Block backgroundColour={randomColour1} colour={colours.white}>
           <p>World Of Winfield</p>
+          <ArchiveDropdown />
         </Block>
       </Container>
     </footer>
@@ -25,9 +27,15 @@ const Block = styled.div<{ backgroundColour: string; colour: string }>`
   color: ${colours.white};
   text-align: center;
   font-size: 1.5rem;
-  font-family: 'Luckiest Guy', monospace;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
 
   p {
     letter-spacing: 3px;
+  }
+
+  @media screen and (max-width: 768px) {
+    flex-direction: column;
   }
 `;
