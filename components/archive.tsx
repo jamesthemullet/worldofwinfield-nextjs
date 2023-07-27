@@ -1,6 +1,7 @@
 import React from 'react';
 import { useRouter } from 'next/router';
 import { getMonthNumber } from './utils';
+import { StyledSelect } from './core-components';
 
 const ArchiveDropdown = () => {
   const router = useRouter();
@@ -35,14 +36,14 @@ const ArchiveDropdown = () => {
   return (
     <div>
       <p>Posts from the archives</p>
-      <select onChange={handleSelectMonth}>
+      <StyledSelect onChange={handleSelectMonth}>
         <option value="">Select Month</option>
         {months.map((month) => (
           <option key={month} value={`${month}`}>
             {month}
           </option>
         ))}
-      </select>
+      </StyledSelect>
     </div>
   );
 };

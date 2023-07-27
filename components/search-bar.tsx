@@ -3,6 +3,7 @@ import { searchBlogPosts } from '../lib/api';
 import { colours } from '../pages/_app';
 import styled from '@emotion/styled';
 import { SearchBarProps } from '../lib/types';
+import { StyledButton, StyledInput } from './core-components';
 
 const SearchBar = ({ onSearch }: SearchBarProps) => {
   const [query, setQuery] = useState('');
@@ -23,8 +24,8 @@ const SearchBar = ({ onSearch }: SearchBarProps) => {
 
   return (
     <StyledForm onSubmit={handleSubmit}>
-      <input type="text" placeholder="Search blog..." value={query} onChange={handleChange} />
-      <button type="submit">{loading ? 'Searching...' : 'Search'}</button>
+      <StyledInput type="text" placeholder="Search blog..." value={query} onChange={handleChange} />
+      <StyledButton type="submit">{loading ? 'Searching...' : 'Search'}</StyledButton>
     </StyledForm>
   );
 };
@@ -40,23 +41,6 @@ const StyledForm = styled.form`
   color: ${colours.white};
   margin: 0 10px 10px;
   padding: 20px;
-
-  input {
-    margin-bottom: 10px;
-    padding: 10px;
-    border: none;
-    width: 200px;
-  }
-
-  button {
-    padding: 10px;
-    border: none;
-    width: 100px;
-    background-color: ${colours.pink};
-    color: ${colours.white};
-    font-weight: bold;
-    cursor: pointer;
-  }
 
   @media (max-width: 768px) {
     margin: 0;
