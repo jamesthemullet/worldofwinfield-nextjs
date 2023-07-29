@@ -30,7 +30,11 @@ export default function PostHeader({ title, coverImage, date }: PostHeaderProps)
       <PostTitle backgroundColour={randomColour1}>{title}</PostTitle>
       <div>
         <PostedContainer backgroundColour={randomColour2} colour={colours.white}>
-          Posted <Date dateString={date} />
+          {date && (
+            <p>
+              Posted <Date dateString={date} />
+            </p>
+          )}
         </PostedContainer>
       </div>
     </>

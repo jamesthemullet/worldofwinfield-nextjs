@@ -225,7 +225,7 @@ export type PostPreviewProps = {
 
 export type PostHeaderProps = {
   title: string;
-  coverImage: {
+  coverImage?: {
     node: {
       sourceUrl: string;
       mediaDetails: {
@@ -236,9 +236,9 @@ export type PostHeaderProps = {
       };
     };
   };
-  date: string;
-  author: AuthorProps;
-  categories: {
+  date?: string;
+  author?: AuthorProps;
+  categories?: {
     edges: {
       node: {
         name: string;

@@ -24,5 +24,6 @@ module.exports = {
   publicRuntimeConfig: {
     WORDPRESS_API_URL: process.env.WORDPRESS_API_URL,
     NEXT_PUBLIC_WORDPRESS_API_URL: process.env.WORDPRESS_API_URL,
+    NEXT_PUBLIC_GOOGLE_SHEETS_API_KEY: process.env.GOOGLE_SHEETS_API_KEY,
   },
 };
