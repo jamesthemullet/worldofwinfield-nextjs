@@ -10,7 +10,7 @@ import { filterPostsByTag } from '../lib/api';
 import { PostsProps } from '../lib/types';
 import styled from '@emotion/styled';
 import { useState } from 'react';
-import { FavouriteResults } from './favourites-results';
+import FavouriteResults from './favourites-results';
 import { StyledButton } from '../components/core-components';
 
 export default function FavouritesPage({ posts }: PostsProps) {

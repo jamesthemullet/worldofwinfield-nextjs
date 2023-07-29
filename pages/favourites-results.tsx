@@ -26,7 +26,7 @@ const fetchDataFromGoogleSheets = async (sheetID) => {
   }
 };
 
-export const FavouriteResults = ({ type }: TypeProps) => {
+const FavouriteResults = ({ type }: TypeProps) => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
@@ -62,6 +62,8 @@ export const FavouriteResults = ({ type }: TypeProps) => {
     </div>
   );
 };
+
+export default FavouriteResults;
 
 const StyledRow = styled.div`
   display: flex;
