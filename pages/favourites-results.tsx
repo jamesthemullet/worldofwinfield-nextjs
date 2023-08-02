@@ -5,7 +5,10 @@ import styled from '@emotion/styled';
 
 const favouriteMoviesSheetID = '1q3LFzLYqK0tLWHjvHYxFE1IIF-FrOJuqJ6XBIQIEl6U';
 const favouriteBooksSheetID = '1G-QrN1NDpKAr12VyIi50Nod8_g-YOSGP3bovCXxDHlY';
-const TestID = '1eWNmP_oj9V3-ammjsCuOe6KRbhfkna0mYx213dxkHs4';
+const favouriteDJsSheetID = '1_zpDBFlpW2ZWTVsXQHoW6Y4FbGw8Vi53nMYpZiOypbg';
+const favouriteCheeseSheetID = '1UDjT7_Q5rBPQasn4o2qxUOsEcElEI67nl-ep9YTLc-E';
+const favouriteBeerSheetID = '1pNNIw849xWrQHtDptwInGs6Un0AZh-fgXUssC3XIrHM';
+const favouriteRestaurantsSheetID = '1J1znKQxeNR3Y6Q1mEPzZyMfCAGK4FQyxasoCQx35NVQ';
 const { publicRuntimeConfig } = getConfig();
 
 type TypeProps = {
@@ -37,8 +40,14 @@ const FavouriteResults = ({ type }: TypeProps) => {
         sheetID = favouriteMoviesSheetID;
       } else if (type === 'favouriteBooksSheetID') {
         sheetID = favouriteBooksSheetID;
-      } else if (type === 'TestID') {
-        sheetID = TestID;
+      } else if (type === 'favouriteDJsSheetID') {
+        sheetID = favouriteDJsSheetID;
+      } else if (type === 'favouriteCheeseSheetID') {
+        sheetID = favouriteCheeseSheetID;
+      } else if (type === 'favouriteBeerSheetID') {
+        sheetID = favouriteBeerSheetID;
+      } else if (type === 'favouriteRestaurantsSheetID') {
+        sheetID = favouriteRestaurantsSheetID;
       }
 
       if (sheetID) {
