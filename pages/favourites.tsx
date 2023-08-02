@@ -54,8 +54,17 @@ export default function FavouritesPage({ posts }: PostsProps) {
                 <StyledButton onClick={() => handleTypeClick('favouriteBooksSheetID')}>
                   Favorite Books
                 </StyledButton>
-                <StyledButton onClick={() => handleTypeClick('TestID')}>
-                  Test Favorites
+                <StyledButton onClick={() => handleTypeClick('favouriteDJsSheetID')}>
+                  Favorite DJs
+                </StyledButton>
+                <StyledButton onClick={() => handleTypeClick('favouriteCheeseSheetID')}>
+                  Favorite Cheese
+                </StyledButton>
+                <StyledButton onClick={() => handleTypeClick('favouriteBeerSheetID')}>
+                  Favorite Beer
+                </StyledButton>
+                <StyledButton onClick={() => handleTypeClick('favouriteRestaurantsSheetID')}>
+                  Favorite Restaurants
                 </StyledButton>
               </RowOfButtons>
               {selectedType && <FavouriteResults type={selectedType} />}
