@@ -49,22 +49,22 @@ export default function FavouritesPage({ posts }: PostsProps) {
               </StyledPostHeader>
               <RowOfButtons>
                 <StyledButton onClick={() => handleTypeClick('favouriteMoviesSheetID')}>
-                  Favorite Movies
+                  Favourite Movies
                 </StyledButton>
                 <StyledButton onClick={() => handleTypeClick('favouriteBooksSheetID')}>
-                  Favorite Books
+                  Favourite Books
                 </StyledButton>
                 <StyledButton onClick={() => handleTypeClick('favouriteDJsSheetID')}>
-                  Favorite DJs
+                  Favourite DJs
                 </StyledButton>
                 <StyledButton onClick={() => handleTypeClick('favouriteCheeseSheetID')}>
-                  Favorite Cheese
+                  Favourite Cheese
                 </StyledButton>
                 <StyledButton onClick={() => handleTypeClick('favouriteBeerSheetID')}>
-                  Favorite Beer
+                  Favourite Beer
                 </StyledButton>
                 <StyledButton onClick={() => handleTypeClick('favouriteRestaurantsSheetID')}>
-                  Favorite Restaurants
+                  Favourite Restaurants
                 </StyledButton>
               </RowOfButtons>
               {selectedType && <FavouriteResults type={selectedType} />}
@@ -104,4 +104,5 @@ const RowOfButtons = styled.div`
   flex-direction: row;
   gap: 1rem;
   margin-top: 2rem;
+  margin-left: 20px;
 `;
