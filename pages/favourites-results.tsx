@@ -33,7 +33,7 @@ const FavouriteResults = ({ type }: TypeProps) => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    const fetchFavoriteData = async () => {
+    const fetchfavouriteData = async () => {
       let sheetID;
 
       if (type === 'favouriteMoviesSheetID') {
@@ -51,24 +51,55 @@ const FavouriteResults = ({ type }: TypeProps) => {
       }
 
       if (sheetID) {
-        const data = await fetchDataFromGoogleSheets(sheetID);
-        setData(data);
+        const rawData = await fetchDataFromGoogleSheets(sheetID);
+
+        // Separate the header row from data rows
+        const headerRow = rawData[0];
+        console.log(1, headerRow);
+        const dataRows = rawData.slice(1);
+
+        // Hide the "date" column if it exists (assuming "date" is in the header row)
+        const dateColumnIndex = headerRow.indexOf('Date');
+        if (dateColumnIndex !== -1) {
+          for (const row of dataRows) {
+            row.splice(dateColumnIndex, 1);
+          }
+          headerRow.splice(dateColumnIndex, 1);
+        }
+
+        // Sort data by the "score" column if it exists (assuming "score" is in the header row)
+        const scoreColumnIndex = headerRow.indexOf('Score');
+        if (scoreColumnIndex !== -1) {
+          dataRows.sort((a, b) => b[scoreColumnIndex] - a[scoreColumnIndex]);
+        }
+
+        // Reassemble the data with the header row at the beginning
+        const updatedData = [headerRow, ...dataRows];
+        setData(updatedData);
       }
     };
 
-    fetchFavoriteData();
+    fetchfavouriteData();
   }, [type]);
 
   return (
-    <div>
-      {data.map((row, index) => (
-        <StyledRow key={index}>
-          <p>{row[0]}</p>
-          <p>{row[1]}</p>
-          <p>{row[2]}</p>
+    <FavouritesContainer isHeading={false}>
+      {data.map((row, rowIndex) => (
+        <StyledRow key={rowIndex}>
+          {rowIndex === 0 ? <p className="index"></p> : <p className="index">{rowIndex}.</p>}{' '}
+          {/* Index column */}
+          {row.map((cellData, cellIndex) => (
+            <p
+              key={cellIndex}
+              className={
+                rowIndex === 0 ? `heading ${data[0][cellIndex]}` : `data ${data[0][cellIndex]}`
+              }>
+              {rowIndex === 0 ? <strong>{cellData}</strong> : cellData}
+            </p>
+          ))}
         </StyledRow>
       ))}
-    </div>
+    </FavouritesContainer>
   );
 };
 
@@ -78,4 +109,42 @@ const StyledRow = styled.div`
   display: flex;
   flex-direction: row;
   gap: 1rem;
+  align-items: flex-start;
+`;
+
+const FavouritesContainer = styled.div<{ isHeading: boolean }>`
+  display: flex;
+  flex-direction: column;
+  margin: 20px;
+
+  p {
+    margin: 0;
+    display: flex;
+    align-items: ${({ isHeading }) => (isHeading ? 'flex-start' : 'center')};
+    width: 200px;
+
+    &.Comments {
+      width: 800px;
+    }
+
+    &.Score,
+    &.Language {
+      width: 100px;
+    }
+  }
+
+  p:first-of-type {
+    width: 30px; /* Adjust the width as needed */
+    display: flex;
+    align-items: center;
+
+    &.Comments {
+      width: 800px;
+    }
+
+    &.Score,
+    &.Language {
+      width: 100px;
+    }
+  }
 `;
