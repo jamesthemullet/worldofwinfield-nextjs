@@ -53,7 +53,7 @@ export default function Meta({ seo }: seoProps) {
         content={
           opengraphDescription
             ? opengraphDescription
-            : 'A senior front-end software engineer in London'
+            : 'World Of Winfield - all about James Winfield'
         }
       />
       <meta
@@ -73,7 +73,7 @@ export default function Meta({ seo }: seoProps) {
         content={
           opengraphDescription
             ? opengraphDescription
-            : 'A senior front-end software engineer in London'
+            : 'World Of Winfield - all about James Winfield'
         }
       />
     </Head>
