@@ -27,7 +27,7 @@ type seoProps = {
 export default function Meta({ seo }: seoProps) {
   const router = useRouter();
   const currentUrl = router.asPath;
-  const siteAddress = 'https://www.jameswinfield.co.uk';
+  const siteAddress = 'https://www.worldofwinfield.co.uk';
   const defaultImageUrl = '/images/jameswinfieldcover.png';
 
   const { opengraphImage, opengraphTitle, opengraphDescription, opengraphSiteName } = seo || {};
@@ -46,7 +46,7 @@ export default function Meta({ seo }: seoProps) {
       <meta property="og:type" content="article" />
       <meta
         property="og:title"
-        content={opengraphTitle ? opengraphTitle : 'James Winfield Software Engineering Portfolio'}
+        content={opengraphTitle ? opengraphTitle : 'World Of Winfield - all about James Winfield'}
       />
       <meta
         property="og:description"
@@ -58,7 +58,7 @@ export default function Meta({ seo }: seoProps) {
       />
       <meta
         property="og:site_name"
-        content={opengraphSiteName ? opengraphSiteName : 'James Winfield'}
+        content={opengraphSiteName ? opengraphSiteName : 'World Of Winfield'}
       />
       <meta property="og:url" content={`${siteAddress}${currentUrl}`} />
       <meta
