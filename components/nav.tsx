@@ -21,16 +21,19 @@ export default function Nav() {
           <Link href="/">Home</Link>
         </li>
         <li>
-          <Link href="/roasts">Roasts</Link>
+          <Link href="/favourites">Favourites</Link>
         </li>
         <li>
-          <Link href="/music">Music</Link>
+          <Link href="/wants">Want To Do</Link>
         </li>
         <li>
           <Link href="/travel">Travel</Link>
         </li>
         <li>
-          <Link href="/sites">Sites</Link>
+          <Link href="/music">Music</Link>
+        </li>
+        <li>
+          <Link href="/politics">Politics</Link>
         </li>
       </ul>
     </StyledNav>
