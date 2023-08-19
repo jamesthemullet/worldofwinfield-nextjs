@@ -14,6 +14,10 @@ export const StyledButton = styled.button`
   &:hover {
     color: ${colours.dark};
   }
+
+  @media (max-width: 768px) {
+    flex: 1;
+  }
 `;
 
 export const StyledInput = styled.input`
