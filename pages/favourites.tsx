@@ -102,7 +102,13 @@ const StyledPostHeader = styled.div`
 const RowOfButtons = styled.div`
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
   gap: 1rem;
   margin-top: 2rem;
   margin-left: 20px;
+
+  @media (max-width: 768px) {
+    gap: 0.5rem;
+    margin: 0.5rem;
+  }
 `;

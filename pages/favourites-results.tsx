@@ -85,9 +85,8 @@ const FavouriteResults = ({ type }: TypeProps) => {
   return (
     <FavouritesContainer isHeading={false}>
       {data.map((row, rowIndex) => (
-        <StyledRow key={rowIndex}>
+        <StyledRow key={rowIndex} className={rowIndex === 0 ? 'header-row' : 'data-row'}>
           {rowIndex === 0 ? <p className="index"></p> : <p className="index">{rowIndex}.</p>}{' '}
-          {/* Index column */}
           {row.map((cellData, cellIndex) => (
             <p
               key={cellIndex}
@@ -108,8 +107,25 @@ export default FavouriteResults;
 const StyledRow = styled.div`
   display: flex;
   flex-direction: row;
-  gap: 1rem;
+  column-gap: 0.5rem;
+  @media (min-width: 768px) {
+    gap: 1rem;
+  }
   align-items: flex-start;
+
+  &.data-row {
+    @media (max-width: 768px) {
+      flex-wrap: wrap;
+    }
+  }
+
+  &.header-row {
+    .Comments {
+      @media (max-width: 768px) {
+        display: none;
+      }
+    }
+  }
 `;
 
 const FavouritesContainer = styled.div<{ isHeading: boolean }>`
@@ -121,15 +137,34 @@ const FavouritesContainer = styled.div<{ isHeading: boolean }>`
     margin: 0;
     display: flex;
     align-items: ${({ isHeading }) => (isHeading ? 'flex-start' : 'center')};
-    width: 200px;
+    @media (min-width: 768px) {
+      width: 200px;
+    }
 
     &.Comments {
       width: 800px;
+      @media (max-width: 768px) {
+        padding-bottom: 20px;
+      }
     }
 
     &.Score,
     &.Language {
-      width: 100px;
+      @media (min-width: 768px) {
+        width: 100px;
+      }
+    }
+
+    &.Year {
+      @media (max-width: 768px) {
+        display: none;
+      }
+    }
+
+    &.data {
+      @media (max-width: 768px) {
+        flex-wrap: wrap;
+      }
     }
   }
 
