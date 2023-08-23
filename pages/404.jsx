@@ -58,7 +58,7 @@ const Block = styled.div`
   padding: 0;
   text-align: center;
   font-size: 4rem;
-  font-family: 'Luckiest Guy', monospace;
+  font-family: 'Oswald', monospace;
   aspect-ratio: 2/1;
   display: flex;
   align-items: center;
