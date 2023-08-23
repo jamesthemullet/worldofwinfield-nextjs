@@ -118,7 +118,7 @@ const Front = styled.div`
   align-items: center;
   justify-content: center;
   font-size: 7rem;
-  font-family: 'Luckiest Guy', monospace;
+  font-family: 'Oswald', monospace;
   padding: 0;
   margin: 0;
 
