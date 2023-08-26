@@ -219,6 +219,17 @@ export type PostPreviewProps = {
       };
     };
   };
+  featuredImage: {
+    node: {
+      sourceUrl: string;
+      mediaDetails: {
+        height: number;
+        width: number;
+        sizes: string;
+        srcset: string;
+      };
+    };
+  };
   excerpt: string;
   author: AuthorProps;
 };
@@ -299,6 +310,24 @@ export type HeroPostProps = {
   };
   excerpt: string;
   author: AuthorProps;
+  featuredImage: {
+    node: {
+      sourceUrl: string;
+      mediaDetails: {
+        height: number;
+        width: number;
+        sizes: string;
+        srcset: string;
+      };
+    };
+  };
+  categories?: {
+    edges: {
+      node: {
+        name: string;
+      };
+    };
+  };
 };
 
 export type ContainerProps = {

@@ -27,10 +27,6 @@ const ContentContainter = styled.div`
     height: auto;
   }
 
-  @media (min-width: 768px) {
-    margin: 4rem auto 0;
-  }
-
   @media (min-width: 1281px) {
     margin: 4rem auto 0;
   }

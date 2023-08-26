@@ -4,34 +4,53 @@ import CoverImage from './cover-image';
 import Link from 'next/link';
 import { PostPreviewProps } from '../lib/types';
 import styled from '@emotion/styled';
+import PostHeader from './post-header';
 
 export default function PostPreview({
   title,
-  coverImage,
   date,
   excerpt,
   author,
   slug,
+  featuredImage,
 }: PostPreviewProps) {
   return (
     <div>
-      <ImageContainer>
-        {coverImage && <CoverImage title={title} coverImage={coverImage} slug={slug} />}
-      </ImageContainer>
-      <h2>
-        <Link href={`/posts/${slug}`} dangerouslySetInnerHTML={{ __html: title }}></Link>
-      </h2>
       <div>
-        <Date dateString={date} />
+        <PostHeader
+          title={title}
+          coverImage={featuredImage}
+          date={date}
+          author={author}
+          slug={slug}
+        />
       </div>
-      <div dangerouslySetInnerHTML={{ __html: excerpt }} />
-      <Avatar author={author} />
+      <div>
+        <StyledExcerpt dangerouslySetInnerHTML={{ __html: excerpt }} />
+      </div>
     </div>
   );
 }
 
-const ImageContainer = styled.div`
-  position: relative;
-  min-width: 100%;
-  min-height: 50vw;
+const StyledExcerpt = styled.div`
+  width: 100%;
+  max-width: 100%;
+  padding: 0 1rem;
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+  box-sizing: border-box;
+  max-width: 60rem;
+
+  @media (min-width: 1281px) {
+    margin: 4rem auto 0;
+  }
+
+  a {
+    margin-top: 20px;
+    display: block;
+  }
+
+  p {
+    word-wrap: break-word;
+  }
 `;

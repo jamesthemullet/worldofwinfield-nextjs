@@ -30,6 +30,7 @@ export default function Index({ allPosts: { edges }, preview }: IndexPageProps) 
             author={heroPost.author}
             slug={heroPost.slug}
             excerpt={heroPost.excerpt}
+            featuredImage={heroPost.featuredImage}
           />
         )}
         {morePosts.length > 0 && <MoreStories posts={morePosts} />}
