@@ -12,7 +12,7 @@ import SearchResults from '../components/search-results';
 import { nanoid } from 'nanoid';
 
 export default function Index({ preview, jamesImages }: IndexPageProps) {
-  const [searchResults, setSearchResults] = useState([]);
+  const [searchResults, setSearchResults] = useState(null);
 
   const handleSearch = (results) => {
     setSearchResults(results);

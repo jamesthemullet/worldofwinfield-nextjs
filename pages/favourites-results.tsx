@@ -55,7 +55,6 @@ const FavouriteResults = ({ type }: TypeProps) => {
 
         // Separate the header row from data rows
         const headerRow = rawData[0];
-        console.log(1, headerRow);
         const dataRows = rawData.slice(1);
 
         // Hide the "date" column if it exists (assuming "date" is in the header row)
