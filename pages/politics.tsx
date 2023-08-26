@@ -97,7 +97,6 @@ const PostContainer = styled.article<{ isEven: boolean }>`
 `;
 
 const StyledPostHeader = styled.div`
-  margin: 0 auto;
   width: 50%;
 
   @media screen and (max-width: 768px) {
