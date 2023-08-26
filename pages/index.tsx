@@ -17,23 +17,22 @@ export default function Index({ preview, jamesImages }: IndexPageProps) {
   const handleSearch = (results) => {
     setSearchResults(results);
   };
-  const tempBlocks = [
-    'all the blog',
-    'travel',
-    'goals',
-    'politics',
-    'music',
-    'favourites',
-    'want to do',
+  const blocks = [
+    { title: 'all the blog', url: '/blog' },
+    { title: 'travel', url: '/travel' },
+    { title: 'goals', url: '/goals' },
+    { title: 'politics', url: '/politics' },
+    { title: 'music', url: '/music' },
+    { title: 'favourites', url: '/favourites' },
+    { title: 'want to do', url: '/wants' },
   ];
-  const blocks = tempBlocks.length % 2 === 0 ? tempBlocks : [...tempBlocks, '?'];
 
   return (
     <Layout preview={preview} seo={null}>
       <Intro jamesImages={jamesImages} />
       <HomepageBlocksContainer>
         {blocks.map((block) => (
-          <HomepageBlock key={nanoid()} props={block} />
+          <HomepageBlock key={nanoid()} title={block.title} url={block.url} />
         ))}
       </HomepageBlocksContainer>
       <SearchBar onSearch={handleSearch} />
