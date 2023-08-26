@@ -4,15 +4,12 @@ import styled from '@emotion/styled';
 import ArchiveDropdown from './archive';
 
 export default function Footer() {
-  const blockColours = [colours.orange, colours.pink, colours.green, colours.purple];
-  const randomIndex1 = Math.floor(Math.random() * blockColours.length);
-  const randomColour1 = blockColours[randomIndex1];
   return (
     <footer>
       <Container>
-        <Block backgroundColour={randomColour1} colour={colours.white}>
-          <p>World Of Winfield</p>
+        <Block backgroundColour={colours.dark} colour={colours.white}>
           <ArchiveDropdown />
+          <p>World Of Winfield</p>
         </Block>
       </Container>
     </footer>
@@ -29,10 +26,17 @@ const Block = styled.div<{ backgroundColour: string; colour: string }>`
   font-size: 1.5rem;
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
+  gap: 40px;
+  justify-content: center;
+  font-family: 'Oswald';
+
+  @media screen and (max-width: 768px) {
+    gap: 20px;
+  }
 
   p {
     letter-spacing: 3px;
+    margin: 0;
   }
 
   @media screen and (max-width: 768px) {
