@@ -245,6 +245,7 @@ export type PostHeaderProps = {
       };
     };
   };
+  slug?: string;
 };
 
 export type PostBodyProps = {

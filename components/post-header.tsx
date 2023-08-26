@@ -1,11 +1,12 @@
 import Date from './date';
 import CoverImage from './cover-image';
 import PostTitle from './post-title';
+import Link from 'next/link';
 import { PostHeaderProps } from '../lib/types';
 import styled from '@emotion/styled';
 import { colours } from '../pages/_app';
 
-export default function PostHeader({ title, coverImage, date }: PostHeaderProps) {
+export default function PostHeader({ title, coverImage, date, slug }: PostHeaderProps) {
   const aspectRatio = coverImage?.node.mediaDetails.width / coverImage?.node.mediaDetails.height;
 
   // Generate random color indexes
@@ -27,7 +28,9 @@ export default function PostHeader({ title, coverImage, date }: PostHeaderProps)
       <ImageContainer aspectRatio={aspectRatio}>
         <CoverImage title={title} coverImage={coverImage} />
       </ImageContainer>
-      <PostTitle backgroundColour={randomColour1}>{title}</PostTitle>
+      <StyledLink href={`/posts/${slug}`} aria-label={title}>
+        <PostTitle backgroundColour={randomColour1}>{title}</PostTitle>
+      </StyledLink>
       <div>
         <PostedContainer backgroundColour={randomColour2} colour={colours.white}>
           {date && (
@@ -60,4 +63,8 @@ const PostedContainer = styled.div<{ backgroundColour: string; colour: string }>
     padding: 1rem 5rem;
     line-height: 2rem;
   }
+`;
+
+const StyledLink = styled(Link)`
+  text-decoration: none;
 `;

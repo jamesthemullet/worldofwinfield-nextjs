@@ -38,6 +38,7 @@ export default function Post({ posts }: PostsProps) {
                     date={post.date}
                     author={post.author}
                     categories={post.categories}
+                    slug={post.slug}
                   />
                 </StyledPostHeader>
                 <StyledExcerpt dangerouslySetInnerHTML={{ __html: post.excerpt }}></StyledExcerpt>
@@ -61,12 +62,20 @@ export const getStaticProps: GetStaticProps = async () => {
   };
 };
 
-const StyledExcerpt = styled.p`
+const StyledExcerpt = styled.div`
   font-size: 1.2rem;
   line-height: 1.5;
   margin: 4rem auto;
   width: calc(50% - 4rem);
-  margin: 2rem;
+
+  @media screen and (max-width: 768px) {
+    width: 100%;
+    margin: 0 1rem;
+
+    p {
+      margin: 1rem;
+    }
+  }
 `;
 
 const PostContainer = styled.article<{ isEven: boolean }>`
@@ -81,9 +90,17 @@ const PostContainer = styled.article<{ isEven: boolean }>`
     padding: 1rem;
     line-height: 4rem;
   }
+
+  @media screen and (max-width: 768px) {
+    flex-direction: column;
+  }
 `;
 
 const StyledPostHeader = styled.div`
   margin: 0 auto;
   width: 50%;
+
+  @media screen and (max-width: 768px) {
+    width: 100%;
+  }
 `;
