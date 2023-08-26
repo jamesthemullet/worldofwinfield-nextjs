@@ -1,19 +1,15 @@
 import { useRouter } from 'next/router';
-import ErrorPage from 'next/error';
 import Head from 'next/head';
-import { GetStaticProps } from 'next';
 import Container from '../components/container';
 import PostHeader from '../components/post-header';
 import Layout from '../components/layout';
 import PostTitle from '../components/post-title';
-import { filterPostsByTag } from '../lib/api';
-import { PostsProps } from '../lib/types';
 import styled from '@emotion/styled';
 import { useState } from 'react';
 import FavouriteResults from './favourites-results';
 import { StyledButton } from '../components/core-components';
 
-export default function FavouritesPage({ posts }: PostsProps) {
+export default function FavouritesPage() {
   const [selectedType, setSelectedType] = useState(null);
 
   const handleTypeClick = (type) => {
@@ -22,12 +18,8 @@ export default function FavouritesPage({ posts }: PostsProps) {
 
   const router = useRouter();
 
-  if (!router.isFallback && !posts?.length) {
-    return <ErrorPage statusCode={404} />;
-  }
-
   return (
-    <Layout preview={null} seo={posts[0]?.seo}>
+    <Layout preview={null}>
       <Container>
         {router.isFallback ? (
           <PostTitle>Loading…</PostTitle>
@@ -75,17 +67,6 @@ export default function FavouritesPage({ posts }: PostsProps) {
     </Layout>
   );
 }
-
-export const getStaticProps: GetStaticProps = async () => {
-  const goalsPosts = await filterPostsByTag('goals');
-
-  return {
-    props: {
-      posts: goalsPosts,
-    },
-    revalidate: 10,
-  };
-};
 
 const PostContainer = styled.article`
   h1 {

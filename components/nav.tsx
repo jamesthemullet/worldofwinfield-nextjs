@@ -24,6 +24,9 @@ export default function Nav() {
           <Link href="/favourites">Favourites</Link>
         </li>
         <li>
+          <Link href="/wants">Wants</Link>
+        </li>
+        <li>
           <Link href="/wants">Want To Do</Link>
         </li>
         <li>
