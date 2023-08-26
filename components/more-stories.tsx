@@ -5,7 +5,6 @@ import styled from '@emotion/styled';
 export default function MoreStories({ posts }: MoreStoriesProps) {
   return (
     <StyledSection>
-      <h2>More Stories</h2>
       <div>
         {posts.map(({ node }) => (
           <PostPreview
@@ -16,6 +15,7 @@ export default function MoreStories({ posts }: MoreStoriesProps) {
             author={node.author}
             slug={node.slug}
             excerpt={node.excerpt}
+            featuredImage={node.featuredImage}
           />
         ))}
       </div>
