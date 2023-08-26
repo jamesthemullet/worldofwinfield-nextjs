@@ -63,6 +63,10 @@ const PostedContainer = styled.div<{ backgroundColour: string; colour: string }>
     padding: 1rem 5rem;
     line-height: 2rem;
   }
+
+  p {
+    margin: 0;
+  }
 `;
 
 const StyledLink = styled(Link)`

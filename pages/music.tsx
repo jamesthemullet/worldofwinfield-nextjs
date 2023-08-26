@@ -10,6 +10,7 @@ import { filterPostsByTag } from '../lib/api';
 import { CMS_NAME } from '../lib/constants';
 import { PostsProps } from '../lib/types';
 import styled from '@emotion/styled';
+import { colours } from './_app';
 
 export default function Post({ posts }: PostsProps) {
   const router = useRouter();
@@ -41,7 +42,9 @@ export default function Post({ posts }: PostsProps) {
                     slug={post.slug}
                   />
                 </StyledPostHeader>
-                <StyledExcerpt dangerouslySetInnerHTML={{ __html: post.excerpt }}></StyledExcerpt>
+                <StyledExcerpt
+                  dangerouslySetInnerHTML={{ __html: post.excerpt }}
+                  backgroundColour={colours.dark}></StyledExcerpt>
               </PostContainer>
             ))}
           </>
@@ -62,15 +65,17 @@ export const getStaticProps: GetStaticProps = async () => {
   };
 };
 
-const StyledExcerpt = styled.div`
+const StyledExcerpt = styled.div<{ backgroundColour: string }>`
   font-size: 1.2rem;
   line-height: 1.5;
   margin: 4rem auto;
   width: calc(50% - 4rem);
+  border-top: 5px solid ${(props) => props.backgroundColour};
 
   @media screen and (max-width: 768px) {
     width: 100%;
     margin: 0 1rem;
+    border: none;
 
     p {
       margin: 1rem;
@@ -97,7 +102,6 @@ const PostContainer = styled.article<{ isEven: boolean }>`
 `;
 
 const StyledPostHeader = styled.div`
-  margin: 0 auto;
   width: 50%;
 
   @media screen and (max-width: 768px) {
