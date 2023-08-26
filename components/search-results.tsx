@@ -6,7 +6,8 @@ import { SearchResultsProps } from '../lib/types';
 const SearchResults = ({ searchResults }: SearchResultsProps) => {
   return (
     <SearchResultsContainer>
-      {searchResults.length > 0 ? (
+      {searchResults && searchResults.length === 0 && <p className="center">No results found.</p>}
+      {searchResults?.length > 0 && (
         <>
           <p>Search results:</p>
           <ul>
@@ -19,8 +20,6 @@ const SearchResults = ({ searchResults }: SearchResultsProps) => {
             ))}
           </ul>
         </>
-      ) : (
-        <p>No results found.</p>
       )}
     </SearchResultsContainer>
   );
@@ -66,7 +65,6 @@ const SearchResultsContainer = styled.div`
   margin: 0;
   color: ${colours.dark};
   margin: 0 auto 10px;
-  padding: 20px;
   max-width: 400px;
 
   li {
@@ -75,5 +73,9 @@ const SearchResultsContainer = styled.div`
 
   a {
     color: ${colours.dark};
+  }
+
+  p.center {
+    text-align: center;
   }
 `;
