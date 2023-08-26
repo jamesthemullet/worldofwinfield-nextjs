@@ -1,15 +1,17 @@
 import { useRouter } from 'next/router';
+import ErrorPage from 'next/error';
 import Head from 'next/head';
 import Container from '../components/container';
 import PostHeader from '../components/post-header';
 import Layout from '../components/layout';
 import PostTitle from '../components/post-title';
+import { PostsProps } from '../lib/types';
 import styled from '@emotion/styled';
 import { useState } from 'react';
 import FavouriteResults from './favourites-results';
 import { StyledButton } from '../components/core-components';
 
-export default function FavouritesPage() {
+export default function WantsPage() {
   const [selectedType, setSelectedType] = useState(null);
 
   const handleTypeClick = (type) => {
@@ -27,12 +29,12 @@ export default function FavouritesPage() {
           <>
             <PostContainer>
               <Head>
-                <title>Favourite...</title>
+                <title>I want...</title>
                 {/* <meta property="og:image" content={post.featuredImage?.node.sourceUrl} /> */}
               </Head>
               <StyledPostHeader>
                 <PostHeader
-                  title="Favourite..."
+                  title="I want..."
                   // coverImage={post?.featuredImage}
                   // date={post.date}
                   // author="James Winfield"
@@ -40,23 +42,11 @@ export default function FavouritesPage() {
                 />
               </StyledPostHeader>
               <RowOfButtons>
-                <StyledButton onClick={() => handleTypeClick('favouriteMoviesSheetID')}>
-                  Favourite Movies
+                <StyledButton onClick={() => handleTypeClick('wantToVisitSheetID')}>
+                  Want To Visit
                 </StyledButton>
-                <StyledButton onClick={() => handleTypeClick('favouriteBooksSheetID')}>
-                  Favourite Books
-                </StyledButton>
-                <StyledButton onClick={() => handleTypeClick('favouriteDJsSheetID')}>
-                  Favourite DJs
-                </StyledButton>
-                <StyledButton onClick={() => handleTypeClick('favouriteCheeseSheetID')}>
-                  Favourite Cheese
-                </StyledButton>
-                <StyledButton onClick={() => handleTypeClick('favouriteBeerSheetID')}>
-                  Favourite Beer
-                </StyledButton>
-                <StyledButton onClick={() => handleTypeClick('favouriteRestaurantsSheetID')}>
-                  Favourite Restaurants
+                <StyledButton onClick={() => handleTypeClick('wantToEatHereSheetID')}>
+                  Want To Eat Here
                 </StyledButton>
               </RowOfButtons>
               {selectedType && <FavouriteResults type={selectedType} />}
