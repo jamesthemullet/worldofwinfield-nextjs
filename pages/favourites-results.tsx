@@ -11,6 +11,8 @@ const favouriteBeerSheetID = '1pNNIw849xWrQHtDptwInGs6Un0AZh-fgXUssC3XIrHM';
 const favouriteRestaurantsSheetID = '1J1znKQxeNR3Y6Q1mEPzZyMfCAGK4FQyxasoCQx35NVQ';
 const wantToVisitSheetID = '1GX6KF20f3Nrb3m8T9th7UIV_uuePj4Ivlc_yLgo-4Bo';
 const wantToEatHereSheetID = '19H_22OK3JqOMkPHzMUuvicWvI1lOaL597xfErw6qqp8';
+const favouriteCountriesID = '1zyzuLzWY0S6mUp-FVjcIa3QFAENcU94WVD9ZF0JWERY';
+const favouriteCitiesID = '1WBfOTfhC70AygxrTcIIgvigzlvOD65WfI9Ysrd3aF5o';
 const { publicRuntimeConfig } = getConfig();
 
 type TypeProps = {
@@ -54,6 +56,10 @@ const FavouriteResults = ({ type }: TypeProps) => {
         sheetID = wantToVisitSheetID;
       } else if (type === 'wantToEatHereSheetID') {
         sheetID = wantToEatHereSheetID;
+      } else if (type === 'favouriteCountriesID') {
+        sheetID = favouriteCountriesID;
+      } else if (type === 'favouriteCitiesID') {
+        sheetID = favouriteCitiesID;
       }
 
       if (sheetID) {
