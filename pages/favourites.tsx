@@ -11,9 +11,15 @@ import { StyledButton } from '../components/core-components';
 
 export default function FavouritesPage() {
   const [selectedType, setSelectedType] = useState(null);
+  const [pageName, setPageName] = useState('Favourite...');
 
-  const handleTypeClick = (type) => {
-    setSelectedType(type);
+  const handleTypeClick = ({ id, name }) => {
+    setSelectedType(id);
+    if (name) {
+      setPageName(name);
+    } else {
+      setPageName('Favourite...');
+    }
   };
 
   const router = useRouter();
@@ -27,12 +33,12 @@ export default function FavouritesPage() {
           <>
             <PostContainer>
               <Head>
-                <title>Favourite...</title>
+                <title>Favourite Things</title>
                 {/* <meta property="og:image" content={post.featuredImage?.node.sourceUrl} /> */}
               </Head>
               <StyledPostHeader>
                 <PostHeader
-                  title="Favourite..."
+                  title={pageName}
                   // coverImage={post?.featuredImage}
                   // date={post.date}
                   // author="James Winfield"
@@ -40,23 +46,59 @@ export default function FavouritesPage() {
                 />
               </StyledPostHeader>
               <RowOfButtons>
-                <StyledButton onClick={() => handleTypeClick('favouriteMoviesSheetID')}>
+                <StyledButton
+                  onClick={() =>
+                    handleTypeClick({ id: 'favouriteMoviesSheetID', name: 'Favourite Movies' })
+                  }>
                   Favourite Movies
                 </StyledButton>
-                <StyledButton onClick={() => handleTypeClick('favouriteBooksSheetID')}>
+                <StyledButton
+                  onClick={() =>
+                    handleTypeClick({ id: 'favouriteBooksSheetID', name: 'Favourite Books' })
+                  }>
                   Favourite Books
                 </StyledButton>
-                <StyledButton onClick={() => handleTypeClick('favouriteDJsSheetID')}>
+                <StyledButton
+                  onClick={() =>
+                    handleTypeClick({ id: 'favouriteDJsSheetID', name: 'Favourite DJs' })
+                  }>
                   Favourite DJs
                 </StyledButton>
-                <StyledButton onClick={() => handleTypeClick('favouriteCheeseSheetID')}>
+                <StyledButton
+                  onClick={() =>
+                    handleTypeClick({ id: 'favouriteCheeseSheetID', name: 'Favourite Cheese' })
+                  }>
                   Favourite Cheese
                 </StyledButton>
-                <StyledButton onClick={() => handleTypeClick('favouriteBeerSheetID')}>
+                <StyledButton
+                  onClick={() =>
+                    handleTypeClick({ id: 'favouriteBeerSheetID', name: 'Favourite Beer' })
+                  }>
                   Favourite Beer
                 </StyledButton>
-                <StyledButton onClick={() => handleTypeClick('favouriteRestaurantsSheetID')}>
+                <StyledButton
+                  onClick={() =>
+                    handleTypeClick({
+                      id: 'favouriteRestaurantsSheetID',
+                      name: 'Favourite Restaurants',
+                    })
+                  }>
                   Favourite Restaurants
+                </StyledButton>
+                <StyledButton
+                  onClick={() =>
+                    handleTypeClick({
+                      id: 'favouriteCountriesID',
+                      name: 'Favourite Countries Visited',
+                    })
+                  }>
+                  Favourite Countries Visited
+                </StyledButton>
+                <StyledButton
+                  onClick={() =>
+                    handleTypeClick({ id: 'favouriteCitiesID', name: 'Favourite Cities Visited' })
+                  }>
+                  Favourite Cities Visited
                 </StyledButton>
               </RowOfButtons>
               {selectedType && <FavouriteResults type={selectedType} />}
