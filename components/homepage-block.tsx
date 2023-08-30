@@ -7,7 +7,15 @@ type HomePageBlockTypes = {
   url: string;
 };
 
-const blockColours = [colours.pink, colours.green, colours.purple, colours.dark];
+const blockColours = [
+  colours.pink,
+  colours.green,
+  colours.purple,
+  colours.burgandy,
+  colours.dark,
+  colours.azure,
+  colours.blueish,
+];
 
 export default function HomepageBlock({ url, title }: HomePageBlockTypes) {
   const randomIndex = Math.floor(Math.random() * blockColours.length);

@@ -21,6 +21,9 @@ export default function Nav() {
           <Link href="/">Home</Link>
         </li>
         <li>
+          <Link href="/blog">The Blog</Link>
+        </li>
+        <li>
           <Link href="/favourites">Favourites</Link>
         </li>
         <li>
