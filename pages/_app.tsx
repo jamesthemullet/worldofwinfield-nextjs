@@ -5,12 +5,14 @@ import Head from 'next/head';
 import styled from '@emotion/styled';
 
 export const colours = {
-  orange: '#FB8B24',
+  purple: '#8884FF',
   pink: '#D90368',
-  purple: '#820263',
+  burgandy: '#820263',
   dark: '#291720',
   green: '#04A777',
   white: '#FFFFFF',
+  blueish: '#547AA5',
+  azure: '#3185FC',
 };
 
 export const globalStyles = css`
@@ -23,12 +25,14 @@ export const globalStyles = css`
 
   :root {
     /* Define your colors as CSS custom properties */
-    --colour-orange: ${colours.orange};
-    --colour-pink: ${colours.pink};
     --colour-purple: ${colours.purple};
+    --colour-pink: ${colours.pink};
+    --colour-burgandy: ${colours.burgandy};
     --colour-dark: ${colours.dark};
     --colour-green: ${colours.green};
     --colour-white: ${colours.white};
+    --colour-blueish: ${colours.blueish};
+    --colour-azure: ${colours.azure};
   }
 
   /* Additional global styles can be included here */

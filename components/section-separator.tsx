@@ -1,7 +1,15 @@
 import styled from '@emotion/styled';
 import { colours } from '../pages/_app';
 
-const blockColours = [colours.orange, colours.pink, colours.green, colours.purple];
+const blockColours = [
+  colours.pink,
+  colours.green,
+  colours.purple,
+  colours.burgandy,
+  colours.dark,
+  colours.azure,
+  colours.blueish,
+];
 const randomIndex1 = Math.floor(Math.random() * blockColours.length);
 const randomColour1 = blockColours[randomIndex1];
 

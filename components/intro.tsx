@@ -8,7 +8,15 @@ type FlipperProps = {
   children: React.ReactNode;
 };
 
-const blockColours = [colours.orange, colours.pink, colours.green];
+const blockColours = [
+  colours.pink,
+  colours.green,
+  colours.purple,
+  colours.burgandy,
+  colours.dark,
+  colours.azure,
+  colours.blueish,
+];
 
 export default function Intro({ jamesImages }: IntroProps) {
   const [hoveredIndex, setHoveredIndex] = useState(-1);

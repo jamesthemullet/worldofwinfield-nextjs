@@ -10,7 +10,15 @@ export default function PostHeader({ title, coverImage, date, slug }: PostHeader
   const aspectRatio = coverImage?.node.mediaDetails.width / coverImage?.node.mediaDetails.height;
 
   // Generate random color indexes
-  const blockColours = [colours.dark, colours.pink, colours.green, colours.purple];
+  const blockColours = [
+    colours.pink,
+    colours.green,
+    colours.purple,
+    colours.burgandy,
+    colours.dark,
+    colours.azure,
+    colours.blueish,
+  ];
   const randomIndex1 = Math.floor(Math.random() * blockColours.length);
   let randomIndex2 = Math.floor(Math.random() * blockColours.length);
 

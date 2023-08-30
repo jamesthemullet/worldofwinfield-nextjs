@@ -7,7 +7,15 @@ import styled from '@emotion/styled';
 
 export default function Custom404() {
   const words = ['Why', 'are', 'you', 'here?'];
-  const blockColours = [colours.dark, colours.pink, colours.green, colours.purple];
+  const blockColours = [
+    colours.pink,
+    colours.green,
+    colours.purple,
+    colours.burgandy,
+    colours.dark,
+    colours.azure,
+    colours.blueish,
+  ];
 
   const shuffleArray = (array) => {
     for (let i = array.length - 1; i > 0; i--) {
