@@ -66,7 +66,12 @@ const StyledNav = styled.nav`
     }
   }
   li {
-    padding: 0.5rem 2rem;
+    @media (min-width: 768px) {
+      padding: 0.5rem 0.5rem;
+    }
+    @media (min-width: 1000px) {
+      padding: 0.5rem 1rem;
+    }
   }
   a {
     color: #fff;

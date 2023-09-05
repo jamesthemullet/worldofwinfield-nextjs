@@ -125,13 +125,18 @@ const Front = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 7rem;
+  font-size: 3rem;
   font-family: 'Oswald', monospace;
   padding: 0;
   margin: 0;
+  cursor: pointer;
 
   @media (max-width: 768px) {
     font-size: 3rem;
+  }
+
+  @media (min-width: 1200px) {
+    font-size: 5rem;
   }
 `;
 
@@ -142,6 +147,7 @@ const Back = styled.img`
   backface-visibility: hidden;
   object-fit: cover;
   transform: rotateY(180deg);
+  cursor: pointer;
 `;
 
 const getColour = (index) => {
