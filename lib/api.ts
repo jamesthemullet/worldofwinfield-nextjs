@@ -63,6 +63,38 @@ export async function getAllPostsWithSlug() {
   return data?.posts;
 }
 
+export async function getFirstPost() {
+  const data = await fetchAPI(`
+    {
+      posts(first: 1) {
+        edges {
+          node {
+            slug
+            title
+            featuredImage {
+              node {
+                id
+                title
+                mediaDetails {
+                  sizes {
+                    sourceUrl
+                    height
+                    width
+                  }
+                }
+                srcSet
+                sourceUrl
+              }
+            }
+            date
+          }
+        }
+      }
+    }
+  `);
+  return data?.posts;
+}
+
 export async function getJamesImages({ first = 10, after = null }) {
   const data = await fetchAPI(
     `

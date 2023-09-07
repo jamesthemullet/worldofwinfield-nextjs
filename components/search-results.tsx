@@ -27,7 +27,7 @@ const SearchResults = ({ searchResults }: SearchResultsProps) => {
 
 export default SearchResults;
 
-const formatDate = (date: string) => {
+export const formatDate = (date: string) => {
   const options: Intl.DateTimeFormatOptions = {
     year: 'numeric',
     month: 'long',
