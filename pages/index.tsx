@@ -2,7 +2,7 @@ import { GetStaticProps } from 'next';
 import { useState } from 'react';
 import Intro from '../components/intro';
 import Layout from '../components/layout';
-import { getJamesImages } from '../lib/api';
+import { getFirstPost, getJamesImages } from '../lib/api';
 import { IndexPageProps } from '../lib/types';
 import HomepageBlock from '../components/homepage-block';
 import styled from '@emotion/styled';
@@ -11,8 +11,9 @@ import SearchResults from '../components/search-results';
 
 import { nanoid } from 'nanoid';
 
-export default function Index({ preview, jamesImages }: IndexPageProps) {
+export default function Index({ preview, jamesImages, firstPost }: IndexPageProps) {
   const [searchResults, setSearchResults] = useState(null);
+  console.log(20, firstPost);
 
   const handleSearch = (results) => {
     setSearchResults(results);
@@ -58,9 +59,11 @@ export default function Index({ preview, jamesImages }: IndexPageProps) {
     { className: 'block-5-9 placeholder', title: 'placeholder', url: '/food', size: 2 },
     {
       className: 'block-6',
-      title: 'politics',
-      url: '/politics',
+      title: `${firstPost.edges[0].node.title}`,
+      url: `posts/${firstPost.edges[0].node.slug}`,
       size: 3,
+      image: firstPost.edges[0].node.featuredImage,
+      date: firstPost.edges[0].node.date,
     },
     {
       className: 'block-6-1 placeholder',
@@ -155,8 +158,8 @@ export default function Index({ preview, jamesImages }: IndexPageProps) {
     },
     {
       className: 'block-10',
-      title: 'recent blog post',
-      url: '/',
+      title: 'politics',
+      url: '/politics',
       size: 2,
     },
     {
@@ -295,6 +298,8 @@ export default function Index({ preview, jamesImages }: IndexPageProps) {
             title={block.title}
             url={block.url}
             size={block.size}
+            image={block.image}
+            date={block.date}
           />
         ))}
       </HomepageBlocksContainer>
@@ -306,9 +311,10 @@ export default function Index({ preview, jamesImages }: IndexPageProps) {
 
 export const getStaticProps: GetStaticProps = async ({ preview = false }) => {
   const jamesImages = await getJamesImages({ first: 20 });
+  const firstPost = await getFirstPost();
 
   return {
-    props: { preview, jamesImages },
+    props: { preview, jamesImages, firstPost },
     revalidate: 10,
   };
 };

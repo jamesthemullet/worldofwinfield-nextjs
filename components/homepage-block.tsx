@@ -1,12 +1,26 @@
 import styled from '@emotion/styled';
 import { colours } from '../pages/_app';
 import Link from 'next/link';
+import Image from 'next/image';
+import { formatDate } from './search-results';
 
 type HomePageBlockTypes = {
   className: string;
   title: string;
   url: string;
   size: number;
+  image?: {
+    node: {
+      sourceUrl: string;
+      mediaDetails: {
+        height: number;
+        width: number;
+        sizes: string;
+      };
+      srcset: string;
+    };
+  };
+  date?: string;
 };
 
 const blockColours = [
@@ -19,14 +33,40 @@ const blockColours = [
   colours.blueish,
 ];
 
-export default function HomepageBlock({ className, url, title, size }: HomePageBlockTypes) {
+export default function HomepageBlock({
+  className,
+  url,
+  title,
+  size,
+  image,
+  date,
+}: HomePageBlockTypes) {
   const randomIndex = Math.floor(Math.random() * blockColours.length);
   const randomColour = blockColours[randomIndex];
 
   return url ? (
     <Block backgroundColour={randomColour} colour={colours.white} size={size} className={className}>
       <StyledLink href={url}>
-        <p>{title}</p>
+        {image?.node && (
+          <ImageContainer>
+            <Image
+              src={image.node.sourceUrl}
+              alt={title}
+              width={1200}
+              height={800}
+              sizes={image.node.srcset}
+              quality={100}
+            />
+          </ImageContainer>
+        )}
+        {image?.node ? (
+          <div>
+            <p>{title}</p>
+            {date && <p>{formatDate(date)}</p>}
+          </div>
+        ) : (
+          <p>{title}</p>
+        )}
       </StyledLink>
     </Block>
   ) : (
@@ -39,19 +79,37 @@ export default function HomepageBlock({ className, url, title, size }: HomePageB
 const StyledLink = styled(Link)`
   text-decoration: none;
   color: inherit;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  position: relative;
+
+  div {
+    position: absolute;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+  }
+`;
+
+const ImageContainer = styled.div`
+  position: relative;
+  max-height: 500px;
 `;
 
 const Block = styled.div<{ backgroundColour: string; colour: string; size: number }>`
   background-color: ${(props) => props.backgroundColour};
   color: ${(props) => props.colour};
   display: flex;
-  align-items: center;
-  justify-content: center;
   min-height: 100px;
   border: 1px solid #ccc;
   margin: 2px;
   grid-column: span ${(props) => props.size};
   grid-row: span ${(props) => props.size};
+  overflow: hidden;
+
+  img {
+    object-fit: none;
+  }
 
   @media (max-width: 768px) {
     width: calc(100%);

@@ -165,6 +165,29 @@ export type IndexPageProps = {
       };
     }[];
   };
+  firstPost: {
+    edges: {
+      node: {
+        slug: string;
+        title: string;
+        featuredImage: {
+          node: {
+            sourceUrl: string;
+            mediaDetails: {
+              height: number;
+              width: number;
+              sizes: string;
+            };
+            srcset: string;
+          };
+        };
+        date: string;
+        content: string;
+        author: AuthorProps;
+        excerpt: string;
+      };
+    }[];
+  };
   preview: string;
   jamesImages: {
     edges: {
