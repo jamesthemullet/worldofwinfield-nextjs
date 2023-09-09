@@ -13,7 +13,6 @@ import { nanoid } from 'nanoid';
 
 export default function Index({ preview, jamesImages, firstPost }: IndexPageProps) {
   const [searchResults, setSearchResults] = useState(null);
-  console.log(20, firstPost);
 
   const handleSearch = (results) => {
     setSearchResults(results);
@@ -300,6 +299,7 @@ export default function Index({ preview, jamesImages, firstPost }: IndexPageProp
             size={block.size}
             image={block.image}
             date={block.date}
+            jamesImages={jamesImages}
           />
         ))}
       </HomepageBlocksContainer>

@@ -3,6 +3,7 @@ import { colours } from '../pages/_app';
 import Link from 'next/link';
 import Image from 'next/image';
 import { formatDate } from './search-results';
+import { JamesImagesProps } from '../lib/types';
 
 type HomePageBlockTypes = {
   className: string;
@@ -11,16 +12,17 @@ type HomePageBlockTypes = {
   size: number;
   image?: {
     node: {
-      sourceUrl: string;
       mediaDetails: {
         height: number;
         width: number;
         sizes: string;
       };
       srcset: string;
+      sourceUrl: string;
     };
   };
   date?: string;
+  jamesImages: JamesImagesProps;
 };
 
 const blockColours = [
@@ -40,9 +42,21 @@ export default function HomepageBlock({
   size,
   image,
   date,
+  jamesImages,
 }: HomePageBlockTypes) {
   const randomIndex = Math.floor(Math.random() * blockColours.length);
   const randomColour = blockColours[randomIndex];
+  let width, height;
+
+  if (title === 'placeholder') {
+    const randomJamesImage = Math.floor(Math.random() * jamesImages.edges.length);
+    image = jamesImages.edges[randomJamesImage].node.featuredImage;
+    width = 230 * size;
+    height = 230 * size;
+  } else {
+    width = 1200;
+    height = 800;
+  }
 
   return url ? (
     <Block backgroundColour={randomColour} colour={colours.white} size={size} className={className}>
@@ -52,14 +66,14 @@ export default function HomepageBlock({
             <Image
               src={image.node.sourceUrl}
               alt={title}
-              width={1200}
-              height={800}
+              width={width}
+              height={height}
               sizes={image.node.srcset}
               quality={100}
             />
           </ImageContainer>
         )}
-        {image?.node ? (
+        {image?.node && title !== 'placeholder' ? (
           <div>
             <p>{title}</p>
             {date && <p>{formatDate(date)}</p>}

@@ -24,14 +24,12 @@ export default function Intro({ jamesImages }: IntroProps) {
   const [imageUrls, setImageUrls] = useState<string[]>([]);
 
   useEffect(() => {
-    // Shuffle the jamesImages array randomly
     const shuffledArray = [...jamesImages.edges].sort(() => Math.random() - 0.5);
     setShuffledImages(shuffledArray);
 
-    // Load the image URLs
     const urls = shuffledArray.map((image) => {
       const jamesImage = image?.node.featuredImage?.node;
-      return jamesImage?.mediaDetails.sizes[0].sourceUrl || '';
+      return jamesImage?.sourceUrl || '';
     });
     setImageUrls(urls);
   }, [jamesImages]);

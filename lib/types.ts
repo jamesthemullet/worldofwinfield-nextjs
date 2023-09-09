@@ -117,28 +117,27 @@ export type AvatarProps = {
   author: AuthorProps;
 };
 
-export type IntroProps = {
-  jamesImages: {
-    edges: {
-      node: {
-        title: string;
-        featuredImage: {
-          node: {
-            id: string;
-            uri: string;
-            mediaDetails: {
-              height: number;
-              width: number;
-              sizes: {
-                name: string;
-                sourceUrl: string;
-              }[];
-            };
+export type JamesImagesProps = {
+  edges: {
+    node: {
+      title: string;
+      featuredImage: {
+        node: {
+          mediaDetails: {
+            height: number;
+            width: number;
+            sizes: string;
           };
+          sourceUrl: string;
+          srcset: string;
         };
       };
-    }[];
-  };
+    };
+  }[];
+};
+
+export type IntroProps = {
+  jamesImages: JamesImagesProps;
 };
 
 export type IndexPageProps = {
@@ -189,27 +188,7 @@ export type IndexPageProps = {
     }[];
   };
   preview: string;
-  jamesImages: {
-    edges: {
-      node: {
-        title: string;
-        featuredImage: {
-          node: {
-            id: string;
-            uri: string;
-            mediaDetails: {
-              height: number;
-              width: number;
-              sizes: {
-                name: string;
-                sourceUrl: string;
-              }[];
-            };
-          };
-        };
-      };
-    }[];
-  };
+  jamesImages: JamesImagesProps;
 };
 
 export type TagsProps = {
