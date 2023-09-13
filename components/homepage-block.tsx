@@ -46,13 +46,16 @@ export default function HomepageBlock({
 }: HomePageBlockTypes) {
   const randomIndex = Math.floor(Math.random() * blockColours.length);
   const randomColour = blockColours[randomIndex];
-  let width, height;
+  let width, height, eagerLoading;
+  let runCount = 0;
 
   if (title === 'placeholder') {
     const randomJamesImage = Math.floor(Math.random() * jamesImages.edges.length);
     image = jamesImages.edges[randomJamesImage].node.featuredImage;
     width = 230 * size;
     height = 230 * size;
+    runCount++;
+    eagerLoading = runCount <= 3 ? 'eager' : 'lazy';
   } else {
     width = 1200;
     height = 800;
@@ -70,6 +73,7 @@ export default function HomepageBlock({
               height={height}
               sizes={image.node.srcset}
               quality={100}
+              loading={eagerLoading}
             />
           </ImageContainer>
         )}

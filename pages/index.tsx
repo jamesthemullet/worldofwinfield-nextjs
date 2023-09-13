@@ -264,14 +264,12 @@ export default function Index({ preview, jamesImages, firstPost }: IndexPageProp
       url: '/music',
       size: 1,
     },
-
     {
       className: 'block-14-4 placeholder',
       title: 'placeholder',
       url: '/music',
       size: 1,
     },
-
     {
       className: 'block-14-5 placeholder',
       title: 'placeholder',
