@@ -105,7 +105,6 @@ export async function getJamesImages({ first = 10, after = null }) {
             title
             featuredImage {
               node {
-                id
                 title
                 mediaDetails {
                   sizes {
@@ -114,6 +113,8 @@ export async function getJamesImages({ first = 10, after = null }) {
                     width
                   }
                 }
+                sourceUrl
+                srcSet
               }
             }
           }
