@@ -238,7 +238,7 @@ export type PostPreviewProps = {
 
 export type PostHeaderProps = {
   title: string;
-  imageSize: string;
+  imageSize?: string;
   coverImage?: {
     node: {
       sourceUrl: string;
