@@ -35,6 +35,7 @@ export default function Post({ posts }: PostsProps) {
                 <StyledPostHeader>
                   <PostHeader
                     title={post.title}
+                    imageSize="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, calc(50vw - (100vw - 1500px))"
                     coverImage={post.featuredImage}
                     date={post.date}
                     author={post.author}
