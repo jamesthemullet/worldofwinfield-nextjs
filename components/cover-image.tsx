@@ -14,15 +14,16 @@ interface Props {
       };
     };
   };
+  imageSize?: string;
   slug?: string;
 }
 
-export default function CoverImage({ title, coverImage, slug }: Props) {
-  const image = (
+export default function CoverImage({ title, coverImage, imageSize, slug }: Props) {
+  const image = coverImage?.node.sourceUrl && (
     <Image
       alt={`Cover Image for ${title}`}
       src={coverImage?.node.sourceUrl}
-      sizes={coverImage?.node.mediaDetails.srcset}
+      sizes={imageSize || coverImage?.node.mediaDetails.srcset}
       fill
     />
   );
