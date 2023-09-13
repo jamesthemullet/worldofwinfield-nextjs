@@ -112,6 +112,10 @@ const StyledLink = styled(Link)`
 const ImageContainer = styled.div`
   position: relative;
   max-height: 500px;
+
+  @media (max-width: 768px) {
+    display: none;
+  }
 `;
 
 const Block = styled.div<{ backgroundColour: string; colour: string; size: number }>`
