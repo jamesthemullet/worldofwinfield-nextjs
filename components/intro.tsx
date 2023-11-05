@@ -64,14 +64,15 @@ export default function Intro({ jamesImages }: IntroProps) {
                 <Flipper flipped={hoveredIndex === index}>
                   <Front>{letter}</Front>
                   {jamesImage && imageUrl && hoveredIndex === index && (
-                    <Back>
+                    <Back width={backImageWidth}>
                       <Image
                         src={imageUrl}
                         alt={jamesAltTag}
-                        width={backImageWidth}
-                        height={backImageWidth}
+                        width={300}
+                        height={300}
                         sizes={jamesImage.srcset}
                         quality={100}
+                        loading="lazy"
                       />
                     </Back>
                   )}
@@ -154,9 +155,18 @@ const Front = styled.div`
   }
 `;
 
-const Back = styled.div`
+const Back = styled.div<{ width: number }>`
   position: relative;
   cursor: pointer;
+  width: ${(props) => props.width}px;
+  max-width: 100%;
+  aspect-ratio: 1;
+
+  img {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+  }
 `;
 
 const getColour = (index) => {

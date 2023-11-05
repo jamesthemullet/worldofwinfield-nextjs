@@ -46,20 +46,25 @@ export default function HomepageBlock({
 }: HomePageBlockTypes) {
   const randomIndex = Math.floor(Math.random() * blockColours.length);
   const randomColour = blockColours[randomIndex];
-  let width, height, eagerLoading;
-  let runCount = 0;
+  let width, height;
 
   if (title === 'placeholder') {
     const randomJamesImage = Math.floor(Math.random() * jamesImages.edges.length);
     image = jamesImages.edges[randomJamesImage].node.featuredImage;
     width = 230 * size;
     height = 230 * size;
-    runCount++;
-    eagerLoading = runCount <= 3 ? 'eager' : 'lazy';
   } else {
     width = 1200;
     height = 800;
   }
+
+  const eagerOrLazy = () => {
+    if (className.includes('block-1') || className.includes('block-2')) {
+      return 'eager';
+    } else {
+      return 'lazy';
+    }
+  };
 
   return url ? (
     <Block backgroundColour={randomColour} colour={colours.white} size={size} className={className}>
@@ -73,7 +78,7 @@ export default function HomepageBlock({
               height={height}
               sizes={image.node.srcset}
               quality={100}
-              loading={eagerLoading}
+              loading={eagerOrLazy()}
             />
           </ImageContainer>
         )}
