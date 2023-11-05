@@ -4,6 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { formatDate } from './search-results';
 import { JamesImagesProps } from '../lib/types';
+import { useEffect, useState } from 'react';
 
 type HomePageBlockTypes = {
   className: string;
@@ -66,20 +67,41 @@ export default function HomepageBlock({
     }
   };
 
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkIfMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    // Initial check on component mount
+    checkIfMobile();
+
+    // Listen for window resize to update isMobile
+    window.addEventListener('resize', checkIfMobile);
+
+    // Clean up the event listener when the component unmounts
+    return () => {
+      window.removeEventListener('resize', checkIfMobile);
+    };
+  }, []);
+
   return url ? (
     <Block backgroundColour={randomColour} colour={colours.white} size={size} className={className}>
       <StyledLink href={url}>
         {image?.node && (
           <ImageContainer>
-            <Image
-              src={image.node.sourceUrl}
-              alt={title}
-              width={width}
-              height={height}
-              sizes={image.node.srcset}
-              quality={100}
-              loading={eagerOrLazy()}
-            />
+            {!isMobile && (
+              <Image
+                src={image.node.sourceUrl}
+                alt={title}
+                width={width}
+                height={height}
+                sizes={image.node.srcset}
+                quality={80}
+                loading={eagerOrLazy()}
+              />
+            )}
           </ImageContainer>
         )}
         {image?.node && title !== 'placeholder' ? (
