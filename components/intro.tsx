@@ -2,6 +2,7 @@ import styled from '@emotion/styled';
 import React, { useState, useEffect } from 'react';
 import { colours } from '../pages/_app';
 import { IntroProps } from '../lib/types';
+import Image from 'next/image';
 
 type FlipperProps = {
   flipped: boolean;
@@ -22,6 +23,7 @@ export default function Intro({ jamesImages }: IntroProps) {
   const [hoveredIndex, setHoveredIndex] = useState(-1);
   const [shuffledImages, setShuffledImages] = useState([]);
   const [imageUrls, setImageUrls] = useState<string[]>([]);
+  const [backImageWidth, setBackImageWidth] = useState(0);
 
   useEffect(() => {
     const shuffledArray = [...jamesImages.edges].sort(() => Math.random() - 0.5);
@@ -33,6 +35,11 @@ export default function Intro({ jamesImages }: IntroProps) {
     });
     setImageUrls(urls);
   }, [jamesImages]);
+
+  useEffect(() => {
+    const margin = window && window.innerWidth < 768 ? 3 : 13;
+    setBackImageWidth(window && window.innerWidth / 8 - margin);
+  });
 
   const handleBlockHover = (index) => {
     setHoveredIndex(index);
@@ -57,7 +64,17 @@ export default function Intro({ jamesImages }: IntroProps) {
                 <Flipper flipped={hoveredIndex === index}>
                   <Front>{letter}</Front>
                   {jamesImage && imageUrl && hoveredIndex === index && (
-                    <Back src={imageUrl} alt={jamesAltTag} />
+                    <Back width={backImageWidth}>
+                      <Image
+                        src={imageUrl}
+                        alt={jamesAltTag}
+                        width={300}
+                        height={300}
+                        sizes={jamesImage.srcset}
+                        quality={100}
+                        loading="lazy"
+                      />
+                    </Back>
                   )}
                 </Flipper>
               </FlipContainer>
@@ -138,14 +155,18 @@ const Front = styled.div`
   }
 `;
 
-const Back = styled.img`
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  backface-visibility: hidden;
-  object-fit: cover;
-  transform: rotateY(180deg);
+const Back = styled.div<{ width: number }>`
+  position: relative;
   cursor: pointer;
+  width: ${(props) => props.width}px;
+  max-width: 100%;
+  aspect-ratio: 1;
+
+  img {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+  }
 `;
 
 const getColour = (index) => {

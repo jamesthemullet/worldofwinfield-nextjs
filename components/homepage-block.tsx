@@ -4,6 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { formatDate } from './search-results';
 import { JamesImagesProps } from '../lib/types';
+import { useEffect, useState } from 'react';
 
 type HomePageBlockTypes = {
   className: string;
@@ -46,35 +47,61 @@ export default function HomepageBlock({
 }: HomePageBlockTypes) {
   const randomIndex = Math.floor(Math.random() * blockColours.length);
   const randomColour = blockColours[randomIndex];
-  let width, height, eagerLoading;
-  let runCount = 0;
+  let width, height;
 
   if (title === 'placeholder') {
     const randomJamesImage = Math.floor(Math.random() * jamesImages.edges.length);
     image = jamesImages.edges[randomJamesImage].node.featuredImage;
     width = 230 * size;
     height = 230 * size;
-    runCount++;
-    eagerLoading = runCount <= 3 ? 'eager' : 'lazy';
   } else {
     width = 1200;
     height = 800;
   }
+
+  const eagerOrLazy = () => {
+    if (className.includes('block-1') || className.includes('block-2')) {
+      return 'eager';
+    } else {
+      return 'lazy';
+    }
+  };
+
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkIfMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    // Initial check on component mount
+    checkIfMobile();
+
+    // Listen for window resize to update isMobile
+    window.addEventListener('resize', checkIfMobile);
+
+    // Clean up the event listener when the component unmounts
+    return () => {
+      window.removeEventListener('resize', checkIfMobile);
+    };
+  }, []);
 
   return url ? (
     <Block backgroundColour={randomColour} colour={colours.white} size={size} className={className}>
       <StyledLink href={url}>
         {image?.node && (
           <ImageContainer>
-            <Image
-              src={image.node.sourceUrl}
-              alt={title}
-              width={width}
-              height={height}
-              sizes={image.node.srcset}
-              quality={100}
-              loading={eagerLoading}
-            />
+            {!isMobile && (
+              <Image
+                src={image.node.sourceUrl}
+                alt={title}
+                width={width}
+                height={height}
+                sizes={image.node.srcset}
+                quality={80}
+                loading={eagerOrLazy()}
+              />
+            )}
           </ImageContainer>
         )}
         {image?.node && title !== 'placeholder' ? (
