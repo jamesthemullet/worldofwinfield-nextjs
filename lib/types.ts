@@ -189,6 +189,26 @@ export type IndexPageProps = {
   };
   preview: string;
   jamesImages: JamesImagesProps;
+  randomPosts: {
+    slug: string;
+    title: string;
+    date: string;
+    featuredImage: {
+      node: {
+        mediaDetails: {
+          sizes: {
+            height: number;
+            width: number;
+            sizes: string;
+          };
+          height: number;
+          width: number;
+        };
+        srcSet: string;
+        sourceUrl: string;
+      };
+    };
+  };
 };
 
 export type TagsProps = {

@@ -2,16 +2,17 @@ import { GetStaticProps } from 'next';
 import { useState } from 'react';
 import Intro from '../components/intro';
 import Layout from '../components/layout';
-import { getFirstPost, getJamesImages } from '../lib/api';
+import { getFirstPost, getJamesImages, getPostDisplayInfo } from '../lib/api';
 import { IndexPageProps } from '../lib/types';
 import HomepageBlock from '../components/homepage-block';
 import styled from '@emotion/styled';
 import SearchBar from '../components/search-bar';
 import SearchResults from '../components/search-results';
+import { hardCodedListOfPostIds } from '../data/allIds';
 
 import { nanoid } from 'nanoid';
 
-export default function Index({ preview, jamesImages, firstPost }: IndexPageProps) {
+export default function Index({ preview, jamesImages, firstPost, randomPosts }: IndexPageProps) {
   const [searchResults, setSearchResults] = useState(null);
 
   const handleSearch = (results) => {
@@ -181,9 +182,11 @@ export default function Index({ preview, jamesImages, firstPost }: IndexPageProp
     },
     {
       className: 'block-11',
-      title: 'random blog post',
-      url: '/',
+      title: randomPosts[0].title,
+      url: `/posts/${randomPosts[0].slug}`,
       size: 3,
+      image: randomPosts[0].featuredImage,
+      date: randomPosts[0].date,
     },
     {
       className: 'block-11-1 placeholder',
@@ -205,9 +208,11 @@ export default function Index({ preview, jamesImages, firstPost }: IndexPageProp
     },
     {
       className: 'block-12',
-      title: 'random blog post',
-      url: '/',
+      title: randomPosts[1].title,
+      url: `/posts/${randomPosts[1].slug}`,
       size: 2,
+      image: randomPosts[1].featuredImage,
+      date: randomPosts[1].date,
     },
     {
       className: 'block-12-1 placeholder',
@@ -217,9 +222,11 @@ export default function Index({ preview, jamesImages, firstPost }: IndexPageProp
     },
     {
       className: 'block-13',
-      title: 'random blog post',
-      url: '/',
+      title: randomPosts[2].title,
+      url: `/posts/${randomPosts[2].slug}`,
       size: 2,
+      image: randomPosts[2].featuredImage,
+      date: randomPosts[2].date,
     },
     {
       className: 'block-13-1 placeholder',
@@ -311,8 +318,16 @@ export const getStaticProps: GetStaticProps = async ({ preview = false }) => {
   const jamesImages = await getJamesImages({ first: 20 });
   const firstPost = await getFirstPost();
 
+  const getRandomPostId = () =>
+    hardCodedListOfPostIds[Math.floor(Math.random() * hardCodedListOfPostIds.length)];
+  const randomPosts = await getPostDisplayInfo([
+    getRandomPostId(),
+    getRandomPostId(),
+    getRandomPostId(),
+  ]);
+
   return {
-    props: { preview, jamesImages, firstPost },
+    props: { preview, jamesImages, firstPost, randomPosts },
     revalidate: 10,
   };
 };

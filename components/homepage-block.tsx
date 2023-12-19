@@ -52,11 +52,17 @@ export default function HomepageBlock({
   if (title === 'placeholder') {
     const randomJamesImage = Math.floor(Math.random() * jamesImages.edges.length);
     image = jamesImages.edges[randomJamesImage].node.featuredImage;
-    width = 230 * size;
-    height = 230 * size;
+    width = 280 * size;
+    height = 280 * size;
+  } else if (size === 1) {
+    width = 300;
+    height = 300;
+  } else if (size === 2) {
+    width = 600;
+    height = 450;
   } else {
-    width = 1200;
-    height = 800;
+    width = 920;
+    height = 720;
   }
 
   const eagerOrLazy = () => {
@@ -87,7 +93,13 @@ export default function HomepageBlock({
   }, []);
 
   return url ? (
-    <Block backgroundColour={randomColour} colour={colours.white} size={size} className={className}>
+    <Block
+      backgroundColour={randomColour}
+      colour={colours.white}
+      size={size}
+      className={className}
+      image={image}
+      date={date}>
       <StyledLink href={url}>
         {image?.node && (
           <ImageContainer>
@@ -98,16 +110,16 @@ export default function HomepageBlock({
                 width={width}
                 height={height}
                 sizes={image.node.srcset}
-                quality={80}
+                quality={0}
                 loading={eagerOrLazy()}
               />
             )}
           </ImageContainer>
         )}
-        {image?.node && title !== 'placeholder' ? (
+        {date && title !== 'placeholder' ? (
           <div>
             <p>{title}</p>
-            {date && <p>{formatDate(date)}</p>}
+            {date && <p className="date">{formatDate(date)}</p>}
           </div>
         ) : (
           <p>{title}</p>
@@ -115,7 +127,12 @@ export default function HomepageBlock({
       </StyledLink>
     </Block>
   ) : (
-    <Block backgroundColour={randomColour} colour={colours.white} size={size}>
+    <Block
+      backgroundColour={randomColour}
+      colour={colours.white}
+      size={size}
+      image={image}
+      date={date}>
       <p>test</p>
     </Block>
   );
@@ -140,18 +157,37 @@ const ImageContainer = styled.div`
   position: relative;
   max-height: 500px;
 
+  img {
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, 0%);
+  }
+
   @media (max-width: 768px) {
     display: none;
   }
 `;
 
-const Block = styled.div<{ backgroundColour: string; colour: string; size: number }>`
+const Block = styled.div<{
+  backgroundColour: string;
+  colour: string;
+  size: number;
+  image: {
+    node: {
+      mediaDetails: { height: number; width: number; sizes: string };
+      srcset: string;
+      sourceUrl: string;
+    };
+  };
+  date: string;
+}>`
   background-color: ${(props) => props.backgroundColour};
   color: ${(props) => props.colour};
   display: flex;
   min-height: 100px;
   border: 1px solid #ccc;
   margin: 2px;
+  padding: ${(props) => !props.image && !props.date && '10px'};
   grid-column: span ${(props) => props.size};
   grid-row: span ${(props) => props.size};
   overflow: hidden;
@@ -171,9 +207,14 @@ const Block = styled.div<{ backgroundColour: string; colour: string; size: numbe
   }
 
   p {
-    font-size: 2rem;
+    font-size: 1.5rem;
     transition: font-size 0.3s ease;
     font-weight: 700;
+
+    &.date {
+      font-size: 1rem;
+      font-weight: 400;
+    }
   }
 
   &::before {

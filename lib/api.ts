@@ -387,6 +387,42 @@ export async function getPage(id, idType = 'DATABASE_ID') {
   return data.page;
 }
 
+export async function getPostDisplayInfo(ids, idType = 'DATABASE_ID') {
+  const posts = [];
+  for (const id of ids) {
+    const data = await fetchAPI(
+      `
+      query Post($id: ID!, $idType: PostIdType!) {
+        post(id: $id, idType: $idType) {
+          slug
+          title
+          date
+          featuredImage {
+            node {
+              mediaDetails {
+                sizes {
+                  height
+                  width
+                  sourceUrl
+                }
+                height
+                width
+              }
+              srcSet
+              sourceUrl
+            }
+          }
+        }
+      }`,
+      {
+        variables: { id, idType: 'DATABASE_ID' },
+      }
+    );
+    posts.push(data.post);
+  }
+  return posts;
+}
+
 export async function searchBlogPosts(searchTerm) {
   const data = await fetchAPI(
     `
