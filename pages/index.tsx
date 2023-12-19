@@ -183,7 +183,7 @@ export default function Index({ preview, jamesImages, firstPost, randomPosts }: 
     {
       className: 'block-11',
       title: randomPosts[0].title,
-      url: `/posts/${randomPosts[0].slug}`,
+      url: `/${randomPosts[0].slug}`,
       size: 3,
       image: randomPosts[0].featuredImage,
       date: randomPosts[0].date,
@@ -223,7 +223,7 @@ export default function Index({ preview, jamesImages, firstPost, randomPosts }: 
     {
       className: 'block-13',
       title: randomPosts[2].title,
-      url: `/posts/${randomPosts[2].slug}`,
+      url: `/${randomPosts[2].slug}`,
       size: 2,
       image: randomPosts[2].featuredImage,
       date: randomPosts[2].date,

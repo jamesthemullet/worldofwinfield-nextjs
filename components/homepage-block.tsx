@@ -210,6 +210,7 @@ const Block = styled.div<{
     font-size: 1.5rem;
     transition: font-size 0.3s ease;
     font-weight: 700;
+    padding: 0 10px;
 
     &.date {
       font-size: 1rem;

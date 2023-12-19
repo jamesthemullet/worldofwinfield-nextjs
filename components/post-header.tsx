@@ -36,7 +36,7 @@ export default function PostHeader({ title, imageSize, coverImage, date, slug }:
       <ImageContainer aspectRatio={aspectRatio}>
         <CoverImage title={title} coverImage={coverImage} imageSize={imageSize} />
       </ImageContainer>
-      <StyledLink href={`/posts/${slug}`} aria-label={title}>
+      <StyledLink href={`/${slug}`} aria-label={title}>
         <PostTitle backgroundColour={randomColour1}>{title}</PostTitle>
       </StyledLink>
       <div>

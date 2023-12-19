@@ -14,7 +14,7 @@ const SearchResults = ({ searchResults }: SearchResultsProps) => {
             {searchResults.map((post) => (
               <li key={post.slug}>
                 <p>
-                  <a href={`/posts/${post.slug}`}>{post.title}</a> - {formatDate(post.date)}
+                  <a href={`/${post.slug}`}>{post.title}</a> - {formatDate(post.date)}
                 </p>
               </li>
             ))}

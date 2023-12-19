@@ -30,7 +30,7 @@ export default function CoverImage({ title, coverImage, imageSize, slug }: Props
   return (
     <>
       {slug ? (
-        <Link href={`/posts/${slug}`} aria-label={title}>
+        <Link href={`/${slug}`} aria-label={title}>
           {image}
         </Link>
       ) : (

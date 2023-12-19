@@ -41,7 +41,7 @@ const ArchivePage = ({ posts: { posts }, month, year }: ArchivePageProps) => {
               <ul>
                 {posts.map((post) => (
                   <li key={post.id}>
-                    <a href={`/posts/${post.slug}`}>{post.title}</a>
+                    <a href={`/${post.slug}`}>{post.title}</a>
                   </li>
                 ))}
               </ul>
