@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { formatDate } from './search-results';
 import { JamesImagesProps } from '../lib/types';
 import { useEffect, useState } from 'react';
+import { set } from 'date-fns';
 
 type HomePageBlockTypes = {
   className: string;
@@ -45,25 +46,37 @@ export default function HomepageBlock({
   date,
   jamesImages,
 }: HomePageBlockTypes) {
-  const randomIndex = Math.floor(Math.random() * blockColours.length);
-  const randomColour = blockColours[randomIndex];
-  let width, height;
+  const [randomColour, setRandomColour] = useState('');
+  const [width, setWidth] = useState(0);
+  const [height, setHeight] = useState(0);
+  const [imageSrc, setImageSrc] = useState(null);
+  useEffect(() => {
+    const randomIndex = Math.floor(Math.random() * blockColours.length);
+    const randomColour = blockColours[randomIndex];
+    setRandomColour(randomColour);
 
-  if (title === 'placeholder') {
-    const randomJamesImage = Math.floor(Math.random() * jamesImages.edges.length);
-    image = jamesImages.edges[randomJamesImage].node.featuredImage;
-    width = 280 * size;
-    height = 280 * size;
-  } else if (size === 1) {
-    width = 300;
-    height = 300;
-  } else if (size === 2) {
-    width = 600;
-    height = 450;
-  } else {
-    width = 920;
-    height = 720;
-  }
+    if (title === 'placeholder') {
+      const randomJamesImage = Math.floor(Math.random() * jamesImages.edges.length);
+      setImageSrc(jamesImages.edges[randomJamesImage].node.featuredImage);
+      setWidth(230);
+      setHeight(230);
+    } else if (size === 1) {
+      console.log(10, title);
+      setImageSrc(image);
+      setWidth(230);
+      setHeight(230);
+    } else if (size === 2) {
+      console.log(11, title);
+      setWidth(600);
+      setHeight(450);
+      setImageSrc(image);
+    } else {
+      console.log(12, title);
+      setWidth(920);
+      setHeight(720);
+      setImageSrc(image);
+    }
+  }, [title, size, image]);
 
   const eagerOrLazy = () => {
     if (className.includes('block-1') || className.includes('block-2')) {
@@ -98,24 +111,42 @@ export default function HomepageBlock({
       colour={colours.white}
       size={size}
       className={className}
-      image={image}
+      image={imageSrc}
       date={date}>
-      <StyledLink href={url}>
-        {image?.node && (
-          <ImageContainer>
-            {!isMobile && (
-              <Image
-                src={image.node.sourceUrl}
-                alt={title}
-                width={width}
-                height={height}
-                sizes={image.node.srcset}
-                quality={0}
-                loading={eagerOrLazy()}
-              />
-            )}
-          </ImageContainer>
+      <StyledLink href={url} width={width} height={height}>
+        {imageSrc?.node && !isMobile && size === 1 && (
+          <Image
+            src={imageSrc.node.sourceUrl}
+            alt={title}
+            width={250}
+            height={250}
+            quality={80}
+            loading={eagerOrLazy()}
+          />
         )}
+
+        {imageSrc?.node && !isMobile && size === 2 && (
+          <Image
+            src={imageSrc.node.sourceUrl}
+            alt={title}
+            width={500}
+            height={500}
+            quality={80}
+            loading={eagerOrLazy()}
+          />
+        )}
+
+        {imageSrc?.node && !isMobile && size === 3 && (
+          <Image
+            src={imageSrc.node.sourceUrl}
+            alt={title}
+            width={800}
+            height={800}
+            quality={80}
+            loading={eagerOrLazy()}
+          />
+        )}
+
         {date && title !== 'placeholder' ? (
           <div>
             <p>{title}</p>
@@ -131,20 +162,24 @@ export default function HomepageBlock({
       backgroundColour={randomColour}
       colour={colours.white}
       size={size}
-      image={image}
+      image={imageSrc}
       date={date}>
       <p>test</p>
     </Block>
   );
 }
 
-const StyledLink = styled(Link)`
+const StyledLink = styled.a<{
+  width: number;
+  height: number;
+}>`
   text-decoration: none;
   color: inherit;
-  width: 100%;
-  height: 100%;
+  width: ${(props) => props.width}px;
+  height: ${(props) => props.height}px;
   text-align: center;
   position: relative;
+  max-height: ${(props) => props.height}px;
 
   div {
     position: absolute;
@@ -159,8 +194,6 @@ const ImageContainer = styled.div`
 
   img {
     position: absolute;
-    left: 50%;
-    transform: translate(-50%, 0%);
   }
 
   @media (max-width: 768px) {
@@ -193,7 +226,7 @@ const Block = styled.div<{
   overflow: hidden;
 
   img {
-    object-fit: none;
+    object-fit: cover;
   }
 
   @media (max-width: 768px) {
