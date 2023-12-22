@@ -113,13 +113,13 @@ export default function HomepageBlock({
       className={className}
       image={imageSrc}
       date={date}>
-      <StyledLink href={url} width={width} height={height}>
+      <StyledLink href={url}>
         {imageSrc?.node && !isMobile && size === 1 && (
           <Image
             src={imageSrc.node.sourceUrl}
             alt={title}
             width={250}
-            height={250}
+            height={220}
             quality={80}
             loading={eagerOrLazy()}
           />
@@ -130,7 +130,7 @@ export default function HomepageBlock({
             src={imageSrc.node.sourceUrl}
             alt={title}
             width={500}
-            height={500}
+            height={30}
             quality={80}
             loading={eagerOrLazy()}
           />
@@ -141,7 +141,7 @@ export default function HomepageBlock({
             src={imageSrc.node.sourceUrl}
             alt={title}
             width={800}
-            height={800}
+            height={60}
             quality={80}
             loading={eagerOrLazy()}
           />
@@ -169,22 +169,19 @@ export default function HomepageBlock({
   );
 }
 
-const StyledLink = styled.a<{
-  width: number;
-  height: number;
-}>`
+const StyledLink = styled(Link)`
   text-decoration: none;
   color: inherit;
-  width: ${(props) => props.width}px;
-  height: ${(props) => props.height}px;
   text-align: center;
   position: relative;
-  max-height: ${(props) => props.height}px;
+  aspect-ratio: 1/1;
+  height: 0;
 
   div {
     position: absolute;
     width: 100%;
     background-color: rgba(0, 0, 0, 0.7);
+    top: 0;
   }
 `;
 
