@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { formatDate } from './search-results';
 import { JamesImagesProps } from '../lib/types';
 import { useEffect, useState } from 'react';
+import { set } from 'date-fns';
 
 type HomePageBlockTypes = {
   className: string;
@@ -45,25 +46,20 @@ export default function HomepageBlock({
   date,
   jamesImages,
 }: HomePageBlockTypes) {
-  const randomIndex = Math.floor(Math.random() * blockColours.length);
-  const randomColour = blockColours[randomIndex];
-  let width, height;
+  const [randomColour, setRandomColour] = useState('');
+  const [imageSrc, setImageSrc] = useState(null);
+  useEffect(() => {
+    const randomIndex = Math.floor(Math.random() * blockColours.length);
+    const randomColour = blockColours[randomIndex];
+    setRandomColour(randomColour);
 
-  if (title === 'placeholder') {
-    const randomJamesImage = Math.floor(Math.random() * jamesImages.edges.length);
-    image = jamesImages.edges[randomJamesImage].node.featuredImage;
-    width = 280 * size;
-    height = 280 * size;
-  } else if (size === 1) {
-    width = 300;
-    height = 300;
-  } else if (size === 2) {
-    width = 600;
-    height = 450;
-  } else {
-    width = 920;
-    height = 720;
-  }
+    if (title === 'placeholder') {
+      const randomJamesImage = Math.floor(Math.random() * jamesImages.edges.length);
+      setImageSrc(jamesImages.edges[randomJamesImage].node.featuredImage);
+    } else {
+      setImageSrc(image);
+    }
+  }, [title, size, image]);
 
   const eagerOrLazy = () => {
     if (className.includes('block-1') || className.includes('block-2')) {
@@ -98,40 +94,58 @@ export default function HomepageBlock({
       colour={colours.white}
       size={size}
       className={className}
-      image={image}
+      image={imageSrc}
       date={date}>
       <StyledLink href={url}>
-        {image?.node && (
-          <ImageContainer>
-            {!isMobile && (
-              <Image
-                src={image.node.sourceUrl}
-                alt={title}
-                width={width}
-                height={height}
-                sizes={image.node.srcset}
-                quality={0}
-                loading={eagerOrLazy()}
-              />
-            )}
-          </ImageContainer>
+        {imageSrc?.node && !isMobile && size === 1 && (
+          <Image
+            src={imageSrc.node.sourceUrl}
+            alt={title}
+            width={230}
+            height={230}
+            quality={80}
+            loading={eagerOrLazy()}
+          />
         )}
-        {date && title !== 'placeholder' ? (
-          <div>
-            <p>{title}</p>
-            {date && <p className="date">{formatDate(date)}</p>}
-          </div>
-        ) : (
-          <p>{title}</p>
+
+        {imageSrc?.node && !isMobile && size === 2 && (
+          <Image
+            src={imageSrc.node.sourceUrl}
+            alt={title}
+            width={474}
+            height={474}
+            quality={80}
+            loading={eagerOrLazy()}
+          />
+        )}
+
+        {imageSrc?.node && !isMobile && size === 3 && (
+          <Image
+            src={imageSrc.node.sourceUrl}
+            alt={title}
+            width={720}
+            height={720}
+            quality={80}
+            loading={eagerOrLazy()}
+          />
         )}
       </StyledLink>
+
+      {date && title !== 'placeholder' ? (
+        <div>
+          <p>{title}</p>
+          {date && <p className="date">{formatDate(date)}</p>}
+        </div>
+      ) : (
+        <p>{title}</p>
+      )}
     </Block>
   ) : (
     <Block
       backgroundColour={randomColour}
       colour={colours.white}
       size={size}
-      image={image}
+      image={imageSrc}
       date={date}>
       <p>test</p>
     </Block>
@@ -141,16 +155,9 @@ export default function HomepageBlock({
 const StyledLink = styled(Link)`
   text-decoration: none;
   color: inherit;
-  width: 100%;
-  height: 100%;
   text-align: center;
   position: relative;
-
-  div {
-    position: absolute;
-    width: 100%;
-    background-color: rgba(0, 0, 0, 0.7);
-  }
+  height: 0;
 `;
 
 const ImageContainer = styled.div`
@@ -159,8 +166,6 @@ const ImageContainer = styled.div`
 
   img {
     position: absolute;
-    left: 50%;
-    transform: translate(-50%, 0%);
   }
 
   @media (max-width: 768px) {
@@ -191,9 +196,18 @@ const Block = styled.div<{
   grid-column: span ${(props) => props.size};
   grid-row: span ${(props) => props.size};
   overflow: hidden;
+  position: relative;
+
+  div {
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.7);
+    top: 0;
+    width: 100%;
+    text-align: center;
+  }
 
   img {
-    object-fit: none;
+    object-fit: cover;
   }
 
   @media (max-width: 768px) {
