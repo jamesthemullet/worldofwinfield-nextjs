@@ -47,8 +47,6 @@ export default function HomepageBlock({
   jamesImages,
 }: HomePageBlockTypes) {
   const [randomColour, setRandomColour] = useState('');
-  const [width, setWidth] = useState(0);
-  const [height, setHeight] = useState(0);
   const [imageSrc, setImageSrc] = useState(null);
   useEffect(() => {
     const randomIndex = Math.floor(Math.random() * blockColours.length);
@@ -58,22 +56,7 @@ export default function HomepageBlock({
     if (title === 'placeholder') {
       const randomJamesImage = Math.floor(Math.random() * jamesImages.edges.length);
       setImageSrc(jamesImages.edges[randomJamesImage].node.featuredImage);
-      setWidth(230);
-      setHeight(230);
-    } else if (size === 1) {
-      console.log(10, title);
-      setImageSrc(image);
-      setWidth(230);
-      setHeight(230);
-    } else if (size === 2) {
-      console.log(11, title);
-      setWidth(600);
-      setHeight(450);
-      setImageSrc(image);
     } else {
-      console.log(12, title);
-      setWidth(920);
-      setHeight(720);
       setImageSrc(image);
     }
   }, [title, size, image]);
@@ -118,8 +101,8 @@ export default function HomepageBlock({
           <Image
             src={imageSrc.node.sourceUrl}
             alt={title}
-            width={250}
-            height={220}
+            width={230}
+            height={230}
             quality={80}
             loading={eagerOrLazy()}
           />
@@ -129,8 +112,8 @@ export default function HomepageBlock({
           <Image
             src={imageSrc.node.sourceUrl}
             alt={title}
-            width={500}
-            height={30}
+            width={474}
+            height={474}
             quality={80}
             loading={eagerOrLazy()}
           />
@@ -140,22 +123,22 @@ export default function HomepageBlock({
           <Image
             src={imageSrc.node.sourceUrl}
             alt={title}
-            width={800}
-            height={60}
+            width={720}
+            height={720}
             quality={80}
             loading={eagerOrLazy()}
           />
         )}
-
-        {date && title !== 'placeholder' ? (
-          <div>
-            <p>{title}</p>
-            {date && <p className="date">{formatDate(date)}</p>}
-          </div>
-        ) : (
-          <p>{title}</p>
-        )}
       </StyledLink>
+
+      {date && title !== 'placeholder' ? (
+        <div>
+          <p>{title}</p>
+          {date && <p className="date">{formatDate(date)}</p>}
+        </div>
+      ) : (
+        <p>{title}</p>
+      )}
     </Block>
   ) : (
     <Block
@@ -174,15 +157,7 @@ const StyledLink = styled(Link)`
   color: inherit;
   text-align: center;
   position: relative;
-  aspect-ratio: 1/1;
   height: 0;
-
-  div {
-    position: absolute;
-    width: 100%;
-    background-color: rgba(0, 0, 0, 0.7);
-    top: 0;
-  }
 `;
 
 const ImageContainer = styled.div`
@@ -221,6 +196,15 @@ const Block = styled.div<{
   grid-column: span ${(props) => props.size};
   grid-row: span ${(props) => props.size};
   overflow: hidden;
+  position: relative;
+
+  div {
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.7);
+    top: 0;
+    width: 100%;
+    text-align: center;
+  }
 
   img {
     object-fit: cover;
