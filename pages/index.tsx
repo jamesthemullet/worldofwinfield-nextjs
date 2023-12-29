@@ -336,7 +336,7 @@ const HomepageBlocksContainer = styled.div`
   @media (min-width: 769px) {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 10px;
+    gap: 8px;
     padding: 0 10px 10px;
   }
 
