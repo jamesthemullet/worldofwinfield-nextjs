@@ -60,7 +60,7 @@ export default function Index({ preview, jamesImages, firstPost, randomPosts }: 
     {
       className: 'block-6',
       title: `${firstPost.edges[0].node.title}`,
-      url: `posts/${firstPost.edges[0].node.slug}`,
+      url: `${firstPost.edges[0].node.slug}`,
       size: 3,
       image: firstPost.edges[0].node.featuredImage,
       date: firstPost.edges[0].node.date,
@@ -209,7 +209,7 @@ export default function Index({ preview, jamesImages, firstPost, randomPosts }: 
     {
       className: 'block-12',
       title: randomPosts[1].title,
-      url: `/posts/${randomPosts[1].slug}`,
+      url: `/${randomPosts[1].slug}`,
       size: 2,
       image: randomPosts[1].featuredImage,
       date: randomPosts[1].date,
