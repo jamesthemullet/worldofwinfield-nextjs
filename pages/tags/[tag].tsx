@@ -39,7 +39,7 @@ export default function Post({ posts, tag }: TagsPostProps) {
               </Head>
               {posts.map((post) => (
                 <div key={post.id}>
-                  <Link href={`/${post.slug}`} aria-label={post.name}>
+                  <Link href={`/${post.slug}`} aria-label={post.title}>
                     {post.title}
                   </Link>
                 </div>

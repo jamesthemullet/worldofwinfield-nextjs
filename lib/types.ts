@@ -66,7 +66,6 @@ export type TagsPostProps = {
     slug: string;
     date: string;
     id: string;
-    name: string;
   }[];
   tag: string;
 };

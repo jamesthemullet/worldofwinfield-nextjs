@@ -517,7 +517,6 @@ export async function getPostsByTag(tag) {
           slug
           date
           id
-          name
         }
       }
     }`,
