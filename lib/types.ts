@@ -60,6 +60,17 @@ export type PostProps = {
   preview: string;
 };
 
+export type TagsPostProps = {
+  posts: {
+    title: string;
+    slug: string;
+    date: string;
+    id: string;
+    name: string;
+  }[];
+  tag: string;
+};
+
 export type PostsProps = {
   posts: {
     id: string;

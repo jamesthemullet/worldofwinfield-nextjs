@@ -506,3 +506,24 @@ export async function getPostsByDate(month, year) {
     year,
   };
 }
+
+export async function getPostsByTag(tag) {
+  const data = await fetchAPI(
+    `
+    query getPostsByTag($tag: String!) {
+      posts(where: {tag: $tag}, first: 100) {
+        nodes {
+          title
+          slug
+          date
+          id
+          name
+        }
+      }
+    }`,
+    {
+      variables: { tag },
+    }
+  );
+  return data.posts.nodes;
+}
