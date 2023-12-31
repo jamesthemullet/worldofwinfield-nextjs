@@ -3,13 +3,13 @@ import styled from '@emotion/styled';
 
 export default function PostBody({ content }: PostBodyProps) {
   return (
-    <ContentContainter>
+    <ContentContainer>
       <div dangerouslySetInnerHTML={{ __html: content }} />
-    </ContentContainter>
+    </ContentContainer>
   );
 }
 
-const ContentContainter = styled.div`
+export const ContentContainer = styled.div`
   width: 100%;
   max-width: 100%;
   padding: 0 1rem;
