@@ -96,7 +96,7 @@ export default function HomepageBlock({
       className={className}
       image={imageSrc}
       date={date}>
-      <StyledLink href={url}>
+      <StyledLinkImage href={url}>
         {imageSrc?.node && !isMobile && size === 1 && (
           <Image
             src={imageSrc.node.sourceUrl}
@@ -129,13 +129,13 @@ export default function HomepageBlock({
             loading={eagerOrLazy()}
           />
         )}
-      </StyledLink>
+      </StyledLinkImage>
 
       {date && title !== 'placeholder' ? (
-        <div>
+        <StyledLink href={url}>
           <p>{title}</p>
           {date && <p className="date">{formatDate(date)}</p>}
-        </div>
+        </StyledLink>
       ) : (
         <p>{title}</p>
       )}
@@ -152,7 +152,7 @@ export default function HomepageBlock({
   );
 }
 
-const StyledLink = styled(Link)`
+const StyledLinkImage = styled(Link)`
   text-decoration: none;
   color: inherit;
   text-align: center;
@@ -160,17 +160,14 @@ const StyledLink = styled(Link)`
   height: 0;
 `;
 
-const ImageContainer = styled.div`
-  position: relative;
-  max-height: 500px;
-
-  img {
-    position: absolute;
-  }
-
-  @media (max-width: 768px) {
-    display: none;
-  }
+const StyledLink = styled(Link)`
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.7);
+  top: 0;
+  width: 100%;
+  text-align: center;
+  text-decoration: none;
+  color: inherit;
 `;
 
 const Block = styled.div<{
@@ -197,14 +194,6 @@ const Block = styled.div<{
   grid-row: span ${(props) => props.size};
   overflow: hidden;
   position: relative;
-
-  div {
-    position: absolute;
-    background-color: rgba(0, 0, 0, 0.7);
-    top: 0;
-    width: 100%;
-    text-align: center;
-  }
 
   img {
     object-fit: cover;
