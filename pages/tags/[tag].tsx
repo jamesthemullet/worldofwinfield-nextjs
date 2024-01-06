@@ -19,10 +19,15 @@ export default function Post({ posts, tag }: TagsPostProps) {
     return <ErrorPage statusCode={404} />;
   }
 
-  // need to do tags seo
+  const seo = {
+    opengraphImage: null,
+    opengraphTitle: `Posts tagged with ${tag} - World Of Winfield`,
+    opengraphDescription: `Posts tagged with ${tag} - World Of Winfield`,
+    opengraphSiteName: `World Of Winfield`,
+  };
 
   return (
-    <Layout preview={null} seo={null}>
+    <Layout preview={null} seo={seo}>
       <Container>
         {router.isFallback ? (
           <PostTitle>Loading…</PostTitle>
