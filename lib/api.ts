@@ -167,14 +167,8 @@ export async function getAllPostsForHome(preview) {
               }
             }
             seo {
-              metaDesc
-              focuskw
-              title
-              canonical
-              metaKeywords
               opengraphTitle
               opengraphDescription
-              opengraphUrl
               opengraphSiteName
               opengraphImage {
                 uri
@@ -262,14 +256,8 @@ export async function getPostAndMorePosts(slug, preview, previewData) {
         }
       }
       seo {
-        metaDesc
-        focuskw
-        title
-        canonical
-        metaKeywords
         opengraphTitle
         opengraphDescription
-        opengraphUrl
         opengraphSiteName
         opengraphImage {
           uri
@@ -356,14 +344,9 @@ export async function getPage(id, idType = 'DATABASE_ID') {
         title
         date
         seo {
-          metaDesc
-          focuskw
-          title
-          canonical
           metaKeywords
           opengraphTitle
           opengraphDescription
-          opengraphUrl
           opengraphSiteName
           opengraphImage {
             uri

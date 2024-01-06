@@ -3,10 +3,6 @@ import { useRouter } from 'next/router';
 
 type seoProps = {
   seo?: {
-    canonical: string;
-    focuskw: string;
-    metaDesc: string;
-    metaKeywords: string;
     opengraphDescription: string;
     opengraphImage: {
       uri: string;
@@ -18,9 +14,7 @@ type seoProps = {
       };
     };
     opengraphTitle: string;
-    opengraphUrl: string;
     opengraphSiteName: string;
-    title: string;
   };
 };
 
@@ -31,6 +25,7 @@ export default function Meta({ seo }: seoProps) {
   const defaultImageUrl = '/images/jameswinfieldcover.png';
 
   const { opengraphImage, opengraphTitle, opengraphDescription, opengraphSiteName } = seo || {};
+
   return (
     <Head>
       <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png" />

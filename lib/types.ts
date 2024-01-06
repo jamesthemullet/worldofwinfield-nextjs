@@ -388,10 +388,6 @@ export type AlertProps = {
 };
 
 export type seoProps = {
-  canonical: string;
-  focuskw: string;
-  metaDesc: string;
-  metaKeywords: string;
   opengraphDescription: string;
   opengraphImage: {
     uri: string;
@@ -403,9 +399,7 @@ export type seoProps = {
     };
   };
   opengraphTitle: string;
-  opengraphUrl: string;
   opengraphSiteName: string;
-  title: string;
 };
 
 export type SearchBarProps = {
