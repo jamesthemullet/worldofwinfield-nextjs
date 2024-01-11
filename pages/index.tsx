@@ -333,6 +333,8 @@ export const getStaticProps: GetStaticProps = async ({ preview = false }) => {
 };
 
 const HomepageBlocksContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
   @media (min-width: 769px) {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));

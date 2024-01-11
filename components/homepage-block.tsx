@@ -97,7 +97,7 @@ export default function HomepageBlock({
       image={imageSrc}
       date={date}>
       <StyledLinkImage href={url}>
-        {imageSrc?.node && !isMobile && size === 1 && (
+        {imageSrc?.node && size === 1 && (
           <Image
             src={imageSrc.node.sourceUrl}
             alt={title}
@@ -108,7 +108,7 @@ export default function HomepageBlock({
           />
         )}
 
-        {imageSrc?.node && !isMobile && size === 2 && (
+        {imageSrc?.node && size === 2 && (
           <Image
             src={imageSrc.node.sourceUrl}
             alt={title}
@@ -119,7 +119,7 @@ export default function HomepageBlock({
           />
         )}
 
-        {imageSrc?.node && !isMobile && size === 3 && (
+        {imageSrc?.node && size === 3 && (
           <Image
             src={imageSrc.node.sourceUrl}
             alt={title}
@@ -200,9 +200,9 @@ const Block = styled.div<{
   }
 
   @media (max-width: 768px) {
-    width: calc(100%);
-    aspect-ratio: 2/1;
-    height: 50px;
+    border: 0;
+    margin: 0;
+    width: 100%;
 
     &.placeholder {
       display: none;
@@ -226,6 +226,19 @@ const Block = styled.div<{
     display: block;
     padding-top: 100%;
     pointer-events: none;
+  }
+
+  @media (max-width: 768px) {
+    &.block-1-1,
+    &.block-1-2,
+    &.block-5-1,
+    &.block-5-2,
+    &.block-8-1,
+    &.block-8-2 {
+      display: flex;
+      width: 50%;
+      aspect-ratio: 1/1;
+    }
   }
 
   @media (min-width: 769px) {
