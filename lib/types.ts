@@ -171,6 +171,7 @@ export type IndexPageProps = {
         content: string;
         author: AuthorProps;
         excerpt: string;
+        seo: seoProps;
       };
     }[];
   };
@@ -194,6 +195,7 @@ export type IndexPageProps = {
         content: string;
         author: AuthorProps;
         excerpt: string;
+        seo: seoProps;
       };
     }[];
   };

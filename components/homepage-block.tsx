@@ -5,7 +5,6 @@ import Image from 'next/image';
 import { formatDate } from './search-results';
 import { JamesImagesProps } from '../lib/types';
 import { useEffect, useState } from 'react';
-import { set } from 'date-fns';
 
 type HomePageBlockTypes = {
   className: string;

@@ -27,8 +27,15 @@ export default function Custom404() {
 
   const shuffledColours = shuffleArray(blockColours);
 
+  const seo = {
+    opengraphImage: null,
+    opengraphTitle: `404 - World Of Winfield`,
+    opengraphDescription: `404 - World Of Winfield`,
+    opengraphSiteName: `World Of Winfield`,
+  };
+
   return (
-    <Layout preview="" seo={null}>
+    <Layout preview="" seo={seo}>
       <Container>
         <article>
           <Head>
