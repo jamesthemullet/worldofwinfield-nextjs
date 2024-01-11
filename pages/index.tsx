@@ -291,8 +291,15 @@ export default function Index({ preview, jamesImages, firstPost, randomPosts }: 
     },
   ];
 
+  const seo = {
+    opengraphImage: firstPost.edges[0].node.seo.opengraphImage,
+    opengraphTitle: `Home - World Of Winfield`,
+    opengraphDescription: `Home - World Of Winfield`,
+    opengraphSiteName: `World Of Winfield`,
+  };
+
   return (
-    <Layout preview={preview} seo={null}>
+    <Layout preview={preview} seo={seo}>
       <Intro jamesImages={jamesImages} />
       <HomepageBlocksContainer>
         {blocks.map((block) => (

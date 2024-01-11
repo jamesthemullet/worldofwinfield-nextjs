@@ -19,8 +19,15 @@ export default function Index({ allPosts: { edges }, preview }: IndexPageProps) 
   const heroPost = edges[0]?.node;
   const morePosts = edges.slice(1);
 
+  const seo = {
+    opengraphImage: edges[0].node.seo.opengraphImage,
+    opengraphTitle: `The Blog - World Of Winfield`,
+    opengraphDescription: `The Blog - World Of Winfield`,
+    opengraphSiteName: `World Of Winfield`,
+  };
+
   return (
-    <Layout preview={preview} seo={null}>
+    <Layout preview={preview} seo={seo}>
       <Container>
         {heroPost && (
           <HeroPost

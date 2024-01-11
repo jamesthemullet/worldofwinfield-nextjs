@@ -87,6 +87,23 @@ export async function getFirstPost() {
               }
             }
             date
+            seo {
+              opengraphTitle
+              opengraphDescription
+              opengraphSiteName
+              opengraphImage {
+                uri
+                altText
+                mediaDetails {
+                  file
+                  height
+                  width
+                }
+                mediaItemUrl
+                sourceUrl
+                srcSet
+              }
+            }
           }
         }
       }
