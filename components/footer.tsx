@@ -8,8 +8,20 @@ export default function Footer() {
     <footer>
       <Container>
         <Block backgroundColour={colours.dark} colour={colours.white}>
-          <ArchiveDropdown />
-          <p>World Of Winfield</p>
+          <FlexRow>
+            <ArchiveDropdown />
+            <p>World Of Winfield</p>
+          </FlexRow>
+          <IconAttribution>
+            Icons made by{' '}
+            <a href="https://www.flaticon.com/authors/smashicons" title="Smashicons">
+              Smashicons
+            </a>{' '}
+            from{' '}
+            <a href="https://www.flaticon.com/" title="Flaticon">
+              www.flaticon.com
+            </a>
+          </IconAttribution>
         </Block>
       </Container>
     </footer>
@@ -25,8 +37,7 @@ const Block = styled.div<{ backgroundColour: string; colour: string }>`
   text-align: center;
   font-size: 1.5rem;
   display: flex;
-  flex-direction: row;
-  gap: 40px;
+  flex-direction: column;
   justify-content: center;
   font-family: 'Oswald';
 
@@ -41,5 +52,25 @@ const Block = styled.div<{ backgroundColour: string; colour: string }>`
 
   @media screen and (max-width: 768px) {
     flex-direction: column;
+  }
+`;
+
+const FlexRow = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 40px;
+  justify-content: center;
+
+  @media screen and (max-width: 768px) {
+    flex-direction: column;
+  }
+`;
+
+const IconAttribution = styled.div`
+  font-size: 0.8rem;
+
+  a {
+    text-decoration: none;
+    color: ${colours.white};
   }
 `;

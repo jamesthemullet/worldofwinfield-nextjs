@@ -24,6 +24,7 @@ type HomePageBlockTypes = {
   };
   date?: string;
   jamesImages: JamesImagesProps;
+  icon?: string;
 };
 
 const blockColours = [
@@ -44,6 +45,7 @@ export default function HomepageBlock({
   image,
   date,
   jamesImages,
+  icon,
 }: HomePageBlockTypes) {
   const [randomColour, setRandomColour] = useState('');
   const [imageSrc, setImageSrc] = useState(null);
@@ -87,7 +89,7 @@ export default function HomepageBlock({
     };
   }, []);
 
-  return url ? (
+  return title ? (
     <Block
       backgroundColour={randomColour}
       colour={colours.white}
@@ -95,48 +97,69 @@ export default function HomepageBlock({
       className={className}
       image={imageSrc}
       date={date}>
-      <StyledLinkImage href={url}>
-        {imageSrc?.node && size === 1 && (
-          <Image
-            src={imageSrc.node.sourceUrl}
-            alt={title}
-            width={230}
-            height={230}
-            quality={80}
-            loading={eagerOrLazy()}
-          />
-        )}
+      {url ? (
+        <StyledLinkImage href={url}>
+          {imageSrc?.node && size === 1 && (
+            <Image
+              src={imageSrc.node.sourceUrl}
+              alt={title}
+              width={230}
+              height={230}
+              quality={80}
+              loading={eagerOrLazy()}
+            />
+          )}
 
-        {imageSrc?.node && size === 2 && (
-          <Image
-            src={imageSrc.node.sourceUrl}
-            alt={title}
-            width={474}
-            height={474}
-            quality={80}
-            loading={eagerOrLazy()}
-          />
-        )}
+          {imageSrc?.node && size === 2 && (
+            <Image
+              src={imageSrc.node.sourceUrl}
+              alt={title}
+              width={474}
+              height={474}
+              quality={80}
+              loading={eagerOrLazy()}
+            />
+          )}
 
-        {imageSrc?.node && size === 3 && (
-          <Image
-            src={imageSrc.node.sourceUrl}
-            alt={title}
-            width={720}
-            height={720}
-            quality={80}
-            loading={eagerOrLazy()}
-          />
-        )}
-      </StyledLinkImage>
-
-      {date && title !== 'placeholder' ? (
-        <StyledLink href={url}>
-          <p>{title}</p>
-          {date && <p className="date">{formatDate(date)}</p>}
-        </StyledLink>
+          {imageSrc?.node && size === 3 && (
+            <Image
+              src={imageSrc.node.sourceUrl}
+              alt={title}
+              width={720}
+              height={720}
+              quality={80}
+              loading={eagerOrLazy()}
+            />
+          )}
+        </StyledLinkImage>
       ) : (
-        <p>{title}</p>
+        imageSrc?.node &&
+        (size === 1 || size === 2) && (
+          <Image
+            src={imageSrc.node.sourceUrl}
+            alt={title}
+            width={size === 1 ? 230 : 474}
+            height={size === 1 ? 230 : 474}
+            quality={80}
+            loading={eagerOrLazy()}
+          />
+        )
+      )}
+
+      {url &&
+        (date ? (
+          <StyledLink href={url}>
+            {title !== 'placeholder' && <p>{title}</p>}
+            {date && title !== 'placeholder' && <p className="date">{formatDate(date)}</p>}
+          </StyledLink>
+        ) : (
+          <p>{title}</p>
+        ))}
+
+      {icon && (
+        <StyledIcon>
+          <img src={`/icons/${icon}.png`} alt={title} />
+        </StyledIcon>
       )}
     </Block>
   ) : (
@@ -169,6 +192,13 @@ const StyledLink = styled(Link)`
   color: inherit;
 `;
 
+const StyledIcon = styled.div`
+  position: absolute;
+  transform: translate(-50%, -50%);
+  top: 50%;
+  left: 50%;
+`;
+
 const Block = styled.div<{
   backgroundColour: string;
   colour: string;
@@ -193,6 +223,8 @@ const Block = styled.div<{
   grid-row: span ${(props) => props.size};
   overflow: hidden;
   position: relative;
+  justify-content: center;
+  aspect-ratio: 1;
 
   img {
     object-fit: cover;
