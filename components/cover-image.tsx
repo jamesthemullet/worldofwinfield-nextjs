@@ -16,15 +16,18 @@ interface Props {
   };
   imageSize?: string;
   slug?: string;
+  heroPost?: boolean;
 }
 
-export default function CoverImage({ title, coverImage, imageSize, slug }: Props) {
+export default function CoverImage({ title, coverImage, imageSize, slug, heroPost }: Props) {
   const image = coverImage?.node.sourceUrl && (
     <Image
       alt={`Cover Image for ${title}`}
       src={coverImage?.node.sourceUrl}
       sizes={imageSize || coverImage?.node.mediaDetails.srcset}
+      quality={50}
       fill
+      loading={heroPost ? 'eager' : 'lazy'}
     />
   );
   return (

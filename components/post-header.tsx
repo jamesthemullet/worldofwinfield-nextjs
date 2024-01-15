@@ -6,7 +6,14 @@ import { PostHeaderProps } from '../lib/types';
 import styled from '@emotion/styled';
 import { colours } from '../pages/_app';
 
-export default function PostHeader({ title, imageSize, coverImage, date, slug }: PostHeaderProps) {
+export default function PostHeader({
+  title,
+  imageSize,
+  coverImage,
+  date,
+  slug,
+  heroPost,
+}: PostHeaderProps) {
   const aspectRatio = coverImage?.node.mediaDetails.width / coverImage?.node.mediaDetails.height;
 
   // Generate random color indexes
@@ -34,7 +41,12 @@ export default function PostHeader({ title, imageSize, coverImage, date, slug }:
   return (
     <>
       <ImageContainer aspectRatio={aspectRatio}>
-        <CoverImage title={title} coverImage={coverImage} imageSize={imageSize} />
+        <CoverImage
+          title={title}
+          coverImage={coverImage}
+          imageSize={imageSize}
+          heroPost={heroPost}
+        />
       </ImageContainer>
       <StyledLink href={`/${slug}`} aria-label={title}>
         <PostTitle backgroundColour={randomColour1}>{title}</PostTitle>
