@@ -41,6 +41,7 @@ export default function Post({ posts }: PostsProps) {
                     author={post.author}
                     categories={post.categories}
                     slug={post.slug}
+                    heroPost={index === 0 || index === 1 ? true : false}
                   />
                 </StyledPostHeader>
                 <StyledExcerpt

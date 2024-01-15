@@ -292,6 +292,7 @@ export type PostHeaderProps = {
     };
   };
   slug?: string;
+  heroPost?: boolean;
 };
 
 export type PostBodyProps = {
@@ -332,17 +333,6 @@ export type HeroPostProps = {
   slug: string;
   title: string;
   date: string;
-  coverImage: {
-    node: {
-      sourceUrl: string;
-      mediaDetails: {
-        height: number;
-        width: number;
-        sizes: string;
-        srcset: string;
-      };
-    };
-  };
   excerpt: string;
   author: AuthorProps;
   featuredImage: {

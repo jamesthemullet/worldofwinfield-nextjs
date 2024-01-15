@@ -1,14 +1,9 @@
-import Avatar from './avatar';
-import Date from './date';
-import CoverImage from './cover-image';
-import Link from 'next/link';
 import { HeroPostProps } from '../lib/types';
 import styled from '@emotion/styled';
 import PostHeader from './post-header';
 
 export default function HeroPost({
   title,
-  coverImage,
   date,
   excerpt,
   author,
@@ -25,6 +20,7 @@ export default function HeroPost({
             date={date}
             author={author}
             slug={slug}
+            heroPost={true}
           />
         </div>
         <div>
