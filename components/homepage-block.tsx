@@ -89,7 +89,7 @@ export default function HomepageBlock({
     };
   }, []);
 
-  return title ? (
+  return !icon ? (
     <Block
       backgroundColour={randomColour}
       colour={colours.white}
@@ -155,12 +155,6 @@ export default function HomepageBlock({
         ) : (
           <p>{title}</p>
         ))}
-
-      {icon && (
-        <StyledIcon>
-          <img src={`/icons/${icon}.png`} alt={title} />
-        </StyledIcon>
-      )}
     </Block>
   ) : (
     <Block
@@ -169,7 +163,12 @@ export default function HomepageBlock({
       size={size}
       image={imageSrc}
       date={date}>
-      <p>test</p>
+      <StyledIconLinkBlock href={url}>
+        <p>{title}</p>
+        <StyledIcon>
+          <img src={`/icons/${icon}.png`} alt={title} />
+        </StyledIcon>
+      </StyledIconLinkBlock>
     </Block>
   );
 }
@@ -190,6 +189,16 @@ const StyledLink = styled(Link)`
   text-align: center;
   text-decoration: none;
   color: inherit;
+`;
+
+const StyledIconLinkBlock = styled(Link)`
+  text-decoration: none;
+  color: inherit;
+  text-align: center;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 `;
 
 const StyledIcon = styled.div`
