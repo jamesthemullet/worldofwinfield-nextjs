@@ -23,7 +23,6 @@ export default function Intro({ jamesImages }: IntroProps) {
   const [hoveredIndex, setHoveredIndex] = useState(-1);
   const [shuffledImages, setShuffledImages] = useState([]);
   const [imageUrls, setImageUrls] = useState<string[]>([]);
-  const [backImageWidth, setBackImageWidth] = useState(0);
 
   useEffect(() => {
     const shuffledArray = [...jamesImages.edges].sort(() => Math.random() - 0.5);
@@ -35,11 +34,6 @@ export default function Intro({ jamesImages }: IntroProps) {
     });
     setImageUrls(urls);
   }, [jamesImages]);
-
-  useEffect(() => {
-    const margin = window && window.innerWidth < 768 ? 3 : 13;
-    setBackImageWidth(window && window.innerWidth / 8 - margin);
-  });
 
   const handleBlockHover = (index) => {
     setHoveredIndex(index);
@@ -64,7 +58,7 @@ export default function Intro({ jamesImages }: IntroProps) {
                 <Flipper flipped={hoveredIndex === index}>
                   <Front>{letter}</Front>
                   {jamesImage && imageUrl && hoveredIndex === index && (
-                    <Back width={backImageWidth}>
+                    <Back>
                       <Image
                         src={imageUrl}
                         alt={jamesAltTag}
@@ -108,11 +102,12 @@ const Block = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: ${(props) => props.color};
+  background-color: ${colours.dark};
   color: ${colours.white};
   aspect-ratio: 1/1;
 
   @media (min-width: 769px) {
+    background-color: ${(props) => props.color};
     border: 5px solid ${colours.white};
   }
 `;
@@ -155,10 +150,9 @@ const Front = styled.div`
   }
 `;
 
-const Back = styled.div<{ width: number }>`
+const Back = styled.div`
   position: relative;
   cursor: pointer;
-  width: ${(props) => props.width}px;
   max-width: 100%;
   aspect-ratio: 1;
 
