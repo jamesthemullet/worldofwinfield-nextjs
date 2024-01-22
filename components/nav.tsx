@@ -46,16 +46,27 @@ export default function Nav() {
 const StyledNav = styled.nav`
   background-color: #333;
   color: #fff;
-  padding: 1rem;
   font-family: 'Oswald', sans-serif;
   letter-spacing: 2px;
+  position: sticky;
+  z-index: 10;
+  top: 0;
+  left: 0;
+  padding: 1rem;
+
+  @media screen and (min-width: 769px) {
+    width: 100%;
+    padding: 0;
+  }
+
   ul {
     display: flex;
     justify-content: center;
     list-style: none;
     margin: 0;
-    padding: 0;
+    padding: 1rem;
     @media (max-width: 768px) {
+      padding: 0.5rem;
       display: none;
 
       &.open {
