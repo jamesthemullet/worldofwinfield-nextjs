@@ -43,7 +43,7 @@ export default function Post({ post, preview }: PostProps) {
               />
               <PrePost tags={post.tags} date={post.date} />
               <PostBody content={post.content} />
-              <footer>{post.tags.edges.length > 0 && <Tags tags={post.tags} />}</footer>
+              <p>{post.tags.edges.length > 0 && <Tags tags={post.tags} />}</p>
             </article>
 
             <SectionSeparator />
