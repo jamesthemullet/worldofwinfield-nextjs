@@ -60,6 +60,10 @@ export default function HomepageBlock({
     } else {
       setImageSrc(image);
     }
+
+    if (title === 'random photo') {
+      setImageSrc(image);
+    }
   }, [title, size, image]);
 
   const eagerOrLazy = () => {
@@ -97,7 +101,7 @@ export default function HomepageBlock({
       className={className}
       image={imageSrc}
       date={date}>
-      {url ? (
+      {url && title !== 'random photo' ? (
         <StyledLinkImage href={url}>
           {imageSrc?.node && size === 1 && (
             <Image
@@ -146,15 +150,12 @@ export default function HomepageBlock({
         )
       )}
 
-      {url &&
-        (date ? (
-          <StyledLink href={url}>
-            {title !== 'placeholder' && <p>{title}</p>}
-            {date && title !== 'placeholder' && <p className="date">{formatDate(date)}</p>}
-          </StyledLink>
-        ) : (
-          <p>{title}</p>
-        ))}
+      {url && date && (
+        <StyledLink href={url}>
+          {title !== 'placeholder' && title !== 'random photo' && <p>{title}</p>}
+          {date && title !== 'placeholder' && <p className="date">{formatDate(date)}</p>}
+        </StyledLink>
+      )}
     </Block>
   ) : (
     <Block

@@ -221,6 +221,18 @@ export type IndexPageProps = {
       };
     };
   };
+  randomImageSet: {
+    images:
+      | {
+          edges: {
+            node: {
+              srcSet: string;
+              id: string;
+            };
+          };
+        }[]
+      | null;
+  };
 };
 
 export type TagsProps = {

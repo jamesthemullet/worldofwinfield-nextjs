@@ -1,8 +1,8 @@
 import { GetStaticProps } from 'next';
-import { useState } from 'react';
+import { use, useEffect, useState } from 'react';
 import Intro from '../components/intro';
 import Layout from '../components/layout';
-import { getFirstPost, getJamesImages, getPostDisplayInfo } from '../lib/api';
+import { getFirstPost, getJamesImages, getPostDisplayInfo, getRandomImage } from '../lib/api';
 import { IndexPageProps } from '../lib/types';
 import HomepageBlock from '../components/homepage-block';
 import styled from '@emotion/styled';
@@ -11,9 +11,26 @@ import SearchResults from '../components/search-results';
 import { hardCodedListOfPostIds } from '../data/allIds';
 
 import { nanoid } from 'nanoid';
+import { set } from 'date-fns';
 
-export default function Index({ preview, jamesImages, firstPost, randomPosts }: IndexPageProps) {
+export default function Index({
+  preview,
+  jamesImages,
+  firstPost,
+  randomPosts,
+  randomImageSet,
+}: IndexPageProps) {
   const [searchResults, setSearchResults] = useState(null);
+  const [randomImage, setRandomImage] = useState(null);
+
+  useEffect(() => {
+    if (!randomImageSet.images?.length) {
+      setRandomImage(jamesImages.edges[0].node.featuredImage);
+    } else {
+      const randomIndex = Math.floor(Math.random() * randomImageSet.images?.length);
+      setRandomImage(randomImageSet.images[randomIndex]);
+    }
+  }, [randomImageSet]);
 
   const handleSearch = (results) => {
     setSearchResults(results);
@@ -256,7 +273,13 @@ export default function Index({ preview, jamesImages, firstPost, randomPosts }: 
       url: null,
       size: 2,
     },
-    { className: 'block-14', title: 'random photo', url: '/', size: 2 },
+    {
+      className: 'block-14',
+      title: 'random photo',
+      url: '/',
+      size: 2,
+      image: randomImage,
+    },
     {
       className: 'block-14-1 placeholder',
       title: 'placeholder',
@@ -338,8 +361,13 @@ export const getStaticProps: GetStaticProps = async ({ preview = false }) => {
     getRandomPostId(),
   ]);
 
+  const years = Array.from(new Array(new Date().getFullYear() - 2017), (x, i) => i + 2018);
+  const randomYear = years[Math.floor(Math.random() * years.length)];
+  const randomMonth = Math.floor(Math.random() * 12) + 1;
+  const randomImageSet = await getRandomImage(randomMonth, randomYear);
+
   return {
-    props: { preview, jamesImages, firstPost, randomPosts },
+    props: { preview, jamesImages, firstPost, randomPosts, randomImageSet },
     revalidate: 10,
   };
 };
