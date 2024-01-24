@@ -12,7 +12,6 @@ async function fetchAPI(query = '', { variables }: Record<string, unknown> = {})
   }
 
   const apiUrl = process.env.WORDPRESS_API_URL ?? API_URL;
-  // WPGraphQL Plugin must be enabled
   const res = await fetch(apiUrl, {
     headers,
     method: 'POST',
@@ -525,4 +524,37 @@ export async function getPostsByTag(tag) {
     }
   );
   return data.posts.nodes;
+}
+
+export async function getRandomImage(randomMonth, randomYear) {
+  const data = await fetchAPI(
+    `
+    query GetRandomImage($randomMonth: Int!, $randomYear: Int!) {
+      mediaItems(where: {dateQuery: {month: $randomMonth, year: $randomYear}}, first: 100) {
+        edges {
+          node {
+            id
+            title
+            mediaDetails {
+              sizes {
+                sourceUrl
+                height
+                width
+              }
+            }
+            srcSet
+            sourceUrl
+          }
+        }
+      }
+    }`,
+    {
+      variables: { randomMonth, randomYear },
+    }
+  );
+  return {
+    images: data.mediaItems.edges,
+    randomMonth,
+    randomYear,
+  };
 }
