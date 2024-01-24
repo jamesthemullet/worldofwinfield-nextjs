@@ -4,7 +4,6 @@ import Head from 'next/head';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import Container from '../components/container';
 import PostBody from '../components/post-body';
-import MoreStories from '../components/more-stories';
 import PostHeader from '../components/post-header';
 import SectionSeparator from '../components/section-separator';
 import Layout from '../components/layout';
@@ -15,9 +14,8 @@ import { CMS_NAME } from '../lib/constants';
 import { PostProps } from '../lib/types';
 import PrePost from '../components/pre-post';
 
-export default function Post({ post, posts, preview }: PostProps) {
+export default function Post({ post, preview }: PostProps) {
   const router = useRouter();
-  const morePosts = posts?.edges;
 
   if (!router.isFallback && !post?.slug) {
     return <ErrorPage statusCode={404} />;
@@ -43,13 +41,12 @@ export default function Post({ post, posts, preview }: PostProps) {
                 categories={post.categories}
                 heroPost={true}
               />
-              <PrePost tags={post.tags} />
+              <PrePost tags={post.tags} date={post.date} />
               <PostBody content={post.content} />
               <footer>{post.tags.edges.length > 0 && <Tags tags={post.tags} />}</footer>
             </article>
 
             <SectionSeparator />
-            {/* {morePosts.length > 0 && <MoreStories posts={morePosts} />} */}
           </>
         )}
       </Container>

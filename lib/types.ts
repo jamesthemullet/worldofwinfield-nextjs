@@ -235,6 +235,17 @@ export type IndexPageProps = {
   };
 };
 
+export type PrePostProps = {
+  date: string;
+  tags: {
+    edges: {
+      node: {
+        name: string;
+      };
+    }[];
+  };
+};
+
 export type TagsProps = {
   tags: {
     edges: {
