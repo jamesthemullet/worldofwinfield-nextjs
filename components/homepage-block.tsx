@@ -102,7 +102,7 @@ export default function HomepageBlock({
       image={imageSrc}
       date={date}>
       {url && title !== 'random photo' ? (
-        <StyledLinkImage href={url}>
+        <StyledLinkImage href={url} aria-label={title}>
           {imageSrc?.node && size === 1 && (
             <Image
               src={imageSrc.node.sourceUrl}
@@ -152,7 +152,7 @@ export default function HomepageBlock({
 
       {url && date && (
         <StyledLink href={url}>
-          {title !== 'placeholder' && title !== 'random photo' && <p>{title}</p>}
+          {title !== 'placeholder' && title !== 'random photo' && <p aria-label={title}>{title}</p>}
           {date && title !== 'placeholder' && <p className="date">{formatDate(date)}</p>}
         </StyledLink>
       )}
@@ -165,9 +165,9 @@ export default function HomepageBlock({
       image={imageSrc}
       date={date}>
       <StyledIconLinkBlock href={url}>
-        <p>{title}</p>
+        <p aria-label={title}>{title}</p>
         <StyledIcon>
-          <img src={`/icons/${icon}.png`} alt={title} />
+          <img src={`/icons/${icon}.png`} alt="icon" />
         </StyledIcon>
       </StyledIconLinkBlock>
     </Block>

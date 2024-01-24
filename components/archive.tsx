@@ -36,7 +36,7 @@ const ArchiveDropdown = () => {
   return (
     <div>
       <p>Posts from the archives</p>
-      <StyledSelect onChange={handleSelectMonth}>
+      <StyledSelect aria-label="Select month" onChange={handleSelectMonth}>
         <option value="">Select Month</option>
         {months.map((month) => (
           <option key={month} value={`${month}`}>
