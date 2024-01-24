@@ -1,7 +1,8 @@
-import { TagsProps } from '../lib/types';
+import { PrePostProps } from '../lib/types';
 import styled from '@emotion/styled';
 
-export default function PrePost({ tags }: TagsProps) {
+export default function PrePost({ tags, date }: PrePostProps) {
+  const years = new Date().getFullYear() - new Date(date).getFullYear();
   return (
     <>
       {tags.edges.map((tag, index) => (
@@ -11,6 +12,12 @@ export default function PrePost({ tags }: TagsProps) {
               Note: Originally posted on the now-defunct Exiled Tory Remoaner Scum website
             </StyledNote>
           )}
+          {tag.node.name.includes('Politics') &&
+            new Date(date).getFullYear() < new Date().getFullYear() - 2 && (
+              <StyledNote>
+                Note: This post is {years} years old, and my politics have changed over time
+              </StyledNote>
+            )}
         </div>
       ))}
     </>
