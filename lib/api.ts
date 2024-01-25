@@ -6,12 +6,15 @@ const API_URL = publicRuntimeConfig.NEXT_PUBLIC_WORDPRESS_API_URL;
 
 async function fetchAPI(query = '', { variables }: Record<string, unknown> = {}) {
   const headers = { 'Content-Type': 'application/json' };
+  console.log(20, process.env.WORDPRESS_AUTH_REFRESH_TOKEN);
+  console.log(21, variables);
 
   if (process.env.WORDPRESS_AUTH_REFRESH_TOKEN) {
     headers['Authorization'] = `Bearer ${process.env.WORDPRESS_AUTH_REFRESH_TOKEN}`;
   }
 
   const apiUrl = process.env.WORDPRESS_API_URL ?? API_URL;
+  console.log(22, apiUrl);
   const res = await fetch(apiUrl, {
     headers,
     method: 'POST',
@@ -20,6 +23,8 @@ async function fetchAPI(query = '', { variables }: Record<string, unknown> = {})
       variables,
     }),
   });
+
+  console.log(25, res);
 
   const json = await res.json();
   if (json.errors) {
@@ -48,6 +53,7 @@ export async function getPreviewPost(id, idType = 'DATABASE_ID') {
 }
 
 export async function getAllPostsWithSlug() {
+  console.log(10);
   const data = await fetchAPI(`
     {
       posts(first: 10000) {
@@ -59,6 +65,7 @@ export async function getAllPostsWithSlug() {
       }
     }
   `);
+  console.log(100, data);
   return data?.posts;
 }
 
