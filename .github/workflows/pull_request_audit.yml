@@ -69,9 +69,7 @@ jobs:
       - run: yarn install
       - run: yarn run build
       - run: yarn dev & npx wait-on http://localhost:3000
-      - run: yarn add browser-driver-manager
-      - run: npx browser-driver-manager install chromedriver=121 --verbose
       - name: Run axe
         run: |
           yarn add @axe-core/cli
-          npx axe http://localhost:3000  --chromedriver-path="/usr/local/bin/chromedriver"
+          npx axe http://localhost:3000 --exit
