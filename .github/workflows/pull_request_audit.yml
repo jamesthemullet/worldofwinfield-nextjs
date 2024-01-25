@@ -58,7 +58,7 @@ jobs:
   axe:
     runs-on: ubuntu-latest
     env:
-      WORDPRESS_API_URL: https://www.worldofwinfield.co.uk/graphql
+      WORDPRESS_API_URL: https://blog.worldofwinfield.co.uk/graphql
       GITHUB_API_SECRET: ${{ secrets.PIPELINE_GITHUB_API_SECRET }}
     steps:
       - uses: actions/checkout@v3
