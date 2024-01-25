@@ -15,7 +15,6 @@ import { PostProps } from '../lib/types';
 import PrePost from '../components/pre-post';
 
 export default function Post({ post, preview }: PostProps) {
-  console.log(1, post, preview);
   const router = useRouter();
 
   if (!router.isFallback && !post?.slug) {
