@@ -72,4 +72,4 @@ jobs:
       - name: Run axe
         run: |
           yarn add @axe-core/cli
-          npx axe http://localhost:3000 --exit
+          npx axe http://localhost:3000  --chromedriver-path="/usr/local/bin/chromedriver"
