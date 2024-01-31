@@ -1,4 +1,5 @@
 import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
 import React from 'react';
 import MyApp from './_app';
 
@@ -11,7 +12,7 @@ type AppProps = {
 const pageContent = 'test content';
 
 describe('App tests', () => {
-  it('should contains the heading 1', () => {
+  it('should load the app page and display content', () => {
     const props: AppProps = {
       Component: () => <div>{pageContent}</div>,
       pageProps: {},
