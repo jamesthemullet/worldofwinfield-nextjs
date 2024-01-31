@@ -79,7 +79,7 @@ jobs:
           chrome-version: ${{ env.CHROMIUM_VERSION }}
       - name: Install chromedriver 🚗
         run: |
-          npm install -g chromedriver@$CHROMIUM_VERSION
+          yarn add -g chromedriver@$CHROMIUM_VERSION
       - run: yarn run build
       - run: yarn dev & npx wait-on http://localhost:3000
       - name: Run axe
