@@ -87,4 +87,4 @@ jobs:
       - name: Run axe
         run: |
           yarn add @axe-core/cli
-          npx axe --chromedriver-path $(yarn global bin)/chromedriver/bin/chromedriver http://localhost:8080/ --load-delay=1500 --exit
+          npx axe --chromedriver-path $(yarn global bin)/chromedriver http://localhost:8080/ --load-delay=1500 --exit
