@@ -1,3 +1,4 @@
+import styled from '@emotion/styled';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -37,8 +38,15 @@ export default function CoverImage({ title, coverImage, imageSize, slug, heroPos
           {image}
         </Link>
       ) : (
-        image
+        <StyledCoverImage>{image}</StyledCoverImage>
       )}
     </>
   );
 }
+
+const StyledCoverImage = styled.div`
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+`;

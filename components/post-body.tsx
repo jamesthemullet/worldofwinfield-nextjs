@@ -1,7 +1,20 @@
 import { PostBodyProps } from '../lib/types';
 import styled from '@emotion/styled';
+import { useEffect } from 'react';
+import LazyLoad from 'vanilla-lazyload';
 
 export default function PostBody({ content }: PostBodyProps) {
+  useEffect(() => {
+    const lazyLoadInstance = new LazyLoad({
+      elements_selector: '.lazyload',
+    });
+
+    return () => {
+      if (lazyLoadInstance) {
+        lazyLoadInstance.destroy();
+      }
+    };
+  }, []);
   return (
     <ContentContainer>
       <div dangerouslySetInnerHTML={{ __html: content }} />
