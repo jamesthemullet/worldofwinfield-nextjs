@@ -286,6 +286,23 @@ export async function getPost(id, idType = 'SLUG') {
             }
           }
         }
+        featuredImage {
+          node {
+            id
+            title
+            mediaDetails {
+              sizes {
+                sourceUrl
+                height
+                width
+              }
+              height
+              width
+            }
+            srcSet
+            sourceUrl
+          }
+        }
       }
     }`,
     {
