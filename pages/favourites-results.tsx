@@ -22,7 +22,6 @@ type TypeProps = {
 const fetchDataFromGoogleSheets = async (sheetID) => {
   try {
     const API_KEY = publicRuntimeConfig.NEXT_PUBLIC_GOOGLE_SHEETS_API_KEY;
-    console.log(10, publicRuntimeConfig);
     const SHEET_NAME = 'Sheet1';
     const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetID}/values/${SHEET_NAME}?alt=json&key=${API_KEY}`;
 
