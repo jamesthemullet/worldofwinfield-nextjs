@@ -3,6 +3,7 @@ import Nav from '../components/nav';
 import { Global, css } from '@emotion/react';
 import Head from 'next/head';
 import styled from '@emotion/styled';
+import { GoogleAnalytics } from '@next/third-parties/google';
 
 export const colours = {
   purple: '#8884FF',
@@ -47,6 +48,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       <Global styles={globalStyles} />
       <Nav />
       <Component {...pageProps} />
+      <GoogleAnalytics gaId="G-R4Y79GZQT0" />
     </StyledContainer>
   );
 }
