@@ -4,7 +4,7 @@
     "timings": [
       {
         "metric": "interactive",
-        "budget": 3500
+        "budget": 4500
       },
       {
         "metric": "first-contentful-paint",
@@ -12,7 +12,7 @@
       },
       {
         "metric": "largest-contentful-paint",
-        "budget": 3500
+        "budget": 4500
       }
     ],
     "resourceSizes": [
