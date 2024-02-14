@@ -41,7 +41,7 @@ export const globalStyles = css`
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <StyledContainer>
+    <>
       <Head>
         <title>World Of Winfield</title>
       </Head>
@@ -49,13 +49,8 @@ function MyApp({ Component, pageProps }: AppProps) {
       <Nav />
       <Component {...pageProps} />
       <GoogleAnalytics gaId="G-R4Y79GZQT0" />
-    </StyledContainer>
+    </>
   );
 }
 
 export default MyApp;
-
-const StyledContainer = styled.div`
-  min-height: 100vh;
-  display: block;
-`;
