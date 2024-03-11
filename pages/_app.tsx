@@ -2,7 +2,6 @@ import { AppProps } from 'next/app';
 import Nav from '../components/nav';
 import { Global, css } from '@emotion/react';
 import Head from 'next/head';
-import styled from '@emotion/styled';
 import { GoogleAnalytics } from '@next/third-parties/google';
 
 export const colours = {
