@@ -11,6 +11,10 @@ type AppProps = {
 
 const pageContent = 'test content';
 
+jest.mock('@next/third-parties/google', () => ({
+  GoogleAnalytics: jest.fn().mockReturnValue(null),
+}));
+
 describe('App tests', () => {
   it('should load the app page and display content', () => {
     const props: AppProps = {
