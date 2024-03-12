@@ -10,6 +10,7 @@ export const StyledButton = styled.button`
   color: ${colours.white};
   font-weight: bold;
   cursor: pointer;
+  text-decoration: none;
 
   &:hover {
     color: ${colours.dark};

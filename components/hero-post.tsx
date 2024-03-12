@@ -1,6 +1,8 @@
 import { HeroPostProps } from '../lib/types';
 import styled from '@emotion/styled';
 import PostHeader from './post-header';
+import { StyledButton } from './core-components';
+import Link from 'next/link';
 
 export default function HeroPost({
   title,
@@ -10,6 +12,12 @@ export default function HeroPost({
   slug,
   featuredImage,
 }: HeroPostProps) {
+  const replaceSlugInExcerpt = (excerpt) => {
+    const regex = /<a\s+(?:[^>]*?\s+)?href="https?:\/\/[^"]*"[^>]*>.*?<\/a>/g;
+    const excerptWithoutSlug = excerpt.replace(regex, '');
+    return excerptWithoutSlug;
+  };
+
   return (
     <StyledSection>
       <div>
@@ -23,9 +31,12 @@ export default function HeroPost({
             heroPost={true}
           />
         </div>
-        <div>
-          <StyledExcerpt dangerouslySetInnerHTML={{ __html: excerpt }} />
-        </div>
+        <StyledExcerptContainer>
+          <StyledExcerpt dangerouslySetInnerHTML={{ __html: replaceSlugInExcerpt(excerpt) }} />
+          <StyledButton>
+            <Link href={slug}>Read More</Link>
+          </StyledButton>
+        </StyledExcerptContainer>
       </div>
     </StyledSection>
   );
@@ -44,10 +55,6 @@ const StyledExcerpt = styled.div`
   box-sizing: border-box;
   max-width: 60rem;
 
-  @media (min-width: 1281px) {
-    margin: 4rem auto 0;
-  }
-
   a {
     margin-top: 20px;
     display: block;
@@ -55,5 +62,21 @@ const StyledExcerpt = styled.div`
 
   p {
     word-wrap: break-word;
+  }
+`;
+
+const StyledExcerptContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  box-sizing: border-box;
+  max-width: 60rem;
+  margin: 0 auto;
+
+  a {
+    text-decoration: none;
+    color: white;
   }
 `;
