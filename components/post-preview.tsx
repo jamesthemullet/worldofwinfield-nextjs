@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { PostPreviewProps } from '../lib/types';
 import styled from '@emotion/styled';
 import PostHeader from './post-header';
+import { StyledButton } from './core-components';
 
 export default function PostPreview({
   title,
@@ -14,6 +15,12 @@ export default function PostPreview({
   slug,
   featuredImage,
 }: PostPreviewProps) {
+  const replaceSlugInExcerpt = (excerpt) => {
+    const regex = /<a\s+(?:[^>]*?\s+)?href="https?:\/\/[^"]*"[^>]*>.*?<\/a>/g;
+    const excerptWithoutSlug = excerpt.replace(regex, '');
+    return excerptWithoutSlug;
+  };
+
   return (
     <div>
       <div>
@@ -25,9 +32,12 @@ export default function PostPreview({
           slug={slug}
         />
       </div>
-      <div>
-        <StyledExcerpt dangerouslySetInnerHTML={{ __html: excerpt }} />
-      </div>
+      <StyledExcerptContainer>
+        <StyledExcerpt dangerouslySetInnerHTML={{ __html: replaceSlugInExcerpt(excerpt) }} />
+        <StyledButton>
+          <Link href={slug}>Read More</Link>
+        </StyledButton>
+      </StyledExcerptContainer>
     </div>
   );
 }
@@ -52,5 +62,21 @@ const StyledExcerpt = styled.div`
 
   p {
     word-wrap: break-word;
+  }
+`;
+
+const StyledExcerptContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  box-sizing: border-box;
+  max-width: 60rem;
+  margin: 0 auto;
+
+  a {
+    text-decoration: none;
+    color: white;
   }
 `;
