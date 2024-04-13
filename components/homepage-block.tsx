@@ -74,25 +74,6 @@ export default function HomepageBlock({
     }
   };
 
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const checkIfMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-
-    // Initial check on component mount
-    checkIfMobile();
-
-    // Listen for window resize to update isMobile
-    window.addEventListener('resize', checkIfMobile);
-
-    // Clean up the event listener when the component unmounts
-    return () => {
-      window.removeEventListener('resize', checkIfMobile);
-    };
-  }, []);
-
   return !icon ? (
     <Block
       backgroundColour={randomColour}
@@ -129,8 +110,8 @@ export default function HomepageBlock({
             <Image
               src={imageSrc.node.sourceUrl}
               alt={title}
-              width={720}
-              height={720}
+              width={840}
+              height={840}
               quality={80}
               loading={eagerOrLazy()}
             />
@@ -142,8 +123,8 @@ export default function HomepageBlock({
           <Image
             src={imageSrc.node.sourceUrl}
             alt={title}
-            width={size === 1 ? 230 : 474}
-            height={size === 1 ? 230 : 474}
+            width={size === 1 ? 270 : 550}
+            height={size === 1 ? 270 : 550}
             quality={80}
             loading={eagerOrLazy()}
           />
