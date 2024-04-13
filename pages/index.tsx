@@ -1,5 +1,5 @@
 import { GetStaticProps } from 'next';
-import { use, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Intro from '../components/intro';
 import Layout from '../components/layout';
 import { getFirstPost, getJamesImages, getPostDisplayInfo, getRandomImage } from '../lib/api';
@@ -11,7 +11,6 @@ import SearchResults from '../components/search-results';
 import { hardCodedListOfPostIds } from '../data/allIds';
 
 import { nanoid } from 'nanoid';
-import { set } from 'date-fns';
 
 export default function Index({
   preview,

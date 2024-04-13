@@ -1,11 +1,9 @@
 import { useRouter } from 'next/router';
-import ErrorPage from 'next/error';
 import Head from 'next/head';
 import Container from '../components/container';
 import PostHeader from '../components/post-header';
 import Layout from '../components/layout';
 import PostTitle from '../components/post-title';
-import { PostsProps } from '../lib/types';
 import styled from '@emotion/styled';
 import { useState } from 'react';
 import FavouriteResults from './favourites-results';
