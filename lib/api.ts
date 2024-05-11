@@ -252,7 +252,6 @@ export async function getPage(id, idType = 'DATABASE_ID') {
 }
 
 export async function getPost(id, idType = 'SLUG') {
-  console.log(30, id);
   const data = await fetchAPI(
     `
     query Post($id: ID!, $idType: PostIdType!) {
@@ -309,7 +308,6 @@ export async function getPost(id, idType = 'SLUG') {
       variables: { id, idType },
     }
   );
-  console.log(40, data);
   return data.post;
 }
 
