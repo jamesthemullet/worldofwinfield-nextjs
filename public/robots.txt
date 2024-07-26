@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://worldofwinfield.co.uk
+
+# Sitemaps
+Sitemap: https://worldofwinfield.co.uk/sitemap.xml
