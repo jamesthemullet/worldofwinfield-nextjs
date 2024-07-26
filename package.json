@@ -8,7 +8,8 @@
     "lint:fix": "eslint --fix",
     "format": "prettier --write './**/*.{js,jsx,ts,tsx,css,md,json}' --config ./.prettierrc",
     "prepare": "husky install",
-    "test": "jest"
+    "test": "jest",
+    "postbuild": "next-sitemap"
   },
   "lint-staged": {
     "**/*.{js,jsx,ts,tsx,css,md,json}": "eslint .",
@@ -30,6 +31,7 @@
     "nanoid": "^4.0.2",
     "next": "^13.4.4",
     "next-config": "^0.1.0",
+    "next-sitemap": "^4.2.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "ts-node": "^10.9.2",

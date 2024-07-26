@@ -47,6 +47,38 @@ export async function getPreviewPost(id, idType = 'DATABASE_ID') {
   return data.post;
 }
 
+export async function fetchAllOfThePostsIfYouReallyWantTo() {
+  let allPosts = [];
+  let hasNextPage = true;
+  let endCursor = null;
+
+  while (hasNextPage) {
+    const query = `
+      {
+        posts(first: 100, after: ${endCursor ? `"${endCursor}"` : 'null'}) {
+          edges {
+            node {
+              slug
+            }
+          }
+          pageInfo {
+            hasNextPage
+            endCursor
+          }
+        }
+      }
+    `;
+
+    const data = await fetchAPI(query);
+
+    allPosts = allPosts.concat(data?.posts.edges);
+    hasNextPage = data?.posts.pageInfo.hasNextPage;
+    endCursor = data?.posts.pageInfo.endCursor;
+  }
+
+  return allPosts;
+}
+
 export async function getAllPostsWithSlug() {
   const data = await fetchAPI(`
     {
