@@ -202,11 +202,11 @@ export default function Index({
     },
     {
       className: 'block-11',
-      title: randomPosts[0].title,
-      url: `/${randomPosts[0].slug}`,
+      title: randomPosts[0]?.title,
+      url: `/${randomPosts[0]?.slug}`,
       size: 3,
-      image: randomPosts[0].featuredImage,
-      date: randomPosts[0].date,
+      image: randomPosts[0]?.featuredImage,
+      date: randomPosts[0]?.date,
     },
     {
       className: 'block-11-1 placeholder',
@@ -228,11 +228,11 @@ export default function Index({
     },
     {
       className: 'block-12',
-      title: randomPosts[1].title,
-      url: `/${randomPosts[1].slug}`,
+      title: randomPosts[1]?.title,
+      url: `/${randomPosts[1]?.slug}`,
       size: 2,
-      image: randomPosts[1].featuredImage,
-      date: randomPosts[1].date,
+      image: randomPosts[1]?.featuredImage,
+      date: randomPosts[1]?.date,
     },
     {
       className: 'block-12-1 placeholder',
@@ -242,11 +242,11 @@ export default function Index({
     },
     {
       className: 'block-13',
-      title: randomPosts[2].title,
-      url: `/${randomPosts[2].slug}`,
+      title: randomPosts[2]?.title,
+      url: `/${randomPosts[2]?.slug}`,
       size: 2,
-      image: randomPosts[2].featuredImage,
-      date: randomPosts[2].date,
+      image: randomPosts[2]?.featuredImage,
+      date: randomPosts[2]?.date,
     },
     {
       className: 'block-13-1 placeholder',
