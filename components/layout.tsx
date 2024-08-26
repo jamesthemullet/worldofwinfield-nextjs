@@ -10,7 +10,7 @@ export default function Layout({ preview, children, seo }: LayoutProps) {
       <Meta seo={seo} />
       <StyledDiv>
         <Alert preview={preview} />
-        {children}
+        <main>{children}</main>
       </StyledDiv>
       <Footer />
     </>
