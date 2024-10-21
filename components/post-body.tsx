@@ -84,5 +84,38 @@ export const ContentContainer = styled.div`
         padding: 0;
       }
     }
+
+    figure.wp-block-gallery.has-nested-images {
+      align-items: normal;
+    }
+
+    .wp-block-gallery.has-nested-images figure.wp-block-image:not(#individual-image) {
+      margin: 0;
+      width: calc(50% - var(--wp--style--unstable-gallery-gap, 16px) / 2);
+    }
+
+    .wp-block-gallery.has-nested-images.is-cropped figure.wp-block-image:not(#individual-image) {
+      align-self: inherit;
+    }
+
+    .wp-block-gallery.has-nested-images figure.wp-block-image {
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+      justify-content: center;
+      max-width: 100%;
+      position: relative;
+    }
+
+    .wp-block-gallery.has-nested-images.is-cropped figure.wp-block-image:not(#individual-image) a,
+    .wp-block-gallery.has-nested-images.is-cropped
+      figure.wp-block-image:not(#individual-image)
+      img {
+      flex: 1 0 0%;
+      height: 100%;
+      object-fit: cover;
+      min-width: 100%;
+    }
   }
 `;
