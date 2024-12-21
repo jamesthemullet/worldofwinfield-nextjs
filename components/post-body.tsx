@@ -1,5 +1,6 @@
 import { PostBodyProps } from '../lib/types';
 import styled from '@emotion/styled';
+import { colours } from '../pages/_app';
 import { useEffect } from 'react';
 import LazyLoad from 'vanilla-lazyload';
 
@@ -36,7 +37,6 @@ export const ContentContainer = styled.div`
   }
 
   img {
-    max-width: calc(100% - 20px);
     height: auto;
   }
 
@@ -50,11 +50,21 @@ export const ContentContainer = styled.div`
     max-width: 100%;
     height: auto;
     padding: 0;
+    display: flex;
+    flex-direction: column;
 
     img,
     iframe {
       width: 100%;
       height: auto;
+    }
+
+    figcaption {
+      background-color: ${colours.dark};
+      color: ${colours.white};
+      padding: 0 0.5rem;
+      font-size: 0.875rem;
+      text-align: center;
     }
   }
 
