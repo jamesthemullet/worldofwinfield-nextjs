@@ -4,10 +4,10 @@ import Meta from './meta';
 import { LayoutProps } from '../lib/types';
 import styled from '@emotion/styled';
 
-export default function Layout({ preview, children, seo }: LayoutProps) {
+export default function Layout({ preview, children, seo, title }: LayoutProps) {
   return (
     <>
-      <Meta seo={seo} />
+      <Meta seo={seo} title={title} />
       <StyledDiv>
         <Alert preview={preview} />
         <main>{children}</main>

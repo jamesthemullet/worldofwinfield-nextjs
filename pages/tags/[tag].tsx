@@ -1,6 +1,5 @@
 import { useRouter } from 'next/router';
 import ErrorPage from 'next/error';
-import Head from 'next/head';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import Container from '../../components/container';
 import PostHeader from '../../components/post-header';
@@ -27,16 +26,13 @@ export default function Post({ posts, tag }: TagsPostProps) {
   };
 
   return (
-    <Layout preview={null} seo={seo}>
+    <Layout preview={null} seo={seo} title={`Posts tagged with ${tag}`}>
       <Container>
         {router.isFallback ? (
           <PostTitle>Loading…</PostTitle>
         ) : (
           <>
             <article>
-              <Head>
-                <title>Posts tagged with {tag}</title>
-              </Head>
               <PostHeader
                 title={`Tagged: ${tag}`}
                 coverImage={null}

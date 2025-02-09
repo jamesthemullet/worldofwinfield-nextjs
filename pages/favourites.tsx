@@ -1,5 +1,4 @@
 import { useRouter } from 'next/router';
-import Head from 'next/head';
 import Container from '../components/container';
 import PostHeader from '../components/post-header';
 import Layout from '../components/layout';
@@ -25,17 +24,13 @@ export default function FavouritesPage() {
   const router = useRouter();
 
   return (
-    <Layout preview={null}>
+    <Layout preview={null} title="Favourite Things">
       <Container>
         {router.isFallback ? (
           <PostTitle>Loading…</PostTitle>
         ) : (
           <>
             <PostContainer>
-              <Head>
-                <title>Favourite Things</title>
-                {/* <meta property="og:image" content={post.featuredImage?.node.sourceUrl} /> */}
-              </Head>
               <StyledPostHeader>
                 <PostHeader
                   title={pageName}

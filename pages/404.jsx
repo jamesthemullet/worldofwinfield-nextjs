@@ -35,12 +35,9 @@ export default function Custom404() {
   };
 
   return (
-    <Layout preview="" seo={seo}>
+    <Layout preview="" seo={seo} title="404 - Page Not Found">
       <Container>
         <article>
-          <Head>
-            <title>404 - Page Not Found</title>
-          </Head>
           <Grid>
             {words.map((word, index) => (
               <Block backgroundColour={shuffledColours[index]} key={index}>
