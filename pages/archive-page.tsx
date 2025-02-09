@@ -7,7 +7,6 @@ import Container from '../components/container';
 import Layout from '../components/layout';
 import PostTitle from '../components/post-title';
 import PostHeader from '../components/post-header';
-import Head from 'next/head';
 import { getMonthName } from '../components/utils';
 import { colours } from './_app';
 import styled from '@emotion/styled';
@@ -26,10 +25,6 @@ const ArchivePage = ({ posts: { posts }, month, year }: ArchivePageProps) => {
           <PostTitle>Loading…</PostTitle>
         ) : (
           <>
-            <Head>
-              <title>{`Archive Posts from ${wordyMonth} ${year}`}</title>
-              <meta property="og:image" content={posts[0].featuredImage?.node.sourceUrl} />
-            </Head>
             <PostHeader
               title={`Archives Posts from ${wordyMonth} ${year}`}
               coverImage={posts[0].featuredImage}

@@ -1,5 +1,4 @@
 import { useRouter } from 'next/router';
-import Head from 'next/head';
 import Container from '../components/container';
 import PostHeader from '../components/post-header';
 import Layout from '../components/layout';
@@ -19,17 +18,13 @@ export default function WantsPage() {
   const router = useRouter();
 
   return (
-    <Layout preview={null}>
+    <Layout preview={null} title="Posts About Wants">
       <Container>
         {router.isFallback ? (
           <PostTitle>Loading…</PostTitle>
         ) : (
           <>
             <PostContainer>
-              <Head>
-                <title>I want...</title>
-                {/* <meta property="og:image" content={post.featuredImage?.node.sourceUrl} /> */}
-              </Head>
               <StyledPostHeader>
                 <PostHeader
                   title="I want..."

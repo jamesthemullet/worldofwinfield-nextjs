@@ -350,6 +350,7 @@ export type LayoutProps = {
   children: React.ReactNode;
   preview: string;
   seo?: seoProps | null;
+  title?: string;
 };
 
 export type HeroPostProps = {

@@ -1,6 +1,5 @@
 import { useRouter } from 'next/router';
 
-import Head from 'next/head';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import Container from '../components/container';
 import PostBody from '../components/post-body';
@@ -10,7 +9,6 @@ import Layout from '../components/layout';
 import PostTitle from '../components/post-title';
 import Tags from '../components/tags';
 import { getAllPostsWithSlug, getPost } from '../lib/api';
-import { CMS_NAME } from '../lib/constants';
 import { PostProps } from '../lib/types';
 import PrePost from '../components/pre-post';
 import Custom404 from './404';
@@ -30,10 +28,6 @@ export default function Post({ post, preview }: PostProps) {
         ) : (
           <>
             <article>
-              <Head>
-                <title>{`${post.title} | Next.js Blog Example with ${CMS_NAME}`}</title>
-                <meta property="og:image" content={post.featuredImage?.node.sourceUrl} />
-              </Head>
               <PostHeader
                 title={post.title}
                 coverImage={post.featuredImage}
