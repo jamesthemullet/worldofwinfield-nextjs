@@ -5487,9 +5487,9 @@ v8-to-istanbul@^9.0.1:
     convert-source-map "^2.0.0"
 
 vanilla-lazyload@^17.8.5:
-  version "17.8.5"
-  resolved "https://registry.yarnpkg.com/vanilla-lazyload/-/vanilla-lazyload-17.8.5.tgz#d63ce6ec9caeb57b5db54bedebce9cb6d464b7f6"
-  integrity sha512-SQdQztlVUJqCbyU15zobpAcoTucCzdJiDIEfqinZDdwifhZxQ5H2j0BJfHlrFxi0lrVAdFBRsICH51YdPv18DQ==
+  version "17.9.0"
+  resolved "https://registry.yarnpkg.com/vanilla-lazyload/-/vanilla-lazyload-17.9.0.tgz#43d86caaa0ae47d8c053d7367d6cd0d9296fc125"
+  integrity sha512-VOuNHn6xCXmC1I/Lz2cB/l1ScpsY2aXcymXzxtbsMmLQ2qiHr2KlBeJ7uf2Su/yqKTLkgdDWahznb/ae5YzZNA==
 
 w3c-xmlserializer@^4.0.0:
   version "4.0.0"
