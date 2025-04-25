@@ -28,7 +28,7 @@
     "dotenv": "^16.1.4",
     "husky": "^8.0.3",
     "lint-staged": "^15.0.0",
-    "nanoid": "^4.0.2",
+    "nanoid": "^5.0.0",
     "next": "^15.2.4",
     "next-config": "^0.1.0",
     "next-sitemap": "^4.2.3",
