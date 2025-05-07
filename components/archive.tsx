@@ -14,7 +14,7 @@ const ArchiveDropdown = () => {
         month: 'long',
         year: 'numeric',
       });
-    }
+    },
   );
 
   const handleSelectMonth = async (event) => {
