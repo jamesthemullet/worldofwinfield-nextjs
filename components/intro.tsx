@@ -119,13 +119,13 @@ const FlipContainer = styled.div`
   perspective: 1000px;
 `;
 
-const Flipper = styled.div(({ flipped }: FlipperProps) => ({
-  transform: flipped ? 'rotateY(180deg)' : 'rotateY(0)',
-  transition: 'transform 0.5s',
-  transformStyle: 'preserve-3d',
-  width: '100%',
-  height: '100%',
-}));
+const Flipper = styled.div<FlipperProps>`
+  transform: ${(props) => (props.flipped ? 'rotateY(180deg)' : 'rotateY(0)')};
+  transition: transform 0.5s;
+  transform-style: preserve-3d;
+  width: 100%;
+  height: 100%;
+`;
 
 const Front = styled.div`
   position: absolute;

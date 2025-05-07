@@ -42,7 +42,7 @@ export async function getPreviewPost(id, idType = 'DATABASE_ID') {
     }`,
     {
       variables: { id, idType },
-    }
+    },
   );
   return data.post;
 }
@@ -179,7 +179,7 @@ export async function getJamesImages({ first = 10, after = null }) {
         first,
         after,
       },
-    }
+    },
   );
   return data.jamesImages;
 }
@@ -241,7 +241,7 @@ export async function getAllPostsForHome(preview) {
         onlyEnabled: !preview,
         preview,
       },
-    }
+    },
   );
 
   return data?.posts;
@@ -278,7 +278,7 @@ export async function getPage(id, idType = 'DATABASE_ID') {
     }`,
     {
       variables: { id, idType },
-    }
+    },
   );
   return data.page;
 }
@@ -338,7 +338,7 @@ export async function getPost(id, idType = 'SLUG') {
     }`,
     {
       variables: { id, idType },
-    }
+    },
   );
   return data.post;
 }
@@ -372,7 +372,7 @@ export async function getPostDisplayInfo(ids, idType = 'DATABASE_ID') {
       }`,
       {
         variables: { id, idType: 'DATABASE_ID' },
-      }
+      },
     );
     posts.push(data.post);
   }
@@ -394,7 +394,7 @@ export async function searchBlogPosts(searchTerm) {
     }`,
     {
       variables: { searchTerm },
-    }
+    },
   );
   return data.posts.nodes;
 }
@@ -435,7 +435,7 @@ export async function filterPostsByTag(tag) {
     }`,
     {
       variables: { tag },
-    }
+    },
   );
   return data.posts.nodes;
 }
@@ -454,7 +454,7 @@ export async function getPostsByDate(month, year) {
     }`,
     {
       variables: { month, year },
-    }
+    },
   );
   return {
     posts: data.posts.nodes,
@@ -478,7 +478,7 @@ export async function getPostsByTag(tag) {
     }`,
     {
       variables: { tag },
-    }
+    },
   );
   return data.posts.nodes;
 }
@@ -507,8 +507,9 @@ export async function getRandomImage(randomMonth, randomYear) {
     }`,
     {
       variables: { randomMonth, randomYear },
-    }
+    },
   );
+  console.log(9, data);
   return {
     images: data.mediaItems.edges,
     randomMonth,
