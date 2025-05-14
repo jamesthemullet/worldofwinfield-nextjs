@@ -4,9 +4,18 @@ import styled from '@emotion/styled';
 
 export default function Nav() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isTravelDropdownOpen, setIsTravelDropdownOpen] = useState(false);
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
+  };
+
+  const toggleTravelDropdown = (open?: boolean) => {
+    if (open === undefined) {
+      setIsTravelDropdownOpen((prev) => !prev);
+    } else {
+      setIsTravelDropdownOpen(open);
+    }
   };
 
   return (
@@ -16,7 +25,7 @@ export default function Nav() {
         <span></span>
         <span></span>
       </BurgerButton>
-      <ul className={isDropdownOpen ? 'open' : ''}>
+      <NavList className={isDropdownOpen ? 'open' : ''}>
         <li>
           <Link href="/">Home</Link>
         </li>
@@ -30,7 +39,16 @@ export default function Nav() {
           <Link href="/wants">Want To Do</Link>
         </li>
         <li>
-          <Link href="/travel">Travel</Link>
+          <Dropdown
+            onMouseEnter={() => toggleTravelDropdown(true)}
+            onMouseLeave={() => toggleTravelDropdown(false)}>
+            <DropdownButton>Travel</DropdownButton>
+            <DropdownMenu isTravelDropdownOpen={isTravelDropdownOpen}>
+              <li>
+                <Link href="/countries-visited">Countries Visited</Link>
+              </li>
+            </DropdownMenu>
+          </Dropdown>
         </li>
         <li>
           <Link href="/music">Music</Link>
@@ -38,7 +56,7 @@ export default function Nav() {
         <li>
           <Link href="/politics">Politics</Link>
         </li>
-      </ul>
+      </NavList>
     </StyledNav>
   );
 }
@@ -58,24 +76,25 @@ const StyledNav = styled.nav`
     width: 100%;
     padding: 0;
   }
+`;
 
-  ul {
-    display: flex;
-    justify-content: center;
-    list-style: none;
-    margin: 0;
-    padding: 1rem;
-    @media (max-width: 768px) {
-      padding: 0.5rem;
-      display: none;
+const NavList = styled.ul`
+  display: flex;
+  justify-content: center;
+  list-style: none;
+  margin: 0;
+  padding: 1rem;
+  @media (max-width: 768px) {
+    padding: 0.5rem;
+    display: none;
 
-      &.open {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-      }
+    &.open {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
   }
+
   li {
     @media (min-width: 768px) {
       padding: 0.5rem 0.5rem;
@@ -127,6 +146,43 @@ const BurgerButton = styled.button`
 
     span:nth-of-type(3) {
       bottom: 0;
+    }
+  }
+`;
+
+const Dropdown = styled.div`
+  position: relative;
+`;
+
+const DropdownButton = styled.button`
+  background: none;
+  border: none;
+  color: #fff;
+  text-decoration: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  font-family: 'Oswald', sans-serif;
+  letter-spacing: 2px;
+`;
+
+const DropdownMenu = styled.ul<{ isTravelDropdownOpen: boolean }>`
+  display: ${(props) => (props.isTravelDropdownOpen ? 'block' : 'none')};
+  position: absolute;
+  background-color: #333;
+  list-style: none;
+  margin: 0;
+  padding: 0.5rem;
+
+  &.open {
+    display: block;
+  }
+
+  li {
+    padding: 0.5rem 1rem;
+
+    a {
+      color: #fff;
+      text-decoration: none;
     }
   }
 `;

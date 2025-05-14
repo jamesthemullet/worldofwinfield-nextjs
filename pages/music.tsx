@@ -87,7 +87,6 @@ const PostContainer = styled.article<{ isEven: boolean }>`
 
   h1 {
     font-size: 3rem;
-    padding: 1rem;
     line-height: 4rem;
   }
 

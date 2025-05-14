@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import getConfig from 'next/config';
 import styled from '@emotion/styled';
 
 const favouriteMoviesSheetID = '1q3LFzLYqK0tLWHjvHYxFE1IIF-FrOJuqJ6XBIQIEl6U';
@@ -13,7 +12,6 @@ const wantToVisitSheetID = '1GX6KF20f3Nrb3m8T9th7UIV_uuePj4Ivlc_yLgo-4Bo';
 const wantToEatHereSheetID = '13gz7lPQ61f_WKQ_xio_QBlUcFB9Dl0yVBynwEadVO_4';
 const favouriteCountriesID = '1zyzuLzWY0S6mUp-FVjcIa3QFAENcU94WVD9ZF0JWERY';
 const favouriteCitiesID = '1WBfOTfhC70AygxrTcIIgvigzlvOD65WfI9Ysrd3aF5o';
-const { publicRuntimeConfig } = getConfig();
 
 type TypeProps = {
   type: string;
@@ -21,7 +19,7 @@ type TypeProps = {
 
 const fetchDataFromGoogleSheets = async (sheetID) => {
   try {
-    const API_KEY = publicRuntimeConfig.NEXT_PUBLIC_GOOGLE_SHEETS_API_KEY;
+    const API_KEY = process.env.NEXT_PUBLIC_GOOGLE_SHEETS_API_KEY;
     const SHEET_NAME = 'Sheet1';
     const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetID}/values/${SHEET_NAME}?alt=json&key=${API_KEY}`;
 

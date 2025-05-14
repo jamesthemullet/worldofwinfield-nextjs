@@ -54,7 +54,6 @@ export default function WantsPage() {
 const PostContainer = styled.article`
   h1 {
     font-size: 3rem;
-    padding: 1rem;
     line-height: 4rem;
   }
 `;
