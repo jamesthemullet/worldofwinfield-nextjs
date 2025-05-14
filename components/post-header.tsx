@@ -16,7 +16,6 @@ export default function PostHeader({
 }: PostHeaderProps) {
   const aspectRatio = coverImage?.node.mediaDetails.width / coverImage?.node.mediaDetails.height;
 
-  // Generate random color indexes
   const blockColours = [
     colours.pink,
     colours.green,
@@ -29,12 +28,10 @@ export default function PostHeader({
   const randomIndex1 = Math.floor(Math.random() * blockColours.length);
   let randomIndex2 = Math.floor(Math.random() * blockColours.length);
 
-  // Ensure the second color is different from the first
   while (randomIndex2 === randomIndex1) {
     randomIndex2 = Math.floor(Math.random() * blockColours.length);
   }
 
-  // Get the random colors
   const randomColour1 = blockColours[randomIndex1];
   const randomColour2 = blockColours[randomIndex2];
 
