@@ -28,6 +28,7 @@ const fetchDataFromGoogleSheets = async (sheetID) => {
     const response = await axios.get(url);
     return response.data.values;
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error('Error fetching data from Google Sheets:', error);
     return null;
   }

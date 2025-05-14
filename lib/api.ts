@@ -343,7 +343,7 @@ export async function getPost(id, idType = 'SLUG') {
   return data.post;
 }
 
-export async function getPostDisplayInfo(ids, idType = 'DATABASE_ID') {
+export async function getPostDisplayInfo(ids) {
   const posts = [];
   for (const id of ids) {
     const data = await fetchAPI(
@@ -509,7 +509,6 @@ export async function getRandomImage(randomMonth, randomYear) {
       variables: { randomMonth, randomYear },
     },
   );
-  console.log(9, data);
   return {
     images: data.mediaItems.edges,
     randomMonth,
