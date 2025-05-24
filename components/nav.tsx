@@ -5,9 +5,18 @@ import styled from '@emotion/styled';
 export default function Nav() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isTravelDropdownOpen, setIsTravelDropdownOpen] = useState(false);
+  const [isFavouritesDropdownOpen, setIsFavouritesDropdownOpen] = useState(false);
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
+  };
+
+  const toggleFavouritesDropdown = (open?: boolean) => {
+    if (open === undefined) {
+      setIsFavouritesDropdownOpen((prev) => !prev);
+    } else {
+      setIsFavouritesDropdownOpen(open);
+    }
   };
 
   const toggleTravelDropdown = (open?: boolean) => {
@@ -33,7 +42,37 @@ export default function Nav() {
           <Link href="/blog">The Blog</Link>
         </li>
         <li>
-          <Link href="/favourites">Favourites</Link>
+          <Dropdown
+            onMouseEnter={() => toggleFavouritesDropdown(true)}
+            onMouseLeave={() => toggleFavouritesDropdown(false)}>
+            <DropdownButton>Favourites</DropdownButton>
+            <DropdownMenu isDropdownOpen={isFavouritesDropdownOpen}>
+              <li>
+                <Link href="/favourite-countries">Countries Visited</Link>
+              </li>
+              <li>
+                <Link href="/favourite-cities">Cities Visited</Link>
+              </li>
+              <li>
+                <Link href="/favourite-movies">Movies</Link>
+              </li>
+              <li>
+                <Link href="/favourite-books">Books</Link>
+              </li>
+              <li>
+                <Link href="/favourite-djs">DJs</Link>
+              </li>
+              <li>
+                <Link href="/favourite-cheese">Cheese</Link>
+              </li>
+              <li>
+                <Link href="/favourite-beers">Beers</Link>
+              </li>
+              <li>
+                <Link href="/favourite-restaurants">Restaurants</Link>
+              </li>
+            </DropdownMenu>
+          </Dropdown>
         </li>
         <li>
           <Link href="/wants">Want To Do</Link>
@@ -43,7 +82,7 @@ export default function Nav() {
             onMouseEnter={() => toggleTravelDropdown(true)}
             onMouseLeave={() => toggleTravelDropdown(false)}>
             <DropdownButton>Travel</DropdownButton>
-            <DropdownMenu isTravelDropdownOpen={isTravelDropdownOpen}>
+            <DropdownMenu isDropdownOpen={isTravelDropdownOpen}>
               <li>
                 <Link href="/countries-visited">Countries Visited</Link>
               </li>
@@ -165,8 +204,8 @@ const DropdownButton = styled.button`
   letter-spacing: 2px;
 `;
 
-const DropdownMenu = styled.ul<{ isTravelDropdownOpen: boolean }>`
-  display: ${(props) => (props.isTravelDropdownOpen ? 'block' : 'none')};
+const DropdownMenu = styled.ul<{ isDropdownOpen: boolean }>`
+  display: ${(props) => (props.isDropdownOpen ? 'block' : 'none')};
   position: absolute;
   background-color: #333;
   list-style: none;
@@ -174,7 +213,7 @@ const DropdownMenu = styled.ul<{ isTravelDropdownOpen: boolean }>`
   padding: 0.5rem;
 
   &.open {
-    display: block;
+    display: flex;
   }
 
   li {
