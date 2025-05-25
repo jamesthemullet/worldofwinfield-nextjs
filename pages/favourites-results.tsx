@@ -2,19 +2,11 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import styled from '@emotion/styled';
 
-const favouriteMoviesSheetID = '1q3LFzLYqK0tLWHjvHYxFE1IIF-FrOJuqJ6XBIQIEl6U';
-const favouriteBooksSheetID = '1G-QrN1NDpKAr12VyIi50Nod8_g-YOSGP3bovCXxDHlY';
-const favouriteDJsSheetID = '1_zpDBFlpW2ZWTVsXQHoW6Y4FbGw8Vi53nMYpZiOypbg';
-const favouriteCheeseSheetID = '1UDjT7_Q5rBPQasn4o2qxUOsEcElEI67nl-ep9YTLc-E';
-const favouriteBeerSheetID = '1pNNIw849xWrQHtDptwInGs6Un0AZh-fgXUssC3XIrHM';
-const favouriteRestaurantsSheetID = '1J1znKQxeNR3Y6Q1mEPzZyMfCAGK4FQyxasoCQx35NVQ';
 const wantToVisitSheetID = '1GX6KF20f3Nrb3m8T9th7UIV_uuePj4Ivlc_yLgo-4Bo';
 const wantToEatHereSheetID = '13gz7lPQ61f_WKQ_xio_QBlUcFB9Dl0yVBynwEadVO_4';
-const favouriteCountriesID = '1zyzuLzWY0S6mUp-FVjcIa3QFAENcU94WVD9ZF0JWERY';
-const favouriteCitiesID = '1WBfOTfhC70AygxrTcIIgvigzlvOD65WfI9Ysrd3aF5o';
 
 type TypeProps = {
-  type: string;
+  sheetId?: string;
 };
 
 const fetchDataFromGoogleSheets = async (sheetID) => {
@@ -32,43 +24,17 @@ const fetchDataFromGoogleSheets = async (sheetID) => {
   }
 };
 
-const FavouriteResults = ({ type }: TypeProps) => {
+const FavouriteResults = ({ sheetId }: TypeProps) => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
     const fetchfavouriteData = async () => {
-      let sheetID;
+      if (sheetId) {
+        const rawData = await fetchDataFromGoogleSheets(sheetId);
 
-      if (type === 'favouriteMoviesSheetID') {
-        sheetID = favouriteMoviesSheetID;
-      } else if (type === 'favouriteBooksSheetID') {
-        sheetID = favouriteBooksSheetID;
-      } else if (type === 'favouriteDJsSheetID') {
-        sheetID = favouriteDJsSheetID;
-      } else if (type === 'favouriteCheeseSheetID') {
-        sheetID = favouriteCheeseSheetID;
-      } else if (type === 'favouriteBeerSheetID') {
-        sheetID = favouriteBeerSheetID;
-      } else if (type === 'favouriteRestaurantsSheetID') {
-        sheetID = favouriteRestaurantsSheetID;
-      } else if (type === 'wantToVisitSheetID') {
-        sheetID = wantToVisitSheetID;
-      } else if (type === 'wantToEatHereSheetID') {
-        sheetID = wantToEatHereSheetID;
-      } else if (type === 'favouriteCountriesID') {
-        sheetID = favouriteCountriesID;
-      } else if (type === 'favouriteCitiesID') {
-        sheetID = favouriteCitiesID;
-      }
-
-      if (sheetID) {
-        const rawData = await fetchDataFromGoogleSheets(sheetID);
-
-        // Separate the header row from data rows
         const headerRow = rawData[0];
         const dataRows = rawData.slice(1);
 
-        // Hide the "date" column if it exists (assuming "date" is in the header row)
         const dateColumnIndex = headerRow.indexOf('Date');
         if (dateColumnIndex !== -1) {
           for (const row of dataRows) {
@@ -77,20 +43,18 @@ const FavouriteResults = ({ type }: TypeProps) => {
           headerRow.splice(dateColumnIndex, 1);
         }
 
-        // Sort data by the "score" column if it exists (assuming "score" is in the header row)
         const scoreColumnIndex = headerRow.indexOf('Score');
         if (scoreColumnIndex !== -1) {
           dataRows.sort((a, b) => b[scoreColumnIndex] - a[scoreColumnIndex]);
         }
 
-        // Reassemble the data with the header row at the beginning
         const updatedData = [headerRow, ...dataRows];
         setData(updatedData);
       }
     };
 
     fetchfavouriteData();
-  }, [type]);
+  }, [sheetId]);
 
   return (
     <FavouritesContainer isHeading={false}>
