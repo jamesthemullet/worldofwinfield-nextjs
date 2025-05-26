@@ -42,7 +42,7 @@ export default function WantsPage() {
                   Want To Eat Here
                 </StyledButton>
               </RowOfButtons>
-              {selectedType && <FavouriteResults type={selectedType} />}
+              {selectedType && <FavouriteResults sheetId={selectedType} />}
             </PostContainer>
           </>
         )}
