@@ -6,6 +6,7 @@ export default function Nav() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isTravelDropdownOpen, setIsTravelDropdownOpen] = useState(false);
   const [isFavouritesDropdownOpen, setIsFavouritesDropdownOpen] = useState(false);
+  const [isWishListDropdownOpen, setIsWishListDropdownOpen] = useState(false);
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
@@ -24,6 +25,14 @@ export default function Nav() {
       setIsTravelDropdownOpen((prev) => !prev);
     } else {
       setIsTravelDropdownOpen(open);
+    }
+  };
+
+  const toggleWishListDropdown = (open?: boolean) => {
+    if (open === undefined) {
+      setIsWishListDropdownOpen((prev) => !prev);
+    } else {
+      setIsWishListDropdownOpen(open);
     }
   };
 
@@ -75,7 +84,19 @@ export default function Nav() {
           </Dropdown>
         </li>
         <li>
-          <Link href="/wants">Want To Do</Link>
+          <Dropdown
+            onMouseEnter={() => toggleWishListDropdown(true)}
+            onMouseLeave={() => toggleWishListDropdown(false)}>
+            <DropdownButton>Wish Lists</DropdownButton>
+            <DropdownMenu isDropdownOpen={isWishListDropdownOpen}>
+              <li>
+                <Link href="/holiday-wish-list">Holidays</Link>
+              </li>
+              <li>
+                <Link href="/restaurant-wish-list">Restaurants</Link>
+              </li>
+            </DropdownMenu>
+          </Dropdown>
         </li>
         <li>
           <Dropdown

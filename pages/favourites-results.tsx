@@ -1,10 +1,6 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import styled from '@emotion/styled';
-
-const wantToVisitSheetID = '1GX6KF20f3Nrb3m8T9th7UIV_uuePj4Ivlc_yLgo-4Bo';
-const wantToEatHereSheetID = '13gz7lPQ61f_WKQ_xio_QBlUcFB9Dl0yVBynwEadVO_4';
 
 type TypeProps = {
   sheetId?: string;
