@@ -156,11 +156,17 @@ const NavList = styled.ul`
   }
 
   li {
+    margin: 0 auto;
     @media (min-width: 768px) {
       padding: 0.5rem 0.5rem;
+      margin: unset;
     }
     @media (min-width: 1000px) {
       padding: 0.5rem 1rem;
+    }
+
+    div {
+      text-align: center;
     }
   }
   a {
@@ -226,23 +232,40 @@ const DropdownButton = styled.button`
 `;
 
 const DropdownMenu = styled.ul<{ isDropdownOpen: boolean }>`
-  display: ${(props) => (props.isDropdownOpen ? 'block' : 'none')};
+  overflow: hidden;
+  max-height: ${(props) => (props.isDropdownOpen ? '1000px' : '0')};
+  opacity: ${(props) => (props.isDropdownOpen ? 1 : 0)};
+  transition:
+    max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.2s;
   position: absolute;
   background-color: #333;
   list-style: none;
   margin: 0;
   padding: 0.5rem;
-
-  &.open {
-    display: flex;
-  }
+  min-width: 180px;
+  z-index: 100;
+  pointer-events: ${(props) => (props.isDropdownOpen ? 'auto' : 'none')};
 
   li {
-    padding: 0.5rem 1rem;
+    padding: 0;
 
     a {
       color: #fff;
       text-decoration: none;
+      font-size: 18px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    position: static;
+    width: 100%;
+    min-width: 0;
+    padding: 0;
+    box-shadow: none;
+    background: none;
+    li {
+      background: #333;
     }
   }
 `;
