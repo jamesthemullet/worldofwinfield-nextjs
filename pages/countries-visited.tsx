@@ -65,7 +65,6 @@ const CountryList = ({
     [key: string]: { country: string; visited: string }[];
   };
 }) => {
-  console.log('Transformed Data:', transformedData);
   return (
     <ContentContainer>
       {Object.keys(transformedData).map((continent) => (
@@ -78,6 +77,11 @@ const CountryList = ({
               </li>
             ))}
           </ul>
+          <p>
+            Total Countries Visited in {continent}:{' '}
+            {transformedData[continent].filter((item) => item.visited).length} out of{' '}
+            {transformedData[continent].length}
+          </p>
         </div>
       ))}
     </ContentContainer>
