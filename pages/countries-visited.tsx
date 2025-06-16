@@ -32,7 +32,7 @@ const processData = (rawData) => {
       if (country) {
         continentCountries.push({
           country,
-          visited: visited === 'Yes' ? '✔ Yes' : '',
+          visited: visited === 'Yes' ? '✔' : '',
         });
       }
     }
