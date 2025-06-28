@@ -13,6 +13,7 @@ export default function PostHeader({
   date,
   slug,
   heroPost,
+  caption,
 }: PostHeaderProps) {
   const aspectRatio = coverImage?.node.mediaDetails.width / coverImage?.node.mediaDetails.height;
 
@@ -44,6 +45,7 @@ export default function PostHeader({
           imageSize={imageSize}
           heroPost={heroPost}
         />
+        {caption && <CaptionOverlay dangerouslySetInnerHTML={{ __html: caption }}></CaptionOverlay>}
       </ImageContainer>
       <StyledLink href={`/${slug}`} aria-label={title}>
         <PostTitle backgroundColour={randomColour1}>{title}</PostTitle>
@@ -92,4 +94,26 @@ const PostedContainer = styled.div<{ backgroundColour: string; colour: string }>
 
 const StyledLink = styled(Link)`
   text-decoration: none;
+`;
+
+const CaptionOverlay = styled.div`
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
+  font-size: 0.9rem;
+  font-family: 'Oswald', sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  a {
+    color: white;
+  }
+
+  @media (min-width: 768px) {
+    font-size: 1rem;
+  }
 `;

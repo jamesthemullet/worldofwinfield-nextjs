@@ -202,6 +202,7 @@ export async function getAllPostsForHome(preview) {
                   height
                   width
                 }
+                caption
               }
             }
             author {
@@ -330,6 +331,7 @@ export async function getPost(id, idType = 'SLUG') {
               height
               width
             }
+            caption
             srcSet
             sourceUrl
           }

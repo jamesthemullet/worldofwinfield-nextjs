@@ -35,6 +35,7 @@ export default function Post({ post, preview }: PostProps) {
                 author={post.author}
                 categories={post.categories}
                 heroPost={true}
+                caption={post.featuredImage.node.caption}
               />
               <PrePost tags={post.tags} date={post.date} />
               <PostBody content={post.content} />

@@ -10,6 +10,7 @@ type SinglePostProps = {
         sizes: string;
         srcset: string;
       };
+      caption: string;
     };
   };
   date: string;
@@ -48,6 +49,7 @@ export type PostProps = {
               sizes: string;
               srcset: string;
             };
+            caption: string;
           };
         };
         date: string;
@@ -86,6 +88,7 @@ export type PostsProps = {
           sizes: string;
           srcset: string;
         };
+        caption: string;
       };
     };
     tags: {
@@ -165,6 +168,7 @@ export type IndexPageProps = {
               sizes: string;
               srcset: string;
             };
+            caption: string;
           };
         };
         date: string;
@@ -189,6 +193,7 @@ export type IndexPageProps = {
               sizes: string;
             };
             srcset: string;
+            caption: string;
           };
         };
         date: string;
@@ -218,6 +223,7 @@ export type IndexPageProps = {
         };
         srcSet: string;
         sourceUrl: string;
+        caption: string;
       };
     };
   };
@@ -274,6 +280,7 @@ export type PostPreviewProps = {
         sizes: string;
         srcset: string;
       };
+      caption: string;
     };
   };
   featuredImage: {
@@ -285,6 +292,7 @@ export type PostPreviewProps = {
         sizes: string;
         srcset: string;
       };
+      caption: string;
     };
   };
   excerpt: string;
@@ -303,6 +311,7 @@ export type PostHeaderProps = {
         sizes: string;
         srcset: string;
       };
+      caption: string;
     };
   };
   date?: string;
@@ -316,6 +325,7 @@ export type PostHeaderProps = {
   };
   slug?: string;
   heroPost?: boolean;
+  caption?: string;
 };
 
 export type PostBodyProps = {
@@ -336,6 +346,7 @@ export type MoreStoriesProps = {
             sizes: string;
             srcset: string;
           };
+          caption: string;
         };
       };
       date: string;
@@ -368,6 +379,7 @@ export type HeroPostProps = {
         sizes: string;
         srcset: string;
       };
+      caption: string;
     };
   };
   categories?: {
