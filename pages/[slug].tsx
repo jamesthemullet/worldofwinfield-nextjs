@@ -27,21 +27,23 @@ export default function Post({ post, preview }: PostProps) {
           <PostTitle>Loading…</PostTitle>
         ) : (
           <>
+            {' '}
             <article>
-              <PostHeader
-                title={post.title}
-                coverImage={post.featuredImage}
-                date={post.date}
-                author={post.author}
-                categories={post.categories}
-                heroPost={true}
-                caption={post.featuredImage.node.caption}
-              />
+              {post.featuredImage && (
+                <PostHeader
+                  title={post.title}
+                  coverImage={post.featuredImage}
+                  date={post.date}
+                  author={post.author}
+                  categories={post.categories}
+                  heroPost={true}
+                  caption={post.featuredImage.node.caption}
+                />
+              )}
               <PrePost tags={post.tags} date={post.date} />
               <PostBody content={post.content} />
               <p>{post.tags.edges.length > 0 && <Tags tags={post.tags} />}</p>
             </article>
-
             <SectionSeparator />
           </>
         )}
