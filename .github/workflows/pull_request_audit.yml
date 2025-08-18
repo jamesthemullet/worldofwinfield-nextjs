@@ -6,7 +6,7 @@ jobs:
   lighthouse:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Vercel Action
         id: vercel_action
         uses: amondnet/vercel-action@v25
@@ -61,7 +61,7 @@ jobs:
       WORDPRESS_API_URL: https://blog.worldofwinfield.co.uk/graphql
       GITHUB_API_SECRET: ${{ secrets.PIPELINE_GITHUB_API_SECRET }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Use Node.js 18.x
         uses: actions/setup-node@v4
         with:
@@ -96,7 +96,7 @@ jobs:
       WORDPRESS_API_URL: https://blog.worldofwinfield.co.uk/graphql
       GITHUB_API_SECRET: ${{ secrets.PIPELINE_GITHUB_API_SECRET }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Install dependencies
         run: yarn install
       - name: Run unit tests
