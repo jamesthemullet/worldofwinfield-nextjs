@@ -80,6 +80,9 @@ export default function Nav() {
               <li>
                 <Link href="/favourite-restaurants">Restaurants</Link>
               </li>
+              <li>
+                <Link href="/favourite-tracks">Tracks</Link>
+              </li>
             </DropdownMenu>
           </Dropdown>
         </li>
