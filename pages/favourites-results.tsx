@@ -3,7 +3,10 @@ import { useEffect, useState } from 'react';
 import styled from '@emotion/styled';
 
 type TypeProps = {
-  sheetId?: string;
+  sheetId: string;
+  columnsToHide?: string[];
+  indexRequired?: boolean;
+  sortBy?: string;
 };
 
 const fetchDataFromGoogleSheets = async (sheetID) => {
@@ -21,48 +24,66 @@ const fetchDataFromGoogleSheets = async (sheetID) => {
   }
 };
 
-const FavouriteResults = ({ sheetId }: TypeProps) => {
+const FavouriteResults = ({ sheetId, columnsToHide = [], indexRequired = true }: TypeProps) => {
   const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const fetchfavouriteData = async () => {
-      if (sheetId) {
-        const rawData = await fetchDataFromGoogleSheets(sheetId);
+    const fetchFavouriteData = async () => {
+      if (sheetId && !loading) {
+        setLoading(true);
+        try {
+          const rawData = await fetchDataFromGoogleSheets(sheetId);
 
-        const headerRow = rawData[0];
-        const dataRows = rawData.slice(1);
-
-        const dateColumnIndex = headerRow.indexOf('Date');
-        if (dateColumnIndex !== -1) {
-          for (const row of dataRows) {
-            row.splice(dateColumnIndex, 1);
+          if (!rawData || !rawData.length) {
+            console.error('No data received from Google Sheets');
+            return;
           }
-          headerRow.splice(dateColumnIndex, 1);
-        }
 
-        const scoreColumnIndex = headerRow.indexOf('Score');
-        if (scoreColumnIndex !== -1) {
-          dataRows.sort((a, b) => b[scoreColumnIndex] - a[scoreColumnIndex]);
-        }
+          const headerRow = rawData[0];
+          const dataRows = rawData.slice(1);
 
-        const updatedData = [headerRow, ...dataRows];
-        setData(updatedData);
+          columnsToHide.forEach((columnName) => {
+            const columnIndex = headerRow.indexOf(columnName);
+            if (columnIndex !== -1) {
+              for (const row of dataRows) {
+                row.splice(columnIndex, 1);
+              }
+              headerRow.splice(columnIndex, 1);
+            }
+          });
+
+          const scoreColumnIndex = headerRow.indexOf('Score');
+          if (scoreColumnIndex !== -1) {
+            dataRows.sort((a, b) => b[scoreColumnIndex] - a[scoreColumnIndex]);
+          }
+
+          const updatedData = [headerRow, ...dataRows];
+          setData(updatedData);
+        } catch (error) {
+          console.error('Error processing sheet data:', error);
+        } finally {
+          setLoading(false);
+        }
       }
     };
 
-    fetchfavouriteData();
-  }, [sheetId]);
+    fetchFavouriteData();
+  }, [sheetId, JSON.stringify(columnsToHide)]);
 
   return (
     <FavouritesContainer isHeading={false}>
       {data.map((row, rowIndex) => (
         <StyledRow key={rowIndex} className={rowIndex === 0 ? 'header-row' : 'data-row'}>
-          {rowIndex === 0 ? <p className="index"></p> : <p className="index">{rowIndex}.</p>}{' '}
+          {indexRequired &&
+            (rowIndex === 0 ? <p className="index"></p> : <p className="index">{rowIndex}.</p>)}
           {row.map((cellData, cellIndex) => (
             <p
               key={cellIndex}
               className={
-                rowIndex === 0 ? `heading ${data[0][cellIndex]}` : `data ${data[0][cellIndex]}`
+                rowIndex === 0
+                  ? `heading-${data[0][cellIndex].toLowerCase().replace(/\s+/g, '-').replace(/\//g, '-')}`
+                  : `data-${data[0][cellIndex].toLowerCase().replace(/\s+/g, '-').replace(/\//g, '-')}`
               }>
               {rowIndex === 0 ? <strong>{cellData}</strong> : cellData}
             </p>
@@ -83,16 +104,22 @@ const StyledRow = styled.div`
     gap: 1rem;
   }
   align-items: flex-start;
+  margin: 0 auto;
 
   &.data-row {
-    @media (max-width: 768px) {
+    @media (min-width: 768px) {
       flex-wrap: wrap;
+      min-width: 1000px;
+      flex: 1;
     }
   }
 
   &.header-row {
+    @media (min-width: 768px) {
+      min-width: 1000px;
+    }
     .Comments {
-      @media (max-width: 768px) {
+      @media (max-width: 767px) {
         display: none;
       }
     }
@@ -108,9 +135,7 @@ const FavouritesContainer = styled.div<{ isHeading: boolean }>`
     margin: 0;
     display: flex;
     align-items: ${({ isHeading }) => (isHeading ? 'flex-start' : 'center')};
-    @media (min-width: 768px) {
-      width: 200px;
-    }
+    max-width: 500px;
 
     &.Comments {
       width: 800px;
@@ -139,18 +164,10 @@ const FavouritesContainer = styled.div<{ isHeading: boolean }>`
     }
   }
 
-  p:first-of-type {
-    width: 30px; /* Adjust the width as needed */
-    display: flex;
-    align-items: center;
-
-    &.Comments {
+  p {
+    &.data-artist-track-name,
+    &.heading-artist-track-name {
       width: 800px;
-    }
-
-    &.Score,
-    &.Language {
-      width: 100px;
     }
   }
 `;
