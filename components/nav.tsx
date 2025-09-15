@@ -36,6 +36,15 @@ export default function Nav() {
     }
   };
 
+  const closeNavOnMobile = () => {
+    if (window.innerWidth <= 768) {
+      setIsDropdownOpen(false);
+      setIsFavouritesDropdownOpen(false);
+      setIsTravelDropdownOpen(false);
+      setIsWishListDropdownOpen(false);
+    }
+  };
+
   return (
     <StyledNav>
       <BurgerButton onClick={toggleDropdown}>
@@ -45,79 +54,167 @@ export default function Nav() {
       </BurgerButton>
       <NavList className={isDropdownOpen ? 'open' : ''}>
         <li>
-          <Link href="/">Home</Link>
+          <Link href="/" onClick={closeNavOnMobile}>
+            Home
+          </Link>
         </li>
         <li>
-          <Link href="/blog">The Blog</Link>
+          <Link href="/blog" onClick={closeNavOnMobile}>
+            The Blog
+          </Link>
         </li>
         <li>
           <Dropdown
-            onMouseEnter={() => toggleFavouritesDropdown(true)}
-            onMouseLeave={() => toggleFavouritesDropdown(false)}>
-            <DropdownButton>Favourites</DropdownButton>
+            onMouseEnter={() => {
+              if (window.innerWidth > 768) {
+                toggleFavouritesDropdown(true);
+              }
+            }}
+            onMouseLeave={() => {
+              if (window.innerWidth > 768) {
+                toggleFavouritesDropdown(false);
+              }
+            }}>
+            <SplitButtonContainer>
+              <DropdownButton onClick={() => toggleFavouritesDropdown()}>Favourites</DropdownButton>
+              <DropdownArrow
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  toggleFavouritesDropdown();
+                }}>
+                ▼
+              </DropdownArrow>
+            </SplitButtonContainer>
             <DropdownMenu isDropdownOpen={isFavouritesDropdownOpen}>
               <li>
-                <Link href="/favourite-countries">Countries Visited</Link>
+                <Link href="/favourite-countries" onClick={closeNavOnMobile}>
+                  Countries Visited
+                </Link>
               </li>
               <li>
-                <Link href="/favourite-cities">Cities Visited</Link>
+                <Link href="/favourite-cities" onClick={closeNavOnMobile}>
+                  Cities Visited
+                </Link>
               </li>
               <li>
-                <Link href="/favourite-movies">Movies</Link>
+                <Link href="/favourite-movies" onClick={closeNavOnMobile}>
+                  Movies
+                </Link>
               </li>
               <li>
-                <Link href="/favourite-books">Books</Link>
+                <Link href="/favourite-books" onClick={closeNavOnMobile}>
+                  Books
+                </Link>
               </li>
               <li>
-                <Link href="/favourite-djs">DJs</Link>
+                <Link href="/favourite-djs" onClick={closeNavOnMobile}>
+                  DJs
+                </Link>
               </li>
               <li>
-                <Link href="/favourite-cheese">Cheese</Link>
+                <Link href="/favourite-cheese" onClick={closeNavOnMobile}>
+                  Cheese
+                </Link>
               </li>
               <li>
-                <Link href="/favourite-beers">Beers</Link>
+                <Link href="/favourite-beers" onClick={closeNavOnMobile}>
+                  Beers
+                </Link>
               </li>
               <li>
-                <Link href="/favourite-restaurants">Restaurants</Link>
+                <Link href="/favourite-restaurants" onClick={closeNavOnMobile}>
+                  Restaurants
+                </Link>
               </li>
               <li>
-                <Link href="/favourite-tracks">Tracks</Link>
+                <Link href="/favourite-tracks" onClick={closeNavOnMobile}>
+                  Tracks
+                </Link>
               </li>
             </DropdownMenu>
           </Dropdown>
         </li>
         <li>
           <Dropdown
-            onMouseEnter={() => toggleWishListDropdown(true)}
-            onMouseLeave={() => toggleWishListDropdown(false)}>
-            <DropdownButton>Wish Lists</DropdownButton>
+            onMouseEnter={() => {
+              if (window.innerWidth > 768) {
+                toggleWishListDropdown(true);
+              }
+            }}
+            onMouseLeave={() => {
+              if (window.innerWidth > 768) {
+                toggleWishListDropdown(false);
+              }
+            }}>
+            <SplitButtonContainer>
+              <DropdownButton onClick={() => toggleWishListDropdown()}>Wish Lists</DropdownButton>
+              <DropdownArrow
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  toggleWishListDropdown();
+                }}>
+                ▼
+              </DropdownArrow>
+            </SplitButtonContainer>
             <DropdownMenu isDropdownOpen={isWishListDropdownOpen}>
               <li>
-                <Link href="/holiday-wish-list">Holidays</Link>
+                <Link href="/holiday-wish-list" onClick={closeNavOnMobile}>
+                  Holidays
+                </Link>
               </li>
               <li>
-                <Link href="/restaurant-wish-list">Restaurants</Link>
+                <Link href="/restaurant-wish-list" onClick={closeNavOnMobile}>
+                  Restaurants
+                </Link>
               </li>
             </DropdownMenu>
           </Dropdown>
         </li>
         <li>
           <Dropdown
-            onMouseEnter={() => toggleTravelDropdown(true)}
-            onMouseLeave={() => toggleTravelDropdown(false)}>
-            <DropdownButton>Travel</DropdownButton>
+            onMouseEnter={() => {
+              if (window.innerWidth > 768) {
+                toggleTravelDropdown(true);
+              }
+            }}
+            onMouseLeave={() => {
+              if (window.innerWidth > 768) {
+                toggleTravelDropdown(false);
+              }
+            }}>
+            <SplitButtonContainer>
+              <Link href="/travel" onClick={closeNavOnMobile}>
+                <TravelLink>Travel</TravelLink>
+              </Link>
+              <DropdownArrow
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  toggleTravelDropdown();
+                }}>
+                ▼
+              </DropdownArrow>
+            </SplitButtonContainer>
             <DropdownMenu isDropdownOpen={isTravelDropdownOpen}>
               <li>
-                <Link href="/countries-visited">Countries Visited</Link>
+                <Link href="/countries-visited" onClick={closeNavOnMobile}>
+                  Countries Visited
+                </Link>
               </li>
             </DropdownMenu>
           </Dropdown>
         </li>
         <li>
-          <Link href="/music">Music</Link>
+          <Link href="/music" onClick={closeNavOnMobile}>
+            Music
+          </Link>
         </li>
         <li>
-          <Link href="/politics">Politics</Link>
+          <Link href="/politics" onClick={closeNavOnMobile}>
+            Politics
+          </Link>
         </li>
       </NavList>
     </StyledNav>
@@ -270,5 +367,35 @@ const DropdownMenu = styled.ul<{ isDropdownOpen: boolean }>`
     li {
       background: #333;
     }
+  }
+`;
+
+const SplitButtonContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const TravelLink = styled.span`
+  color: #fff;
+  text-decoration: none;
+  font-size: 1.5rem;
+  font-family: 'Oswald', sans-serif;
+  letter-spacing: 2px;
+  cursor: pointer;
+`;
+
+const DropdownArrow = styled.button`
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 12px;
+  cursor: pointer;
+  margin-left: 5px;
+  padding: 2px 4px;
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
   }
 `;
