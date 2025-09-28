@@ -7,6 +7,7 @@ type TypeProps = {
   columnsToHide?: string[];
   indexRequired?: boolean;
   sortBy?: string;
+  genreFilter?: string;
 };
 
 const fetchDataFromGoogleSheets = async (sheetID) => {
@@ -24,7 +25,12 @@ const fetchDataFromGoogleSheets = async (sheetID) => {
   }
 };
 
-const FavouriteResults = ({ sheetId, columnsToHide = [], indexRequired = true }: TypeProps) => {
+const FavouriteResults = ({
+  sheetId,
+  columnsToHide = [],
+  indexRequired = true,
+  genreFilter,
+}: TypeProps) => {
   const [data, setData] = useState<string[][]>([]);
   const [loading, setLoading] = useState(false);
 
@@ -53,12 +59,19 @@ const FavouriteResults = ({ sheetId, columnsToHide = [], indexRequired = true }:
             }
           });
 
-          const scoreColumnIndex = headerRow.indexOf('Score');
-          if (scoreColumnIndex !== -1) {
-            dataRows.sort((a, b) => b[scoreColumnIndex] - a[scoreColumnIndex]);
+          // Filter by genre if genreFilter is set
+          let filteredRows = dataRows;
+          if (genreFilter && headerRow.includes('Genre')) {
+            const genreIndex = headerRow.indexOf('Genre');
+            filteredRows = dataRows.filter((row) => row[genreIndex] === genreFilter);
           }
 
-          const updatedData = [headerRow, ...dataRows];
+          const scoreColumnIndex = headerRow.indexOf('Score');
+          if (scoreColumnIndex !== -1) {
+            filteredRows.sort((a, b) => b[scoreColumnIndex] - a[scoreColumnIndex]);
+          }
+
+          const updatedData = [headerRow, ...filteredRows];
           setData(updatedData);
         } catch (error) {
           console.error('Error processing sheet data:', error);
@@ -69,7 +82,7 @@ const FavouriteResults = ({ sheetId, columnsToHide = [], indexRequired = true }:
     };
 
     fetchFavouriteData();
-  }, [sheetId, JSON.stringify(columnsToHide)]);
+  }, [sheetId, JSON.stringify(columnsToHide), genreFilter]);
 
   return (
     <FavouritesContainer isHeading={false}>
