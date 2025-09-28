@@ -25,7 +25,7 @@ const fetchDataFromGoogleSheets = async (sheetID) => {
 };
 
 const FavouriteResults = ({ sheetId, columnsToHide = [], indexRequired = true }: TypeProps) => {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState<string[][]>([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -111,12 +111,16 @@ const StyledRow = styled.div`
       flex-wrap: wrap;
       min-width: 1000px;
       flex: 1;
+      display: flex;
+      justify-content: center;
     }
   }
 
   &.header-row {
     @media (min-width: 768px) {
       min-width: 1000px;
+      display: flex;
+      justify-content: center;
     }
     .Comments {
       @media (max-width: 767px) {
@@ -150,26 +154,40 @@ const FavouritesContainer = styled.div<{ isHeading: boolean }>`
     &.data-title,
     &.heading-title,
     &.data-name,
-    &.heading-name {
+    &.heading-name,
+    &.data-brewery,
+    &.heading-brewery,
+    &.data-beer-name,
+    &.heading-beer-name,
+    &.data-style,
+    &.heading-style,
+    &.data-genre,
+    &.heading-genre {
       width: 200px;
     }
 
     &.data-score,
     &.heading-score,
     &.data-year-read,
-    &.heading-year-read {
+    &.heading-year-read,
+    &.data-abv,
+    &.heading-abv {
       width: 70px;
     }
 
     &.data-comments,
-    &.heading-comments {
+    &.heading-comments,
+    &.data-artist-track-name,
+    &.heading-artist-track-name {
       width: 500px;
     }
 
     &.data-date,
     &.heading-date,
     &.data-language,
-    &.heading-language {
+    &.heading-language,
+    &.data-bought-from,
+    &.heading-bought-from {
       width: 120px;
     }
   }
