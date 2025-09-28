@@ -137,37 +137,40 @@ const FavouritesContainer = styled.div<{ isHeading: boolean }>`
     align-items: ${({ isHeading }) => (isHeading ? 'flex-start' : 'center')};
     max-width: 500px;
 
-    &.Comments {
-      width: 800px;
-      @media (max-width: 768px) {
-        padding-bottom: 20px;
-      }
+    &.index {
+      width: 30px;
     }
 
-    &.Score,
-    &.Language {
-      @media (min-width: 768px) {
-        width: 100px;
-      }
-    }
-
-    &.Year {
-      @media (max-width: 768px) {
-        display: none;
-      }
-    }
-
-    &.data {
-      @media (max-width: 768px) {
-        flex-wrap: wrap;
-      }
-    }
-  }
-
-  p {
     &.data-artist-track-name,
     &.heading-artist-track-name {
       width: 800px;
+    }
+    &.data-author,
+    &.heading-author,
+    &.data-title,
+    &.heading-title,
+    &.data-name,
+    &.heading-name {
+      width: 200px;
+    }
+
+    &.data-score,
+    &.heading-score,
+    &.data-year-read,
+    &.heading-year-read {
+      width: 70px;
+    }
+
+    &.data-comments,
+    &.heading-comments {
+      width: 500px;
+    }
+
+    &.data-date,
+    &.heading-date,
+    &.data-language,
+    &.heading-language {
+      width: 120px;
     }
   }
 `;
