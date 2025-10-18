@@ -78,17 +78,8 @@ const FavouriteResults = ({
           const normalizedHeaders = headerRow.map((h) => normalize(h));
 
           const chooseSortColumnIndex = () => {
-            if (!sortBy) {
-              const orderIdx = normalizedHeaders.indexOf(normalize('Order Added'));
-              if (orderIdx !== -1) return orderIdx;
-
-              const fallbacks = ['Country', 'Order Added', 'Score'];
-              for (const name of fallbacks) {
-                const idx = normalizedHeaders.indexOf(normalize(name));
-                if (idx !== -1) return idx;
-              }
-              return -1;
-            }
+            // If no explicit sort selected (Default), don't apply any sorting and preserve sheet order
+            if (!sortBy) return -1;
 
             const normSort = normalize(sortBy);
             const exact = normalizedHeaders.indexOf(normSort);

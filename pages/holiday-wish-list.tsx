@@ -35,7 +35,7 @@ export default function WishListPage() {
 
               <DropdownContainer>
                 <SortDropdown
-                  options={['Country', 'Name']}
+                  options={['Name', 'Country']}
                   selected={selectedSort}
                   onChange={setSelectedSort}
                 />
