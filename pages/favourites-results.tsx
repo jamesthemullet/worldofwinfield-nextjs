@@ -78,27 +78,29 @@ const FavouriteResults = ({
           const normalizedHeaders = headerRow.map((h) => normalize(h));
 
           const chooseSortColumnIndex = () => {
-            if (!sortBy) return -1;
+            if (!sortBy) {
+              const orderIdx = normalizedHeaders.indexOf(normalize('Order Added'));
+              if (orderIdx !== -1) return orderIdx;
 
-            if (sortBy) {
-              const normSort = normalize(sortBy);
-              const exact = normalizedHeaders.indexOf(normSort);
-              if (exact !== -1) return exact;
-
-              const fuzzy = normalizedHeaders.findIndex((h) => h && h.includes(normSort));
-              if (fuzzy !== -1) return fuzzy;
-
-              const starts = normalizedHeaders.findIndex((h) => h && h.startsWith(normSort));
-              if (starts !== -1) return starts;
+              const fallbacks = ['Country', 'Order Added', 'Score'];
+              for (const name of fallbacks) {
+                const idx = normalizedHeaders.indexOf(normalize(name));
+                if (idx !== -1) return idx;
+              }
+              return -1;
             }
-            const orderIdx = normalizedHeaders.indexOf(normalize('Order Added'));
-            if (!sortBy && orderIdx !== -1) return orderIdx;
 
-            const fallbacks = ['Country', 'Order Added', 'Score'];
-            for (const name of fallbacks) {
-              const idx = normalizedHeaders.indexOf(normalize(name));
-              if (idx !== -1) return idx;
-            }
+            const normSort = normalize(sortBy);
+            const exact = normalizedHeaders.indexOf(normSort);
+            if (exact !== -1) return exact;
+
+            const fuzzy = normalizedHeaders.findIndex((h) => h && h.includes(normSort));
+            if (fuzzy !== -1) return fuzzy;
+
+            const starts = normalizedHeaders.findIndex((h) => h && h.startsWith(normSort));
+            if (starts !== -1) return starts;
+
+            // If no match, fall back to -1
             return -1;
           };
 
