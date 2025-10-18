@@ -118,8 +118,14 @@ const FavouriteResults = ({
               filteredRows.sort((a, b) => {
                 const rawA = (a[sortColumnIndex] ?? '').toString().replace(/,/g, '');
                 const rawB = (b[sortColumnIndex] ?? '').toString().replace(/,/g, '');
-                const av = parseFloat(rawA) || 0;
-                const bv = parseFloat(rawB) || 0;
+                const av = parseFloat(rawA);
+                const bv = parseFloat(rawB);
+                // Handle missing/invalid data: sort them after valid numbers (ascending), before (descending)
+                const aIsValid = !isNaN(av);
+                const bIsValid = !isNaN(bv);
+                if (!aIsValid && !bIsValid) return 0;
+                if (!aIsValid) return sortIsAscending ? 1 : -1;
+                if (!bIsValid) return sortIsAscending ? -1 : 1;
                 return sortIsAscending ? av - bv : bv - av;
               });
             } else {
