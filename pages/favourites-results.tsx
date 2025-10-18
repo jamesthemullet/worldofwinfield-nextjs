@@ -29,6 +29,7 @@ const FavouriteResults = ({
   sheetId,
   columnsToHide = [],
   indexRequired = true,
+  sortBy,
   genreFilter,
 }: TypeProps) => {
   const [data, setData] = useState<string[][]>([]);
@@ -59,16 +60,74 @@ const FavouriteResults = ({
             }
           });
 
-          // Filter by genre if genreFilter is set
           let filteredRows = dataRows;
           if (genreFilter && headerRow.includes('Genre')) {
             const genreIndex = headerRow.indexOf('Genre');
             filteredRows = dataRows.filter((row) => row[genreIndex] === genreFilter);
           }
 
-          const scoreColumnIndex = headerRow.indexOf('Score');
-          if (scoreColumnIndex !== -1) {
-            filteredRows.sort((a, b) => b[scoreColumnIndex] - a[scoreColumnIndex]);
+          const normalize = (s: any) =>
+            (s || '')
+              .toString()
+              .normalize('NFKD')
+              .replace(/\s+/g, ' ')
+              .trim()
+              .toLowerCase()
+              .replace(/[^a-z0-9 ]/g, '');
+
+          const normalizedHeaders = headerRow.map((h) => normalize(h));
+
+          const chooseSortColumnIndex = () => {
+            if (!sortBy) return -1;
+
+            if (sortBy) {
+              const normSort = normalize(sortBy);
+              const exact = normalizedHeaders.indexOf(normSort);
+              if (exact !== -1) return exact;
+
+              const fuzzy = normalizedHeaders.findIndex((h) => h && h.includes(normSort));
+              if (fuzzy !== -1) return fuzzy;
+
+              const starts = normalizedHeaders.findIndex((h) => h && h.startsWith(normSort));
+              if (starts !== -1) return starts;
+            }
+            const orderIdx = normalizedHeaders.indexOf(normalize('Order Added'));
+            if (!sortBy && orderIdx !== -1) return orderIdx;
+
+            const fallbacks = ['Country', 'Order Added', 'Score'];
+            for (const name of fallbacks) {
+              const idx = normalizedHeaders.indexOf(normalize(name));
+              if (idx !== -1) return idx;
+            }
+            return -1;
+          };
+
+          const sortColumnIndex = chooseSortColumnIndex();
+          if (sortColumnIndex !== -1) {
+            const headerName = headerRow[sortColumnIndex] || '';
+            const normalizedHeaderName = normalizedHeaders[sortColumnIndex] || '';
+            const combinedHeader = `${headerName} ${normalizedHeaderName}`;
+            const isNumeric = /\b(score|year|abv|order|amount|quantity|price|count)\b/i.test(
+              combinedHeader,
+            );
+            const sortIsAscending = !isNumeric;
+
+            if (isNumeric) {
+              filteredRows.sort((a, b) => {
+                const rawA = (a[sortColumnIndex] ?? '').toString().replace(/,/g, '');
+                const rawB = (b[sortColumnIndex] ?? '').toString().replace(/,/g, '');
+                const av = parseFloat(rawA) || 0;
+                const bv = parseFloat(rawB) || 0;
+                return sortIsAscending ? av - bv : bv - av;
+              });
+            } else {
+              filteredRows.sort((a, b) => {
+                const av = (a[sortColumnIndex] ?? '').toString().trim().toLowerCase();
+                const bv = (b[sortColumnIndex] ?? '').toString().trim().toLowerCase();
+                const cmp = av.localeCompare(bv);
+                return sortIsAscending ? cmp : -cmp;
+              });
+            }
           }
 
           const updatedData = [headerRow, ...filteredRows];
@@ -82,7 +141,7 @@ const FavouriteResults = ({
     };
 
     fetchFavouriteData();
-  }, [sheetId, JSON.stringify(columnsToHide), genreFilter]);
+  }, [sheetId, JSON.stringify(columnsToHide), genreFilter, sortBy]);
 
   return (
     <FavouritesContainer isHeading={false}>
@@ -175,7 +234,9 @@ const FavouritesContainer = styled.div<{ isHeading: boolean }>`
     &.data-style,
     &.heading-style,
     &.data-genre,
-    &.heading-genre {
+    &.heading-genre,
+    &.data-country,
+    &.heading-country {
       width: 200px;
     }
 
@@ -200,7 +261,9 @@ const FavouritesContainer = styled.div<{ isHeading: boolean }>`
     &.data-language,
     &.heading-language,
     &.data-bought-from,
-    &.heading-bought-from {
+    &.heading-bought-from,
+    &.data-order-added,
+    &.heading-order-added {
       width: 120px;
     }
   }
