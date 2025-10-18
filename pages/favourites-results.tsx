@@ -66,7 +66,7 @@ const FavouriteResults = ({
             filteredRows = dataRows.filter((row) => row[genreIndex] === genreFilter);
           }
 
-          const normalize = (s: any) =>
+          const normalize = (s: string) =>
             (s || '')
               .toString()
               .normalize('NFKD')
