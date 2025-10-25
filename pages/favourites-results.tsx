@@ -198,14 +198,22 @@ export default FavouriteResults;
 const StyledRow = styled.div`
   display: flex;
   flex-direction: row;
-  column-gap: 0.5rem;
+  gap: 0.5rem;
   @media (min-width: 768px) {
-    gap: 1rem;
+    & > p {
+      margin-left: 1rem;
+    }
   }
   align-items: flex-start;
-  margin: 0 auto;
+  flex-wrap: wrap;
+
+  @media (min-width: 768px) {
+    flex-wrap: nowrap;
+    margin: 0 auto;
+  }
 
   &.data-row {
+    margin-top: 0.5rem;
     @media (min-width: 768px) {
       flex-wrap: wrap;
       min-width: 1000px;
@@ -226,6 +234,14 @@ const StyledRow = styled.div`
         display: none;
       }
     }
+
+    .index {
+      display: none;
+      @media (min-width: 768px) {
+        display: block;
+        width: 30px;
+      }
+    }
   }
 `;
 
@@ -244,60 +260,110 @@ const FavouritesContainer = styled.div<{ isHeading: boolean }>`
       width: 30px;
     }
 
-    &.data-artist-track-name,
-    &.heading-artist-track-name {
-      width: 800px;
+    &.data-artist-track-name {
+      @media screen and (min-width: 768px) {
+        width: 800px;
+      }
     }
+
+    &.heading-artist-track-name {
+      @media screen and (min-width: 768px) {
+        width: 800px;
+      }
+    }
+
     &.data-author,
-    &.heading-author,
     &.data-title,
-    &.heading-title,
     &.data-name,
-    &.heading-name,
     &.data-brewery,
-    &.heading-brewery,
     &.data-beer-name,
-    &.heading-beer-name,
     &.data-style,
-    &.heading-style,
     &.data-genre,
-    &.heading-genre,
     &.data-country,
+    &.data-date-read {
+      @media screen and (min-width: 768px) {
+        width: 200px;
+      }
+    }
+
+    &.heading-author,
+    &.heading-title,
+    &.heading-name,
+    &.heading-brewery,
+    &.heading-beer-name,
+    &.heading-style,
+    &.heading-genre,
     &.heading-country,
-    &.data-date-read,
     &.heading-date-read {
-      width: 200px;
+      @media screen and (min-width: 768px) {
+        width: 200px;
+      }
     }
 
     &.data-score,
-    &.heading-score,
     &.data-year-read,
+    &.data-abv {
+      @media screen and (min-width: 768px) {
+        width: 70px;
+      }
+    }
+
+    &.heading-score,
     &.heading-year-read,
-    &.data-abv,
     &.heading-abv {
-      width: 70px;
+      @media screen and (min-width: 768px) {
+        width: 70px;
+      }
     }
 
     &.data-comments,
-    &.heading-comments,
     &.data-artist-track-name,
-    &.heading-artist-track-name,
     &.data-about,
+    &.data-link {
+      width: 100%;
+      @media screen and (min-width: 768px) {
+        width: 500px;
+      }
+    }
+
+    /* make long links wrap on mobile so they don't force horizontal scroll */
+    &.data-link {
+      a {
+        display: inline-block;
+        max-width: 100%;
+        white-space: normal;
+        overflow-wrap: anywhere;
+        word-break: break-word;
+        hyphens: auto;
+        word-wrap: break-word;
+      }
+    }
+
+    &.heading-comments,
+    &.heading-artist-track-name,
     &.heading-about,
-    &.data-link,
     &.heading-link {
-      width: 500px;
+      @media screen and (min-width: 768px) {
+        width: 500px;
+      }
     }
 
     &.data-date,
-    &.heading-date,
     &.data-language,
-    &.heading-language,
     &.data-bought-from,
+    &.data-order-added {
+      @media screen and (min-width: 768px) {
+        width: 120px;
+      }
+    }
+
+    &.heading-date,
+    &.heading-language,
     &.heading-bought-from,
-    &.data-order-added,
     &.heading-order-added {
-      width: 120px;
+      @media screen and (min-width: 768px) {
+        width: 120px;
+      }
     }
   }
 `;
