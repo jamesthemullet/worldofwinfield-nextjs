@@ -148,17 +148,45 @@ const FavouriteResults = ({
         <StyledRow key={rowIndex} className={rowIndex === 0 ? 'header-row' : 'data-row'}>
           {indexRequired &&
             (rowIndex === 0 ? <p className="index"></p> : <p className="index">{rowIndex}.</p>)}
-          {row.map((cellData, cellIndex) => (
-            <p
-              key={cellIndex}
-              className={
-                rowIndex === 0
-                  ? `heading-${data[0][cellIndex].toLowerCase().replace(/\s+/g, '-').replace(/\//g, '-')}`
-                  : `data-${data[0][cellIndex].toLowerCase().replace(/\s+/g, '-').replace(/\//g, '-')}`
-              }>
-              {rowIndex === 0 ? <strong>{cellData}</strong> : cellData}
-            </p>
-          ))}
+          {row.map((cellData, cellIndex) => {
+            const rawHeader = data[0][cellIndex] || '';
+            const className =
+              rowIndex === 0
+                ? `heading-${rawHeader.toString().toLowerCase().replace(/\s+/g, '-').replace(/\//g, '-')}`
+                : `data-${rawHeader.toString().toLowerCase().replace(/\s+/g, '-').replace(/\//g, '-')}`;
+
+            if (rowIndex !== 0 && /link/.test(rawHeader.toString().toLowerCase())) {
+              const text = (cellData ?? '').toString();
+              const urlMatch = text.match(/(https?:\/\/[^")\s]+)/i) || text.match(/(www\.[^\s]+)/i);
+              const mailtoMatch = text.match(/mailto:[^\s]+/i);
+              let href = '';
+              if (urlMatch) {
+                href = urlMatch[0];
+                if (!/^https?:\/\//i.test(href)) href = `http://${href}`;
+              } else if (mailtoMatch) {
+                href = mailtoMatch[0];
+              }
+
+              return (
+                <p key={cellIndex} className={className}>
+                  {href ? (
+                    // eslint-disable-next-line react/jsx-no-target-blank
+                    <a href={href} target="_blank" rel="noopener noreferrer">
+                      {text}
+                    </a>
+                  ) : (
+                    text
+                  )}
+                </p>
+              );
+            }
+
+            return (
+              <p key={cellIndex} className={className}>
+                {rowIndex === 0 ? <strong>{cellData}</strong> : cellData}
+              </p>
+            );
+          })}
         </StyledRow>
       ))}
     </FavouritesContainer>
@@ -235,7 +263,9 @@ const FavouritesContainer = styled.div<{ isHeading: boolean }>`
     &.data-genre,
     &.heading-genre,
     &.data-country,
-    &.heading-country {
+    &.heading-country,
+    &.data-date-read,
+    &.heading-date-read {
       width: 200px;
     }
 
@@ -251,7 +281,11 @@ const FavouritesContainer = styled.div<{ isHeading: boolean }>`
     &.data-comments,
     &.heading-comments,
     &.data-artist-track-name,
-    &.heading-artist-track-name {
+    &.heading-artist-track-name,
+    &.data-about,
+    &.heading-about,
+    &.data-link,
+    &.heading-link {
       width: 500px;
     }
 

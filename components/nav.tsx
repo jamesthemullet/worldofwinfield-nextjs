@@ -132,6 +132,11 @@ export default function Nav() {
                   Tracks
                 </Link>
               </li>
+              <li>
+                <Link href="/favourite-articles" onClick={closeNavOnMobile}>
+                  Articles
+                </Link>
+              </li>
             </DropdownMenu>
           </Dropdown>
         </li>
