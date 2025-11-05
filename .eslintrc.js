@@ -11,6 +11,7 @@ module.exports = {
     'plugin:prettier/recommended',
   ],
   overrides: [],
+  ignorePatterns: ['next-env.d.ts'],
   parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaVersion: 'latest',
