@@ -110,10 +110,6 @@ export type PostsProps = {
   }[];
 };
 
-export type PageProps = {
-  page: SinglePostProps;
-};
-
 type AuthorProps = {
   node: {
     name: string;
@@ -124,10 +120,6 @@ type AuthorProps = {
     };
     description: string;
   };
-};
-
-export type AvatarProps = {
-  author: AuthorProps;
 };
 
 export type JamesImagesProps = {
@@ -393,22 +385,6 @@ export type HeroPostProps = {
 
 export type ContainerProps = {
   children: React.ReactNode;
-};
-
-export type CategoriesProps = {
-  categories?: {
-    edges:
-      | {
-          node: {
-            name: string;
-          };
-        }[]
-      | {
-          node: {
-            name: string;
-          };
-        };
-  };
 };
 
 export type AlertProps = {

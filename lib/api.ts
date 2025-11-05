@@ -47,38 +47,6 @@ export async function getPreviewPost(id, idType = 'DATABASE_ID') {
   return data.post;
 }
 
-export async function fetchAllOfThePostsIfYouReallyWantTo() {
-  let allPosts = [];
-  let hasNextPage = true;
-  let endCursor = null;
-
-  while (hasNextPage) {
-    const query = `
-      {
-        posts(first: 100, after: ${endCursor ? `"${endCursor}"` : 'null'}) {
-          edges {
-            node {
-              slug
-            }
-          }
-          pageInfo {
-            hasNextPage
-            endCursor
-          }
-        }
-      }
-    `;
-
-    const data = await fetchAPI(query);
-
-    allPosts = allPosts.concat(data?.posts.edges);
-    hasNextPage = data?.posts.pageInfo.hasNextPage;
-    endCursor = data?.posts.pageInfo.endCursor;
-  }
-
-  return allPosts;
-}
-
 export async function getAllPostsWithSlug() {
   const data = await fetchAPI(`
     {
@@ -246,42 +214,6 @@ export async function getAllPostsForHome(preview) {
   );
 
   return data?.posts;
-}
-
-export async function getPage(id, idType = 'DATABASE_ID') {
-  const data = await fetchAPI(
-    `
-    query Page($id: ID!, $idType: PageIdType!) {
-      page(id: $id, idType: $idType) {
-        slug
-        content
-        title
-        date
-        seo {
-          metaKeywords
-          opengraphTitle
-          opengraphDescription
-          opengraphSiteName
-          opengraphImage {
-            uri
-            altText
-            mediaDetails {
-              file
-              height
-              width
-            }
-            mediaItemUrl
-            sourceUrl
-            srcSet
-          }
-        }
-      }
-    }`,
-    {
-      variables: { id, idType },
-    },
-  );
-  return data.page;
 }
 
 export async function getPost(id, idType = 'SLUG') {

@@ -1,0 +1,11 @@
+{
+  "$schema": "https://unpkg.com/knip@5/schema.json",
+  "entry": ["next-sitemap.config.js"],
+  "ignoreBinaries": ["wait-on", "axe"],
+  "ignoreDependencies": ["eslint-config-next", "tsc-files", "ts-node"],
+  "ignoreExportsUsedInFile": {
+    "interface": true,
+    "type": true
+  },
+  "tags": ["-lintignore"]
+}
