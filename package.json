@@ -49,6 +49,7 @@
     "jest": "^30.0.0",
     "jest-environment-jsdom": "^30.0.0",
     "knip": "^5.67.1",
-    "prettier": "^3.5.3"
+    "prettier": "^3.5.3",
+    "ts-node": "^10.9.2"
   }
 }
