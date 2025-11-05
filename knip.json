@@ -1,0 +1,18 @@
+{
+  "$schema": "https://unpkg.com/knip@5/schema.json",
+  "entry": ["next-sitemap.config.js"],
+  "ignoreBinaries": ["wait-on", "axe"],
+  "ignoreDependencies": [
+    "@typescript-eslint/eslint-plugin",
+    "@typescript-eslint/parser",
+    "eslint-config-next",
+    "eslint-config-prettier",
+    "eslint-plugin-prettier",
+    "eslint-plugin-react"
+  ],
+  "ignoreExportsUsedInFile": {
+    "interface": true,
+    "type": true
+  },
+  "tags": ["-lintignore"]
+}
