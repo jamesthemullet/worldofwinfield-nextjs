@@ -1,8 +1,4 @@
-import getConfig from 'next/config';
-
-const { publicRuntimeConfig } = getConfig();
-
-const API_URL = publicRuntimeConfig.NEXT_PUBLIC_WORDPRESS_API_URL;
+const API_URL = process.env.NEXT_PUBLIC_WORDPRESS_API_URL;
 
 async function fetchAPI(query = '', { variables }: Record<string, unknown> = {}) {
   const headers = { 'Content-Type': 'application/json' };
