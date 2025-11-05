@@ -8,7 +8,8 @@
     "eslint-config-next",
     "eslint-config-prettier",
     "eslint-plugin-prettier",
-    "eslint-plugin-react"
+    "eslint-plugin-react",
+    "tsc-files"
   ],
   "ignoreExportsUsedInFile": {
     "interface": true,
