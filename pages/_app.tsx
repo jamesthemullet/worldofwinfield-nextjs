@@ -38,6 +38,10 @@ export const globalStyles = css`
   /* Additional global styles can be included here */
 `;
 
+if (process.env.NODE_ENV === 'development' && typeof window !== 'undefined') {
+  import('accented').then(({ accented }) => accented());
+}
+
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
