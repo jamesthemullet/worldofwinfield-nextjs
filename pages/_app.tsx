@@ -24,7 +24,6 @@ export const globalStyles = css`
   }
 
   :root {
-    /* Define your colors as CSS custom properties */
     --colour-purple: ${colours.purple};
     --colour-pink: ${colours.pink};
     --colour-burgandy: ${colours.burgandy};
@@ -34,8 +33,6 @@ export const globalStyles = css`
     --colour-blueish: ${colours.blueish};
     --colour-azure: ${colours.azure};
   }
-
-  /* Additional global styles can be included here */
 `;
 
 if (process.env.NODE_ENV === 'development' && typeof window !== 'undefined') {
