@@ -6,24 +6,25 @@ if (!process.env.WORDPRESS_API_URL) {
 }
 
 /** @type {import('next').NextConfig} */
-module.exports = {
+const nextConfig = {
   images: {
-    domains: [
-      process.env.WORDPRESS_API_URL.match(/(?!(w+)\.)\w*(?:\w+\.)+\w+/)[0], // Valid WP Image domain.
-      '0.gravatar.com',
-      '1.gravatar.com',
-      '2.gravatar.com',
-      'secure.gravatar.com',
-      'i0.wp.com',
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: process.env.WORDPRESS_API_URL.match(/(?!(w+)\.)\w*(?:\w+\.)+\w+/)[0],
+      },
+      { protocol: 'https', hostname: '0.gravatar.com' },
+      { protocol: 'https', hostname: '1.gravatar.com' },
+      { protocol: 'https', hostname: '2.gravatar.com' },
+      { protocol: 'https', hostname: 'secure.gravatar.com' },
+      { protocol: 'https', hostname: 'i0.wp.com' },
     ],
+    qualities: [50, 75],
   },
   env: {
     WORDPRESS_API_URL: process.env.WORDPRESS_API_URL,
     WORDPRESS_AUTH_REFRESH_TOKEN: process.env.WORDPRESS_AUTH_REFRESH_TOKEN,
   },
-  publicRuntimeConfig: {
-    WORDPRESS_API_URL: process.env.WORDPRESS_API_URL,
-    NEXT_PUBLIC_WORDPRESS_API_URL: process.env.WORDPRESS_API_URL,
-    NEXT_PUBLIC_GOOGLE_SHEETS_API_KEY: process.env.GOOGLE_SHEETS_API_KEY,
-  },
 };
+
+module.exports = nextConfig;

@@ -45,7 +45,8 @@ export const ContentContainer = styled.div`
   }
 
   .wp-block-image,
-  .wp-block-embed {
+  .wp-block-embed,
+  .wp-block-video {
     margin: 0 auto;
     max-width: 100%;
     height: auto;
