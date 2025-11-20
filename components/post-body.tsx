@@ -81,11 +81,19 @@ export const ContentContainer = styled.div`
     }
   }
 
-  @media screen and (min-width: 760px) {
+  .wp-block-gallery {
+    margin: 2rem auto;
+    max-width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  @media screen and (min-width: 768px) {
     .wp-block-gallery.has-nested-images {
       margin: 0;
       display: flex;
-      gap: 10px;
+      flex-direction: row;
       flex-wrap: wrap;
 
       .wp-block-image {
