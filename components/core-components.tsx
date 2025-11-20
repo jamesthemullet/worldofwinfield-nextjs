@@ -28,7 +28,7 @@ export const StyledInput = styled.input`
   margin-bottom: 10px;
 `;
 
-export const StyledSelect = styled.sedlect`
+export const StyledSelect = styled.select`
   padding: 10px;
   border: none;
   min-width: 100px;
