@@ -2,13 +2,19 @@ import { PostBodyProps } from '../lib/types';
 import styled from '@emotion/styled';
 import { colours } from '../pages/_app';
 import { useEffect } from 'react';
-import LazyLoad from 'vanilla-lazyload';
+import type { ILazyLoadInstance } from 'vanilla-lazyload';
 
 export default function PostBody({ content }: PostBodyProps) {
   useEffect(() => {
-    const lazyLoadInstance = new LazyLoad({
-      elements_selector: '.lazyload',
-    });
+    let lazyLoadInstance: ILazyLoadInstance | null = null;
+
+    (async () => {
+      const LazyLoadModule = await import('vanilla-lazyload');
+      const LazyLoad = LazyLoadModule.default;
+      lazyLoadInstance = new LazyLoad({
+        elements_selector: '.lazyload',
+      });
+    })();
 
     return () => {
       if (lazyLoadInstance) {
