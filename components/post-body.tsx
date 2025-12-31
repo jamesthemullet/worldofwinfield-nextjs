@@ -10,10 +10,12 @@ export default function PostBody({ content }: PostBodyProps) {
 
     (async () => {
       const LazyLoadModule = await import('vanilla-lazyload');
-      const LazyLoad = LazyLoadModule.default;
-      lazyLoadInstance = new LazyLoad({
-        elements_selector: '.lazyload',
-      });
+      const LazyLoad = LazyLoadModule.default || LazyLoadModule;
+      if (typeof LazyLoad === 'function') {
+        lazyLoadInstance = new LazyLoad({
+          elements_selector: '.lazyload',
+        });
+      }
     })();
 
     return () => {
@@ -61,7 +63,8 @@ export const ContentContainer = styled.div`
     flex-direction: column;
 
     img,
-    iframe {
+    iframe,
+    video {
       width: 100%;
       height: auto;
     }
