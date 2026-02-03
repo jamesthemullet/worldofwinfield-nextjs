@@ -29,7 +29,7 @@ export default function HeroPost({
             author={author}
             slug={slug}
             heroPost={true}
-            caption={featuredImage.node.caption}
+            caption={featuredImage?.node.caption}
           />
         </div>
         <StyledExcerptContainer>

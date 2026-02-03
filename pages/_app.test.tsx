@@ -17,7 +17,7 @@ jest.mock('@next/third-parties/google', () => ({
 }));
 
 describe('App tests', () => {
-  it('should load the app page and display content ', () => {
+  it('should load the app page and display content', () => {
     const props: AppProps = {
       Component: () => <div>{pageContent}</div>,
       pageProps: {},

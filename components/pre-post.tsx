@@ -31,7 +31,7 @@ const StyledNote = styled.p`
   margin: 0 5rem;
   padding: 1rem 0;
   color: #333;
-  border-bottom: 1px solid #333;
+  border-bottom: 1px solid currentColor;
   @media (max-width: 768px) {
     margin: 0 1rem;
   }
