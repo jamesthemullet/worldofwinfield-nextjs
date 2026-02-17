@@ -49,6 +49,18 @@ If port `8081` is already in use, set `PORT` in `realtime/.env` (for example `PO
 NEXT_PUBLIC_STOCKS_WS_URL=ws://localhost:8090
 ```
 
+## Production
+
+For production, deploy this `realtime` service to a host that supports long-running Node processes (for example Render, Railway, Fly, VPS).
+
+Then set this environment variable in your Next.js production app:
+
+```bash
+NEXT_PUBLIC_STOCKS_WS_URL=wss://your-realtime-domain.example.com
+```
+
+Do not use `localhost` in production environment variables.
+
 ## Frontend usage
 
 ```ts

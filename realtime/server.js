@@ -1,5 +1,5 @@
 const path = require('path');
-const { WebSocketServer, WebSocket } = require('ws');
+const { WebSocketServer, WebSocket: WsWebSocket } = require('ws');
 require('dotenv').config({ path: path.resolve(__dirname, '.env') });
 require('dotenv').config({ path: path.resolve(__dirname, '../.env'), override: true });
 
@@ -36,7 +36,7 @@ function broadcast(payload) {
   const message = JSON.stringify(payload);
 
   wss.clients.forEach((client) => {
-    if (client.readyState === WebSocket.OPEN) {
+    if (client.readyState === WsWebSocket.OPEN) {
       client.send(message);
     }
   });
@@ -183,7 +183,7 @@ wss.on('connection', (ws) => {
       return;
     }
 
-    if (ws.readyState === WebSocket.OPEN) {
+    if (ws.readyState === WsWebSocket.OPEN) {
       ws.send(JSON.stringify({ type: 'prices', data: prices }));
     }
   });

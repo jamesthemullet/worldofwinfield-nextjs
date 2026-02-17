@@ -19,7 +19,14 @@ type PricesPayload = {
 
 const resolveDefaultWsUrl = () => {
   if (typeof window === 'undefined') {
-    return 'ws://localhost:8081';
+    return '';
+  }
+
+  const isLocalHost =
+    window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+
+  if (!isLocalHost) {
+    return '';
   }
 
   const protocol = window.location.protocol === 'https:' ? 'wss' : 'ws';
@@ -54,7 +61,6 @@ const normalisePrices = (input: unknown): StockRow[] => {
     })
     .map(([symbol, value]) => {
       const stock = value as Record<string, unknown>;
-      console.log(9, stock);
       const priceValue = stock.price;
       const errorValue = stock.error;
       return {
@@ -79,6 +85,12 @@ export default function StocksPage() {
   const wsUrl = useMemo(() => process.env.NEXT_PUBLIC_STOCKS_WS_URL || resolveDefaultWsUrl(), []);
 
   useEffect(() => {
+    if (!wsUrl) {
+      setStatus('error');
+      setErrorMessage('Set NEXT_PUBLIC_STOCKS_WS_URL to your public websocket URL in production.');
+      return;
+    }
+
     let activeSocket: WebSocket | null = null;
     let reconnectTimer: ReturnType<typeof setTimeout> | null = null;
     let shouldReconnect = true;
@@ -96,7 +108,6 @@ export default function StocksPage() {
         activeSocket.onmessage = (event) => {
           try {
             const payload = JSON.parse(event.data) as PricesPayload;
-            console.log(8, payload);
 
             if (payload.type === 'status') {
               if (payload.level === 'error') {
