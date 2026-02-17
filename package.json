@@ -2,6 +2,8 @@
   "private": true,
   "scripts": {
     "dev": "next",
+    "dev:realtime": "yarn --cwd realtime dev",
+    "start:realtime": "yarn --cwd realtime start",
     "build": "next build",
     "start": "next start",
     "lint": "tsc --noEmit && eslint .",

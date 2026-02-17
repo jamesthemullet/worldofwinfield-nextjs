@@ -60,12 +60,19 @@ export default [
     },
   },
   {
-    files: ['next.config.js', 'next-sitemap.config.js', 'scripts/**/*.js', '.eslintrc.js'],
+    files: [
+      'next.config.js',
+      'next-sitemap.config.js',
+      'scripts/**/*.js',
+      'realtime/**/*.js',
+      '.eslintrc.js',
+    ],
     languageOptions: {
       ecmaVersion: 'latest',
       sourceType: 'script',
       globals: {
         ...globals.node,
+        fetch: 'readonly',
       },
     },
   },
