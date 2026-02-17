@@ -221,6 +221,11 @@ export default function Nav() {
             Politics
           </Link>
         </li>
+        <li>
+          <Link href="/stocks" onClick={closeNavOnMobile}>
+            Stocks
+          </Link>
+        </li>
       </NavList>
     </StyledNav>
   );
