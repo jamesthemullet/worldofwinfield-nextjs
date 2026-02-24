@@ -6,7 +6,11 @@ import PostHeader from '../components/post-header';
 
 type StockRow = {
   symbol: string;
-  price: string;
+  price: number | null;
+  previousClose?: number | null;
+  previousPrice?: number | null;
+  tickDirection?: 'up' | 'down' | null;
+  pulseNonce?: number;
 };
 
 type PricesPayload = {
@@ -33,44 +37,27 @@ const resolveDefaultWsUrl = () => {
   return `${protocol}://${window.location.hostname}:8081`;
 };
 
-const formatPrice = (value: unknown) => {
-  if (typeof value === 'number') {
-    return value.toFixed(2);
-  }
-
-  if (typeof value === 'string') {
-    return value;
-  }
-
-  return 'N/A';
-};
-
 const normalisePrices = (input: unknown): StockRow[] => {
   if (!input || typeof input !== 'object') {
     return [];
   }
 
   const raw = input as Record<string, unknown>;
-  const rows = Object.entries(raw)
-    .filter(([key, value]) => {
-      if (key === 'code' || key === 'message' || key === 'status') {
-        return false;
-      }
 
-      return !!value && typeof value === 'object';
-    })
+  return Object.entries(raw)
+    .filter(([, value]) => value && typeof value === 'object')
     .map(([symbol, value]) => {
       const stock = value as Record<string, unknown>;
       const priceValue = stock.price;
+      const previousCloseValue = stock.previousClose;
       const errorValue = stock.error;
+
       return {
         symbol,
-        price: errorValue ? 'N/A' : formatPrice(priceValue),
+        price: errorValue || typeof priceValue !== 'number' ? null : priceValue,
+        previousClose: typeof previousCloseValue === 'number' ? previousCloseValue : null,
       };
-    })
-    .filter((row) => row.symbol);
-
-  return rows;
+    });
 };
 
 export default function StocksPage() {
@@ -126,8 +113,28 @@ export default function StocksPage() {
 
             const nextStocks = normalisePrices(payload.data);
 
+            setStocks((currentStocks) => {
+              const previousMap = new Map(currentStocks.map((s) => [s.symbol, s.price]));
+              const previousPulseMap = new Map(currentStocks.map((s) => [s.symbol, s.pulseNonce ?? 0]));
+
+              return nextStocks.map((stock) => {
+                const previousPrice = previousMap.get(stock.symbol) ?? null;
+                const tickChange =
+                  previousPrice !== null && stock.price !== null ? stock.price - previousPrice : 0;
+
+                const tickDirection = tickChange > 0 ? 'up' : tickChange < 0 ? 'down' : null;
+                const previousPulseNonce = previousPulseMap.get(stock.symbol) ?? 0;
+
+                return {
+                  ...stock,
+                  previousPrice,
+                  tickDirection,
+                  pulseNonce: tickDirection ? previousPulseNonce + 1 : previousPulseNonce,
+                };
+              });
+            });
+
             if (nextStocks.length) {
-              setStocks(nextStocks);
               setLastUpdated(payload.timestamp || new Date().toISOString());
               setErrorMessage(null);
               setServerMessage(null);
@@ -200,12 +207,41 @@ export default function StocksPage() {
               </thead>
               <tbody>
                 {stocks.length ? (
-                  stocks.map((stock) => (
-                    <tr key={stock.symbol}>
-                      <td>{stock.symbol}</td>
-                      <td>{stock.price}</td>
-                    </tr>
-                  ))
+                  stocks.map((stock) => {
+                    const baseline = stock.previousClose ?? stock.previousPrice ?? null;
+
+                    const change =
+                      baseline !== null && stock.price !== null ? stock.price - baseline : null;
+
+                    const percent = change !== null && baseline ? (change / baseline) * 100 : null;
+
+                    const direction =
+                      change === null ? null : change > 0 ? 'up' : change < 0 ? 'down' : null;
+
+                    const pulseClass =
+                      stock.tickDirection !== null
+                        ? `pulse-${stock.tickDirection}-${(stock.pulseNonce || 0) % 2 === 0 ? 'a' : 'b'}`
+                        : '';
+
+                    return (
+                      <tr key={stock.symbol} className={[direction || '', pulseClass].filter(Boolean).join(' ')}>
+                        <td>{stock.symbol}</td>
+
+                        <td>
+                          <Price className={direction || ''}>
+                            {stock.price !== null ? stock.price.toFixed(2) : 'N/A'}
+                          </Price>
+
+                          {change !== null && percent !== null && (
+                            <Change className={direction || ''}>
+                              {change > 0 ? '+' : ''}
+                              {change.toFixed(2)} ({percent.toFixed(2)}%)
+                            </Change>
+                          )}
+                        </td>
+                      </tr>
+                    );
+                  })
                 ) : (
                   <tr>
                     <td colSpan={2}>Waiting for live prices…</td>
@@ -253,6 +289,32 @@ const InfoText = styled.p`
   margin: 0.5rem 0 1rem;
 `;
 
+const Price = styled.div`
+  font-weight: bold;
+  transition: color 0.2s ease;
+
+  &.up {
+    color: #16a34a;
+  }
+
+  &.down {
+    color: #dc2626;
+  }
+`;
+
+const Change = styled.div`
+  font-size: 0.85rem;
+  opacity: 0.8;
+
+  &.up {
+    color: #16a34a;
+  }
+
+  &.down {
+    color: #dc2626;
+  }
+`;
+
 const TableWrapper = styled.div`
   overflow-x: auto;
 
@@ -262,17 +324,39 @@ const TableWrapper = styled.div`
     border: 1px solid var(--colour-dark);
   }
 
-  th,
-  td {
-    border: 1px solid var(--colour-dark);
-    padding: 0.75rem;
-    text-align: left;
+  tr.up {
+    background: rgba(22, 163, 74, 0.05);
   }
 
-  th {
-    background: var(--colour-dark);
-    color: var(--colour-white);
-    font-family: 'Oswald', sans-serif;
-    letter-spacing: 1px;
+  tr.down {
+    background: rgba(220, 38, 38, 0.05);
+  }
+
+  tr.pulse-up-a,
+  tr.pulse-up-b {
+    animation: flashUp 0.45s ease;
+  }
+
+  tr.pulse-down-a,
+  tr.pulse-down-b {
+    animation: flashDown 0.45s ease;
+  }
+
+  @keyframes flashUp {
+    0% {
+      background: rgba(22, 163, 74, 0.15);
+    }
+    100% {
+      background: transparent;
+    }
+  }
+
+  @keyframes flashDown {
+    0% {
+      background: rgba(220, 38, 38, 0.15);
+    }
+    100% {
+      background: transparent;
+    }
   }
 `;

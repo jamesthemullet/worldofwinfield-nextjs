@@ -103,6 +103,47 @@ async function fetchStooqQuote(resolvedSymbol) {
   };
 }
 
+function parsePreviousCloseFromHistory(csvText) {
+  if (!csvText) {
+    return null;
+  }
+
+  const lines = csvText
+    .split('\n')
+    .map((line) => line.trim())
+    .filter(Boolean);
+
+  if (lines.length <= 1) {
+    return null;
+  }
+
+  const closingPrices = lines
+    .slice(1)
+    .map((line) => {
+      const columns = line.split(',');
+      return parseNumericValue(columns[4]);
+    })
+    .filter((value) => value !== null);
+
+  if (closingPrices.length < 2) {
+    return null;
+  }
+
+  return closingPrices[closingPrices.length - 2];
+}
+
+async function fetchStooqPreviousClose(resolvedSymbol) {
+  const url = `https://stooq.com/q/d/l/?s=${encodeURIComponent(resolvedSymbol.toLowerCase())}&i=d`;
+  const response = await fetch(url, { headers: quoteRequestHeaders });
+
+  if (!response.ok) {
+    throw new Error(`Stooq history HTTP error: ${response.status}`);
+  }
+
+  const body = (await response.text()).trim();
+  return parsePreviousCloseFromHistory(body);
+}
+
 async function fetchPrices() {
   if (!symbols.length) {
     const message = 'No symbols configured. Set SYMBOLS environment variable.';
@@ -120,21 +161,26 @@ async function fetchPrices() {
     const resolvedSymbols = [...new Set(requestedToResolved.map((item) => item.resolvedSymbol))];
     const quoteEntries = await Promise.all(
       resolvedSymbols.map(async (resolvedSymbol) => {
-        const quote = await fetchStooqQuote(resolvedSymbol);
-        return [resolvedSymbol.toUpperCase(), quote];
+        const [quote, previousClose] = await Promise.all([
+          fetchStooqQuote(resolvedSymbol),
+          fetchStooqPreviousClose(resolvedSymbol),
+        ]);
+        return [resolvedSymbol.toUpperCase(), { quote, previousClose }];
       }),
     );
     const quoteBySymbol = new Map(quoteEntries);
 
     const prices = requestedToResolved.reduce((accumulator, symbolPair) => {
       const raw = quoteBySymbol.get(symbolPair.resolvedSymbol.toUpperCase()) || null;
-      const price = raw?.close ?? raw?.open ?? null;
+      const price = raw?.quote?.close ?? raw?.quote?.open ?? null;
+      const previousClose = raw?.previousClose ?? null;
 
       if (price !== null && price !== undefined) {
         accumulator[symbolPair.requestedSymbol] = {
           requestedSymbol: symbolPair.requestedSymbol,
           resolvedSymbol: symbolPair.resolvedSymbol,
           price,
+          previousClose,
         };
       } else {
         accumulator[symbolPair.requestedSymbol] = {
@@ -212,4 +258,4 @@ setInterval(async () => {
   broadcast({ type: 'prices', data: prices, timestamp: new Date().toISOString() });
 }, pollIntervalMs);
 
-console.log(`Realtime WebSocket server running on ws://localhost:${port}`);
+console.log(`Realtime WebSocket server running on port ${port}`);
