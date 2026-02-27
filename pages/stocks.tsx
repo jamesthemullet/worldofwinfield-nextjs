@@ -115,7 +115,9 @@ export default function StocksPage() {
 
             setStocks((currentStocks) => {
               const previousMap = new Map(currentStocks.map((s) => [s.symbol, s.price]));
-              const previousPulseMap = new Map(currentStocks.map((s) => [s.symbol, s.pulseNonce ?? 0]));
+              const previousPulseMap = new Map(
+                currentStocks.map((s) => [s.symbol, s.pulseNonce ?? 0]),
+              );
 
               return nextStocks.map((stock) => {
                 const previousPrice = previousMap.get(stock.symbol) ?? null;
@@ -181,11 +183,9 @@ export default function StocksPage() {
   return (
     <Layout preview={null} title="Stocks">
       <Container>
-        <PageContainer>
-          <StyledPostHeader>
-            <PostHeader title="Stocks" />
-          </StyledPostHeader>
+        <PostHeader title="Stocks" />
 
+        <PageContainer>
           <StatusRow>
             <span>Connection: {status}</span>
             <span>Server: {wsUrl}</span>
@@ -224,7 +224,9 @@ export default function StocksPage() {
                         : '';
 
                     return (
-                      <tr key={stock.symbol} className={[direction || '', pulseClass].filter(Boolean).join(' ')}>
+                      <tr
+                        key={stock.symbol}
+                        className={[direction || '', pulseClass].filter(Boolean).join(' ')}>
                         <td>{stock.symbol}</td>
 
                         <td>
@@ -260,10 +262,6 @@ const PageContainer = styled.section`
   max-width: 900px;
   margin: 0 auto;
   padding: 1rem;
-`;
-
-const StyledPostHeader = styled.div`
-  margin: 0 auto;
 `;
 
 const StatusRow = styled.div`
