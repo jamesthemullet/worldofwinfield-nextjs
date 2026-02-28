@@ -5,7 +5,10 @@ require('dotenv').config({ path: path.resolve(__dirname, '../.env'), override: t
 
 const port = Number(process.env.PORT || 8081);
 const pollIntervalMs = Number(process.env.POLL_INTERVAL_MS || 60000);
-const symbols = (process.env.SYMBOLS || 'NVDA,LSE:FUTR,LSE:MGNS,LSE:MKS')
+const symbols = (
+  process.env.SYMBOLS ||
+  'XLON:GAW,XLON:YU.,XLON:FORT,XLON:GRI,XLON:THRL,XLON:IPX,XLON:TW.,XLON:FOUR,XLON:RWS,XNYS:NVO,XNYS:EVTL,XLON:EMG,XLON:CAML,XLON:SQZ,XLON:COST,XNAS:RYAAY,XLON:KLR,XLON:MONY,XWBO:OMV,XLON:JET2,XLON:FUTR,XLON:MGNS,XLON:MKS,XLON:EVR,XLON:AIE,XLON:BRLA,XLON:BIOG,XLON:IBT,XLON:FSG,XLON:PCGH,XLON:GCL,XLON:0LY1,XLON:JEGI,XLON:CGEO,XLON:JGGI,XLON:PCT,XLON:SPOL,XLON:NAVF,XLON:JEDT,XLON:IAD,XLON:IKOR,XLON:FCSS,XLON:HFEL,XLON:BRSC,XLON:JUSC,XLON:GSCT,XLON:TRIG,XLON:ROBG,XLON:SSIT,XETR:PCFP,XETR:PCFH,XLON:BRFI'
+)
   .split(',')
   .map((symbol) => symbol.trim())
   .filter(Boolean);
@@ -17,19 +20,112 @@ const quoteRequestHeaders = {
   'User-Agent': 'Mozilla/5.0',
   Accept: 'text/csv,text/plain,*/*',
 };
+const fetchTimeoutMs = Number(process.env.FETCH_TIMEOUT_MS || 10000);
+const fetchRetries = Number(process.env.FETCH_RETRIES || 2);
+const retryDelayMs = Number(process.env.FETCH_RETRY_DELAY_MS || 500);
+const symbolFetchConcurrency = Number(process.env.SYMBOL_FETCH_CONCURRENCY || 6);
+
+function delay(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+async function fetchTextWithRetry(url, contextLabel) {
+  let lastError = null;
+
+  for (let attempt = 0; attempt <= fetchRetries; attempt += 1) {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), fetchTimeoutMs);
+
+    try {
+      const response = await fetch(url, {
+        headers: quoteRequestHeaders,
+        signal: controller.signal,
+      });
+
+      if (!response.ok) {
+        throw new Error(`${contextLabel} HTTP error: ${response.status}`);
+      }
+
+      return (await response.text()).trim();
+    } catch (error) {
+      lastError = error;
+
+      if (attempt < fetchRetries) {
+        await delay(retryDelayMs * (attempt + 1));
+      }
+    } finally {
+      clearTimeout(timeout);
+    }
+  }
+
+  throw lastError || new Error(`${contextLabel} fetch failed`);
+}
+
+async function mapWithConcurrency(items, limit, mapper) {
+  if (!items.length) {
+    return [];
+  }
+
+  const safeLimit = Number.isFinite(limit) && limit > 0 ? Math.floor(limit) : 1;
+  const results = new Array(items.length);
+  let nextIndex = 0;
+
+  async function worker() {
+    while (nextIndex < items.length) {
+      const currentIndex = nextIndex;
+      nextIndex += 1;
+      results[currentIndex] = await mapper(items[currentIndex], currentIndex);
+    }
+  }
+
+  const workers = Array.from({ length: Math.min(safeLimit, items.length) }, () => worker());
+  await Promise.all(workers);
+  return results;
+}
 
 function normaliseSymbol(symbol) {
-  const lseMatch = symbol.match(/^LSE:(.+)$/i);
+  const trimmed = symbol.trim();
+  const exchangeMatch = trimmed.match(/^([A-Z]+):(.+)$/i);
+
+  if (exchangeMatch) {
+    const exchange = exchangeMatch[1].toUpperCase();
+    const ticker = exchangeMatch[2].trim().toUpperCase().replace(/\.$/, '');
+
+    if (exchange === 'LSE' || exchange === 'XLON') {
+      return `${ticker}.UK`;
+    }
+
+    if (
+      exchange === 'NYSE' ||
+      exchange === 'XNYS' ||
+      exchange === 'NASDAQ' ||
+      exchange === 'XNAS'
+    ) {
+      return `${ticker}.US`;
+    }
+
+    if (exchange === 'XWBO') {
+      return `${ticker}.SG`;
+    }
+
+    if (exchange === 'XETR' || exchange === 'XETRA') {
+      return `${ticker}.DE`;
+    }
+
+    return ticker.includes('.') ? ticker : `${ticker}.US`;
+  }
+
+  const lseMatch = trimmed.match(/^LSE:(.+)$/i);
 
   if (lseMatch) {
-    return `${lseMatch[1].toUpperCase()}.UK`;
+    return `${lseMatch[1].toUpperCase().replace(/\.$/, '')}.UK`;
   }
 
-  if (symbol.includes('.')) {
-    return symbol.trim().toUpperCase();
+  if (trimmed.includes('.')) {
+    return trimmed.toUpperCase();
   }
 
-  return `${symbol.trim().toUpperCase()}.US`;
+  return `${trimmed.toUpperCase()}.US`;
 }
 
 function broadcast(payload) {
@@ -78,13 +174,7 @@ function parseNumericValue(value) {
 
 async function fetchStooqQuote(resolvedSymbol) {
   const url = `https://stooq.com/q/l/?s=${encodeURIComponent(resolvedSymbol.toLowerCase())}&i=d`;
-  const response = await fetch(url, { headers: quoteRequestHeaders });
-
-  if (!response.ok) {
-    throw new Error(`Stooq HTTP error: ${response.status}`);
-  }
-
-  const body = (await response.text()).trim();
+  const body = await fetchTextWithRetry(url, 'Stooq quote');
   const [symbol, date, time, open, high, low, close, volume] = body.split(',');
 
   if (!symbol) {
@@ -134,14 +224,69 @@ function parsePreviousCloseFromHistory(csvText) {
 
 async function fetchStooqPreviousClose(resolvedSymbol) {
   const url = `https://stooq.com/q/d/l/?s=${encodeURIComponent(resolvedSymbol.toLowerCase())}&i=d`;
-  const response = await fetch(url, { headers: quoteRequestHeaders });
+  const body = await fetchTextWithRetry(url, 'Stooq history');
+  return parsePreviousCloseFromHistory(body);
+}
 
-  if (!response.ok) {
-    throw new Error(`Stooq history HTTP error: ${response.status}`);
+function normaliseSymbolForYahoo(resolvedSymbol) {
+  const upper = resolvedSymbol.toUpperCase();
+
+  if (upper.endsWith('.UK')) {
+    return `${upper.slice(0, -3)}.L`;
   }
 
-  const body = (await response.text()).trim();
-  return parsePreviousCloseFromHistory(body);
+  if (upper.endsWith('.US')) {
+    return upper.slice(0, -3);
+  }
+
+  return upper;
+}
+
+function pickLastFinite(values) {
+  for (let index = values.length - 1; index >= 0; index -= 1) {
+    const value = values[index];
+    if (Number.isFinite(value)) {
+      return { value, index };
+    }
+  }
+
+  return null;
+}
+
+async function fetchYahooFallback(resolvedSymbol) {
+  const yahooSymbol = normaliseSymbolForYahoo(resolvedSymbol);
+  const url = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(yahooSymbol)}?interval=1d&range=1mo`;
+  const body = await fetchTextWithRetry(url, 'Yahoo chart');
+  const payload = JSON.parse(body);
+  const result = payload?.chart?.result?.[0];
+  const closes = result?.indicators?.quote?.[0]?.close;
+
+  if (!Array.isArray(closes) || closes.length === 0) {
+    return null;
+  }
+
+  const latest = pickLastFinite(closes);
+  if (!latest) {
+    return null;
+  }
+
+  let previousClose = null;
+  for (let index = latest.index - 1; index >= 0; index -= 1) {
+    if (Number.isFinite(closes[index])) {
+      previousClose = closes[index];
+      break;
+    }
+  }
+
+  if (previousClose === null && Number.isFinite(result?.meta?.previousClose)) {
+    previousClose = result.meta.previousClose;
+  }
+
+  return {
+    requestedSymbol: yahooSymbol,
+    price: latest.value,
+    previousClose,
+  };
 }
 
 async function fetchPrices() {
@@ -159,14 +304,53 @@ async function fetchPrices() {
     }));
 
     const resolvedSymbols = [...new Set(requestedToResolved.map((item) => item.resolvedSymbol))];
-    const quoteEntries = await Promise.all(
-      resolvedSymbols.map(async (resolvedSymbol) => {
-        const [quote, previousClose] = await Promise.all([
+    const quoteEntries = await mapWithConcurrency(
+      resolvedSymbols,
+      symbolFetchConcurrency,
+      async (resolvedSymbol) => {
+        const [quoteResult, previousCloseResult] = await Promise.allSettled([
           fetchStooqQuote(resolvedSymbol),
           fetchStooqPreviousClose(resolvedSymbol),
         ]);
+
+        let quote = quoteResult.status === 'fulfilled' ? quoteResult.value : null;
+        let previousClose =
+          previousCloseResult.status === 'fulfilled' ? previousCloseResult.value : null;
+
+        if (!quote || quote.close === null) {
+          try {
+            const yahooFallback = await fetchYahooFallback(resolvedSymbol);
+
+            if (yahooFallback) {
+              quote = {
+                symbol: yahooFallback.requestedSymbol,
+                date: null,
+                time: null,
+                open: null,
+                high: null,
+                low: null,
+                close: yahooFallback.price,
+                volume: null,
+              };
+              previousClose = previousClose ?? yahooFallback.previousClose;
+            }
+          } catch (error) {
+            console.error(
+              `Yahoo fallback failed for ${resolvedSymbol}: ${error?.message || error}`,
+            );
+          }
+        }
+
+        if (!quote) {
+          const quoteError =
+            quoteResult.status === 'rejected'
+              ? quoteResult.reason?.message || 'Unknown quote error'
+              : null;
+          console.error(`Failed to fetch quote for ${resolvedSymbol}: ${quoteError}`);
+        }
+
         return [resolvedSymbol.toUpperCase(), { quote, previousClose }];
-      }),
+      },
     );
     const quoteBySymbol = new Map(quoteEntries);
 
