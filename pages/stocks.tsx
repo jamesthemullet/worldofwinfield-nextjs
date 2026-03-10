@@ -22,6 +22,8 @@ type PricesPayload = {
   timestamp?: string;
 };
 
+type SortMode = 'default' | 'percent-desc' | 'percent-asc';
+
 const OWNED_STOCK_SYMBOLS = new Set([
   'XLON:GAW',
   'XLON:YU.',
@@ -41,7 +43,6 @@ const OWNED_STOCK_SYMBOLS = new Set([
   'XNAS:RYAAY',
   'XLON:KLR',
   'XLON:MONY',
-  'XWBO:OMV',
   'XLON:JET2',
   'XLON:FUTR',
   'XLON:MGNS',
@@ -99,7 +100,6 @@ const COMPANY_NAMES: Record<string, string> = {
   'XNAS:RYAAY': 'Ryanair Holdings plc',
   'XLON:KLR': 'Keller Group PLC',
   'XLON:MONY': 'MONY Group plc',
-  'XWBO:OMV': 'OMV AG',
   'XLON:JET2': 'Jet2 PLC',
   'XLON:FUTR': 'Future PLC',
   'XLON:MGNS': 'Morgan Sindall Group PLC',
@@ -216,7 +216,10 @@ const normalisePrices = (input: unknown): StockRow[] => {
 
 const buildConfiguredRows = (symbols: Set<string>, liveRows: StockRow[]): StockRow[] => {
   const liveBySymbol = new Map(
-    liveRows.map((row) => [normaliseSymbolAlias(row.symbol), { ...row, symbol: normaliseSymbolAlias(row.symbol) }]),
+    liveRows.map((row) => [
+      normaliseSymbolAlias(row.symbol),
+      { ...row, symbol: normaliseSymbolAlias(row.symbol) },
+    ]),
   );
 
   return Array.from(symbols).map((symbol) => {
@@ -239,6 +242,48 @@ const buildConfiguredRows = (symbols: Set<string>, liveRows: StockRow[]): StockR
   });
 };
 
+const getPercentChange = (stock: StockRow): number | null => {
+  const baseline = stock.previousClose ?? stock.previousPrice ?? null;
+
+  if (baseline === null || baseline === 0 || stock.price === null) {
+    return null;
+  }
+
+  return ((stock.price - baseline) / baseline) * 100;
+};
+
+const sortByPercentChange = (rows: StockRow[], mode: SortMode): StockRow[] => {
+  if (mode === 'default') {
+    return rows;
+  }
+
+  const multiplier = mode === 'percent-desc' ? -1 : 1;
+
+  return [...rows].sort((a, b) => {
+    const aPercent = getPercentChange(a);
+    const bPercent = getPercentChange(b);
+
+    if (aPercent === null && bPercent === null) {
+      return a.companyName.localeCompare(b.companyName);
+    }
+
+    if (aPercent === null) {
+      return 1;
+    }
+
+    if (bPercent === null) {
+      return -1;
+    }
+
+    const delta = (aPercent - bPercent) * multiplier;
+    if (delta !== 0) {
+      return delta;
+    }
+
+    return a.companyName.localeCompare(b.companyName);
+  });
+};
+
 export default function StocksPage() {
   const [stocks, setStocks] = useState<StockRow[]>([]);
   const [status, setStatus] = useState<'connecting' | 'connected' | 'disconnected' | 'error'>(
@@ -247,15 +292,18 @@ export default function StocksPage() {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [serverMessage, setServerMessage] = useState<string | null>(null);
   const [lastUpdated, setLastUpdated] = useState<string | null>(null);
+  const [sortMode, setSortMode] = useState<SortMode>('default');
 
   const wsUrl = useMemo(() => process.env.NEXT_PUBLIC_STOCKS_WS_URL || resolveDefaultWsUrl(), []);
-  const ownedStocks = useMemo(
-    () => buildConfiguredRows(OWNED_STOCK_SYMBOLS, stocks),
-    [stocks],
+  const ownedStocks = useMemo(() => buildConfiguredRows(OWNED_STOCK_SYMBOLS, stocks), [stocks]);
+  const ownedFunds = useMemo(() => buildConfiguredRows(OWNED_FUND_SYMBOLS, stocks), [stocks]);
+  const sortedOwnedStocks = useMemo(
+    () => sortByPercentChange(ownedStocks, sortMode),
+    [ownedStocks, sortMode],
   );
-  const ownedFunds = useMemo(
-    () => buildConfiguredRows(OWNED_FUND_SYMBOLS, stocks),
-    [stocks],
+  const sortedOwnedFunds = useMemo(
+    () => sortByPercentChange(ownedFunds, sortMode),
+    [ownedFunds, sortMode],
   );
 
   useEffect(() => {
@@ -384,6 +432,18 @@ export default function StocksPage() {
           {errorMessage ? <ErrorText>{errorMessage}</ErrorText> : null}
           {serverMessage && !errorMessage ? <InfoText>{serverMessage}</InfoText> : null}
 
+          <SortRow>
+            <label htmlFor="stocks-sort-select">Re-order:</label>
+            <SortSelect
+              id="stocks-sort-select"
+              value={sortMode}
+              onChange={(event) => setSortMode(event.target.value as SortMode)}>
+              <option value="default">Default</option>
+              <option value="percent-desc">% Increased (High to Low)</option>
+              <option value="percent-asc">% Decreased (Low to High)</option>
+            </SortSelect>
+          </SortRow>
+
           <h2>Stocks I Own</h2>
 
           <TableWrapper>
@@ -395,46 +455,46 @@ export default function StocksPage() {
                 </tr>
               </thead>
               <tbody>
-                {ownedStocks.map((stock) => {
-                    const baseline = stock.previousClose ?? stock.previousPrice ?? null;
+                {sortedOwnedStocks.map((stock) => {
+                  const baseline = stock.previousClose ?? stock.previousPrice ?? null;
 
-                    const change =
-                      baseline !== null && stock.price !== null ? stock.price - baseline : null;
+                  const change =
+                    baseline !== null && stock.price !== null ? stock.price - baseline : null;
 
-                    const percent = change !== null && baseline ? (change / baseline) * 100 : null;
+                  const percent = change !== null && baseline ? (change / baseline) * 100 : null;
 
-                    const direction =
-                      change === null ? null : change > 0 ? 'up' : change < 0 ? 'down' : null;
+                  const direction =
+                    change === null ? null : change > 0 ? 'up' : change < 0 ? 'down' : null;
 
-                    const pulseClass =
-                      stock.tickDirection !== null
-                        ? `pulse-${stock.tickDirection}-${(stock.pulseNonce || 0) % 2 === 0 ? 'a' : 'b'}`
-                        : '';
+                  const pulseClass =
+                    stock.tickDirection !== null
+                      ? `pulse-${stock.tickDirection}-${(stock.pulseNonce || 0) % 2 === 0 ? 'a' : 'b'}`
+                      : '';
 
-                    return (
-                      <tr
-                        key={stock.symbol}
-                        className={[direction || '', pulseClass].filter(Boolean).join(' ')}>
-                        <td>
-                          {stock.companyName}
-                          <SymbolText>{stock.symbol}</SymbolText>
-                        </td>
+                  return (
+                    <tr
+                      key={stock.symbol}
+                      className={[direction || '', pulseClass].filter(Boolean).join(' ')}>
+                      <td>
+                        {stock.companyName}
+                        <SymbolText>{stock.symbol}</SymbolText>
+                      </td>
 
-                        <td>
-                          <Price className={direction || ''}>
-                            {stock.price !== null ? stock.price.toFixed(2) : 'N/A'}
-                          </Price>
+                      <td>
+                        <Price className={direction || ''}>
+                          {stock.price !== null ? stock.price.toFixed(2) : 'N/A'}
+                        </Price>
 
-                          {change !== null && percent !== null && (
-                            <Change className={direction || ''}>
-                              {change > 0 ? '+' : ''}
-                              {change.toFixed(2)} ({percent.toFixed(2)}%)
-                            </Change>
-                          )}
-                        </td>
-                      </tr>
-                    );
-                  })}
+                        {change !== null && percent !== null && (
+                          <Change className={direction || ''}>
+                            {change > 0 ? '+' : ''}
+                            {change.toFixed(2)} ({percent.toFixed(2)}%)
+                          </Change>
+                        )}
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </TableWrapper>
@@ -450,46 +510,46 @@ export default function StocksPage() {
                 </tr>
               </thead>
               <tbody>
-                {ownedFunds.map((stock) => {
-                    const baseline = stock.previousClose ?? stock.previousPrice ?? null;
+                {sortedOwnedFunds.map((stock) => {
+                  const baseline = stock.previousClose ?? stock.previousPrice ?? null;
 
-                    const change =
-                      baseline !== null && stock.price !== null ? stock.price - baseline : null;
+                  const change =
+                    baseline !== null && stock.price !== null ? stock.price - baseline : null;
 
-                    const percent = change !== null && baseline ? (change / baseline) * 100 : null;
+                  const percent = change !== null && baseline ? (change / baseline) * 100 : null;
 
-                    const direction =
-                      change === null ? null : change > 0 ? 'up' : change < 0 ? 'down' : null;
+                  const direction =
+                    change === null ? null : change > 0 ? 'up' : change < 0 ? 'down' : null;
 
-                    const pulseClass =
-                      stock.tickDirection !== null
-                        ? `pulse-${stock.tickDirection}-${(stock.pulseNonce || 0) % 2 === 0 ? 'a' : 'b'}`
-                        : '';
+                  const pulseClass =
+                    stock.tickDirection !== null
+                      ? `pulse-${stock.tickDirection}-${(stock.pulseNonce || 0) % 2 === 0 ? 'a' : 'b'}`
+                      : '';
 
-                    return (
-                      <tr
-                        key={stock.symbol}
-                        className={[direction || '', pulseClass].filter(Boolean).join(' ')}>
-                        <td>
-                          {stock.companyName}
-                          <SymbolText>{stock.symbol}</SymbolText>
-                        </td>
+                  return (
+                    <tr
+                      key={stock.symbol}
+                      className={[direction || '', pulseClass].filter(Boolean).join(' ')}>
+                      <td>
+                        {stock.companyName}
+                        <SymbolText>{stock.symbol}</SymbolText>
+                      </td>
 
-                        <td>
-                          <Price className={direction || ''}>
-                            {stock.price !== null ? stock.price.toFixed(2) : 'N/A'}
-                          </Price>
+                      <td>
+                        <Price className={direction || ''}>
+                          {stock.price !== null ? stock.price.toFixed(2) : 'N/A'}
+                        </Price>
 
-                          {change !== null && percent !== null && (
-                            <Change className={direction || ''}>
-                              {change > 0 ? '+' : ''}
-                              {change.toFixed(2)} ({percent.toFixed(2)}%)
-                            </Change>
-                          )}
-                        </td>
-                      </tr>
-                    );
-                  })}
+                        {change !== null && percent !== null && (
+                          <Change className={direction || ''}>
+                            {change > 0 ? '+' : ''}
+                            {change.toFixed(2)} ({percent.toFixed(2)}%)
+                          </Change>
+                        )}
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </TableWrapper>
@@ -532,6 +592,18 @@ const SymbolText = styled.span`
 const InfoText = styled.p`
   color: var(--colour-azure);
   margin: 0.5rem 0 1rem;
+`;
+
+const SortRow = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 1rem 0;
+`;
+
+const SortSelect = styled.select`
+  min-width: 240px;
+  padding: 0.4rem 0.6rem;
 `;
 
 const Price = styled.div`
