@@ -9,6 +9,9 @@ type StockRow = {
   companyName: string;
   price: number | null;
   previousClose?: number | null;
+  close30DaysAgo?: number | null;
+  close90DaysAgo?: number | null;
+  close1YearAgo?: number | null;
   previousPrice?: number | null;
   tickDirection?: 'up' | 'down' | null;
   pulseNonce?: number;
@@ -22,7 +25,17 @@ type PricesPayload = {
   timestamp?: string;
 };
 
-type SortMode = 'default' | 'percent-desc' | 'percent-asc';
+type SortMode =
+  | 'default'
+  | '1d-desc'
+  | '1d-asc'
+  | '30d-desc'
+  | '30d-asc'
+  | '90d-desc'
+  | '90d-asc'
+  | '1y-desc'
+  | '1y-asc';
+type ChangeWindow = '1d' | '30d' | '90d' | '1y';
 
 const OWNED_STOCK_SYMBOLS = new Set([
   'XLON:GAW',
@@ -197,6 +210,9 @@ const normalisePrices = (input: unknown): StockRow[] => {
       const stock = value as Record<string, unknown>;
       const priceValue = stock.price;
       const previousCloseValue = stock.previousClose;
+      const close30DaysAgoValue = stock.close30DaysAgo;
+      const close90DaysAgoValue = stock.close90DaysAgo;
+      const close1YearAgoValue = stock.close1YearAgo;
       const errorValue = stock.error;
       const numericPrice =
         typeof priceValue === 'number'
@@ -204,12 +220,39 @@ const normalisePrices = (input: unknown): StockRow[] => {
           : typeof priceValue === 'string'
             ? Number(priceValue)
             : null;
+      const numericPreviousClose =
+        typeof previousCloseValue === 'number'
+          ? previousCloseValue
+          : typeof previousCloseValue === 'string'
+            ? Number(previousCloseValue)
+            : null;
+      const numericClose30DaysAgo =
+        typeof close30DaysAgoValue === 'number'
+          ? close30DaysAgoValue
+          : typeof close30DaysAgoValue === 'string'
+            ? Number(close30DaysAgoValue)
+            : null;
+      const numericClose90DaysAgo =
+        typeof close90DaysAgoValue === 'number'
+          ? close90DaysAgoValue
+          : typeof close90DaysAgoValue === 'string'
+            ? Number(close90DaysAgoValue)
+            : null;
+      const numericClose1YearAgo =
+        typeof close1YearAgoValue === 'number'
+          ? close1YearAgoValue
+          : typeof close1YearAgoValue === 'string'
+            ? Number(close1YearAgoValue)
+            : null;
 
       return {
         symbol: canonicalSymbol,
         companyName: getCompanyName(canonicalSymbol),
         price: errorValue || !Number.isFinite(numericPrice) ? null : numericPrice,
-        previousClose: typeof previousCloseValue === 'number' ? previousCloseValue : null,
+        previousClose: Number.isFinite(numericPreviousClose) ? numericPreviousClose : null,
+        close30DaysAgo: Number.isFinite(numericClose30DaysAgo) ? numericClose30DaysAgo : null,
+        close90DaysAgo: Number.isFinite(numericClose90DaysAgo) ? numericClose90DaysAgo : null,
+        close1YearAgo: Number.isFinite(numericClose1YearAgo) ? numericClose1YearAgo : null,
       };
     });
 };
@@ -235,6 +278,9 @@ const buildConfiguredRows = (symbols: Set<string>, liveRows: StockRow[]): StockR
       companyName: getCompanyName(canonicalSymbol),
       price: null,
       previousClose: null,
+      close30DaysAgo: null,
+      close90DaysAgo: null,
+      close1YearAgo: null,
       previousPrice: null,
       tickDirection: null,
       pulseNonce: 0,
@@ -242,8 +288,55 @@ const buildConfiguredRows = (symbols: Set<string>, liveRows: StockRow[]): StockR
   });
 };
 
-const getPercentChange = (stock: StockRow): number | null => {
-  const baseline = stock.previousClose ?? stock.previousPrice ?? null;
+const getChange = (
+  currentPrice: number | null,
+  baseline: number | null,
+): { change: number | null; percent: number | null } => {
+  if (currentPrice === null || baseline === null || baseline === 0) {
+    return { change: null, percent: null };
+  }
+
+  const change = currentPrice - baseline;
+  return {
+    change,
+    percent: (change / baseline) * 100,
+  };
+};
+
+const getBaselineForWindow = (stock: StockRow, window: ChangeWindow): number | null => {
+  if (window === '1d') {
+    return stock.previousClose ?? null;
+  }
+
+  if (window === '30d') {
+    return stock.close30DaysAgo ?? null;
+  }
+
+  if (window === '90d') {
+    return stock.close90DaysAgo ?? null;
+  }
+
+  return stock.close1YearAgo ?? null;
+};
+
+const getWindowLabel = (window: ChangeWindow): string => {
+  if (window === '1d') {
+    return '1D';
+  }
+
+  if (window === '30d') {
+    return '30D';
+  }
+
+  if (window === '90d') {
+    return '90D';
+  }
+
+  return '1Y';
+};
+
+const getPercentChange = (stock: StockRow, window: ChangeWindow): number | null => {
+  const baseline = getBaselineForWindow(stock, window);
 
   if (baseline === null || baseline === 0 || stock.price === null) {
     return null;
@@ -252,16 +345,30 @@ const getPercentChange = (stock: StockRow): number | null => {
   return ((stock.price - baseline) / baseline) * 100;
 };
 
-const sortByPercentChange = (rows: StockRow[], mode: SortMode): StockRow[] => {
+const getSortConfig = (
+  mode: SortMode,
+  fallbackWindow: ChangeWindow,
+): { window: ChangeWindow; direction: 'asc' | 'desc' | null } => {
+  if (mode === 'default') {
+    return { window: fallbackWindow, direction: null };
+  }
+
+  const [window, direction] = mode.split('-') as [ChangeWindow, 'asc' | 'desc'];
+  return { window, direction };
+};
+
+const sortByPercentChange = (rows: StockRow[], mode: SortMode, window: ChangeWindow): StockRow[] => {
+  const sortConfig = getSortConfig(mode, window);
+
   if (mode === 'default') {
     return rows;
   }
 
-  const multiplier = mode === 'percent-desc' ? -1 : 1;
+  const multiplier = sortConfig.direction === 'desc' ? -1 : 1;
 
   return [...rows].sort((a, b) => {
-    const aPercent = getPercentChange(a);
-    const bPercent = getPercentChange(b);
+    const aPercent = getPercentChange(a, sortConfig.window);
+    const bPercent = getPercentChange(b, sortConfig.window);
 
     if (aPercent === null && bPercent === null) {
       return a.companyName.localeCompare(b.companyName);
@@ -293,17 +400,27 @@ export default function StocksPage() {
   const [serverMessage, setServerMessage] = useState<string | null>(null);
   const [lastUpdated, setLastUpdated] = useState<string | null>(null);
   const [sortMode, setSortMode] = useState<SortMode>('default');
+  const [changeWindow, setChangeWindow] = useState<ChangeWindow>('1d');
+
+  const handleSortChange = (nextMode: SortMode) => {
+    setSortMode(nextMode);
+
+    const sortConfig = getSortConfig(nextMode, changeWindow);
+    if (sortConfig.direction) {
+      setChangeWindow(sortConfig.window);
+    }
+  };
 
   const wsUrl = useMemo(() => process.env.NEXT_PUBLIC_STOCKS_WS_URL || resolveDefaultWsUrl(), []);
   const ownedStocks = useMemo(() => buildConfiguredRows(OWNED_STOCK_SYMBOLS, stocks), [stocks]);
   const ownedFunds = useMemo(() => buildConfiguredRows(OWNED_FUND_SYMBOLS, stocks), [stocks]);
   const sortedOwnedStocks = useMemo(
-    () => sortByPercentChange(ownedStocks, sortMode),
-    [ownedStocks, sortMode],
+    () => sortByPercentChange(ownedStocks, sortMode, changeWindow),
+    [ownedStocks, sortMode, changeWindow],
   );
   const sortedOwnedFunds = useMemo(
-    () => sortByPercentChange(ownedFunds, sortMode),
-    [ownedFunds, sortMode],
+    () => sortByPercentChange(ownedFunds, sortMode, changeWindow),
+    [ownedFunds, sortMode, changeWindow],
   );
 
   useEffect(() => {
@@ -437,12 +554,38 @@ export default function StocksPage() {
             <SortSelect
               id="stocks-sort-select"
               value={sortMode}
-              onChange={(event) => setSortMode(event.target.value as SortMode)}>
+              onChange={(event) => handleSortChange(event.target.value as SortMode)}>
               <option value="default">Default</option>
-              <option value="percent-desc">% Increased (High to Low)</option>
-              <option value="percent-asc">% Decreased (Low to High)</option>
+              <option value="1d-desc">1D % Increased (High to Low)</option>
+              <option value="1d-asc">1D % Decreased (Low to High)</option>
+              <option value="30d-desc">30D % Increased (High to Low)</option>
+              <option value="30d-asc">30D % Decreased (Low to High)</option>
+              <option value="90d-desc">90D % Increased (High to Low)</option>
+              <option value="90d-asc">90D % Decreased (Low to High)</option>
+              <option value="1y-desc">1Y % Increased (High to Low)</option>
+              <option value="1y-asc">1Y % Decreased (Low to High)</option>
             </SortSelect>
           </SortRow>
+
+          <ToggleRow>
+            <span>Change window:</span>
+            <ToggleGroup role="group" aria-label="Select price change window">
+              {(['1d', '30d', '90d', '1y'] as ChangeWindow[]).map((window) => {
+                const isActive = changeWindow === window;
+
+                return (
+                  <ToggleButton
+                    key={window}
+                    type="button"
+                    aria-pressed={isActive}
+                    className={isActive ? 'active' : ''}
+                    onClick={() => setChangeWindow(window)}>
+                    {getWindowLabel(window)}
+                  </ToggleButton>
+                );
+              })}
+            </ToggleGroup>
+          </ToggleRow>
 
           <h2>Stocks I Own</h2>
 
@@ -456,15 +599,18 @@ export default function StocksPage() {
               </thead>
               <tbody>
                 {sortedOwnedStocks.map((stock) => {
-                  const baseline = stock.previousClose ?? stock.previousPrice ?? null;
-
-                  const change =
-                    baseline !== null && stock.price !== null ? stock.price - baseline : null;
-
-                  const percent = change !== null && baseline ? (change / baseline) * 100 : null;
+                  const selectedBaseline = getBaselineForWindow(stock, changeWindow);
+                  const selectedChange = getChange(stock.price, selectedBaseline);
+                  const selectedLabel = getWindowLabel(changeWindow);
 
                   const direction =
-                    change === null ? null : change > 0 ? 'up' : change < 0 ? 'down' : null;
+                    selectedChange.change === null
+                      ? null
+                      : selectedChange.change > 0
+                        ? 'up'
+                        : selectedChange.change < 0
+                          ? 'down'
+                          : null;
 
                   const pulseClass =
                     stock.tickDirection !== null
@@ -485,10 +631,10 @@ export default function StocksPage() {
                           {stock.price !== null ? stock.price.toFixed(2) : 'N/A'}
                         </Price>
 
-                        {change !== null && percent !== null && (
+                        {selectedChange.change !== null && selectedChange.percent !== null && (
                           <Change className={direction || ''}>
-                            {change > 0 ? '+' : ''}
-                            {change.toFixed(2)} ({percent.toFixed(2)}%)
+                            {selectedLabel}: {selectedChange.change > 0 ? '+' : ''}
+                            {selectedChange.change.toFixed(2)} ({selectedChange.percent.toFixed(2)}%)
                           </Change>
                         )}
                       </td>
@@ -511,15 +657,18 @@ export default function StocksPage() {
               </thead>
               <tbody>
                 {sortedOwnedFunds.map((stock) => {
-                  const baseline = stock.previousClose ?? stock.previousPrice ?? null;
-
-                  const change =
-                    baseline !== null && stock.price !== null ? stock.price - baseline : null;
-
-                  const percent = change !== null && baseline ? (change / baseline) * 100 : null;
+                  const selectedBaseline = getBaselineForWindow(stock, changeWindow);
+                  const selectedChange = getChange(stock.price, selectedBaseline);
+                  const selectedLabel = getWindowLabel(changeWindow);
 
                   const direction =
-                    change === null ? null : change > 0 ? 'up' : change < 0 ? 'down' : null;
+                    selectedChange.change === null
+                      ? null
+                      : selectedChange.change > 0
+                        ? 'up'
+                        : selectedChange.change < 0
+                          ? 'down'
+                          : null;
 
                   const pulseClass =
                     stock.tickDirection !== null
@@ -540,10 +689,10 @@ export default function StocksPage() {
                           {stock.price !== null ? stock.price.toFixed(2) : 'N/A'}
                         </Price>
 
-                        {change !== null && percent !== null && (
+                        {selectedChange.change !== null && selectedChange.percent !== null && (
                           <Change className={direction || ''}>
-                            {change > 0 ? '+' : ''}
-                            {change.toFixed(2)} ({percent.toFixed(2)}%)
+                            {selectedLabel}: {selectedChange.change > 0 ? '+' : ''}
+                            {selectedChange.change.toFixed(2)} ({selectedChange.percent.toFixed(2)}%)
                           </Change>
                         )}
                       </td>
@@ -604,6 +753,37 @@ const SortRow = styled.div`
 const SortSelect = styled.select`
   min-width: 240px;
   padding: 0.4rem 0.6rem;
+`;
+
+const ToggleRow = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 1rem 0 1.5rem;
+`;
+
+const ToggleGroup = styled.div`
+  display: inline-flex;
+  border: 1px solid var(--colour-dark);
+  border-radius: 6px;
+  overflow: hidden;
+`;
+
+const ToggleButton = styled.button`
+  padding: 0.45rem 0.8rem;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  font-weight: 600;
+
+  &:not(:last-of-type) {
+    border-right: 1px solid var(--colour-dark);
+  }
+
+  &.active {
+    background: var(--colour-dark);
+    color: var(--colour-light);
+  }
 `;
 
 const Price = styled.div`
