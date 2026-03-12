@@ -193,9 +193,14 @@ async function fetchStooqQuote(resolvedSymbol) {
   };
 }
 
-function parsePreviousCloseFromHistory(csvText) {
+function parseHistoryMetrics(csvText) {
   if (!csvText) {
-    return null;
+    return {
+      previousClose: null,
+      close30DaysAgo: null,
+      close90DaysAgo: null,
+      close1YearAgo: null,
+    };
   }
 
   const lines = csvText
@@ -204,7 +209,12 @@ function parsePreviousCloseFromHistory(csvText) {
     .filter(Boolean);
 
   if (lines.length <= 1) {
-    return null;
+    return {
+      previousClose: null,
+      close30DaysAgo: null,
+      close90DaysAgo: null,
+      close1YearAgo: null,
+    };
   }
 
   const closingPrices = lines
@@ -215,17 +225,35 @@ function parsePreviousCloseFromHistory(csvText) {
     })
     .filter((value) => value !== null);
 
-  if (closingPrices.length < 2) {
-    return null;
+  if (closingPrices.length === 0) {
+    return {
+      previousClose: null,
+      close30DaysAgo: null,
+      close90DaysAgo: null,
+      close1YearAgo: null,
+    };
   }
 
-  return closingPrices[closingPrices.length - 2];
+  const previousClose = closingPrices.length >= 2 ? closingPrices[closingPrices.length - 2] : null;
+  const close30DaysAgo =
+    closingPrices.length >= 31 ? closingPrices[closingPrices.length - 31] : null;
+  const close90DaysAgo =
+    closingPrices.length >= 91 ? closingPrices[closingPrices.length - 91] : null;
+  const close1YearAgo =
+    closingPrices.length >= 253 ? closingPrices[closingPrices.length - 253] : null;
+
+  return {
+    previousClose,
+    close30DaysAgo,
+    close90DaysAgo,
+    close1YearAgo,
+  };
 }
 
 async function fetchStooqPreviousClose(resolvedSymbol) {
   const url = `https://stooq.com/q/d/l/?s=${encodeURIComponent(resolvedSymbol.toLowerCase())}&i=d`;
   const body = await fetchTextWithRetry(url, 'Stooq history');
-  return parsePreviousCloseFromHistory(body);
+  return parseHistoryMetrics(body);
 }
 
 function normaliseSymbolForYahoo(resolvedSymbol) {
@@ -253,9 +281,29 @@ function pickLastFinite(values) {
   return null;
 }
 
+function pickNthPriorFinite(values, startIndex, nth) {
+  if (nth <= 0) {
+    return null;
+  }
+
+  let seen = 0;
+
+  for (let index = startIndex - 1; index >= 0; index -= 1) {
+    if (Number.isFinite(values[index])) {
+      seen += 1;
+
+      if (seen === nth) {
+        return values[index];
+      }
+    }
+  }
+
+  return null;
+}
+
 async function fetchYahooFallback(resolvedSymbol) {
   const yahooSymbol = normaliseSymbolForYahoo(resolvedSymbol);
-  const url = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(yahooSymbol)}?interval=1d&range=1mo`;
+  const url = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(yahooSymbol)}?interval=1d&range=2y`;
   const body = await fetchTextWithRetry(url, 'Yahoo chart');
   const payload = JSON.parse(body);
   const result = payload?.chart?.result?.[0];
@@ -270,13 +318,10 @@ async function fetchYahooFallback(resolvedSymbol) {
     return null;
   }
 
-  let previousClose = null;
-  for (let index = latest.index - 1; index >= 0; index -= 1) {
-    if (Number.isFinite(closes[index])) {
-      previousClose = closes[index];
-      break;
-    }
-  }
+  let previousClose = pickNthPriorFinite(closes, latest.index, 1);
+  const close30DaysAgo = pickNthPriorFinite(closes, latest.index, 30);
+  const close90DaysAgo = pickNthPriorFinite(closes, latest.index, 90);
+  const close1YearAgo = pickNthPriorFinite(closes, latest.index, 252);
 
   if (previousClose === null && Number.isFinite(result?.meta?.previousClose)) {
     previousClose = result.meta.previousClose;
@@ -286,6 +331,9 @@ async function fetchYahooFallback(resolvedSymbol) {
     requestedSymbol: yahooSymbol,
     price: latest.value,
     previousClose,
+    close30DaysAgo,
+    close90DaysAgo,
+    close1YearAgo,
   };
 }
 
@@ -314,8 +362,15 @@ async function fetchPrices() {
         ]);
 
         let quote = quoteResult.status === 'fulfilled' ? quoteResult.value : null;
-        let previousClose =
-          previousCloseResult.status === 'fulfilled' ? previousCloseResult.value : null;
+        let historyMetrics =
+          previousCloseResult.status === 'fulfilled'
+            ? previousCloseResult.value
+            : {
+                previousClose: null,
+                close30DaysAgo: null,
+                close90DaysAgo: null,
+                close1YearAgo: null,
+              };
 
         if (!quote || quote.close === null) {
           try {
@@ -332,11 +387,40 @@ async function fetchPrices() {
                 close: yahooFallback.price,
                 volume: null,
               };
-              previousClose = previousClose ?? yahooFallback.previousClose;
+              historyMetrics = {
+                previousClose: historyMetrics.previousClose ?? yahooFallback.previousClose,
+                close30DaysAgo: historyMetrics.close30DaysAgo ?? yahooFallback.close30DaysAgo,
+                close90DaysAgo: historyMetrics.close90DaysAgo ?? yahooFallback.close90DaysAgo,
+                close1YearAgo: historyMetrics.close1YearAgo ?? yahooFallback.close1YearAgo,
+              };
             }
           } catch (error) {
             console.error(
               `Yahoo fallback failed for ${resolvedSymbol}: ${error?.message || error}`,
+            );
+          }
+        }
+
+        if (
+          historyMetrics.previousClose === null ||
+          historyMetrics.close30DaysAgo === null ||
+          historyMetrics.close90DaysAgo === null ||
+          historyMetrics.close1YearAgo === null
+        ) {
+          try {
+            const yahooHistory = await fetchYahooFallback(resolvedSymbol);
+
+            if (yahooHistory) {
+              historyMetrics = {
+                previousClose: historyMetrics.previousClose ?? yahooHistory.previousClose,
+                close30DaysAgo: historyMetrics.close30DaysAgo ?? yahooHistory.close30DaysAgo,
+                close90DaysAgo: historyMetrics.close90DaysAgo ?? yahooHistory.close90DaysAgo,
+                close1YearAgo: historyMetrics.close1YearAgo ?? yahooHistory.close1YearAgo,
+              };
+            }
+          } catch (error) {
+            console.error(
+              `Yahoo history fallback failed for ${resolvedSymbol}: ${error?.message || error}`,
             );
           }
         }
@@ -349,7 +433,7 @@ async function fetchPrices() {
           console.error(`Failed to fetch quote for ${resolvedSymbol}: ${quoteError}`);
         }
 
-        return [resolvedSymbol.toUpperCase(), { quote, previousClose }];
+        return [resolvedSymbol.toUpperCase(), { quote, historyMetrics }];
       },
     );
     const quoteBySymbol = new Map(quoteEntries);
@@ -357,7 +441,10 @@ async function fetchPrices() {
     const prices = requestedToResolved.reduce((accumulator, symbolPair) => {
       const raw = quoteBySymbol.get(symbolPair.resolvedSymbol.toUpperCase()) || null;
       const price = raw?.quote?.close ?? raw?.quote?.open ?? null;
-      const previousClose = raw?.previousClose ?? null;
+      const previousClose = raw?.historyMetrics?.previousClose ?? null;
+      const close30DaysAgo = raw?.historyMetrics?.close30DaysAgo ?? null;
+      const close90DaysAgo = raw?.historyMetrics?.close90DaysAgo ?? null;
+      const close1YearAgo = raw?.historyMetrics?.close1YearAgo ?? null;
 
       if (price !== null && price !== undefined) {
         accumulator[symbolPair.requestedSymbol] = {
@@ -365,6 +452,9 @@ async function fetchPrices() {
           resolvedSymbol: symbolPair.resolvedSymbol,
           price,
           previousClose,
+          close30DaysAgo,
+          close90DaysAgo,
+          close1YearAgo,
         };
       } else {
         accumulator[symbolPair.requestedSymbol] = {
