@@ -54,5 +54,8 @@
     "knip": "^6.0.0",
     "prettier": "^3.5.3",
     "ts-node": "^10.9.2"
+  },
+  "resolutions": {
+    "picomatch": "^2.3.2"
   }
 }
