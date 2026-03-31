@@ -10,7 +10,7 @@ export default function PostBody({ content }: PostBodyProps) {
 
     (async () => {
       const LazyLoadModule = await import('vanilla-lazyload');
-      const LazyLoad = LazyLoadModule.default || LazyLoadModule;
+      const LazyLoad = (LazyLoadModule.default || LazyLoadModule) as any;
       if (typeof LazyLoad === 'function') {
         lazyLoadInstance = new LazyLoad({
           elements_selector: '.lazyload',
