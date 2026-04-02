@@ -56,6 +56,6 @@
     "ts-node": "^10.9.2"
   },
   "resolutions": {
-    "picomatch": "^2.3.2"
+    "picomatch": "^4.0.0"
   }
 }
