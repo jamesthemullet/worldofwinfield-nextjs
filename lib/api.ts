@@ -274,10 +274,10 @@ export async function getPost(id, idType = 'SLUG') {
 }
 
 export async function getPostDisplayInfo(ids) {
-  const posts = [];
-  for (const id of ids) {
-    const data = await fetchAPI(
-      `
+  const posts = await Promise.all(
+    ids.map((id) =>
+      fetchAPI(
+        `
       query Post($id: ID!, $idType: PostIdType!) {
         post(id: $id, idType: $idType) {
           slug
@@ -300,12 +300,12 @@ export async function getPostDisplayInfo(ids) {
           }
         }
       }`,
-      {
-        variables: { id, idType: 'DATABASE_ID' },
-      },
-    );
-    posts.push(data.post);
-  }
+        {
+          variables: { id, idType: 'DATABASE_ID' },
+        },
+      ).then((data) => data.post),
+    ),
+  );
   return posts;
 }
 
