@@ -19,7 +19,7 @@ async function fetchAPI(query = '', { variables }: Record<string, unknown> = {})
 
   const json = await res.json();
   if (json.errors) {
-    // eslint-disable-next-line no-console
+     
     console.error(json.errors);
     throw new Error('Failed to fetch API');
   }
