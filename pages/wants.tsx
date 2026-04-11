@@ -9,9 +9,9 @@ import FavouriteResults from './favourites-results';
 import { StyledButton } from '../components/core-components';
 
 export default function WantsPage() {
-  const [selectedType, setSelectedType] = useState(null);
+  const [selectedType, setSelectedType] = useState<string | null>(null);
 
-  const handleTypeClick = (type) => {
+  const handleTypeClick = (type: string) => {
     setSelectedType(type);
   };
 

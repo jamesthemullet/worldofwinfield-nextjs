@@ -17,7 +17,7 @@ const ArchiveDropdown = () => {
     },
   );
 
-  const handleSelectMonth = async (event) => {
+  const handleSelectMonth = async (event: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedValue = event.target.value;
 
     if (selectedValue) {

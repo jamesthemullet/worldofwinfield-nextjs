@@ -10,9 +10,9 @@ import SearchBar from '../components/search-bar';
 import SearchResults from '../components/search-results';
 
 export default function Index({ allPosts: { edges }, preview }: IndexPageProps) {
-  const [searchResults, setSearchResults] = useState([]);
+  const [searchResults, setSearchResults] = useState<{ slug: string; title: string; date: string }[]>([]);
 
-  const handleSearch = (results) => {
+  const handleSearch = (results: { slug: string; title: string; date: string }[]) => {
     setSearchResults(results);
   };
   const heroPost = edges[0]?.node;

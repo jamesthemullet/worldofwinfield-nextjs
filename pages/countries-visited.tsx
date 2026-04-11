@@ -6,7 +6,7 @@ import PostTitle from '../components/post-title';
 import styled from '@emotion/styled';
 import axios from 'axios';
 
-const processData = (rawData) => {
+const processData = (rawData: string[][]) => {
   const continents = [
     'Europe',
     'North America',
@@ -16,7 +16,7 @@ const processData = (rawData) => {
     'Asia',
     'Oceania',
   ];
-  const result = {};
+  const result: Record<string, { country: string; visited: string }[]> = {};
 
   continents.forEach((continent) => {
     result[continent] = [];

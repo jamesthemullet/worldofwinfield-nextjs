@@ -12,7 +12,7 @@ export default function PostPreview({
   slug,
   featuredImage,
 }: PostPreviewProps) {
-  const replaceSlugInExcerpt = (excerpt) => {
+  const replaceSlugInExcerpt = (excerpt: string) => {
     const regex = /<a\s+(?:[^>]*?\s+)?href="https?:\/\/[^"]*"[^>]*>.*?<\/a>/g;
     const excerptWithoutSlug = excerpt.replace(regex, '');
     return excerptWithoutSlug;

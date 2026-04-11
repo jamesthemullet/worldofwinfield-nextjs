@@ -4,7 +4,7 @@ import Link from 'next/link';
 
 interface Props {
   title: string;
-  coverImage: {
+  coverImage?: {
     node: {
       sourceUrl: string;
       mediaDetails: {

@@ -6,22 +6,24 @@ import { formatDate } from './search-results';
 import { JamesImagesProps } from '../lib/types';
 import { useEffect, useState } from 'react';
 
-type HomePageBlockTypes = {
-  className: string;
-  title: string;
-  url: string;
-  size: number;
-  image?: {
-    node: {
-      mediaDetails: {
-        height: number;
-        width: number;
-        sizes: string;
-      };
-      srcset: string;
-      sourceUrl: string;
+type BlockImage = {
+  node: {
+    mediaDetails: {
+      height: number;
+      width: number;
+      sizes: string;
     };
+    srcset: string;
+    sourceUrl: string;
   };
+};
+
+type HomePageBlockTypes = {
+  className?: string;
+  title: string;
+  url: string | null;
+  size: number;
+  image?: BlockImage;
   date?: string;
   jamesImages: JamesImagesProps;
   icon?: string;
@@ -48,7 +50,7 @@ export default function HomepageBlock({
   icon,
 }: HomePageBlockTypes) {
   const [randomColour, setRandomColour] = useState('');
-  const [imageSrc, setImageSrc] = useState(null);
+  const [imageSrc, setImageSrc] = useState<BlockImage | null>(null);
   useEffect(() => {
     const randomIndex = Math.floor(Math.random() * blockColours.length);
     const randomColour = blockColours[randomIndex];
@@ -56,18 +58,18 @@ export default function HomepageBlock({
 
     if (title === 'placeholder') {
       const randomJamesImage = Math.floor(Math.random() * jamesImages.edges.length);
-      setImageSrc(jamesImages.edges[randomJamesImage].node.featuredImage);
+      setImageSrc(jamesImages.edges[randomJamesImage].node.featuredImage as BlockImage);
     } else {
-      setImageSrc(image);
+      setImageSrc(image ?? null);
     }
 
     if (title === 'random photo') {
-      setImageSrc(image);
+      setImageSrc(image ?? null);
     }
   }, [title, size, image]);
 
   const eagerOrLazy = () => {
-    if (className.includes('block-1-') || className.includes('block-2-')) {
+    if (className?.includes('block-1-') || className?.includes('block-2-')) {
       return 'eager';
     } else {
       return 'lazy';
@@ -145,7 +147,7 @@ export default function HomepageBlock({
       size={size}
       image={imageSrc}
       date={date}>
-      <StyledIconLinkBlock href={url}>
+      <StyledIconLinkBlock href={url ?? '/'}>
         <p aria-label={title}>{title}</p>
         <StyledIcon>
           <img src={`/icons/${icon}.png`} alt="icon" />
@@ -194,14 +196,8 @@ const Block = styled.div<{
   backgroundColour: string;
   colour: string;
   size: number;
-  image: {
-    node: {
-      mediaDetails: { height: number; width: number; sizes: string };
-      srcset: string;
-      sourceUrl: string;
-    };
-  };
-  date: string;
+  image: BlockImage | null;
+  date: string | undefined;
 }>`
   background-color: ${(props) => props.backgroundColour};
   color: ${(props) => props.colour};
