@@ -19,7 +19,7 @@ const fetchDataFromGoogleSheets = async (sheetID) => {
     const json = await response.json();
     return json.values;
   } catch (error) {
-    // eslint-disable-next-line no-console
+     
     console.error('Error fetching data from Google Sheets:', error);
     return null;
   }
@@ -170,7 +170,7 @@ const FavouriteResults = ({
               return (
                 <p key={cellIndex} className={className}>
                   {href ? (
-                    // eslint-disable-next-line react/jsx-no-target-blank
+                     
                     <a href={href} target="_blank" rel="noopener noreferrer">
                       {text}
                     </a>

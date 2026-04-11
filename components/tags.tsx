@@ -4,17 +4,17 @@ import Link from 'next/link';
 
 export default function Tags({ tags }: TagsProps) {
   // remove tags with a space because I cannot retrieve them from the API
-  tags.edges = tags.edges.filter((tag) => tag.node.name.indexOf(' ') === -1);
+  const filteredEdges = tags.edges.filter((tag) => tag.node.name.indexOf(' ') === -1);
   return (
     <div>
       <StyledTags>
         Tagged:
-        {tags.edges.map((tag, index) => (
+        {filteredEdges.map((tag, index) => (
           <span key={index}>
             <Link href={`/tags/${encodeURIComponent(tag.node.name)}`} aria-label={tag.node.name}>
               {tag.node.name}
             </Link>
-            {index !== tags.edges.length - 1 && ',\u00A0'}
+            {index !== filteredEdges.length - 1 && ',\u00A0'}
           </span>
         ))}
       </StyledTags>
