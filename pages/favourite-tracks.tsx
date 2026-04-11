@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import Container from '../components/container';
@@ -26,8 +25,9 @@ export default function FavouritesPage() {
       const SHEET_NAME = 'Sheet1';
       const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${SHEET_NAME}?alt=json&key=${API_KEY}`;
       try {
-        const response = await axios.get(url);
-        const values: string[][] = response.data.values;
+        const response = await fetch(url);
+        const json = await response.json();
+        const values: string[][] = json.values;
         if (!values || values.length === 0) return;
         const headerRow = values[0];
         const genreIndex = headerRow.indexOf('Genre');

@@ -21,6 +21,7 @@ export const globalStyles = css`
     src: url('/fonts/Oswald-VariableFont_rght.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
+    font-display: swap;
   }
 
   :root {

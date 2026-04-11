@@ -367,7 +367,7 @@ export const getStaticProps: GetStaticProps = async ({ preview = false }) => {
 
   return {
     props: { preview, jamesImages, firstPost, randomPosts, randomImageSet },
-    revalidate: 10,
+    revalidate: 3600,
   };
 };
 

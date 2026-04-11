@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { useEffect, useState } from 'react';
 import styled from '@emotion/styled';
 
@@ -16,8 +15,9 @@ const fetchDataFromGoogleSheets = async (sheetID) => {
     const SHEET_NAME = 'Sheet1';
     const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetID}/values/${SHEET_NAME}?alt=json&key=${API_KEY}`;
 
-    const response = await axios.get(url);
-    return response.data.values;
+    const response = await fetch(url);
+    const json = await response.json();
+    return json.values;
   } catch (error) {
     // eslint-disable-next-line no-console
     console.error('Error fetching data from Google Sheets:', error);
