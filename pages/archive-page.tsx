@@ -48,7 +48,7 @@ const ArchivePage = ({ posts: { posts }, month, year }: ArchivePageProps) => {
   );
 };
 
-export async function getServerSideProps(context) {
+export async function getServerSideProps(context: { query: { month: string; year: string } }) {
   const { month, year } = context.query;
   const posts = await getPostsByDate(parseInt(month), parseInt(year));
   return {

@@ -1,13 +1,13 @@
 const API_URL = process.env.NEXT_PUBLIC_WORDPRESS_API_URL;
 
 async function fetchAPI(query = '', { variables }: Record<string, unknown> = {}) {
-  const headers = { 'Content-Type': 'application/json' };
+  const headers: Record<string, string> = { 'Content-Type': 'application/json' };
 
   if (process.env.WORDPRESS_AUTH_REFRESH_TOKEN) {
     headers['Authorization'] = `Bearer ${process.env.WORDPRESS_AUTH_REFRESH_TOKEN}`;
   }
 
-  const apiUrl = process.env.WORDPRESS_API_URL ?? API_URL;
+  const apiUrl = (process.env.WORDPRESS_API_URL ?? API_URL) as string;
   const res = await fetch(apiUrl, {
     headers,
     method: 'POST',
@@ -26,7 +26,7 @@ async function fetchAPI(query = '', { variables }: Record<string, unknown> = {})
   return json.data;
 }
 
-export async function getPreviewPost(id, idType = 'DATABASE_ID') {
+export async function getPreviewPost(id: string, idType = 'DATABASE_ID') {
   const data = await fetchAPI(
     `
     query PreviewPost($id: ID!, $idType: PostIdType!) {
@@ -148,7 +148,7 @@ export async function getJamesImages({ first = 10, after = null }) {
   return data.jamesImages;
 }
 
-export async function getAllPostsForHome(preview) {
+export async function getAllPostsForHome(preview: boolean) {
   const data = await fetchAPI(
     `
     query AllPosts {
@@ -212,7 +212,7 @@ export async function getAllPostsForHome(preview) {
   return data?.posts;
 }
 
-export async function getPost(id, idType = 'SLUG') {
+export async function getPost(id: string, idType = 'SLUG') {
   const data = await fetchAPI(
     `
     query Post($id: ID!, $idType: PostIdType!) {
@@ -273,9 +273,9 @@ export async function getPost(id, idType = 'SLUG') {
   return data.post;
 }
 
-export async function getPostDisplayInfo(ids) {
+export async function getPostDisplayInfo(ids: string[]) {
   const posts = await Promise.all(
-    ids.map((id) =>
+    ids.map((id: string) =>
       fetchAPI(
         `
       query Post($id: ID!, $idType: PostIdType!) {
@@ -309,7 +309,7 @@ export async function getPostDisplayInfo(ids) {
   return posts;
 }
 
-export async function searchBlogPosts(searchTerm) {
+export async function searchBlogPosts(searchTerm: string) {
   const data = await fetchAPI(
     `
     query SearchBlogPosts($searchTerm: String!) {
@@ -329,7 +329,7 @@ export async function searchBlogPosts(searchTerm) {
   return data.posts.nodes;
 }
 
-export async function filterPostsByTag(tag) {
+export async function filterPostsByTag(tag: string) {
   const data = await fetchAPI(
     `
     query filterPostsByTag($tag: String!) {
@@ -370,7 +370,7 @@ export async function filterPostsByTag(tag) {
   return data.posts.nodes;
 }
 
-export async function getPostsByDate(month, year) {
+export async function getPostsByDate(month: number, year: number) {
   const data = await fetchAPI(
     `
     query GetPostsByDate($month: Int!, $year: Int!) {
@@ -393,7 +393,7 @@ export async function getPostsByDate(month, year) {
   };
 }
 
-export async function getPostsByTag(tag) {
+export async function getPostsByTag(tag: string) {
   const data = await fetchAPI(
     `
     query getPostsByTag($tag: String!) {
@@ -413,7 +413,7 @@ export async function getPostsByTag(tag) {
   return data.posts.nodes;
 }
 
-export async function getRandomImage(randomMonth, randomYear) {
+export async function getRandomImage(randomMonth: number, randomYear: number) {
   const data = await fetchAPI(
     `
     query GetRandomImage($randomMonth: Int!, $randomYear: Int!) {

@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import React, { useState, useEffect } from 'react';
 import { colours } from '../pages/_app';
-import { IntroProps } from '../lib/types';
+import { IntroProps, JamesImagesProps } from '../lib/types';
 import Image from 'next/image';
 
 type FlipperProps = {
@@ -21,7 +21,7 @@ const blockColours = [
 
 export default function Intro({ jamesImages }: IntroProps) {
   const [hoveredIndex, setHoveredIndex] = useState(-1);
-  const [shuffledImages, setShuffledImages] = useState([]);
+  const [shuffledImages, setShuffledImages] = useState<JamesImagesProps['edges']>([]);
   const [imageUrls, setImageUrls] = useState<string[]>([]);
 
   useEffect(() => {
@@ -35,7 +35,7 @@ export default function Intro({ jamesImages }: IntroProps) {
     setImageUrls(urls);
   }, [jamesImages]);
 
-  const handleBlockHover = (index) => {
+  const handleBlockHover = (index: number) => {
     setHoveredIndex(index);
   };
 
@@ -163,7 +163,6 @@ const Back = styled.div`
   }
 `;
 
-const getColour = (index) => {
-  const colourIndex = index % Object.keys(blockColours).length;
-  return Object.keys(blockColours)[colourIndex];
+const getColour = (index: number): number => {
+  return index % blockColours.length;
 };

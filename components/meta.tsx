@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 type seoProps = {
   seo?: {
     opengraphDescription: string;
-    opengraphImage: {
+    opengraphImage?: {
       uri: string;
       altText: string;
       mediaItemUrl: string;
@@ -12,7 +12,7 @@ type seoProps = {
         width: string;
         height: string;
       };
-    };
+    } | null;
     opengraphTitle: string;
     opengraphSiteName: string;
   };

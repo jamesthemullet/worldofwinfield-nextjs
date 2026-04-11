@@ -19,7 +19,7 @@ export default function Post({ posts, tag }: TagsPostProps) {
   }
 
   const seo = {
-    opengraphImage: null,
+    opengraphImage: undefined,
     opengraphTitle: `Posts tagged with ${tag} - World Of Winfield`,
     opengraphDescription: `Posts tagged with ${tag} - World Of Winfield`,
     opengraphSiteName: `World Of Winfield`,
@@ -33,13 +33,7 @@ export default function Post({ posts, tag }: TagsPostProps) {
         ) : (
           <>
             <article>
-              <PostHeader
-                title={`Tagged: ${tag}`}
-                coverImage={null}
-                date={null}
-                author={null}
-                categories={null}
-              />
+              <PostHeader title={`Tagged: ${tag}`} />
               <ContentContainer>
                 <p>All the posts that are tagged with {tag}</p>
                 {posts.map((post) => (
@@ -59,12 +53,13 @@ export default function Post({ posts, tag }: TagsPostProps) {
 }
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const data = await getPostsByTag(params.tag);
+  const tag = params?.tag as string;
+  const data = await getPostsByTag(tag);
 
   return {
     props: {
       posts: data,
-      tag: params.tag,
+      tag,
     },
     revalidate: 3600,
   };

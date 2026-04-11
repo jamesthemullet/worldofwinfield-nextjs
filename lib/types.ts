@@ -110,7 +110,7 @@ export type PostsProps = {
   }[];
 };
 
-type AuthorProps = {
+export type AuthorProps = {
   node: {
     name: string;
     firstName: string;
@@ -218,7 +218,7 @@ export type IndexPageProps = {
         caption: string;
       };
     };
-  };
+  }[];
   randomImageSet: {
     images:
       | {
@@ -351,7 +351,7 @@ export type MoreStoriesProps = {
 
 export type LayoutProps = {
   children: React.ReactNode;
-  preview: string;
+  preview: string | null;
   seo?: seoProps | null;
   title?: string;
 };
@@ -388,12 +388,12 @@ export type ContainerProps = {
 };
 
 export type AlertProps = {
-  preview: string;
+  preview: string | null;
 };
 
 export type seoProps = {
   opengraphDescription: string;
-  opengraphImage: {
+  opengraphImage?: {
     uri: string;
     altText: string;
     mediaItemUrl: string;
@@ -401,13 +401,13 @@ export type seoProps = {
       width: string;
       height: string;
     };
-  };
+  } | null;
   opengraphTitle: string;
   opengraphSiteName: string;
 };
 
 export type SearchBarProps = {
-  onSearch: (results: string) => void;
+  onSearch: (results: { slug: string; title: string; date: string }[]) => void;
 };
 
 export type SearchResultsProps = {
@@ -415,7 +415,7 @@ export type SearchResultsProps = {
     slug: string;
     title: string;
     date: string;
-  }[];
+  }[] | null;
 };
 
 export type ArchivePageProps = {

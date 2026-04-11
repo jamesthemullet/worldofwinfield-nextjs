@@ -2,7 +2,8 @@
   "permissions": {
     "allow": [
       "Bash(grep -v \":0$\")",
-      "Bash(yarn test:*)"
+      "Bash(yarn test:*)",
+      "Bash(npx tsc:*)"
     ]
   }
 }

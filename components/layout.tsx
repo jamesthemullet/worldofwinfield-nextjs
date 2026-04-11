@@ -7,7 +7,7 @@ import styled from '@emotion/styled';
 export default function Layout({ preview, children, seo, title }: LayoutProps) {
   return (
     <>
-      <Meta seo={seo} title={title} />
+      <Meta seo={seo ?? undefined} title={title} />
       <StyledDiv>
         <Alert preview={preview} />
         <main>{children}</main>

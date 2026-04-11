@@ -19,19 +19,19 @@ export default function Index({
   randomPosts,
   randomImageSet,
 }: IndexPageProps) {
-  const [searchResults, setSearchResults] = useState(null);
-  const [randomImage, setRandomImage] = useState(null);
+  const [searchResults, setSearchResults] = useState<{ slug: string; title: string; date: string }[] | null>(null);
+  const [randomImage, setRandomImage] = useState<IndexPageProps['jamesImages']['edges'][0]['node']['featuredImage'] | null>(null);
 
   useEffect(() => {
     if (!randomImageSet.images?.length) {
       setRandomImage(jamesImages.edges[0].node.featuredImage);
     } else {
       const randomIndex = Math.floor(Math.random() * randomImageSet.images?.length);
-      setRandomImage(randomImageSet.images[randomIndex]);
+      setRandomImage(randomImageSet.images[randomIndex] as unknown as IndexPageProps['jamesImages']['edges'][0]['node']['featuredImage']);
     }
   }, [randomImageSet]);
 
-  const handleSearch = (results) => {
+  const handleSearch = (results: { slug: string; title: string; date: string }[]) => {
     setSearchResults(results);
   };
 
@@ -335,7 +335,7 @@ export default function Index({
             title={block.title}
             url={block.url}
             size={block.size}
-            image={block.image}
+            image={block.image as any}
             date={block.date}
             jamesImages={jamesImages}
             icon={block.icon}
@@ -355,9 +355,9 @@ export const getStaticProps: GetStaticProps = async ({ preview = false }) => {
   const getRandomPostId = () =>
     hardCodedListOfPostIds[Math.floor(Math.random() * hardCodedListOfPostIds.length)];
   const randomPosts = await getPostDisplayInfo([
-    getRandomPostId(),
-    getRandomPostId(),
-    getRandomPostId(),
+    String(getRandomPostId()),
+    String(getRandomPostId()),
+    String(getRandomPostId()),
   ]);
 
   const years = Array.from(new Array(new Date().getFullYear() - 2017), (x, i) => i + 2018);

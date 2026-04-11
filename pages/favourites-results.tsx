@@ -9,7 +9,7 @@ type TypeProps = {
   genreFilter?: string;
 };
 
-const fetchDataFromGoogleSheets = async (sheetID) => {
+const fetchDataFromGoogleSheets = async (sheetID: string) => {
   try {
     const API_KEY = process.env.NEXT_PUBLIC_GOOGLE_SHEETS_API_KEY;
     const SHEET_NAME = 'Sheet1';
@@ -63,7 +63,7 @@ const FavouriteResults = ({
           let filteredRows = dataRows;
           if (genreFilter && headerRow.includes('Genre')) {
             const genreIndex = headerRow.indexOf('Genre');
-            filteredRows = dataRows.filter((row) => row[genreIndex] === genreFilter);
+            filteredRows = dataRows.filter((row: string[]) => row[genreIndex] === genreFilter);
           }
 
           const normalize = (s: string) =>
@@ -75,7 +75,7 @@ const FavouriteResults = ({
               .toLowerCase()
               .replace(/[^a-z0-9 ]/g, '');
 
-          const normalizedHeaders = headerRow.map((h) => normalize(h));
+          const normalizedHeaders = headerRow.map((h: string) => normalize(h));
 
           const chooseSortColumnIndex = () => {
             // If no explicit sort selected (Default), don't apply any sorting and preserve sheet order
@@ -85,10 +85,10 @@ const FavouriteResults = ({
             const exact = normalizedHeaders.indexOf(normSort);
             if (exact !== -1) return exact;
 
-            const fuzzy = normalizedHeaders.findIndex((h) => h && h.includes(normSort));
+            const fuzzy = normalizedHeaders.findIndex((h: string) => h && h.includes(normSort));
             if (fuzzy !== -1) return fuzzy;
 
-            const starts = normalizedHeaders.findIndex((h) => h && h.startsWith(normSort));
+            const starts = normalizedHeaders.findIndex((h: string) => h && h.startsWith(normSort));
             if (starts !== -1) return starts;
 
             // If no match, fall back to -1
@@ -106,7 +106,7 @@ const FavouriteResults = ({
             const sortIsAscending = !isNumeric;
 
             if (isNumeric) {
-              filteredRows.sort((a, b) => {
+              filteredRows.sort((a: string[], b: string[]) => {
                 const rawA = (a[sortColumnIndex] ?? '').toString().replace(/,/g, '');
                 const rawB = (b[sortColumnIndex] ?? '').toString().replace(/,/g, '');
                 const av = parseFloat(rawA);
@@ -120,7 +120,7 @@ const FavouriteResults = ({
                 return sortIsAscending ? av - bv : bv - av;
               });
             } else {
-              filteredRows.sort((a, b) => {
+              filteredRows.sort((a: string[], b: string[]) => {
                 const av = (a[sortColumnIndex] ?? '').toString().trim().toLowerCase();
                 const bv = (b[sortColumnIndex] ?? '').toString().trim().toLowerCase();
                 const cmp = av.localeCompare(bv);

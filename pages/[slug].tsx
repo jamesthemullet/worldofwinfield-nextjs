@@ -53,7 +53,7 @@ export default function Post({ post, preview }: PostProps) {
 }
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const data = await getPost(params?.slug);
+  const data = await getPost(params?.slug as string);
 
   return {
     props: {
@@ -67,7 +67,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
   const allPosts = await getAllPostsWithSlug();
 
   return {
-    paths: allPosts.edges.map(({ node }) => `/${node.slug}`) || [],
+    paths: allPosts.edges.map(({ node }: { node: { slug: string } }) => `/${node.slug}`) || [],
     fallback: true,
   };
 };

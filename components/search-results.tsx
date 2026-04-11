@@ -6,12 +6,12 @@ import { SearchResultsProps } from '../lib/types';
 const SearchResults = ({ searchResults }: SearchResultsProps) => {
   return (
     <SearchResultsContainer>
-      {searchResults && searchResults.length === 0 && <p className="center">No results found.</p>}
-      {searchResults?.length > 0 && (
+      {searchResults !== null && searchResults.length === 0 && <p className="center">No results found.</p>}
+      {(searchResults?.length ?? 0) > 0 && (
         <>
           <p>Search results:</p>
           <ul>
-            {searchResults.map((post) => (
+            {searchResults?.map((post) => (
               <li key={post.slug}>
                 <p>
                   <a href={`/${post.slug}`}>{post.title}</a> - {formatDate(post.date)}
@@ -41,7 +41,7 @@ export const formatDate = (date: string) => {
   return formattedDate.replace(day.toString(), dayWithOrdinal);
 };
 
-const addOrdinalIndicator = (day) => {
+const addOrdinalIndicator = (day: number) => {
   if (day >= 11 && day <= 13) {
     return day + 'th';
   } else {

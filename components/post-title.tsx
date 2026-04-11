@@ -5,7 +5,7 @@ import DOMPurify from 'isomorphic-dompurify';
 
 export default function PostTitle({ backgroundColour, children }: PostTitleProps) {
   return (
-    <StyledTitleContainer backgroundColour={backgroundColour}>
+    <StyledTitleContainer backgroundColour={backgroundColour ?? ''}>
       <Title colour={colours.white} dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(children as string) }} />
     </StyledTitleContainer>
   );
