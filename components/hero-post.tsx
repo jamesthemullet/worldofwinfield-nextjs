@@ -3,6 +3,7 @@ import styled from '@emotion/styled';
 import PostHeader from './post-header';
 import { StyledButton } from './core-components';
 import Link from 'next/link';
+import DOMPurify from 'isomorphic-dompurify';
 
 export default function HeroPost({
   title,
@@ -33,7 +34,7 @@ export default function HeroPost({
           />
         </div>
         <StyledExcerptContainer>
-          <StyledExcerpt dangerouslySetInnerHTML={{ __html: replaceSlugInExcerpt(excerpt) }} />
+          <StyledExcerpt dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(replaceSlugInExcerpt(excerpt)) }} />
           <StyledButton>
             <Link href={slug}>Read More</Link>
           </StyledButton>

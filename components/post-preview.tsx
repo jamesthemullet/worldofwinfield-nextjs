@@ -3,6 +3,7 @@ import { PostPreviewProps } from '../lib/types';
 import styled from '@emotion/styled';
 import PostHeader from './post-header';
 import { StyledButton } from './core-components';
+import DOMPurify from 'isomorphic-dompurify';
 
 export default function PostPreview({
   title,
@@ -30,7 +31,7 @@ export default function PostPreview({
         />
       </div>
       <StyledExcerptContainer>
-        <StyledExcerpt dangerouslySetInnerHTML={{ __html: replaceSlugInExcerpt(excerpt) }} />
+        <StyledExcerpt dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(replaceSlugInExcerpt(excerpt)) }} />
         <StyledButton>
           <Link href={slug}>Read More</Link>
         </StyledButton>

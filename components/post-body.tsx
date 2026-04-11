@@ -3,6 +3,7 @@ import styled from '@emotion/styled';
 import { colours } from '../pages/_app';
 import { useEffect } from 'react';
 import type { ILazyLoadInstance } from 'vanilla-lazyload';
+import DOMPurify from 'isomorphic-dompurify';
 
 export default function PostBody({ content }: PostBodyProps) {
   useEffect(() => {
@@ -26,7 +27,7 @@ export default function PostBody({ content }: PostBodyProps) {
   }, []);
   return (
     <ContentContainer>
-      <div dangerouslySetInnerHTML={{ __html: content }} />
+      <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(content) }} />
     </ContentContainer>
   );
 }
