@@ -6,6 +6,12 @@ import { formatDate } from './search-results';
 import { JamesImagesProps } from '../lib/types';
 import { useEffect, useState } from 'react';
 
+const hashStr = (s: string) => {
+  let h = 0;
+  for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) & 0xffffffff;
+  return Math.abs(h);
+};
+
 type HomePageBlockTypes = {
   className: string;
   title: string;
@@ -47,16 +53,14 @@ export default function HomepageBlock({
   jamesImages,
   icon,
 }: HomePageBlockTypes) {
-  const [randomColour, setRandomColour] = useState('');
+  const colourIndex = hashStr(url || title || '') % blockColours.length;
+  const blockColour = blockColours[colourIndex];
+
   const [imageSrc, setImageSrc] = useState(null);
   useEffect(() => {
-    const randomIndex = Math.floor(Math.random() * blockColours.length);
-    const randomColour = blockColours[randomIndex];
-    setRandomColour(randomColour);
-
     if (title === 'placeholder') {
-      const randomJamesImage = Math.floor(Math.random() * jamesImages.edges.length);
-      setImageSrc(jamesImages.edges[randomJamesImage].node.featuredImage);
+      const placeholderIndex = hashStr(className || title) % jamesImages.edges.length;
+      setImageSrc(jamesImages.edges[placeholderIndex].node.featuredImage);
     } else {
       setImageSrc(image);
     }
@@ -76,7 +80,7 @@ export default function HomepageBlock({
 
   return !icon ? (
     <Block
-      backgroundColour={randomColour}
+      backgroundColour={blockColour}
       colour={colours.white}
       size={size}
       className={className}
@@ -140,7 +144,7 @@ export default function HomepageBlock({
     </Block>
   ) : (
     <Block
-      backgroundColour={randomColour}
+      backgroundColour={blockColour}
       colour={colours.white}
       size={size}
       image={imageSrc}

@@ -26,15 +26,19 @@ export default function PostHeader({
     colours.azure,
     colours.blueish,
   ];
-  const randomIndex1 = Math.floor(Math.random() * blockColours.length);
-  let randomIndex2 = Math.floor(Math.random() * blockColours.length);
 
-  while (randomIndex2 === randomIndex1) {
-    randomIndex2 = Math.floor(Math.random() * blockColours.length);
-  }
+  const hashStr = (s: string) => {
+    let h = 0;
+    for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) & 0xffffffff;
+    return Math.abs(h);
+  };
 
-  const randomColour1 = blockColours[randomIndex1];
-  const randomColour2 = blockColours[randomIndex2];
+  const seed = title || slug || '';
+  const idx1 = hashStr(seed) % blockColours.length;
+  const idx2 = (idx1 + 1) % blockColours.length;
+
+  const randomColour1 = blockColours[idx1];
+  const randomColour2 = blockColours[idx2];
 
   return (
     <>
