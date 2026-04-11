@@ -65,7 +65,7 @@ export default function Intro({ jamesImages }: IntroProps) {
                         width={300}
                         height={300}
                         sizes={jamesImage.srcset}
-                        quality={100}
+                        quality={75}
                         loading="lazy"
                       />
                     </Back>

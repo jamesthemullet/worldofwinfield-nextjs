@@ -39,7 +39,7 @@ export default function FavouritesPage() {
         }
         setGenres(Array.from(genreSet).sort());
       } catch (err) {
-        // eslint-disable-next-line no-console
+         
         console.error('Failed to fetch genres', err);
       }
     }

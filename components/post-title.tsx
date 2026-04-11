@@ -1,11 +1,12 @@
 import { PostTitleProps } from '../lib/types';
 import styled from '@emotion/styled';
 import { colours } from '../pages/_app';
+import DOMPurify from 'isomorphic-dompurify';
 
 export default function PostTitle({ backgroundColour, children }: PostTitleProps) {
   return (
     <StyledTitleContainer backgroundColour={backgroundColour ?? ''}>
-      <Title colour={colours.white} dangerouslySetInnerHTML={{ __html: children }} />
+      <Title colour={colours.white} dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(children as string) }} />
     </StyledTitleContainer>
   );
 }

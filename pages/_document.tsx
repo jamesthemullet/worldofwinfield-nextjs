@@ -4,7 +4,15 @@ import styled from '@emotion/styled';
 export default function Document() {
   return (
     <Html lang="en">
-      <Head />
+      <Head>
+        <link
+          rel="preload"
+          href="/fonts/Oswald-VariableFont_rght.ttf"
+          as="font"
+          type="font/truetype"
+          crossOrigin="anonymous"
+        />
+      </Head>
       <StyledBody>
         <Main />
         <NextScript />
