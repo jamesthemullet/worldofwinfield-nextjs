@@ -14,6 +14,7 @@ type SinglePostProps = {
     };
   };
   date: string;
+  modified?: string;
   content: string;
   author: AuthorProps;
   categories: {
@@ -354,6 +355,10 @@ export type LayoutProps = {
   preview: string | null;
   seo?: seoProps | null;
   title?: string;
+  ogType?: string;
+  articleDate?: string;
+  articleModified?: string;
+  articleAuthor?: string;
 };
 
 export type HeroPostProps = {
@@ -404,6 +409,7 @@ export type seoProps = {
   } | null;
   opengraphTitle: string;
   opengraphSiteName: string;
+  metaKeywords?: string;
 };
 
 export type SearchBarProps = {
