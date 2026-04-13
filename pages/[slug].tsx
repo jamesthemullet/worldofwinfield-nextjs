@@ -21,7 +21,14 @@ export default function Post({ post, preview }: PostProps) {
   }
 
   return (
-    <Layout preview={preview} seo={post?.seo}>
+    <Layout
+      preview={preview}
+      seo={post?.seo}
+      ogType="article"
+      articleDate={post?.date}
+      articleModified={post?.modified}
+      articleAuthor={post?.author?.node?.name}
+    >
       <Container>
         {router.isFallback ? (
           <PostTitle>Loading…</PostTitle>

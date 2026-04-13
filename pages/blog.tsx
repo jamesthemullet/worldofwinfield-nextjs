@@ -26,7 +26,7 @@ export default function Index({ allPosts: { edges }, preview }: IndexPageProps) 
   };
 
   return (
-    <Layout preview={preview} seo={seo}>
+    <Layout preview={preview} seo={seo} ogType="website">
       <Container>
         {heroPost && (
           <HeroPost

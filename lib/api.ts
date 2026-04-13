@@ -221,6 +221,18 @@ export async function getPost(id: string, idType = 'SLUG') {
         content
         title
         date
+        modified
+        author {
+          node {
+            name
+            firstName
+            lastName
+            avatar {
+              url
+            }
+            description
+          }
+        }
         seo {
           metaKeywords
           opengraphTitle
