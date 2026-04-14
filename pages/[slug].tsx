@@ -60,7 +60,13 @@ export default function Post({ post, preview }: PostProps) {
 }
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const data = await getPost(params?.slug as string);
+  const slug = params?.slug as string;
+
+  if (!slug || !/^[a-zA-Z0-9-]+$/.test(slug)) {
+    return { notFound: true };
+  }
+
+  const data = await getPost(slug);
 
   return {
     props: {
