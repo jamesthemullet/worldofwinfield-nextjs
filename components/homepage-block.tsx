@@ -92,6 +92,7 @@ export default function HomepageBlock({
               alt={title}
               width={230}
               height={230}
+              sizes="(max-width: 768px) 50vw, (max-width: 1200px) 15vw, 230px"
               quality={80}
               loading={eagerOrLazy()}
             />
@@ -103,6 +104,7 @@ export default function HomepageBlock({
               alt={title}
               width={474}
               height={474}
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 30vw, 474px"
               quality={80}
               loading={eagerOrLazy()}
             />
@@ -114,6 +116,7 @@ export default function HomepageBlock({
               alt={title}
               width={840}
               height={840}
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 840px"
               quality={80}
               loading={eagerOrLazy()}
             />
@@ -127,6 +130,7 @@ export default function HomepageBlock({
             alt={title}
             width={size === 1 ? 270 : 550}
             height={size === 1 ? 270 : 550}
+            sizes={size === 1 ? '(max-width: 768px) 50vw, (max-width: 1200px) 15vw, 270px' : '(max-width: 768px) 100vw, (max-width: 1200px) 30vw, 550px'}
             quality={80}
             loading={eagerOrLazy()}
           />
