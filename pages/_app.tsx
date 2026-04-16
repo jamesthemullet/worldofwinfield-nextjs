@@ -45,6 +45,8 @@ function MyApp({ Component, pageProps }: AppProps) {
     <>
       <Head>
         <title>World Of Winfield</title>
+        <link rel="preconnect" href="https://www.googletagmanager.com" />
+        <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
       </Head>
       <Global styles={globalStyles} />
       <Nav />
