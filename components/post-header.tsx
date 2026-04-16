@@ -6,6 +6,7 @@ import { PostHeaderProps } from '../lib/types';
 import styled from '@emotion/styled';
 import { colours } from '../pages/_app';
 import DOMPurify from 'isomorphic-dompurify';
+import { useMemo } from 'react';
 
 export default function PostHeader({
   title,
@@ -28,15 +29,16 @@ export default function PostHeader({
     colours.azure,
     colours.blueish,
   ];
-  const randomIndex1 = Math.floor(Math.random() * blockColours.length);
-  let randomIndex2 = Math.floor(Math.random() * blockColours.length);
 
-  while (randomIndex2 === randomIndex1) {
-    randomIndex2 = Math.floor(Math.random() * blockColours.length);
-  }
-
-  const randomColour1 = blockColours[randomIndex1];
-  const randomColour2 = blockColours[randomIndex2];
+  const { randomColour1, randomColour2 } = useMemo(() => {
+    const index1 = Math.floor(Math.random() * blockColours.length);
+    let index2 = Math.floor(Math.random() * blockColours.length);
+    while (index2 === index1) {
+      index2 = Math.floor(Math.random() * blockColours.length);
+    }
+    return { randomColour1: blockColours[index1], randomColour2: blockColours[index2] };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <>
