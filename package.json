@@ -26,7 +26,6 @@
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
     "accented": "^1.2.0",
-    "axios": "^1.4.0",
     "date-fns": "^4.0.0",
     "isomorphic-dompurify": "^3.8.0",
     "nanoid": "^5.0.0",

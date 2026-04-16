@@ -92,7 +92,7 @@ export default function HomepageBlock({
               alt={title}
               width={230}
               height={230}
-              quality={80}
+              quality={75}
               loading={eagerOrLazy()}
             />
           )}
@@ -103,7 +103,7 @@ export default function HomepageBlock({
               alt={title}
               width={474}
               height={474}
-              quality={80}
+              quality={75}
               loading={eagerOrLazy()}
             />
           )}
@@ -114,7 +114,7 @@ export default function HomepageBlock({
               alt={title}
               width={840}
               height={840}
-              quality={80}
+              quality={75}
               loading={eagerOrLazy()}
             />
           )}

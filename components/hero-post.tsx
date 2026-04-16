@@ -1,9 +1,15 @@
+import { useMemo } from 'react';
 import { HeroPostProps } from '../lib/types';
 import styled from '@emotion/styled';
 import PostHeader from './post-header';
 import { StyledButton } from './core-components';
 import Link from 'next/link';
 import DOMPurify from 'isomorphic-dompurify';
+
+const stripExternalLinks = (excerpt: string) => {
+  const regex = /<a\s+(?:[^>]*?\s+)?href="https?:\/\/[^"]*"[^>]*>.*?<\/a>/g;
+  return excerpt.replace(regex, '');
+};
 
 export default function HeroPost({
   title,
@@ -13,11 +19,10 @@ export default function HeroPost({
   slug,
   featuredImage,
 }: HeroPostProps) {
-  const replaceSlugInExcerpt = (excerpt: string) => {
-    const regex = /<a\s+(?:[^>]*?\s+)?href="https?:\/\/[^"]*"[^>]*>.*?<\/a>/g;
-    const excerptWithoutSlug = excerpt.replace(regex, '');
-    return excerptWithoutSlug;
-  };
+  const sanitizedExcerpt = useMemo(
+    () => DOMPurify.sanitize(stripExternalLinks(excerpt)),
+    [excerpt]
+  );
 
   return (
     <StyledSection>
@@ -34,7 +39,7 @@ export default function HeroPost({
           />
         </div>
         <StyledExcerptContainer>
-          <StyledExcerpt dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(replaceSlugInExcerpt(excerpt)) }} />
+          <StyledExcerpt dangerouslySetInnerHTML={{ __html: sanitizedExcerpt }} />
           <StyledButton>
             <Link href={slug}>Read More</Link>
           </StyledButton>

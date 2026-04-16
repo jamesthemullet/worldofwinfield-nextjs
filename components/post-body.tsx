@@ -1,33 +1,14 @@
+import { useMemo } from 'react';
 import { PostBodyProps } from '../lib/types';
 import styled from '@emotion/styled';
 import { colours } from '../pages/_app';
-import { useEffect } from 'react';
-import type { ILazyLoadInstance } from 'vanilla-lazyload';
 import DOMPurify from 'isomorphic-dompurify';
 
 export default function PostBody({ content }: PostBodyProps) {
-  useEffect(() => {
-    let lazyLoadInstance: ILazyLoadInstance | null = null;
-
-    (async () => {
-      const LazyLoadModule = await import('vanilla-lazyload');
-      const LazyLoad = (LazyLoadModule.default || LazyLoadModule) as any;
-      if (typeof LazyLoad === 'function') {
-        lazyLoadInstance = new LazyLoad({
-          elements_selector: '.lazyload',
-        });
-      }
-    })();
-
-    return () => {
-      if (lazyLoadInstance) {
-        lazyLoadInstance.destroy();
-      }
-    };
-  }, []);
+  const sanitizedContent = useMemo(() => DOMPurify.sanitize(content), [content]);
   return (
     <ContentContainer>
-      <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(content) }} />
+      <div dangerouslySetInnerHTML={{ __html: sanitizedContent }} />
     </ContentContainer>
   );
 }
