@@ -49,13 +49,11 @@ export default function HomepageBlock({
   jamesImages,
   icon,
 }: HomePageBlockTypes) {
-  const [randomColour, setRandomColour] = useState('');
+  const [randomColour] = useState(
+    () => blockColours[Math.floor(Math.random() * blockColours.length)]
+  );
   const [imageSrc, setImageSrc] = useState<BlockImage | null>(null);
   useEffect(() => {
-    const randomIndex = Math.floor(Math.random() * blockColours.length);
-    const randomColour = blockColours[randomIndex];
-    setRandomColour(randomColour);
-
     if (title === 'placeholder') {
       const randomJamesImage = Math.floor(Math.random() * jamesImages.edges.length);
       setImageSrc(jamesImages.edges[randomJamesImage].node.featuredImage as BlockImage);
@@ -66,7 +64,7 @@ export default function HomepageBlock({
     if (title === 'random photo') {
       setImageSrc(image ?? null);
     }
-  }, [title, size, image]);
+  }, [title, size, image, jamesImages]);
 
   const eagerOrLazy = () => {
     if (className?.includes('block-1-') || className?.includes('block-2-')) {
