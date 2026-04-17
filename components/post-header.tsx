@@ -37,7 +37,6 @@ export default function PostHeader({
       index2 = Math.floor(Math.random() * blockColours.length);
     }
     return { randomColour1: blockColours[index1], randomColour2: blockColours[index2] };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -49,7 +48,10 @@ export default function PostHeader({
           imageSize={imageSize}
           heroPost={heroPost}
         />
-        {caption && <CaptionOverlay dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(caption) }}></CaptionOverlay>}
+        {caption && (
+          <CaptionOverlay
+            dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(caption) }}></CaptionOverlay>
+        )}
       </ImageContainer>
       <StyledLink href={`/${slug}`} aria-label={title}>
         <PostTitle backgroundColour={randomColour1}>{title}</PostTitle>

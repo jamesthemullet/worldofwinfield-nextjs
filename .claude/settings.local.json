@@ -3,7 +3,14 @@
     "allow": [
       "Bash(grep -v \":0$\")",
       "Bash(yarn test:*)",
-      "Bash(npx tsc:*)"
+      "Bash(npx tsc:*)",
+      "Bash(git -C /c/Users/james/Documents/GitHub/worldofwinfield-nextjs log --oneline)",
+      "Bash(git checkout:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(gh pr:*)",
+      "Skill(schedule)"
     ]
   }
 }
