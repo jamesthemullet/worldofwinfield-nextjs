@@ -425,6 +425,38 @@ export async function getPostsByTag(tag: string) {
   return data.posts.nodes;
 }
 
+export async function getRelatedPosts(tag: string, excludeSlug: string) {
+  const data = await fetchAPI(
+    `
+    query GetRelatedPosts($tag: String!) {
+      posts(where: { tag: $tag }, first: 4) {
+        nodes {
+          title
+          slug
+          date
+          excerpt
+          featuredImage {
+            node {
+              sourceUrl
+              mediaDetails {
+                height
+                width
+              }
+              srcSet
+            }
+          }
+        }
+      }
+    }`,
+    {
+      variables: { tag },
+    },
+  );
+  return (data.posts.nodes as { slug: string }[])
+    .filter((post) => post.slug !== excludeSlug)
+    .slice(0, 3);
+}
+
 export async function getRandomImage(randomMonth: number, randomYear: number) {
   const data = await fetchAPI(
     `

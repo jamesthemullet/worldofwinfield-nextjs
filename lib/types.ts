@@ -61,6 +61,7 @@ export type PostProps = {
     }[];
   };
   preview: string;
+  relatedPosts: RelatedPost[];
 };
 
 export type TagsPostProps = {
@@ -236,6 +237,7 @@ export type IndexPageProps = {
 
 export type PrePostProps = {
   date: string;
+  content?: string;
   tags: {
     edges: {
       node: {
@@ -410,6 +412,27 @@ export type seoProps = {
   opengraphTitle: string;
   opengraphSiteName: string;
   metaKeywords?: string;
+};
+
+export type RelatedPost = {
+  title: string;
+  slug: string;
+  date: string;
+  excerpt: string;
+  featuredImage: {
+    node: {
+      sourceUrl: string;
+      mediaDetails: {
+        height: number;
+        width: number;
+      };
+      srcSet: string;
+    };
+  } | null;
+};
+
+export type RelatedPostsProps = {
+  posts: RelatedPost[];
 };
 
 export type SearchBarProps = {
