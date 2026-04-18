@@ -9,11 +9,16 @@ import FavouriteResults from './favourites-results';
 export default function FavouritesPage() {
   const title = 'Favourite Beer';
   const sheetId = '1pNNIw849xWrQHtDptwInGs6Un0AZh-fgXUssC3XIrHM';
+  const seo = {
+    opengraphTitle: 'Favourite Beers | World Of Winfield',
+    opengraphDescription: "A ranked list of James Winfield's favourite beers.",
+    opengraphSiteName: 'World Of Winfield',
+  };
 
   const router = useRouter();
 
   return (
-    <Layout preview={null} title={title}>
+    <Layout preview={null} title={title} seo={seo}>
       <Container>
         {router.isFallback ? (
           <PostTitle>Loading…</PostTitle>

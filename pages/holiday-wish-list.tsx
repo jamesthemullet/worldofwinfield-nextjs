@@ -11,12 +11,17 @@ import { useState } from 'react';
 export default function WishListPage() {
   const title = 'Holiday Wish List';
   const sheetId = '1GX6KF20f3Nrb3m8T9th7UIV_uuePj4Ivlc_yLgo-4Bo';
+  const seo = {
+    opengraphTitle: 'Holiday Wish List | World Of Winfield',
+    opengraphDescription: "James Winfield's holiday wish list — places around the world still to visit.",
+    opengraphSiteName: 'World Of Winfield',
+  };
 
   const router = useRouter();
   const [selectedSort, setSelectedSort] = useState('');
 
   return (
-    <Layout preview={null} title={title}>
+    <Layout preview={null} title={title} seo={seo}>
       <Container>
         {router.isFallback ? (
           <PostTitle>Loading…</PostTitle>

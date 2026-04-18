@@ -9,11 +9,16 @@ import FavouriteResults from './favourites-results';
 export default function FavouritesPage() {
   const title = 'Favourite Countries Visited';
   const sheetId = '1zyzuLzWY0S6mUp-FVjcIa3QFAENcU94WVD9ZF0JWERY';
+  const seo = {
+    opengraphTitle: 'Favourite Countries Visited | World Of Winfield',
+    opengraphDescription: "A ranked list of James Winfield's favourite countries visited.",
+    opengraphSiteName: 'World Of Winfield',
+  };
 
   const router = useRouter();
 
   return (
-    <Layout preview={null} title={title}>
+    <Layout preview={null} title={title} seo={seo}>
       <Container>
         {router.isFallback ? (
           <PostTitle>Loading…</PostTitle>
