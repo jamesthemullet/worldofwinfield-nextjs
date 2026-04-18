@@ -47,7 +47,7 @@ export default function Nav() {
 
   return (
     <StyledNav>
-      <BurgerButton onClick={toggleDropdown}>
+      <BurgerButton onClick={toggleDropdown} aria-label="Toggle navigation menu" aria-expanded={isDropdownOpen}>
         <span></span>
         <span></span>
         <span></span>
@@ -82,7 +82,9 @@ export default function Nav() {
                   e.preventDefault();
                   e.stopPropagation();
                   toggleFavouritesDropdown();
-                }}>
+                }}
+                aria-label="Toggle Favourites submenu"
+                aria-expanded={isFavouritesDropdownOpen}>
                 ▼
               </DropdownArrow>
             </SplitButtonContainer>
@@ -159,7 +161,9 @@ export default function Nav() {
                   e.preventDefault();
                   e.stopPropagation();
                   toggleWishListDropdown();
-                }}>
+                }}
+                aria-label="Toggle Wish Lists submenu"
+                aria-expanded={isWishListDropdownOpen}>
                 ▼
               </DropdownArrow>
             </SplitButtonContainer>
@@ -198,7 +202,9 @@ export default function Nav() {
                   e.preventDefault();
                   e.stopPropagation();
                   toggleTravelDropdown();
-                }}>
+                }}
+                aria-label="Toggle Travel submenu"
+                aria-expanded={isTravelDropdownOpen}>
                 ▼
               </DropdownArrow>
             </SplitButtonContainer>
@@ -256,9 +262,14 @@ const NavList = styled.ul`
   padding: 1rem;
   @media (max-width: 768px) {
     padding: 0.5rem;
-    display: none;
+    visibility: hidden;
+    height: 0;
+    overflow: hidden;
 
     &.open {
+      visibility: visible;
+      height: auto;
+      overflow: visible;
       display: flex;
       flex-direction: column;
       align-items: center;
