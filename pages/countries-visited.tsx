@@ -96,9 +96,14 @@ export default function CountriesVisited({
   };
 }) {
   const router = useRouter();
+  const seo = {
+    opengraphTitle: 'Countries Visited | World Of Winfield',
+    opengraphDescription: 'Countries visited by James Winfield, organised by continent.',
+    opengraphSiteName: 'World Of Winfield',
+  };
 
   return (
-    <Layout preview={null} title="Countries Visited">
+    <Layout preview={null} title="Countries Visited" seo={seo}>
       <Container>
         {router.isFallback ? (
           <PostTitle>Loading…</PostTitle>

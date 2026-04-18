@@ -532,8 +532,14 @@ export default function StocksPage() {
     };
   }, [wsUrl]);
 
+  const seo = {
+    opengraphTitle: 'Stocks | World Of Winfield',
+    opengraphDescription: 'Live stock market tracking and portfolio overview by James Winfield.',
+    opengraphSiteName: 'World Of Winfield',
+  };
+
   return (
-    <Layout preview={null} title="Stocks">
+    <Layout preview={null} title="Stocks" seo={seo}>
       <Container>
         <PostHeader title="Stocks" />
 

@@ -68,8 +68,12 @@ export default function Meta({ seo, title, ogType = 'article', articleDate, arti
         property="og:image"
         content={opengraphImage?.mediaItemUrl ? opengraphImage?.mediaItemUrl : defaultImageUrl}
       />
-      <meta property="og:image:width" content={opengraphImage?.mediaDetails?.width} />
-      <meta property="og:image:height" content={opengraphImage?.mediaDetails?.height} />
+      {opengraphImage?.mediaDetails?.width && (
+        <meta property="og:image:width" content={opengraphImage.mediaDetails.width} />
+      )}
+      {opengraphImage?.mediaDetails?.height && (
+        <meta property="og:image:height" content={opengraphImage.mediaDetails.height} />
+      )}
       {opengraphImage?.altText && <meta property="og:image:alt" content={opengraphImage.altText} />}
       {ogType === 'article' && articleDate && (
         <meta property="article:published_time" content={articleDate} />
