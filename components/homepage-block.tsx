@@ -89,7 +89,7 @@ export default function HomepageBlock({
           {imageSrc?.node && size === 1 && (
             <Image
               src={imageSrc.node.sourceUrl}
-              alt={title}
+              alt=""
               width={230}
               height={230}
               quality={80}
@@ -100,7 +100,7 @@ export default function HomepageBlock({
           {imageSrc?.node && size === 2 && (
             <Image
               src={imageSrc.node.sourceUrl}
-              alt={title}
+              alt=""
               width={474}
               height={474}
               quality={80}
@@ -111,7 +111,7 @@ export default function HomepageBlock({
           {imageSrc?.node && size === 3 && (
             <Image
               src={imageSrc.node.sourceUrl}
-              alt={title}
+              alt=""
               width={840}
               height={840}
               quality={80}
@@ -124,7 +124,7 @@ export default function HomepageBlock({
         (size === 1 || size === 2) && (
           <Image
             src={imageSrc.node.sourceUrl}
-            alt={title}
+            alt=""
             width={size === 1 ? 270 : 550}
             height={size === 1 ? 270 : 550}
             quality={80}

@@ -74,8 +74,11 @@ export default function Nav() {
               if (window.innerWidth > 768) {
                 toggleFavouritesDropdown(false);
               }
+            }}
+            onKeyDown={(e) => {
+              if (e.key === 'Escape') toggleFavouritesDropdown(false);
             }}>
-            <SplitButtonContainer>
+            <SplitButtonContainer role="group" aria-label="Favourites navigation">
               <DropdownButton onClick={() => toggleFavouritesDropdown()}>Favourites</DropdownButton>
               <DropdownArrow
                 onClick={(e) => {
@@ -151,8 +154,11 @@ export default function Nav() {
               if (window.innerWidth > 768) {
                 toggleWishListDropdown(false);
               }
+            }}
+            onKeyDown={(e) => {
+              if (e.key === 'Escape') toggleWishListDropdown(false);
             }}>
-            <SplitButtonContainer>
+            <SplitButtonContainer role="group" aria-label="Wish Lists navigation">
               <DropdownButton onClick={() => toggleWishListDropdown()}>Wish Lists</DropdownButton>
               <DropdownArrow
                 onClick={(e) => {
@@ -188,8 +194,11 @@ export default function Nav() {
               if (window.innerWidth > 768) {
                 toggleTravelDropdown(false);
               }
+            }}
+            onKeyDown={(e) => {
+              if (e.key === 'Escape') toggleTravelDropdown(false);
             }}>
-            <SplitButtonContainer>
+            <SplitButtonContainer role="group" aria-label="Travel navigation">
               <Link href="/travel" onClick={closeNavOnMobile}>
                 <TravelLink>Travel</TravelLink>
               </Link>
