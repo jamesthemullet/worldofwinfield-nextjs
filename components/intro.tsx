@@ -82,8 +82,14 @@ export default function Intro({ jamesImages }: IntroProps) {
 
 const HiddenHeading = styled.h1`
   position: absolute;
-  top: -9999px;
-  left: -9999px;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
 `;
 
 const GridContainer = styled.div`

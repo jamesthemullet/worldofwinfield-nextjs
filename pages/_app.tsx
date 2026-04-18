@@ -5,14 +5,14 @@ import Head from 'next/head';
 import { GoogleAnalytics } from '@next/third-parties/google';
 
 export const colours = {
-  purple: '#8884FF',
+  purple: '#5552CC',
   pink: '#D90368',
   burgandy: '#820263',
   dark: '#291720',
-  green: '#04A777',
+  green: '#027855',
   white: '#FFFFFF',
-  blueish: '#547AA5',
-  azure: '#3185FC',
+  blueish: '#3D6490',
+  azure: '#0F5FCC',
 };
 
 export const globalStyles = css`
