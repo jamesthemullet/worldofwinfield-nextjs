@@ -147,8 +147,8 @@ export default function HomepageBlock({
       size={size}
       image={imageSrc}
       date={date}>
-      <StyledIconLinkBlock href={url ?? '/'}>
-        <p aria-label={title}>{title}</p>
+      <StyledIconLinkBlock href={url ?? '/'} aria-label={title}>
+        <p>{title}</p>
         <StyledIcon>
           <Image src={`/icons/${icon}.png`} alt="" width={64} height={64} />
         </StyledIcon>
