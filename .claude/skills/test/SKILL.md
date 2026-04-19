@@ -75,18 +75,50 @@ For **e2e tests**, keep specs focused on critical paths: page loads, navigation,
 After writing tests, run them to confirm they pass:
 
 ```bash
-yarn test --testPathPattern="<new-file-name>" 2>&1 | tail -30
+yarn test <new-file-name> 2>&1 | tail -30
 ```
 
 Fix any failures before reporting back.
 
-### Step 5: Report
+### Step 5: Branch and PR
+
+Create a dedicated branch for the changes and open a pull request:
+
+```bash
+# Create branch named after the component being tested
+git checkout -b test/<component-name>
+
+# Stage only the new/modified test file(s)
+git add <test-file-path>
+
+# Commit
+git commit -m "test: add tests for <ComponentName>"
+
+# Push and open PR
+git push -u origin test/<component-name>
+gh pr create --title "test: add tests for <ComponentName>" --body "$(cat <<'EOF'
+## Summary
+- Adds unit tests for `<ComponentName>`
+- Covers: <brief list of what's tested>
+
+## Coverage
+<coverage before> → <coverage after> for `<file>`
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+EOF
+)"
+```
+
+Return the PR URL to the user.
+
+### Step 6: Report
 
 Tell the user:
 - What you improved and why you chose it
 - Which file(s) were created or modified
 - Test count before → after (if measurable)
 - Coverage delta (if visible in output)
+- The PR URL
 - A suggested next target for the following invocation
 
 Keep the report short — two or three sentences plus the specifics.
