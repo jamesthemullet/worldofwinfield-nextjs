@@ -13,14 +13,14 @@ function createEmotionCache() {
 const clientSideEmotionCache = createEmotionCache();
 
 export const colours = {
-  purple: '#5552CC',
+  purple: '#8884FF',
   pink: '#D90368',
   burgandy: '#820263',
   dark: '#291720',
-  green: '#027855',
+  green: '#04A777',
   white: '#FFFFFF',
-  blueish: '#3D6490',
-  azure: '#0F5FCC',
+  blueish: '#547AA5',
+  azure: '#3185FC',
 };
 
 export const globalStyles = css`
