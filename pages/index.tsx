@@ -10,8 +10,6 @@ import SearchBar from '../components/search-bar';
 import SearchResults from '../components/search-results';
 import { hardCodedListOfPostIds } from '../data/allIds';
 
-import { nanoid } from 'nanoid';
-
 export default function Index({
   preview,
   jamesImages,
@@ -331,7 +329,7 @@ export default function Index({
         {blocks.map((block) => (
           <HomepageBlock
             className={block.className}
-            key={nanoid()}
+            key={block.className}
             title={block.title}
             url={block.url}
             size={block.size}

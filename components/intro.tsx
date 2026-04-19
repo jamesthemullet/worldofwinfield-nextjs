@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { colours } from '../pages/_app';
 import { IntroProps, JamesImagesProps } from '../lib/types';
 import Image from 'next/image';
@@ -35,9 +35,9 @@ export default function Intro({ jamesImages }: IntroProps) {
     setImageUrls(urls);
   }, [jamesImages]);
 
-  const handleBlockHover = (index: number) => {
+  const handleBlockHover = useCallback((index: number) => {
     setHoveredIndex(index);
-  };
+  }, []);
 
   return (
     <section>
