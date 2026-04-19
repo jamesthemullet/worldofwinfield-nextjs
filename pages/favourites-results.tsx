@@ -143,129 +143,100 @@ const FavouriteResults = ({
   }, [sheetId, JSON.stringify(columnsToHide), genreFilter, sortBy]);
 
   return (
-    <FavouritesContainer isHeading={false}>
-      {data.map((row, rowIndex) => (
-        <StyledRow key={rowIndex} className={rowIndex === 0 ? 'header-row' : 'data-row'}>
-          {indexRequired &&
-            (rowIndex === 0 ? <p className="index"></p> : <p className="index">{rowIndex}.</p>)}
-          {row.map((cellData, cellIndex) => {
-            const rawHeader = data[0][cellIndex] || '';
-            const className =
-              rowIndex === 0
-                ? `heading-${rawHeader.toString().toLowerCase().replace(/\s+/g, '-').replace(/\//g, '-')}`
-                : `data-${rawHeader.toString().toLowerCase().replace(/\s+/g, '-').replace(/\//g, '-')}`;
+    <FavouritesContainer>
+      <StyledTable>
+        {data.length > 0 && (
+          <>
+            <thead>
+              <tr>
+                {indexRequired && <th className="index" scope="col"></th>}
+                {data[0].map((header, cellIndex) => {
+                  const className = `heading-${header.toString().toLowerCase().replace(/\s+/g, '-').replace(/\//g, '-')}`;
+                  return (
+                    <th key={cellIndex} className={className} scope="col">
+                      {header}
+                    </th>
+                  );
+                })}
+              </tr>
+            </thead>
+            <tbody>
+              {data.slice(1).map((row, rowIndex) => (
+                <tr key={rowIndex}>
+                  {indexRequired && <td className="index">{rowIndex + 1}.</td>}
+                  {row.map((cellData, cellIndex) => {
+                    const rawHeader = data[0][cellIndex] || '';
+                    const className = `data-${rawHeader.toString().toLowerCase().replace(/\s+/g, '-').replace(/\//g, '-')}`;
 
-            if (rowIndex !== 0 && /link/.test(rawHeader.toString().toLowerCase())) {
-              const text = (cellData ?? '').toString();
-              const urlMatch = text.match(/(https?:\/\/[^")\s]+)/i) || text.match(/(www\.[^\s]+)/i);
-              const mailtoMatch = text.match(/mailto:[^\s]+/i);
-              let href = '';
-              if (urlMatch) {
-                href = urlMatch[0];
-                if (!/^https?:\/\//i.test(href)) href = `http://${href}`;
-              } else if (mailtoMatch) {
-                href = mailtoMatch[0];
-              }
+                    if (/link/.test(rawHeader.toString().toLowerCase())) {
+                      const text = (cellData ?? '').toString();
+                      const urlMatch =
+                        text.match(/(https?:\/\/[^")\s]+)/i) || text.match(/(www\.[^\s]+)/i);
+                      const mailtoMatch = text.match(/mailto:[^\s]+/i);
+                      let href = '';
+                      if (urlMatch) {
+                        href = urlMatch[0];
+                        if (!/^https?:\/\//i.test(href)) href = `http://${href}`;
+                      } else if (mailtoMatch) {
+                        href = mailtoMatch[0];
+                      }
 
-              return (
-                <p key={cellIndex} className={className}>
-                  {href ? (
-                     
-                    <a href={href} target="_blank" rel="noopener noreferrer">
-                      {text}
-                    </a>
-                  ) : (
-                    text
-                  )}
-                </p>
-              );
-            }
+                      return (
+                        <td key={cellIndex} className={className}>
+                          {href ? (
+                            <a href={href} target="_blank" rel="noopener noreferrer">
+                              {text}
+                            </a>
+                          ) : (
+                            text
+                          )}
+                        </td>
+                      );
+                    }
 
-            return (
-              <p key={cellIndex} className={className}>
-                {rowIndex === 0 ? <strong>{cellData}</strong> : cellData}
-              </p>
-            );
-          })}
-        </StyledRow>
-      ))}
+                    return (
+                      <td key={cellIndex} className={className}>
+                        {cellData}
+                      </td>
+                    );
+                  })}
+                </tr>
+              ))}
+            </tbody>
+          </>
+        )}
+      </StyledTable>
     </FavouritesContainer>
   );
 };
 
 export default FavouriteResults;
 
-const StyledRow = styled.div`
-  display: flex;
-  flex-direction: row;
-  gap: 0.5rem;
-  @media (min-width: 768px) {
-    & > p {
-      margin-left: 1rem;
-    }
-  }
-  align-items: flex-start;
-  flex-wrap: wrap;
-
-  @media (min-width: 768px) {
-    flex-wrap: nowrap;
-    margin: 0 auto;
-  }
-
-  &.data-row {
-    margin-top: 0.5rem;
-    @media (min-width: 768px) {
-      flex-wrap: wrap;
-      min-width: 1000px;
-      flex: 1;
-      display: flex;
-      justify-content: center;
-    }
-  }
-
-  &.header-row {
-    @media (min-width: 768px) {
-      min-width: 1000px;
-      display: flex;
-      justify-content: center;
-    }
-    .Comments {
-      @media (max-width: 767px) {
-        display: none;
-      }
-    }
-
-    .index {
-      display: none;
-      @media (min-width: 768px) {
-        display: block;
-        width: 30px;
-      }
-    }
-  }
+const FavouritesContainer = styled.div`
+  margin: 20px;
+  overflow-x: auto;
 `;
 
-const FavouritesContainer = styled.div<{ isHeading: boolean }>`
-  display: flex;
-  flex-direction: column;
-  margin: 20px;
+const StyledTable = styled.table`
+  border-collapse: collapse;
+  width: 100%;
 
-  p {
-    margin: 0;
-    display: flex;
-    align-items: ${({ isHeading }) => (isHeading ? 'flex-start' : 'center')};
+  @media (min-width: 768px) {
+    min-width: 1000px;
+  }
+
+  th,
+  td {
+    text-align: left;
+    padding: 0.35rem 0.5rem;
+    vertical-align: middle;
     max-width: 500px;
 
     &.index {
       width: 30px;
     }
 
-    &.data-artist-track-name {
-      @media screen and (min-width: 768px) {
-        width: 800px;
-      }
-    }
-
+    &.data-artist-track-name,
     &.heading-artist-track-name {
       @media screen and (min-width: 768px) {
         width: 800px;
@@ -280,12 +251,7 @@ const FavouritesContainer = styled.div<{ isHeading: boolean }>`
     &.data-style,
     &.data-genre,
     &.data-country,
-    &.data-date-read {
-      @media screen and (min-width: 768px) {
-        width: 200px;
-      }
-    }
-
+    &.data-date-read,
     &.heading-author,
     &.heading-title,
     &.heading-name,
@@ -302,12 +268,7 @@ const FavouritesContainer = styled.div<{ isHeading: boolean }>`
 
     &.data-score,
     &.data-year-read,
-    &.data-abv {
-      @media screen and (min-width: 768px) {
-        width: 70px;
-      }
-    }
-
+    &.data-abv,
     &.heading-score,
     &.heading-year-read,
     &.heading-abv {
@@ -351,18 +312,28 @@ const FavouritesContainer = styled.div<{ isHeading: boolean }>`
     &.data-date,
     &.data-language,
     &.data-bought-from,
-    &.data-order-added {
-      @media screen and (min-width: 768px) {
-        width: 120px;
-      }
-    }
-
+    &.data-order-added,
     &.heading-date,
     &.heading-language,
     &.heading-bought-from,
     &.heading-order-added {
       @media screen and (min-width: 768px) {
         width: 120px;
+      }
+    }
+  }
+
+  thead {
+    th.index {
+      display: none;
+      @media (min-width: 768px) {
+        display: table-cell;
+      }
+    }
+
+    th.heading-comments {
+      @media (max-width: 767px) {
+        display: none;
       }
     }
   }

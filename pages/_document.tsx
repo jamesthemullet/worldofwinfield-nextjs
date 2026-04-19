@@ -1,7 +1,14 @@
-import { Html, Head, Main, NextScript } from 'next/document';
-import styled from '@emotion/styled';
+import Document, { Html, Head, Main, NextScript, DocumentContext } from 'next/document';
+import createEmotionServer from '@emotion/server/create-instance';
+import createCache from '@emotion/cache';
 
-export default function Document() {
+const EMOTION_KEY = 'css';
+
+function createEmotionCache() {
+  return createCache({ key: EMOTION_KEY });
+}
+
+export default function MyDocument({ emotionStyleTags }: { emotionStyleTags: React.ReactNode }) {
   return (
     <Html lang="en">
       <Head>
@@ -12,21 +19,42 @@ export default function Document() {
           type="font/truetype"
           crossOrigin="anonymous"
         />
+        {emotionStyleTags}
       </Head>
-      <StyledBody>
+      <body style={{ margin: 0, padding: 0, fontFamily: 'sans-serif', fontSize: '1.2rem', lineHeight: '1.5', color: '#333', backgroundColor: '#fff' }}>
         <Main />
         <NextScript />
-      </StyledBody>
+      </body>
     </Html>
   );
 }
 
-const StyledBody = styled.body`
-  margin: 0;
-  padding: 0;
-  font-family: sans-serif;
-  font-size: 1.2rem;
-  line-height: 1.5;
-  color: #333;
-  background-color: #fff;
-`;
+MyDocument.getInitialProps = async (ctx: DocumentContext) => {
+  const cache = createEmotionCache();
+  const { extractCriticalToChunks } = createEmotionServer(cache);
+
+  const originalRenderPage = ctx.renderPage;
+  ctx.renderPage = () =>
+    originalRenderPage({
+       
+      enhanceApp: (App: React.ComponentType<any>) =>
+        function EnhancedApp(props: Record<string, unknown>) {
+          return <App emotionCache={cache} {...props} />;
+        },
+    });
+
+  const initialProps = await Document.getInitialProps(ctx);
+  const emotionStyles = extractCriticalToChunks(initialProps.html);
+  const emotionStyleTags = emotionStyles.styles.map((style) => (
+    <style
+      data-emotion={`${style.key} ${style.ids.join(' ')}`}
+      key={style.key}
+      dangerouslySetInnerHTML={{ __html: style.css }}
+    />
+  ));
+
+  return {
+    ...initialProps,
+    emotionStyleTags,
+  };
+};
