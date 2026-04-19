@@ -72,7 +72,8 @@ export default function PostHeader({
 const ImageContainer = styled.div<{ aspectRatio: number }>`
   position: relative;
   min-width: 100%;
-  aspect-ratio: ${(props) => props.aspectRatio};
+  aspect-ratio: ${(props) => props.aspectRatio || '16/9'};
+  min-height: 200px;
 
   img {
     display: block;
