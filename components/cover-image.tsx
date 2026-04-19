@@ -25,7 +25,7 @@ export default function CoverImage({ title, coverImage, imageSize, slug, heroPos
     <Image
       alt={`Cover Image for ${title}`}
       src={coverImage?.node.sourceUrl}
-      sizes={imageSize || coverImage?.node.mediaDetails.srcset}
+      sizes={imageSize || '(max-width: 768px) 100vw, 50vw'}
       quality={75}
       fill
       loading={heroPost ? 'eager' : 'lazy'}

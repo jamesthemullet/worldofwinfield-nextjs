@@ -6,6 +6,7 @@ import { PostHeaderProps } from '../lib/types';
 import styled from '@emotion/styled';
 import { colours } from '../pages/_app';
 import DOMPurify from 'isomorphic-dompurify';
+import { useMemo } from 'react';
 
 export default function PostHeader({
   title,
@@ -28,15 +29,15 @@ export default function PostHeader({
     colours.azure,
     colours.blueish,
   ];
-  const randomIndex1 = Math.floor(Math.random() * blockColours.length);
-  let randomIndex2 = Math.floor(Math.random() * blockColours.length);
 
-  while (randomIndex2 === randomIndex1) {
-    randomIndex2 = Math.floor(Math.random() * blockColours.length);
-  }
-
-  const randomColour1 = blockColours[randomIndex1];
-  const randomColour2 = blockColours[randomIndex2];
+  const { randomColour1, randomColour2 } = useMemo(() => {
+    const index1 = Math.floor(Math.random() * blockColours.length);
+    let index2 = Math.floor(Math.random() * blockColours.length);
+    while (index2 === index1) {
+      index2 = Math.floor(Math.random() * blockColours.length);
+    }
+    return { randomColour1: blockColours[index1], randomColour2: blockColours[index2] };
+  }, []);
 
   return (
     <>
@@ -47,7 +48,10 @@ export default function PostHeader({
           imageSize={imageSize}
           heroPost={heroPost}
         />
-        {caption && <CaptionOverlay dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(caption) }}></CaptionOverlay>}
+        {caption && (
+          <CaptionOverlay
+            dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(caption) }}></CaptionOverlay>
+        )}
       </ImageContainer>
       <StyledLink href={`/${slug}`} aria-label={title}>
         <PostTitle backgroundColour={randomColour1}>{title}</PostTitle>
@@ -68,7 +72,8 @@ export default function PostHeader({
 const ImageContainer = styled.div<{ aspectRatio: number }>`
   position: relative;
   min-width: 100%;
-  aspect-ratio: ${(props) => props.aspectRatio};
+  aspect-ratio: ${(props) => props.aspectRatio || '16/9'};
+  min-height: 200px;
 
   img {
     display: block;
