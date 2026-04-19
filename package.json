@@ -17,7 +17,9 @@
     "**/*.{ts,tsx}": "tsc-files --noEmit"
   },
   "dependencies": {
+    "@emotion/cache": "^11.14.0",
     "@emotion/react": "^11.11.0",
+    "@emotion/server": "^11.11.0",
     "@emotion/styled": "^11.11.0",
     "@next/third-parties": "^16.0.0",
     "@types/dompurify": "^3.2.0",

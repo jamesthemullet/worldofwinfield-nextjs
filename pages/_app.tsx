@@ -1,8 +1,16 @@
 import { AppProps } from 'next/app';
 import Nav from '../components/nav';
-import { Global, css } from '@emotion/react';
+import { Global, css, CacheProvider } from '@emotion/react';
+import createCache from '@emotion/cache';
+import { EmotionCache } from '@emotion/cache';
 import Head from 'next/head';
 import { GoogleAnalytics } from '@next/third-parties/google';
+
+function createEmotionCache() {
+  return createCache({ key: 'css' });
+}
+
+const clientSideEmotionCache = createEmotionCache();
 
 export const colours = {
   purple: '#8884FF',
@@ -40,9 +48,9 @@ if (process.env.NODE_ENV === 'development' && typeof window !== 'undefined') {
   import('accented').then(({ accented }) => accented());
 }
 
-function MyApp({ Component, pageProps }: AppProps) {
+function MyApp({ Component, pageProps, emotionCache = clientSideEmotionCache }: AppProps & { emotionCache?: EmotionCache }) {
   return (
-    <>
+    <CacheProvider value={emotionCache}>
       <Head>
         <title>World Of Winfield</title>
         <link rel="preconnect" href="https://www.googletagmanager.com" />
@@ -52,7 +60,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       <Nav />
       <Component {...pageProps} />
       <GoogleAnalytics gaId="G-R4Y79GZQT0" />
-    </>
+    </CacheProvider>
   );
 }
 

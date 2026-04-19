@@ -44,18 +44,20 @@ export default function PostHeader({
 
   return (
     <>
-      <ImageContainer aspectRatio={aspectRatio}>
-        <CoverImage
-          title={title}
-          coverImage={coverImage}
-          imageSize={imageSize}
-          heroPost={heroPost}
-        />
-        {caption && (
-          <CaptionOverlay
-            dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(caption) }}></CaptionOverlay>
-        )}
-      </ImageContainer>
+      {coverImage && (
+        <ImageContainer aspectRatio={aspectRatio}>
+          <CoverImage
+            title={title}
+            coverImage={coverImage}
+            imageSize={imageSize}
+            heroPost={heroPost}
+          />
+          {caption && (
+            <CaptionOverlay
+              dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(caption) }}></CaptionOverlay>
+          )}
+        </ImageContainer>
+      )}
       <StyledLink href={`/${slug}`} aria-label={title}>
         <PostTitle backgroundColour={randomColour1}>{title}</PostTitle>
       </StyledLink>
