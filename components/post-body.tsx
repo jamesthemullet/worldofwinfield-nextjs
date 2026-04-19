@@ -1,12 +1,34 @@
+import { useMemo } from 'react';
 import { PostBodyProps } from '../lib/types';
 import styled from '@emotion/styled';
 import { colours } from '../pages/_app';
 import DOMPurify from 'isomorphic-dompurify';
 
 export default function PostBody({ content }: PostBodyProps) {
+  const sanitizedContent = useMemo(() => {
+    DOMPurify.addHook('afterSanitizeAttributes', (node) => {
+      if (node.nodeName === 'IMG') {
+        const dataSrc = node.getAttribute('data-src');
+        if (dataSrc) {
+          node.setAttribute('src', dataSrc);
+          node.removeAttribute('data-src');
+        }
+        const dataSrcset = node.getAttribute('data-srcset');
+        if (dataSrcset) {
+          node.setAttribute('srcset', dataSrcset);
+          node.removeAttribute('data-srcset');
+        }
+      }
+    });
+    const result = DOMPurify.sanitize(content, {
+      ADD_ATTR: ['srcset', 'sizes', 'loading', 'decoding'],
+    });
+    DOMPurify.removeHook('afterSanitizeAttributes');
+    return result;
+  }, [content]);
   return (
     <ContentContainer>
-      <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(content) }} />
+      <div dangerouslySetInnerHTML={{ __html: sanitizedContent }} />
     </ContentContainer>
   );
 }
