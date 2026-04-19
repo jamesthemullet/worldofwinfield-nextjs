@@ -347,21 +347,23 @@ export default function Index({
 }
 
 export const getStaticProps: GetStaticProps = async ({ preview = false }) => {
-  const jamesImages = await getJamesImages({ first: 20 });
-  const firstPost = await getFirstPost();
-
   const getRandomPostId = () =>
     hardCodedListOfPostIds[Math.floor(Math.random() * hardCodedListOfPostIds.length)];
-  const randomPosts = await getPostDisplayInfo([
-    String(getRandomPostId()),
-    String(getRandomPostId()),
-    String(getRandomPostId()),
-  ]);
 
   const years = Array.from(new Array(new Date().getFullYear() - 2017), (x, i) => i + 2018);
   const randomYear = years[Math.floor(Math.random() * years.length)];
   const randomMonth = Math.floor(Math.random() * 12) + 1;
-  const randomImageSet = await getRandomImage(randomMonth, randomYear);
+
+  const [jamesImages, firstPost, randomPosts, randomImageSet] = await Promise.all([
+    getJamesImages({ first: 20 }),
+    getFirstPost(),
+    getPostDisplayInfo([
+      String(getRandomPostId()),
+      String(getRandomPostId()),
+      String(getRandomPostId()),
+    ]),
+    getRandomImage(randomMonth, randomYear),
+  ]);
 
   return {
     props: { preview, jamesImages, firstPost, randomPosts, randomImageSet },
@@ -374,40 +376,8 @@ const HomepageBlocksContainer = styled.div`
   flex-wrap: wrap;
   @media (min-width: 769px) {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(clamp(200px, calc(200px + (100vw - 2110px) / 8.75), 360px), 1fr));
     gap: 8px;
     padding: 0 10px 10px;
-  }
-
-  @media (min-width: 2110px) {
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  }
-
-  @media (min-width: 2310px) {
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  }
-
-  @media (min-width: 2510px) {
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  }
-
-  @media (min-width: 2710px) {
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  }
-
-  @media (min-width: 2910px) {
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  }
-
-  @media (min-width: 3110px) {
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  }
-
-  @media (min-width: 3310px) {
-    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-  }
-
-  @media (min-width: 3510px) {
-    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
   }
 `;
