@@ -2,13 +2,13 @@ import '@testing-library/jest-dom';
 
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
-  value: jest.fn().mockImplementation((query: string) => ({
+  value: (query: string) => ({
     matches: false,
     media: query,
     onchange: null,
-    addEventListenerListener: jest.fn(),
-    removeEventListener: jest.fn(),
-    addEventListener: jest.fn(),
-    dispatchEvent: jest.fn(),
-  })),
+    addEventListenerListener: () => {},
+    removeEventListener: () => {},
+    addEventListener: () => {},
+    dispatchEvent: () => false,
+  }),
 });
