@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import Link from 'next/link';
 import styled from '@emotion/styled';
 
@@ -16,6 +16,10 @@ export default function Nav() {
     mq.addEventListener('change', handler);
     return () => mq.removeEventListener('change', handler);
   }, []);
+
+  const favouritesButtonRef = useRef<HTMLButtonElement>(null);
+  const wishListButtonRef = useRef<HTMLButtonElement>(null);
+  const travelArrowRef = useRef<HTMLButtonElement>(null);
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
@@ -85,8 +89,19 @@ export default function Nav() {
               }
             }}>
             <SplitButtonContainer>
-              <DropdownButton onClick={() => toggleFavouritesDropdown()}>Favourites</DropdownButton>
+              <DropdownButton
+                ref={favouritesButtonRef}
+                aria-expanded={isFavouritesDropdownOpen}
+                onClick={() => toggleFavouritesDropdown()}>
+                Favourites
+              </DropdownButton>
               <DropdownArrow
+                onKeyDown={(e) => {
+                  if (e.key === 'Escape') {
+                    toggleFavouritesDropdown(false);
+                    favouritesButtonRef.current?.focus();
+                  }
+                }}
                 onClick={(e) => {
                   e.preventDefault();
                   e.stopPropagation();
@@ -95,7 +110,9 @@ export default function Nav() {
                 ▼
               </DropdownArrow>
             </SplitButtonContainer>
-            <DropdownMenu isDropdownOpen={isFavouritesDropdownOpen}>
+            <DropdownMenu
+              isDropdownOpen={isFavouritesDropdownOpen}
+              aria-hidden={!isFavouritesDropdownOpen}>
               <li>
                 <Link href="/favourite-countries" onClick={closeNavOnMobile}>
                   Countries Visited
@@ -162,8 +179,19 @@ export default function Nav() {
               }
             }}>
             <SplitButtonContainer>
-              <DropdownButton onClick={() => toggleWishListDropdown()}>Wish Lists</DropdownButton>
+              <DropdownButton
+                ref={wishListButtonRef}
+                aria-expanded={isWishListDropdownOpen}
+                onClick={() => toggleWishListDropdown()}>
+                Wish Lists
+              </DropdownButton>
               <DropdownArrow
+                onKeyDown={(e) => {
+                  if (e.key === 'Escape') {
+                    toggleWishListDropdown(false);
+                    wishListButtonRef.current?.focus();
+                  }
+                }}
                 onClick={(e) => {
                   e.preventDefault();
                   e.stopPropagation();
@@ -172,7 +200,9 @@ export default function Nav() {
                 ▼
               </DropdownArrow>
             </SplitButtonContainer>
-            <DropdownMenu isDropdownOpen={isWishListDropdownOpen}>
+            <DropdownMenu
+              isDropdownOpen={isWishListDropdownOpen}
+              aria-hidden={!isWishListDropdownOpen}>
               <li>
                 <Link href="/holiday-wish-list" onClick={closeNavOnMobile}>
                   Holidays
@@ -203,6 +233,13 @@ export default function Nav() {
                 <TravelLink>Travel</TravelLink>
               </Link>
               <DropdownArrow
+                ref={travelArrowRef}
+                onKeyDown={(e) => {
+                  if (e.key === 'Escape') {
+                    toggleTravelDropdown(false);
+                    travelArrowRef.current?.focus();
+                  }
+                }}
                 onClick={(e) => {
                   e.preventDefault();
                   e.stopPropagation();
@@ -211,7 +248,7 @@ export default function Nav() {
                 ▼
               </DropdownArrow>
             </SplitButtonContainer>
-            <DropdownMenu isDropdownOpen={isTravelDropdownOpen}>
+            <DropdownMenu isDropdownOpen={isTravelDropdownOpen} aria-hidden={!isTravelDropdownOpen}>
               <li>
                 <Link href="/countries-visited" onClick={closeNavOnMobile}>
                   Countries Visited
