@@ -64,7 +64,7 @@ export default function Intro({ jamesImages }: IntroProps) {
                         alt={jamesAltTag}
                         width={300}
                         height={300}
-                        sizes="12.5vw"
+                        sizes="(max-width: 768px) 12vw, 12vw"
                         quality={75}
                         loading="lazy"
                       />
