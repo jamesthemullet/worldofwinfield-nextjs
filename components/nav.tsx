@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import styled from '@emotion/styled';
 
@@ -7,6 +7,15 @@ export default function Nav() {
   const [isTravelDropdownOpen, setIsTravelDropdownOpen] = useState(false);
   const [isFavouritesDropdownOpen, setIsFavouritesDropdownOpen] = useState(false);
   const [isWishListDropdownOpen, setIsWishListDropdownOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 768px)');
+    setIsMobile(mq.matches);
+    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+    mq.addEventListener('change', handler);
+    return () => mq.removeEventListener('change', handler);
+  }, []);
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
@@ -37,7 +46,7 @@ export default function Nav() {
   };
 
   const closeNavOnMobile = () => {
-    if (window.innerWidth <= 768) {
+    if (isMobile) {
       setIsDropdownOpen(false);
       setIsFavouritesDropdownOpen(false);
       setIsTravelDropdownOpen(false);
@@ -66,12 +75,12 @@ export default function Nav() {
         <li>
           <Dropdown
             onMouseEnter={() => {
-              if (window.innerWidth > 768) {
+              if (!isMobile) {
                 toggleFavouritesDropdown(true);
               }
             }}
             onMouseLeave={() => {
-              if (window.innerWidth > 768) {
+              if (!isMobile) {
                 toggleFavouritesDropdown(false);
               }
             }}>
@@ -143,12 +152,12 @@ export default function Nav() {
         <li>
           <Dropdown
             onMouseEnter={() => {
-              if (window.innerWidth > 768) {
+              if (!isMobile) {
                 toggleWishListDropdown(true);
               }
             }}
             onMouseLeave={() => {
-              if (window.innerWidth > 768) {
+              if (!isMobile) {
                 toggleWishListDropdown(false);
               }
             }}>
@@ -180,12 +189,12 @@ export default function Nav() {
         <li>
           <Dropdown
             onMouseEnter={() => {
-              if (window.innerWidth > 768) {
+              if (!isMobile) {
                 toggleTravelDropdown(true);
               }
             }}
             onMouseLeave={() => {
-              if (window.innerWidth > 768) {
+              if (!isMobile) {
                 toggleTravelDropdown(false);
               }
             }}>
