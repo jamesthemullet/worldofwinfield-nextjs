@@ -1,4 +1,4 @@
-import React, { useRef, useState, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import Link from 'next/link';
 import styled from '@emotion/styled';
 
@@ -110,7 +110,9 @@ export default function Nav() {
                 ▼
               </DropdownArrow>
             </SplitButtonContainer>
-            <DropdownMenu isDropdownOpen={isFavouritesDropdownOpen} aria-hidden={!isFavouritesDropdownOpen}>
+            <DropdownMenu
+              isDropdownOpen={isFavouritesDropdownOpen}
+              aria-hidden={!isFavouritesDropdownOpen}>
               <li>
                 <Link href="/favourite-countries" onClick={closeNavOnMobile}>
                   Countries Visited
@@ -198,7 +200,9 @@ export default function Nav() {
                 ▼
               </DropdownArrow>
             </SplitButtonContainer>
-            <DropdownMenu isDropdownOpen={isWishListDropdownOpen} aria-hidden={!isWishListDropdownOpen}>
+            <DropdownMenu
+              isDropdownOpen={isWishListDropdownOpen}
+              aria-hidden={!isWishListDropdownOpen}>
               <li>
                 <Link href="/holiday-wish-list" onClick={closeNavOnMobile}>
                   Holidays
