@@ -4,8 +4,6 @@ import PostHeader from '../components/post-header';
 import Layout from '../components/layout';
 import PostTitle from '../components/post-title';
 import styled from '@emotion/styled';
-import axios from 'axios';
-
 const processData = (rawData: string[][]) => {
   const continents = [
     'Europe',
@@ -50,8 +48,9 @@ const fetchDataFromGoogleSheets = async () => {
     const SHEET_NAME = 'Sheet1';
     const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetID}/values/${SHEET_NAME}?alt=json&key=${API_KEY}`;
 
-    const response = await axios.get(url);
-    return response.data.values;
+    const response = await fetch(url);
+    const data = await response.json();
+    return data.values;
   } catch (error) {
     console.error('Error fetching data from Google Sheets:', error);
     return null;

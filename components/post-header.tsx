@@ -31,28 +31,33 @@ export default function PostHeader({
   ];
 
   const { randomColour1, randomColour2 } = useMemo(() => {
-    const index1 = Math.floor(Math.random() * blockColours.length);
-    let index2 = Math.floor(Math.random() * blockColours.length);
-    while (index2 === index1) {
-      index2 = Math.floor(Math.random() * blockColours.length);
+    let hash = 0;
+    const seed = title ?? '';
+    for (let i = 0; i < seed.length; i++) {
+      hash = (hash * 31 + seed.charCodeAt(i)) & 0xffffffff;
     }
+    const index1 = Math.abs(hash) % blockColours.length;
+    const index2 =
+      (index1 + 1 + (Math.abs(hash >> 4) % (blockColours.length - 1))) % blockColours.length;
     return { randomColour1: blockColours[index1], randomColour2: blockColours[index2] };
-  }, []);
+  }, [title]);
 
   return (
     <>
-      <ImageContainer aspectRatio={aspectRatio}>
-        <CoverImage
-          title={title}
-          coverImage={coverImage}
-          imageSize={imageSize}
-          heroPost={heroPost}
-        />
-        {caption && (
-          <CaptionOverlay
-            dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(caption) }}></CaptionOverlay>
-        )}
-      </ImageContainer>
+      {coverImage && (
+        <ImageContainer aspectRatio={aspectRatio}>
+          <CoverImage
+            title={title}
+            coverImage={coverImage}
+            imageSize={imageSize}
+            heroPost={heroPost}
+          />
+          {caption && (
+            <CaptionOverlay
+              dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(caption) }}></CaptionOverlay>
+          )}
+        </ImageContainer>
+      )}
       <StyledLink href={`/${slug}`} aria-label={title}>
         <PostTitle backgroundColour={randomColour1}>{title}</PostTitle>
       </StyledLink>
@@ -72,7 +77,8 @@ export default function PostHeader({
 const ImageContainer = styled.div<{ aspectRatio: number }>`
   position: relative;
   min-width: 100%;
-  aspect-ratio: ${(props) => props.aspectRatio};
+  aspect-ratio: ${(props) => props.aspectRatio || '16/9'};
+  min-height: 200px;
 
   img {
     display: block;

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import Link from 'next/link';
 import styled from '@emotion/styled';
 
@@ -7,6 +7,19 @@ export default function Nav() {
   const [isTravelDropdownOpen, setIsTravelDropdownOpen] = useState(false);
   const [isFavouritesDropdownOpen, setIsFavouritesDropdownOpen] = useState(false);
   const [isWishListDropdownOpen, setIsWishListDropdownOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 768px)');
+    setIsMobile(mq.matches);
+    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+    mq.addEventListener('change', handler);
+    return () => mq.removeEventListener('change', handler);
+  }, []);
+
+  const favouritesButtonRef = useRef<HTMLButtonElement>(null);
+  const wishListButtonRef = useRef<HTMLButtonElement>(null);
+  const travelArrowRef = useRef<HTMLButtonElement>(null);
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
@@ -37,7 +50,7 @@ export default function Nav() {
   };
 
   const closeNavOnMobile = () => {
-    if (window.innerWidth <= 768) {
+    if (isMobile) {
       setIsDropdownOpen(false);
       setIsFavouritesDropdownOpen(false);
       setIsTravelDropdownOpen(false);
@@ -47,7 +60,7 @@ export default function Nav() {
 
   return (
     <StyledNav>
-      <BurgerButton onClick={toggleDropdown} aria-label="Open navigation menu" aria-expanded={isDropdownOpen}>
+      <BurgerButton onClick={toggleDropdown} aria-label="Toggle navigation menu" aria-expanded={isDropdownOpen}>
         <span></span>
         <span></span>
         <span></span>
@@ -66,27 +79,45 @@ export default function Nav() {
         <li>
           <Dropdown
             onMouseEnter={() => {
-              if (window.innerWidth > 768) {
+              if (!isMobile) {
                 toggleFavouritesDropdown(true);
               }
             }}
             onMouseLeave={() => {
-              if (window.innerWidth > 768) {
+              if (!isMobile) {
                 toggleFavouritesDropdown(false);
               }
+            }}
+            onKeyDown={(e) => {
+              if (e.key === 'Escape') toggleFavouritesDropdown(false);
             }}>
-            <SplitButtonContainer>
-              <DropdownButton onClick={() => toggleFavouritesDropdown()}>Favourites</DropdownButton>
+            <SplitButtonContainer role="group" aria-label="Favourites navigation">
+              <DropdownButton
+                ref={favouritesButtonRef}
+                aria-expanded={isFavouritesDropdownOpen}
+                onClick={() => toggleFavouritesDropdown()}>
+                Favourites
+              </DropdownButton>
               <DropdownArrow
+                onKeyDown={(e) => {
+                  if (e.key === 'Escape') {
+                    toggleFavouritesDropdown(false);
+                    favouritesButtonRef.current?.focus();
+                  }
+                }}
                 onClick={(e) => {
                   e.preventDefault();
                   e.stopPropagation();
                   toggleFavouritesDropdown();
-                }}>
+                }}
+                aria-label="Toggle Favourites submenu"
+                aria-expanded={isFavouritesDropdownOpen}>
                 ▼
               </DropdownArrow>
             </SplitButtonContainer>
-            <DropdownMenu isDropdownOpen={isFavouritesDropdownOpen}>
+            <DropdownMenu
+              isDropdownOpen={isFavouritesDropdownOpen}
+              aria-hidden={!isFavouritesDropdownOpen}>
               <li>
                 <Link href="/favourite-countries" onClick={closeNavOnMobile}>
                   Countries Visited
@@ -143,27 +174,45 @@ export default function Nav() {
         <li>
           <Dropdown
             onMouseEnter={() => {
-              if (window.innerWidth > 768) {
+              if (!isMobile) {
                 toggleWishListDropdown(true);
               }
             }}
             onMouseLeave={() => {
-              if (window.innerWidth > 768) {
+              if (!isMobile) {
                 toggleWishListDropdown(false);
               }
+            }}
+            onKeyDown={(e) => {
+              if (e.key === 'Escape') toggleWishListDropdown(false);
             }}>
-            <SplitButtonContainer>
-              <DropdownButton onClick={() => toggleWishListDropdown()}>Wish Lists</DropdownButton>
+            <SplitButtonContainer role="group" aria-label="Wish Lists navigation">
+              <DropdownButton
+                ref={wishListButtonRef}
+                aria-expanded={isWishListDropdownOpen}
+                onClick={() => toggleWishListDropdown()}>
+                Wish Lists
+              </DropdownButton>
               <DropdownArrow
+                onKeyDown={(e) => {
+                  if (e.key === 'Escape') {
+                    toggleWishListDropdown(false);
+                    wishListButtonRef.current?.focus();
+                  }
+                }}
                 onClick={(e) => {
                   e.preventDefault();
                   e.stopPropagation();
                   toggleWishListDropdown();
-                }}>
+                }}
+                aria-label="Toggle Wish Lists submenu"
+                aria-expanded={isWishListDropdownOpen}>
                 ▼
               </DropdownArrow>
             </SplitButtonContainer>
-            <DropdownMenu isDropdownOpen={isWishListDropdownOpen}>
+            <DropdownMenu
+              isDropdownOpen={isWishListDropdownOpen}
+              aria-hidden={!isWishListDropdownOpen}>
               <li>
                 <Link href="/holiday-wish-list" onClick={closeNavOnMobile}>
                   Holidays
@@ -180,29 +229,41 @@ export default function Nav() {
         <li>
           <Dropdown
             onMouseEnter={() => {
-              if (window.innerWidth > 768) {
+              if (!isMobile) {
                 toggleTravelDropdown(true);
               }
             }}
             onMouseLeave={() => {
-              if (window.innerWidth > 768) {
+              if (!isMobile) {
                 toggleTravelDropdown(false);
               }
+            }}
+            onKeyDown={(e) => {
+              if (e.key === 'Escape') toggleTravelDropdown(false);
             }}>
-            <SplitButtonContainer>
+            <SplitButtonContainer role="group" aria-label="Travel navigation">
               <Link href="/travel" onClick={closeNavOnMobile}>
                 <TravelLink>Travel</TravelLink>
               </Link>
               <DropdownArrow
+                ref={travelArrowRef}
+                onKeyDown={(e) => {
+                  if (e.key === 'Escape') {
+                    toggleTravelDropdown(false);
+                    travelArrowRef.current?.focus();
+                  }
+                }}
                 onClick={(e) => {
                   e.preventDefault();
                   e.stopPropagation();
                   toggleTravelDropdown();
-                }}>
+                }}
+                aria-label="Toggle Travel submenu"
+                aria-expanded={isTravelDropdownOpen}>
                 ▼
               </DropdownArrow>
             </SplitButtonContainer>
-            <DropdownMenu isDropdownOpen={isTravelDropdownOpen}>
+            <DropdownMenu isDropdownOpen={isTravelDropdownOpen} aria-hidden={!isTravelDropdownOpen}>
               <li>
                 <Link href="/countries-visited" onClick={closeNavOnMobile}>
                   Countries Visited
@@ -256,9 +317,14 @@ const NavList = styled.ul`
   padding: 1rem;
   @media (max-width: 768px) {
     padding: 0.5rem;
-    display: none;
+    visibility: hidden;
+    height: 0;
+    overflow: hidden;
 
     &.open {
+      visibility: visible;
+      height: auto;
+      overflow: visible;
       display: flex;
       flex-direction: column;
       align-items: center;

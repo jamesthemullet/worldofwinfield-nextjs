@@ -10,7 +10,11 @@
       "Bash(git commit:*)",
       "Bash(git push:*)",
       "Bash(gh pr:*)",
-      "Skill(schedule)"
+      "Skill(schedule)",
+      "Bash(yarn lint *)",
+      "Bash(git stash *)"
+      "Bash(yarn build *)",
+      "Bash(xargs grep *)"
     ]
   }
 }

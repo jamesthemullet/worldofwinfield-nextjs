@@ -1,4 +1,4 @@
-export const getMonthNumber = (monthName: string) => {
+export const getMonthNumber = (monthName: string): number => {
   const monthNames = [
     'January',
     'February',
@@ -17,7 +17,13 @@ export const getMonthNumber = (monthName: string) => {
   return monthNames.indexOf(monthName) + 1;
 };
 
-export const getMonthName = (monthNumber: number) => {
+export const calculateReadingTime = (htmlContent: string): number => {
+  const text = htmlContent.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+  const wordCount = text.split(' ').filter((word) => word.length > 0).length;
+  return Math.max(1, Math.ceil(wordCount / 200));
+};
+
+export const getMonthName = (monthNumber: number): string => {
   const monthNames = [
     'January',
     'February',

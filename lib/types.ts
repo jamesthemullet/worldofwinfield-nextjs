@@ -61,6 +61,7 @@ export type PostProps = {
     }[];
   };
   preview: string;
+  relatedPosts: RelatedPost[];
 };
 
 export type TagsPostProps = {
@@ -236,6 +237,7 @@ export type IndexPageProps = {
 
 export type PrePostProps = {
   date: string;
+  content?: string;
   tags: {
     edges: {
       node: {
@@ -412,16 +414,39 @@ export type seoProps = {
   metaKeywords?: string;
 };
 
+export type RelatedPost = {
+  title: string;
+  slug: string;
+  date: string;
+  excerpt: string;
+  featuredImage: {
+    node: {
+      sourceUrl: string;
+      mediaDetails: {
+        height: number;
+        width: number;
+      };
+      srcSet: string;
+    };
+  } | null;
+};
+
+export type RelatedPostsProps = {
+  posts: RelatedPost[];
+};
+
 export type SearchBarProps = {
   onSearch: (results: { slug: string; title: string; date: string }[]) => void;
 };
 
 export type SearchResultsProps = {
-  searchResults: {
-    slug: string;
-    title: string;
-    date: string;
-  }[] | null;
+  searchResults:
+    | {
+        slug: string;
+        title: string;
+        date: string;
+      }[]
+    | null;
 };
 
 export type ArchivePageProps = {
