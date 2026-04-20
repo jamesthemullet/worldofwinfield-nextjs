@@ -6,7 +6,7 @@ import { StyledButton } from './core-components';
 import Link from 'next/link';
 import DOMPurify from 'isomorphic-dompurify';
 
-const stripExternalLinks = (excerpt: string) => {
+const stripExternalLinks = (excerpt: string): string => {
   const regex = /<a\s+(?:[^>]*?\s+)?href="https?:\/\/[^"]*"[^>]*>.*?<\/a>/g;
   return excerpt.replace(regex, '');
 };

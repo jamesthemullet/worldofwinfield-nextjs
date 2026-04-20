@@ -9,7 +9,7 @@ type TypeProps = {
   genreFilter?: string;
 };
 
-const fetchDataFromGoogleSheets = async (sheetID: string) => {
+const fetchDataFromGoogleSheets = async (sheetID: string): Promise<string[][] | null> => {
   try {
     const API_KEY = process.env.NEXT_PUBLIC_GOOGLE_SHEETS_API_KEY;
     const SHEET_NAME = 'Sheet1';

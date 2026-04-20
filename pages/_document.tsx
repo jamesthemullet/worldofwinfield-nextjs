@@ -1,6 +1,6 @@
 import Document, { Html, Head, Main, NextScript, DocumentContext } from 'next/document';
 import createEmotionServer from '@emotion/server/create-instance';
-import createCache from '@emotion/cache';
+import createCache, { type EmotionCache } from '@emotion/cache';
 
 const EMOTION_KEY = 'css';
 
@@ -37,8 +37,8 @@ MyDocument.getInitialProps = async (ctx: DocumentContext) => {
   ctx.renderPage = () =>
     originalRenderPage({
        
-      enhanceApp: (App: React.ComponentType<any>) =>
-        function EnhancedApp(props: Record<string, unknown>) {
+      enhanceApp: (App: React.ComponentType<{ emotionCache?: EmotionCache } & Record<string, unknown>>) =>
+        function EnhancedApp(props: { emotionCache?: EmotionCache } & Record<string, unknown>) {
           return <App emotionCache={cache} {...props} />;
         },
     });

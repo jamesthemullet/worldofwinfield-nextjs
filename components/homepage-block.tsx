@@ -66,7 +66,7 @@ export default function HomepageBlock({
     }
   }, [title, size, image, jamesImages]);
 
-  const eagerOrLazy = () => {
+  const eagerOrLazy = (): 'eager' | 'lazy' => {
     if (className?.includes('block-1-') || className?.includes('block-2-')) {
       return 'eager';
     } else {

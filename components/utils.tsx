@@ -1,4 +1,4 @@
-export const getMonthNumber = (monthName: string) => {
+export const getMonthNumber = (monthName: string): number => {
   const monthNames = [
     'January',
     'February',
@@ -17,7 +17,7 @@ export const getMonthNumber = (monthName: string) => {
   return monthNames.indexOf(monthName) + 1;
 };
 
-export const getMonthName = (monthNumber: number) => {
+export const getMonthName = (monthNumber: number): string => {
   const monthNames = [
     'January',
     'February',
