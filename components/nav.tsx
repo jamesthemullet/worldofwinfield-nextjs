@@ -87,8 +87,11 @@ export default function Nav() {
               if (!isMobile) {
                 toggleFavouritesDropdown(false);
               }
+            }}
+            onKeyDown={(e) => {
+              if (e.key === 'Escape') toggleFavouritesDropdown(false);
             }}>
-            <SplitButtonContainer>
+            <SplitButtonContainer role="group" aria-label="Favourites navigation">
               <DropdownButton
                 ref={favouritesButtonRef}
                 aria-expanded={isFavouritesDropdownOpen}
@@ -177,8 +180,11 @@ export default function Nav() {
               if (!isMobile) {
                 toggleWishListDropdown(false);
               }
+            }}
+            onKeyDown={(e) => {
+              if (e.key === 'Escape') toggleWishListDropdown(false);
             }}>
-            <SplitButtonContainer>
+            <SplitButtonContainer role="group" aria-label="Wish Lists navigation">
               <DropdownButton
                 ref={wishListButtonRef}
                 aria-expanded={isWishListDropdownOpen}
@@ -227,8 +233,11 @@ export default function Nav() {
               if (!isMobile) {
                 toggleTravelDropdown(false);
               }
+            }}
+            onKeyDown={(e) => {
+              if (e.key === 'Escape') toggleTravelDropdown(false);
             }}>
-            <SplitButtonContainer>
+            <SplitButtonContainer role="group" aria-label="Travel navigation">
               <Link href="/travel" onClick={closeNavOnMobile}>
                 <TravelLink>Travel</TravelLink>
               </Link>

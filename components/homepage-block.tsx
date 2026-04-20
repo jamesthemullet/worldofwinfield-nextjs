@@ -87,7 +87,7 @@ export default function HomepageBlock({
           {imageSrc?.node && size === 1 && (
             <Image
               src={imageSrc.node.sourceUrl}
-              alt={title}
+              alt=""
               width={230}
               height={230}
               sizes="(max-width: 768px) 50vw, (max-width: 1200px) 15vw, 230px"
@@ -99,7 +99,7 @@ export default function HomepageBlock({
           {imageSrc?.node && size === 2 && (
             <Image
               src={imageSrc.node.sourceUrl}
-              alt={title}
+              alt=""
               width={474}
               height={474}
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 30vw, 474px"
@@ -111,7 +111,7 @@ export default function HomepageBlock({
           {imageSrc?.node && size === 3 && (
             <Image
               src={imageSrc.node.sourceUrl}
-              alt={title}
+              alt=""
               width={840}
               height={840}
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 840px"
@@ -125,7 +125,7 @@ export default function HomepageBlock({
         (size === 1 || size === 2) && (
           <Image
             src={imageSrc.node.sourceUrl}
-            alt={title}
+            alt=""
             width={size === 1 ? 270 : 550}
             height={size === 1 ? 270 : 550}
             sizes={size === 1 ? '(max-width: 768px) 50vw, (max-width: 1200px) 15vw, 270px' : '(max-width: 768px) 100vw, (max-width: 1200px) 30vw, 550px'}
