@@ -1,6 +1,6 @@
 import Document, { Html, Head, Main, NextScript, DocumentContext } from 'next/document';
 import createEmotionServer from '@emotion/server/create-instance';
-import createCache, { type EmotionCache } from '@emotion/cache';
+import createCache from '@emotion/cache';
 
 const EMOTION_KEY = 'css';
 
@@ -36,9 +36,10 @@ MyDocument.getInitialProps = async (ctx: DocumentContext) => {
   const originalRenderPage = ctx.renderPage;
   ctx.renderPage = () =>
     originalRenderPage({
-       
-      enhanceApp: (App: React.ComponentType<{ emotionCache?: EmotionCache } & Record<string, unknown>>) =>
-        function EnhancedApp(props: { emotionCache?: EmotionCache } & Record<string, unknown>) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      enhanceApp: (App: any) =>
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        function EnhancedApp(props: any) {
           return <App emotionCache={cache} {...props} />;
         },
     });
