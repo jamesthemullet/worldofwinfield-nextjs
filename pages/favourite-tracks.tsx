@@ -14,6 +14,11 @@ export default function FavouritesPage() {
   const columnsToHide = ['Date Added'];
   const indexRequired = false;
   const sortBy = 'Artist/Track Name';
+  const seo = {
+    opengraphTitle: 'Favourite Tracks | World Of Winfield',
+    opengraphDescription: "A ranked list of James Winfield's favourite music tracks.",
+    opengraphSiteName: 'World Of Winfield',
+  };
 
   const router = useRouter();
   const [selectedGenre, setSelectedGenre] = useState('');
@@ -47,7 +52,7 @@ export default function FavouritesPage() {
   }, [sheetId]);
 
   return (
-    <Layout preview={null} title={title}>
+    <Layout preview={null} title={title} seo={seo}>
       <Container>
         {router.isFallback ? (
           <PostTitle>Loading…</PostTitle>

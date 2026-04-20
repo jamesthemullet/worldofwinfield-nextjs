@@ -17,8 +17,14 @@ export default function WantsPage() {
 
   const router = useRouter();
 
+  const seo = {
+    opengraphTitle: 'Wants | World Of Winfield',
+    opengraphDescription: "James Winfield's wish lists — places to visit and restaurants to try.",
+    opengraphSiteName: 'World Of Winfield',
+  };
+
   return (
-    <Layout preview={null} title="Posts About Wants">
+    <Layout preview={null} title="Posts About Wants" seo={seo}>
       <Container>
         {router.isFallback ? (
           <PostTitle>Loading…</PostTitle>

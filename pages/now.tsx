@@ -4,8 +4,15 @@ import Layout from '../components/layout';
 import styled from '@emotion/styled';
 
 export default function NowPage() {
+  const seo = {
+    opengraphTitle: 'Now | World Of Winfield',
+    opengraphDescription:
+      "What James Winfield is up to right now — current location, projects, and interests.",
+    opengraphSiteName: 'World Of Winfield',
+  };
+
   return (
-    <Layout preview={null} title="Now">
+    <Layout preview={null} title="Now" seo={seo}>
       <Container>
         <PostContainer>
           <StyledPostHeader>

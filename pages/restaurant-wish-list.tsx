@@ -9,11 +9,16 @@ import FavouriteResults from './favourites-results';
 export default function WishListPage() {
   const title = 'Restaurant Wish List';
   const sheetId = '13gz7lPQ61f_WKQ_xio_QBlUcFB9Dl0yVBynwEadVO_4';
+  const seo = {
+    opengraphTitle: 'Restaurant Wish List | World Of Winfield',
+    opengraphDescription: "James Winfield's restaurant wish list — restaurants he still wants to try.",
+    opengraphSiteName: 'World Of Winfield',
+  };
 
   const router = useRouter();
 
   return (
-    <Layout preview={null} title={title}>
+    <Layout preview={null} title={title} seo={seo}>
       <Container>
         {router.isFallback ? (
           <PostTitle>Loading…</PostTitle>
