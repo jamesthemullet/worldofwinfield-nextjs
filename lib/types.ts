@@ -440,11 +440,13 @@ export type SearchBarProps = {
 };
 
 export type SearchResultsProps = {
-  searchResults: {
-    slug: string;
-    title: string;
-    date: string;
-  }[] | null;
+  searchResults:
+    | {
+        slug: string;
+        title: string;
+        date: string;
+      }[]
+    | null;
 };
 
 export type ArchivePageProps = {

@@ -49,13 +49,11 @@ export default function HomepageBlock({
   jamesImages,
   icon,
 }: HomePageBlockTypes) {
-  const [randomColour, setRandomColour] = useState('');
+  const [randomColour] = useState(
+    () => blockColours[Math.floor(Math.random() * blockColours.length)]
+  );
   const [imageSrc, setImageSrc] = useState<BlockImage | null>(null);
   useEffect(() => {
-    const randomIndex = Math.floor(Math.random() * blockColours.length);
-    const randomColour = blockColours[randomIndex];
-    setRandomColour(randomColour);
-
     if (title === 'placeholder') {
       const randomJamesImage = Math.floor(Math.random() * jamesImages.edges.length);
       setImageSrc(jamesImages.edges[randomJamesImage].node.featuredImage as BlockImage);
@@ -66,9 +64,9 @@ export default function HomepageBlock({
     if (title === 'random photo') {
       setImageSrc(image ?? null);
     }
-  }, [title, size, image]);
+  }, [title, size, image, jamesImages]);
 
-  const eagerOrLazy = () => {
+  const eagerOrLazy = (): 'eager' | 'lazy' => {
     if (className?.includes('block-1-') || className?.includes('block-2-')) {
       return 'eager';
     } else {
@@ -89,10 +87,11 @@ export default function HomepageBlock({
           {imageSrc?.node && size === 1 && (
             <Image
               src={imageSrc.node.sourceUrl}
-              alt={title}
+              alt=""
               width={230}
               height={230}
-              quality={80}
+              sizes="(max-width: 768px) 50vw, (max-width: 1200px) 15vw, 230px"
+              quality={75}
               loading={eagerOrLazy()}
             />
           )}
@@ -100,10 +99,11 @@ export default function HomepageBlock({
           {imageSrc?.node && size === 2 && (
             <Image
               src={imageSrc.node.sourceUrl}
-              alt={title}
+              alt=""
               width={474}
               height={474}
-              quality={80}
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 30vw, 474px"
+              quality={75}
               loading={eagerOrLazy()}
             />
           )}
@@ -111,10 +111,11 @@ export default function HomepageBlock({
           {imageSrc?.node && size === 3 && (
             <Image
               src={imageSrc.node.sourceUrl}
-              alt={title}
+              alt=""
               width={840}
               height={840}
-              quality={80}
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 840px"
+              quality={75}
               loading={eagerOrLazy()}
             />
           )}
@@ -124,9 +125,10 @@ export default function HomepageBlock({
         (size === 1 || size === 2) && (
           <Image
             src={imageSrc.node.sourceUrl}
-            alt={title}
+            alt=""
             width={size === 1 ? 270 : 550}
             height={size === 1 ? 270 : 550}
+            sizes={size === 1 ? '(max-width: 768px) 50vw, (max-width: 1200px) 15vw, 270px' : '(max-width: 768px) 100vw, (max-width: 1200px) 30vw, 550px'}
             quality={80}
             loading={eagerOrLazy()}
           />
@@ -147,8 +149,8 @@ export default function HomepageBlock({
       size={size}
       image={imageSrc}
       date={date}>
-      <StyledIconLinkBlock href={url ?? '/'}>
-        <p aria-label={title}>{title}</p>
+      <StyledIconLinkBlock href={url ?? '/'} aria-label={title}>
+        <p>{title}</p>
         <StyledIcon>
           <Image src={`/icons/${icon}.png`} alt="" width={64} height={64} />
         </StyledIcon>

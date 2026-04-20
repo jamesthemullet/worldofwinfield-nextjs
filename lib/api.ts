@@ -107,7 +107,7 @@ export async function getFirstPost() {
   return data?.posts;
 }
 
-export async function getJamesImages({ first = 10, after = null }) {
+export async function getJamesImages({ first = 10, after = null }: { first?: number; after?: string | null } = {}) {
   const data = await fetchAPI(
     `
     query JamesImages($first: Int, $after: String) {

@@ -37,3 +37,5 @@ next-env.d.ts
 
 yarn.lock
 /realtime/node_modules
+.claude/settings.local.json
+.claude/settings.local.json

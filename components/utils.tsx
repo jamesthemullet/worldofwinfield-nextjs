@@ -1,4 +1,4 @@
-export const getMonthNumber = (monthName: string) => {
+export const getMonthNumber = (monthName: string): number => {
   const monthNames = [
     'January',
     'February',
@@ -23,7 +23,7 @@ export const calculateReadingTime = (htmlContent: string): number => {
   return Math.max(1, Math.ceil(wordCount / 200));
 };
 
-export const getMonthName = (monthNumber: number) => {
+export const getMonthName = (monthNumber: number): string => {
   const monthNames = [
     'January',
     'February',

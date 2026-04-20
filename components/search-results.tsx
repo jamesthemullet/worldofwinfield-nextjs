@@ -27,7 +27,7 @@ const SearchResults = ({ searchResults }: SearchResultsProps) => {
 
 export default SearchResults;
 
-export const formatDate = (date: string) => {
+export const formatDate = (date: string): string => {
   const options: Intl.DateTimeFormatOptions = {
     year: 'numeric',
     month: 'long',
@@ -41,7 +41,7 @@ export const formatDate = (date: string) => {
   return formattedDate.replace(day.toString(), dayWithOrdinal);
 };
 
-const addOrdinalIndicator = (day: number) => {
+const addOrdinalIndicator = (day: number): string => {
   if (day >= 11 && day <= 13) {
     return day + 'th';
   } else {

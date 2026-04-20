@@ -24,7 +24,8 @@ const SearchBar = ({ onSearch }: SearchBarProps) => {
 
   return (
     <StyledForm onSubmit={handleSubmit}>
-      <StyledInput type="text" placeholder="Search blog..." value={query} onChange={handleChange} />
+      <label htmlFor="blog-search-input">Search blog</label>
+      <StyledInput id="blog-search-input" type="text" placeholder="Search blog..." value={query} onChange={handleChange} />
       <StyledButton type="submit">{loading ? 'Searching...' : 'Search'}</StyledButton>
     </StyledForm>
   );
