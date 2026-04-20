@@ -17,6 +17,12 @@ export const getMonthNumber = (monthName: string): number => {
   return monthNames.indexOf(monthName) + 1;
 };
 
+export const calculateReadingTime = (htmlContent: string): number => {
+  const text = htmlContent.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+  const wordCount = text.split(' ').filter((word) => word.length > 0).length;
+  return Math.max(1, Math.ceil(wordCount / 200));
+};
+
 export const getMonthName = (monthNumber: number): string => {
   const monthNames = [
     'January',
