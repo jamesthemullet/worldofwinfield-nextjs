@@ -1,5 +1,67 @@
 const API_URL = process.env.NEXT_PUBLIC_WORDPRESS_API_URL;
 
+const SEO_FRAGMENT = `
+  fragment SEOFields on Post {
+    seo {
+      opengraphTitle
+      opengraphDescription
+      opengraphSiteName
+      metaKeywords
+      opengraphImage {
+        uri
+        altText
+        mediaDetails {
+          file
+          height
+          width
+        }
+        mediaItemUrl
+        sourceUrl
+        srcSet
+      }
+    }
+  }
+`;
+
+const AUTHOR_FRAGMENT = `
+  fragment AuthorFields on Post {
+    author {
+      node {
+        name
+        firstName
+        lastName
+        avatar {
+          url
+        }
+        description
+      }
+    }
+  }
+`;
+
+const FEATURED_IMAGE_FRAGMENT = `
+  fragment FeaturedImageFields on NodeWithFeaturedImage {
+    featuredImage {
+      node {
+        id
+        title
+        sourceUrl
+        srcSet
+        caption
+        mediaDetails {
+          height
+          width
+          sizes {
+            sourceUrl
+            height
+            width
+          }
+        }
+      }
+    }
+  }
+`;
+
 async function fetchAPI(query = '', { variables }: Record<string, unknown> = {}) {
   const headers: Record<string, string> = { 'Content-Type': 'application/json' };
 
@@ -60,45 +122,17 @@ export async function getAllPostsWithSlug() {
 
 export async function getFirstPost() {
   const data = await fetchAPI(`
+    ${FEATURED_IMAGE_FRAGMENT}
+    ${SEO_FRAGMENT}
     {
       posts(first: 1) {
         edges {
           node {
             slug
             title
-            featuredImage {
-              node {
-                id
-                title
-                mediaDetails {
-                  sizes {
-                    sourceUrl
-                    height
-                    width
-                  }
-                }
-                srcSet
-                sourceUrl
-              }
-            }
+            ...FeaturedImageFields
             date
-            seo {
-              opengraphTitle
-              opengraphDescription
-              opengraphSiteName
-              opengraphImage {
-                uri
-                altText
-                mediaDetails {
-                  file
-                  height
-                  width
-                }
-                mediaItemUrl
-                sourceUrl
-                srcSet
-              }
-            }
+            ...SEOFields
           }
         }
       }
@@ -151,6 +185,9 @@ export async function getJamesImages({ first = 10, after = null }: { first?: num
 export async function getAllPostsForHome(preview: boolean) {
   const data = await fetchAPI(
     `
+    ${FEATURED_IMAGE_FRAGMENT}
+    ${AUTHOR_FRAGMENT}
+    ${SEO_FRAGMENT}
     query AllPosts {
       posts(first: 20, where: { orderby: { field: DATE, order: DESC } }) {
         edges {
@@ -159,43 +196,9 @@ export async function getAllPostsForHome(preview: boolean) {
             excerpt
             slug
             date
-            featuredImage {
-              node {
-                sourceUrl
-                mediaDetails {
-                  height
-                  width
-                }
-                caption
-              }
-            }
-            author {
-              node {
-                name
-                firstName
-                lastName
-                avatar {
-                  url
-                }
-              }
-            }
-            seo {
-              opengraphTitle
-              opengraphDescription
-              opengraphSiteName
-              opengraphImage {
-                uri
-                altText
-                mediaDetails {
-                  file
-                  height
-                  width
-                }
-                mediaItemUrl
-                sourceUrl
-                srcSet
-              }
-            }
+            ...FeaturedImageFields
+            ...AuthorFields
+            ...SEOFields
           }
         }
       }
@@ -215,6 +218,9 @@ export async function getAllPostsForHome(preview: boolean) {
 export async function getPost(id: string, idType = 'SLUG') {
   const data = await fetchAPI(
     `
+    ${FEATURED_IMAGE_FRAGMENT}
+    ${AUTHOR_FRAGMENT}
+    ${SEO_FRAGMENT}
     query Post($id: ID!, $idType: PostIdType!) {
       post(id: $id, idType: $idType) {
         slug
@@ -222,35 +228,8 @@ export async function getPost(id: string, idType = 'SLUG') {
         title
         date
         modified
-        author {
-          node {
-            name
-            firstName
-            lastName
-            avatar {
-              url
-            }
-            description
-          }
-        }
-        seo {
-          metaKeywords
-          opengraphTitle
-          opengraphDescription
-          opengraphSiteName
-          opengraphImage {
-            uri
-            altText
-            mediaDetails {
-              file
-              height
-              width
-            }
-            mediaItemUrl
-            sourceUrl
-            srcSet
-          }
-        }
+        ...AuthorFields
+        ...SEOFields
         tags {
           edges {
             node {
@@ -258,24 +237,7 @@ export async function getPost(id: string, idType = 'SLUG') {
             }
           }
         }
-        featuredImage {
-          node {
-            id
-            title
-            mediaDetails {
-              sizes {
-                sourceUrl
-                height
-                width
-              }
-              height
-              width
-            }
-            caption
-            srcSet
-            sourceUrl
-          }
-        }
+        ...FeaturedImageFields
       }
     }`,
     {
@@ -290,26 +252,13 @@ export async function getPostDisplayInfo(ids: string[]) {
     ids.map((id: string) =>
       fetchAPI(
         `
+      ${FEATURED_IMAGE_FRAGMENT}
       query Post($id: ID!, $idType: PostIdType!) {
         post(id: $id, idType: $idType) {
           slug
           title
           date
-          featuredImage {
-            node {
-              mediaDetails {
-                sizes {
-                  height
-                  width
-                  sourceUrl
-                }
-                height
-                width
-              }
-              srcSet
-              sourceUrl
-            }
-          }
+          ...FeaturedImageFields
         }
       }`,
         {
@@ -344,6 +293,7 @@ export async function searchBlogPosts(searchTerm: string) {
 export async function filterPostsByTag(tag: string) {
   const data = await fetchAPI(
     `
+    ${FEATURED_IMAGE_FRAGMENT}
     query filterPostsByTag($tag: String!) {
       posts(where: { tag: $tag }, first: 100) {
         nodes {
@@ -357,21 +307,7 @@ export async function filterPostsByTag(tag: string) {
               name
             }
           }
-          featuredImage {
-            node {
-              mediaDetails {
-                sizes {
-                  height
-                  width
-                  sourceUrl
-                }
-                height
-                width
-              }
-              srcSet
-              sourceUrl
-            }
-          }
+          ...FeaturedImageFields
         }
       }
     }`,
@@ -428,6 +364,7 @@ export async function getPostsByTag(tag: string) {
 export async function getRelatedPosts(tag: string, excludeSlug: string) {
   const data = await fetchAPI(
     `
+    ${FEATURED_IMAGE_FRAGMENT}
     query GetRelatedPosts($tag: String!) {
       posts(where: { tag: $tag }, first: 4) {
         nodes {
@@ -435,16 +372,7 @@ export async function getRelatedPosts(tag: string, excludeSlug: string) {
           slug
           date
           excerpt
-          featuredImage {
-            node {
-              sourceUrl
-              mediaDetails {
-                height
-                width
-              }
-              srcSet
-            }
-          }
+          ...FeaturedImageFields
         }
       }
     }`,
@@ -460,6 +388,7 @@ export async function getRelatedPosts(tag: string, excludeSlug: string) {
 export async function getRandomImage(randomMonth: number, randomYear: number) {
   const data = await fetchAPI(
     `
+    ${FEATURED_IMAGE_FRAGMENT}
     query GetRandomImage($randomMonth: Int!, $randomYear: Int!) {
       mediaItems(where: {dateQuery: {month: $randomMonth, year: $randomYear}}, first: 100) {
         edges {
