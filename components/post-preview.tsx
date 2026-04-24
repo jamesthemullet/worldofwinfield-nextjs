@@ -4,7 +4,7 @@ import { PostPreviewProps } from '../lib/types';
 import styled from '@emotion/styled';
 import PostHeader from './post-header';
 import { StyledButton } from './core-components';
-import DOMPurify from 'isomorphic-dompurify';
+import { sanitize } from '../lib/sanitize';
 
 const stripExternalLinks = (excerpt: string) => {
   const regex = /<a\s+(?:[^>]*?\s+)?href="https?:\/\/[^"]*"[^>]*>.*?<\/a>/g;
@@ -20,7 +20,7 @@ export default function PostPreview({
   featuredImage,
 }: PostPreviewProps) {
   const sanitizedExcerpt = useMemo(
-    () => DOMPurify.sanitize(stripExternalLinks(excerpt)),
+    () => sanitize(stripExternalLinks(excerpt)),
     [excerpt]
   );
 

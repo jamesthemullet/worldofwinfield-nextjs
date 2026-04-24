@@ -4,7 +4,7 @@ import styled from '@emotion/styled';
 import PostHeader from './post-header';
 import { StyledButton } from './core-components';
 import Link from 'next/link';
-import DOMPurify from 'isomorphic-dompurify';
+import { sanitize } from '../lib/sanitize';
 
 const stripExternalLinks = (excerpt: string): string => {
   const regex = /<a\s+(?:[^>]*?\s+)?href="https?:\/\/[^"]*"[^>]*>.*?<\/a>/g;
@@ -20,7 +20,7 @@ export default function HeroPost({
   featuredImage,
 }: HeroPostProps) {
   const sanitizedExcerpt = useMemo(
-    () => DOMPurify.sanitize(stripExternalLinks(excerpt)),
+    () => sanitize(stripExternalLinks(excerpt)),
     [excerpt]
   );
 
