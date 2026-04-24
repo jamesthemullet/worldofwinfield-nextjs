@@ -7,6 +7,7 @@ type TypeProps = {
   indexRequired?: boolean;
   sortBy?: string;
   genreFilter?: string;
+  labelFilter?: string;
 };
 
 const fetchDataFromGoogleSheets = async (sheetID: string): Promise<string[][] | null> => {
@@ -31,6 +32,7 @@ const FavouriteResults = ({
   indexRequired = true,
   sortBy,
   genreFilter,
+  labelFilter,
 }: TypeProps) => {
   const [data, setData] = useState<string[][]>([]);
   const [loading, setLoading] = useState(false);
@@ -63,7 +65,11 @@ const FavouriteResults = ({
           let filteredRows = dataRows;
           if (genreFilter && headerRow.includes('Genre')) {
             const genreIndex = headerRow.indexOf('Genre');
-            filteredRows = dataRows.filter((row: string[]) => row[genreIndex] === genreFilter);
+            filteredRows = filteredRows.filter((row: string[]) => row[genreIndex] === genreFilter);
+          }
+          if (labelFilter && headerRow.includes('Label')) {
+            const labelIndex = headerRow.indexOf('Label');
+            filteredRows = filteredRows.filter((row: string[]) => row[labelIndex] === labelFilter);
           }
 
           const normalize = (s: string) =>
@@ -140,7 +146,7 @@ const FavouriteResults = ({
     };
 
     fetchFavouriteData();
-  }, [sheetId, JSON.stringify(columnsToHide), genreFilter, sortBy]);
+  }, [sheetId, JSON.stringify(columnsToHide), genreFilter, labelFilter, sortBy]);
 
   return (
     <FavouritesContainer>
@@ -268,12 +274,21 @@ const StyledTable = styled.table`
 
     &.data-score,
     &.data-year-read,
+    &.data-year-released,
     &.data-abv,
     &.heading-score,
     &.heading-year-read,
+    &.heading-year-released,
     &.heading-abv {
       @media screen and (min-width: 768px) {
         width: 70px;
+      }
+    }
+
+    &.data-label,
+    &.heading-label {
+      @media screen and (min-width: 768px) {
+        width: 200px;
       }
     }
 
