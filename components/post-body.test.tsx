@@ -21,8 +21,6 @@ jest.mock('dompurify', () => ({
   __esModule: true,
   default: {
     sanitize: jest.fn((html: string) => html),
-    addHook: jest.fn(),
-    removeHook: jest.fn(),
   },
 }));
 
@@ -48,6 +46,26 @@ describe('PostBody', () => {
     expect(DOMPurify.sanitize).toHaveBeenCalledWith(
       '<p>Test content</p>',
       expect.objectContaining({ ADD_ATTR: expect.arrayContaining(['srcset']) })
+    );
+  });
+
+  it('converts data-src to src before sanitizing', () => {
+    render(<PostBody content='<img data-src="/foo.jpg" />' />);
+    expect(DOMPurify.sanitize).toHaveBeenCalledWith(
+      expect.stringContaining('src="/foo.jpg"'),
+      expect.anything()
+    );
+  });
+
+  it('replaces placeholder src when data-src is also present', () => {
+    render(<PostBody content='<img src="data:image/gif;base64,ABC" data-src="/real.jpg" />' />);
+    expect(DOMPurify.sanitize).toHaveBeenCalledWith(
+      expect.stringMatching(/src="\/real\.jpg"/),
+      expect.anything()
+    );
+    expect(DOMPurify.sanitize).not.toHaveBeenCalledWith(
+      expect.stringContaining('data:image/gif'),
+      expect.anything()
     );
   });
 });

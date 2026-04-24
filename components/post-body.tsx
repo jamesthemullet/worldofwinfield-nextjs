@@ -4,28 +4,25 @@ import styled from '@emotion/styled';
 import { colours } from '../pages/_app';
 import DOMPurify from 'dompurify';
 
+const resolveDataSrc = (html: string): string =>
+  html
+    // Remove placeholder src/srcset that precede the real data-src/data-lazy-src
+    .replace(/\bsrc="[^"]*"\s+(?=data-(?:lazy-)?src=)/gi, '')
+    .replace(/\bsrcset="[^"]*"\s+(?=data-(?:lazy-)?srcset=)/gi, '')
+    // Rename data-lazy-src / data-src → src
+    .replace(/\bdata-lazy-src=/gi, 'src=')
+    .replace(/\bdata-src=/gi, 'src=')
+    // Rename data-lazy-srcset / data-srcset → srcset
+    .replace(/\bdata-lazy-srcset=/gi, 'srcset=')
+    .replace(/\bdata-srcset=/gi, 'srcset=');
+
 export default function PostBody({ content }: PostBodyProps) {
   const sanitizedContent = useMemo(() => {
-    if (typeof window === 'undefined') return content;
-    DOMPurify.addHook('afterSanitizeAttributes', (node) => {
-      if (node.nodeName === 'IMG') {
-        const dataSrc = node.getAttribute('data-src');
-        if (dataSrc) {
-          node.setAttribute('src', dataSrc);
-          node.removeAttribute('data-src');
-        }
-        const dataSrcset = node.getAttribute('data-srcset');
-        if (dataSrcset) {
-          node.setAttribute('srcset', dataSrcset);
-          node.removeAttribute('data-srcset');
-        }
-      }
-    });
-    const result = DOMPurify.sanitize(content, {
+    const resolved = resolveDataSrc(content);
+    if (typeof window === 'undefined') return resolved;
+    return DOMPurify.sanitize(resolved, {
       ADD_ATTR: ['srcset', 'sizes', 'loading', 'decoding'],
-    });
-    DOMPurify.removeHook('afterSanitizeAttributes');
-    return result;
+    }) as string;
   }, [content]);
   return (
     <ContentContainer>
