@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import PostBody from './post-body';
-import DOMPurify from 'isomorphic-dompurify';
+import DOMPurify from 'dompurify';
 
 jest.mock('../pages/_app', () => ({
   colours: {
@@ -17,7 +17,7 @@ jest.mock('../pages/_app', () => ({
   },
 }));
 
-jest.mock('isomorphic-dompurify', () => ({
+jest.mock('dompurify', () => ({
   __esModule: true,
   default: {
     sanitize: jest.fn((html: string) => html),

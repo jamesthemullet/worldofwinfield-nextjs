@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { PostHeaderProps } from '../lib/types';
 import styled from '@emotion/styled';
 import { colours } from '../pages/_app';
-import DOMPurify from 'isomorphic-dompurify';
+import { sanitize } from '../lib/sanitize';
 import { useMemo } from 'react';
 
 export default function PostHeader({
@@ -54,7 +54,7 @@ export default function PostHeader({
           />
           {caption && (
             <CaptionOverlay
-              dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(caption) }}></CaptionOverlay>
+              dangerouslySetInnerHTML={{ __html: sanitize(caption) }}></CaptionOverlay>
           )}
         </ImageContainer>
       )}

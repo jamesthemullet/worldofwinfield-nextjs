@@ -3,7 +3,7 @@ import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import PostTitle from './post-title';
 
-jest.mock('isomorphic-dompurify', () => ({
+jest.mock('dompurify', () => ({
   __esModule: true,
   default: { sanitize: (html: string) => html },
 }));

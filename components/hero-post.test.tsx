@@ -4,7 +4,7 @@ import '@testing-library/jest-dom';
 import HeroPost from './hero-post';
 import { HeroPostProps } from '../lib/types';
 
-jest.mock('isomorphic-dompurify', () => ({
+jest.mock('dompurify', () => ({
   __esModule: true,
   default: { sanitize: (html: string) => html },
 }));

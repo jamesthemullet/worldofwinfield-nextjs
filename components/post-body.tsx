@@ -2,10 +2,11 @@ import { useMemo } from 'react';
 import { PostBodyProps } from '../lib/types';
 import styled from '@emotion/styled';
 import { colours } from '../pages/_app';
-import DOMPurify from 'isomorphic-dompurify';
+import DOMPurify from 'dompurify';
 
 export default function PostBody({ content }: PostBodyProps) {
   const sanitizedContent = useMemo(() => {
+    if (typeof window === 'undefined') return content;
     DOMPurify.addHook('afterSanitizeAttributes', (node) => {
       if (node.nodeName === 'IMG') {
         const dataSrc = node.getAttribute('data-src');

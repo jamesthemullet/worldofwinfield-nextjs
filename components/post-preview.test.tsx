@@ -4,7 +4,7 @@ import '@testing-library/jest-dom';
 import PostPreview from './post-preview';
 import { PostPreviewProps } from '../lib/types';
 
-jest.mock('isomorphic-dompurify', () => ({
+jest.mock('dompurify', () => ({
   __esModule: true,
   default: { sanitize: (html: string) => html },
 }));
