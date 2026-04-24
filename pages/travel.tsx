@@ -9,7 +9,7 @@ import { filterPostsByTag } from '../lib/api';
 import { PostsProps } from '../lib/types';
 import styled from '@emotion/styled';
 import { colours } from './_app';
-import DOMPurify from 'isomorphic-dompurify';
+import { sanitize } from '../lib/sanitize';
 
 export default function Post({ posts }: PostsProps) {
   const router = useRouter();
@@ -40,7 +40,7 @@ export default function Post({ posts }: PostsProps) {
                   />
                 </StyledPostHeader>
                 <StyledExcerpt
-                  dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(post.excerpt) }}
+                  dangerouslySetInnerHTML={{ __html: sanitize(post.excerpt) }}
                   backgroundColour={colours.dark}></StyledExcerpt>
               </PostContainer>
             ))}
