@@ -26,7 +26,7 @@ function sleep(ms) {
 }
 
 function loadEnvLocal() {
-  const envPath = path.join(__dirname, '..', '.env.local');
+  const envPath = path.join(__dirname, '..', '.env');
   if (!fs.existsSync(envPath)) return;
   const lines = fs.readFileSync(envPath, 'utf8').split('\n');
   for (const line of lines) {
@@ -35,7 +35,10 @@ function loadEnvLocal() {
     const eqIdx = trimmed.indexOf('=');
     if (eqIdx === -1) continue;
     const key = trimmed.slice(0, eqIdx).trim();
-    const val = trimmed.slice(eqIdx + 1).trim().replace(/^['"]|['"]$/g, '');
+    const val = trimmed
+      .slice(eqIdx + 1)
+      .trim()
+      .replace(/^['"]|['"]$/g, '');
     if (!process.env[key]) process.env[key] = val;
   }
 }
@@ -74,14 +77,23 @@ async function queryMusicBrainz(artist, track) {
   const safeArtist = artist.replace(/"/g, '\\"');
   const safeTrack = track.replace(/"/g, '\\"');
   const q = `recording:"${safeTrack}" AND artist:"${safeArtist}"`;
-  const url = `https://musicbrainz.org/ws/2/recording?query=${encodeURIComponent(q)}&fmt=json&limit=5&inc=releases+labels`;
+  const url = `https://musicbrainz.org/ws/2/recording?query=${encodeURIComponent(q)}&fmt=json&limit=5&inc=releases`;
   const res = await fetch(url, { headers: { 'User-Agent': MB_USER_AGENT } });
   if (res.status === 503) throw new Error('MusicBrainz rate limit hit — try again later');
   if (!res.ok) throw new Error(`MusicBrainz returned ${res.status}`);
   return res.json();
 }
 
-function extractInfo(mbResult) {
+async function fetchReleaseLabelInfo(releaseMbid) {
+  const url = `https://musicbrainz.org/ws/2/release/${releaseMbid}?inc=labels&fmt=json`;
+  const res = await fetch(url, { headers: { 'User-Agent': MB_USER_AGENT } });
+  if (res.status === 503) throw new Error('MusicBrainz rate limit hit — try again later');
+  if (!res.ok) return '';
+  const json = await res.json();
+  return json['label-info']?.[0]?.label?.name || '';
+}
+
+async function extractInfo(mbResult) {
   const recordings = mbResult.recordings || [];
   if (!recordings.length) return { year: '', label: '', confidence: 0 };
 
@@ -96,8 +108,10 @@ function extractInfo(mbResult) {
   if (!earliest) return { year: '', label: '', confidence };
 
   const year = earliest.date ? earliest.date.slice(0, 4) : '';
-  const labelInfo = earliest['label-info'] || [];
-  const label = labelInfo[0]?.label?.name || '';
+
+  // The search endpoint doesn't include label-info; do a release lookup to get it
+  await sleep(RATE_LIMIT_MS);
+  const label = await fetchReleaseLabelInfo(earliest.id);
 
   return { year, label, confidence };
 }
@@ -128,7 +142,9 @@ async function main() {
   if (fs.existsSync(PROGRESS_FILE)) {
     progress = JSON.parse(fs.readFileSync(PROGRESS_FILE, 'utf8'));
     const done = Object.keys(progress).length;
-    console.log(`Resuming — ${done} tracks already processed, ${dataRows.length - done} remaining.\n`);
+    console.log(
+      `Resuming — ${done} tracks already processed, ${dataRows.length - done} remaining.\n`,
+    );
   } else {
     console.log(`Starting fresh — ${dataRows.length} tracks to process.\n`);
   }
@@ -153,7 +169,12 @@ async function main() {
     const { artist, track } = parseArtistTrack(combined);
 
     if (!track) {
-      progress[combined] = { year: '', label: '', confidence: 0, note: 'could not parse artist/track' };
+      progress[combined] = {
+        year: '',
+        label: '',
+        confidence: 0,
+        note: 'could not parse artist/track',
+      };
       console.warn(`[${i + 1}/${dataRows.length}] SKIPPED (unparseable): ${combined}`);
       skipped++;
       continue;
@@ -161,7 +182,7 @@ async function main() {
 
     try {
       const mbResult = await queryMusicBrainz(artist, track);
-      const { year, label, confidence } = extractInfo(mbResult);
+      const { year, label, confidence } = await extractInfo(mbResult);
       const isLowConfidence = confidence < CONFIDENCE_THRESHOLD;
 
       progress[combined] = { year, label, confidence };
@@ -171,7 +192,7 @@ async function main() {
       const flag = isLowConfidence ? ' ⚠️' : '';
       console.log(
         `[${i + 1}/${dataRows.length}] ${combined}\n` +
-        `  → ${year || '(no year)'}, ${label || '(no label)'}  score: ${confidence}${flag}\n`
+          `  → ${year || '(no year)'}, ${label || '(no label)'}  score: ${confidence}${flag}\n`,
       );
     } catch (err) {
       progress[combined] = { year: '', label: '', confidence: 0, note: err.message };
