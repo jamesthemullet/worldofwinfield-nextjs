@@ -17,7 +17,7 @@ type HomePageBlockTypes = {
   title: string;
   url: string | null;
   size: number;
-  image?: BlockImage;
+  image?: BlockImage | null;
   date?: string;
   jamesImages: JamesImagesProps;
   icon?: string;
