@@ -8,12 +8,6 @@ import { useEffect, useState } from 'react';
 
 type BlockImage = {
   node: {
-    mediaDetails: {
-      height: number;
-      width: number;
-      sizes: string;
-    };
-    srcset: string;
     sourceUrl: string;
   };
 };
@@ -56,7 +50,7 @@ export default function HomepageBlock({
   useEffect(() => {
     if (title === 'placeholder') {
       const randomJamesImage = Math.floor(Math.random() * jamesImages.edges.length);
-      setImageSrc(jamesImages.edges[randomJamesImage].node.featuredImage as BlockImage);
+      setImageSrc(jamesImages.edges[randomJamesImage].node.featuredImage);
     } else {
       setImageSrc(image ?? null);
     }
