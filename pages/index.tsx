@@ -333,7 +333,7 @@ export default function Index({
             title={block.title}
             url={block.url}
             size={block.size}
-            image={block.image as any}
+            image={block.image}
             date={block.date}
             jamesImages={jamesImages}
             icon={block.icon}

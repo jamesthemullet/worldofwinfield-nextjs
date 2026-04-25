@@ -4,16 +4,10 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { formatDate } from './search-results';
 import { JamesImagesProps } from '../lib/types';
-import { useEffect, useState } from 'react';
+import { useMemo, useState } from 'react';
 
 type BlockImage = {
   node: {
-    mediaDetails: {
-      height: number;
-      width: number;
-      sizes: string;
-    };
-    srcset: string;
     sourceUrl: string;
   };
 };
@@ -23,11 +17,14 @@ type HomePageBlockTypes = {
   title: string;
   url: string | null;
   size: number;
-  image?: BlockImage;
+  image?: BlockImage | null;
   date?: string;
   jamesImages: JamesImagesProps;
   icon?: string;
 };
+
+const PLACEHOLDER = 'placeholder';
+const RANDOM_PHOTO = 'random photo';
 
 const blockColours = [
   colours.pink,
@@ -52,27 +49,14 @@ export default function HomepageBlock({
   const [randomColour] = useState(
     () => blockColours[Math.floor(Math.random() * blockColours.length)]
   );
-  const [imageSrc, setImageSrc] = useState<BlockImage | null>(null);
-  useEffect(() => {
-    if (title === 'placeholder') {
-      const randomJamesImage = Math.floor(Math.random() * jamesImages.edges.length);
-      setImageSrc(jamesImages.edges[randomJamesImage].node.featuredImage as BlockImage);
-    } else {
-      setImageSrc(image ?? null);
-    }
+  const [randomJamesIndex] = useState(() => Math.floor(Math.random() * jamesImages.edges.length));
 
-    if (title === 'random photo') {
-      setImageSrc(image ?? null);
-    }
-  }, [title, size, image, jamesImages]);
+  const imageSrc = useMemo(
+    () => (title === PLACEHOLDER ? jamesImages.edges[randomJamesIndex].node.featuredImage : image ?? null),
+    [title, image, jamesImages, randomJamesIndex]
+  );
 
-  const eagerOrLazy = (): 'eager' | 'lazy' => {
-    if (className?.includes('block-1-') || className?.includes('block-2-')) {
-      return 'eager';
-    } else {
-      return 'lazy';
-    }
-  };
+  const eagerOrLazy = className?.includes('block-1-') || className?.includes('block-2-') ? 'eager' : 'lazy';
 
   return !icon ? (
     <Block
@@ -82,7 +66,7 @@ export default function HomepageBlock({
       className={className}
       image={imageSrc}
       date={date}>
-      {url && title !== 'random photo' ? (
+      {url && title !== RANDOM_PHOTO ? (
         <StyledLinkImage href={url} aria-label={title}>
           {imageSrc?.node && size === 1 && (
             <Image
@@ -92,7 +76,7 @@ export default function HomepageBlock({
               height={230}
               sizes="(max-width: 768px) 50vw, (max-width: 1200px) 15vw, 230px"
               quality={75}
-              loading={eagerOrLazy()}
+              loading={eagerOrLazy}
             />
           )}
 
@@ -104,7 +88,7 @@ export default function HomepageBlock({
               height={474}
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 30vw, 474px"
               quality={75}
-              loading={eagerOrLazy()}
+              loading={eagerOrLazy}
             />
           )}
 
@@ -116,7 +100,7 @@ export default function HomepageBlock({
               height={840}
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 840px"
               quality={75}
-              loading={eagerOrLazy()}
+              loading={eagerOrLazy}
             />
           )}
         </StyledLinkImage>
@@ -130,15 +114,15 @@ export default function HomepageBlock({
             height={size === 1 ? 270 : 550}
             sizes={size === 1 ? '(max-width: 768px) 50vw, (max-width: 1200px) 15vw, 270px' : '(max-width: 768px) 100vw, (max-width: 1200px) 30vw, 550px'}
             quality={80}
-            loading={eagerOrLazy()}
+            loading={eagerOrLazy}
           />
         )
       )}
 
       {url && date && (
         <StyledLink href={url}>
-          {title !== 'placeholder' && title !== 'random photo' && <p aria-label={title}>{title}</p>}
-          {date && title !== 'placeholder' && <p className="date">{formatDate(date)}</p>}
+          {title !== PLACEHOLDER && title !== RANDOM_PHOTO && <p aria-label={title}>{title}</p>}
+          {date && title !== PLACEHOLDER && <p className="date">{formatDate(date)}</p>}
         </StyledLink>
       )}
     </Block>
