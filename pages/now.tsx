@@ -2,6 +2,8 @@ import Container from '../components/container';
 import PostHeader from '../components/post-header';
 import Layout from '../components/layout';
 import styled from '@emotion/styled';
+import { colours } from './_app';
+import { NOW_LAST_UPDATED } from '../data/now-meta';
 
 export default function NowPage() {
   const seo = {
@@ -19,7 +21,7 @@ export default function NowPage() {
             <PostHeader title="Now" />
           </StyledPostHeader>
           <NowContent>
-            <LastUpdated>Last updated: April 2026</LastUpdated>
+            <LastUpdated>Last updated: {NOW_LAST_UPDATED}</LastUpdated>
 
             <Section>
               <SectionHeading>📍 Where I am</SectionHeading>
@@ -109,8 +111,11 @@ const NowContent = styled.div`
 
 const LastUpdated = styled.p`
   font-size: 0.9rem;
+  font-weight: bold;
   color: #767676;
   margin-bottom: 2rem;
+  border-left: 4px solid ${colours.purple};
+  padding-left: 0.75rem;
 `;
 
 const Section = styled.section`
