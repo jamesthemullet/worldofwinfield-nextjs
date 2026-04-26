@@ -72,6 +72,11 @@ export default function Nav() {
           </Link>
         </li>
         <li>
+          <Link href="/now" onClick={closeNavOnMobile}>
+            Now
+          </Link>
+        </li>
+        <li>
           <Link href="/blog" onClick={closeNavOnMobile}>
             The Blog
           </Link>
