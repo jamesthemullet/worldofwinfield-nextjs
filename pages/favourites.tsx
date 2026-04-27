@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import Container from '../components/container';
+import PostHeader from '../components/post-header';
 import Layout from '../components/layout';
 import styled from '@emotion/styled';
 import { colours } from './_app';
@@ -41,7 +42,9 @@ export default function FavouritesHubPage() {
   return (
     <Layout preview={null} title="Favourites" seo={seo}>
       <Container>
-        <HubHeader>Favourites</HubHeader>
+        <StyledPostHeader>
+          <PostHeader title="Favourites" />
+        </StyledPostHeader>
         <Grid>
           {categories.map(({ title, url }, index) => (
             <Tile key={url} href={url} backgroundColour={tileColours[index]}>
@@ -59,10 +62,8 @@ export default function FavouritesHubPage() {
   );
 }
 
-const HubHeader = styled.h1`
-  font-size: 3rem;
-  line-height: 4rem;
-  margin: 2rem 0 1rem;
+const StyledPostHeader = styled.div`
+  margin: 0 auto;
 `;
 
 const Grid = styled.div`
