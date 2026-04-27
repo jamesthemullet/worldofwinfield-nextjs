@@ -119,6 +119,7 @@ const TileInner = styled.div`
     padding: 0 10px;
     margin: 0;
     text-align: center;
+    font-family: 'Oswald', sans-serif;
   }
 `;
 
