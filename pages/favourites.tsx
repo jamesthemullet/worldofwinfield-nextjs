@@ -72,8 +72,9 @@ const Grid = styled.div`
 
   @media (min-width: 769px) {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    grid-template-columns: repeat(5, 1fr);
     gap: 8px;
+    max-width: 1100px;
   }
 `;
 
