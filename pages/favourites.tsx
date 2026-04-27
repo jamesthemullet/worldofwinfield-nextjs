@@ -1,69 +1,34 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import Container from '../components/container';
 import Layout from '../components/layout';
 import styled from '@emotion/styled';
+import { colours } from './_app';
 
 const categories = [
-  {
-    title: 'Books',
-    url: '/favourite-books',
-    emoji: '📚',
-    description: 'A ranked list of the books I have loved most.',
-  },
-  {
-    title: 'Beers',
-    url: '/favourite-beers',
-    emoji: '🍺',
-    description: 'Craft beers, lagers, and everything in between.',
-  },
-  {
-    title: 'Cheese',
-    url: '/favourite-cheese',
-    emoji: '🧀',
-    description: 'The finest wheels and wedges I have encountered.',
-  },
-  {
-    title: 'Cities',
-    url: '/favourite-cities',
-    emoji: '🏙️',
-    description: 'Places around the world that have left a mark.',
-  },
-  {
-    title: 'Countries',
-    url: '/favourite-countries',
-    emoji: '🌍',
-    description: 'Nations I have visited and would return to.',
-  },
-  {
-    title: 'DJs',
-    url: '/favourite-djs',
-    emoji: '🎧',
-    description: 'The selectors who move a dancefloor.',
-  },
-  {
-    title: 'Movies',
-    url: '/favourite-movies',
-    emoji: '🎬',
-    description: 'Films I keep thinking about long after the credits roll.',
-  },
-  {
-    title: 'Restaurants',
-    url: '/favourite-restaurants',
-    emoji: '🍽️',
-    description: 'Meals and places worth travelling for.',
-  },
-  {
-    title: 'Tracks',
-    url: '/favourite-tracks',
-    emoji: '🎵',
-    description: 'Songs that have soundtracked my life.',
-  },
-  {
-    title: 'Articles',
-    url: '/favourite-articles',
-    emoji: '📰',
-    description: 'Writing from across the web that stuck with me.',
-  },
+  { title: 'Books', url: '/favourite-books', icon: null },
+  { title: 'Beers', url: '/favourite-beers', icon: null },
+  { title: 'Cheese', url: '/favourite-cheese', icon: null },
+  { title: 'Cities', url: '/favourite-cities', icon: null },
+  { title: 'Countries', url: '/favourite-countries', icon: null },
+  { title: 'DJs', url: '/favourite-djs', icon: null },
+  { title: 'Movies', url: '/favourite-movies', icon: null },
+  { title: 'Restaurants', url: '/favourite-restaurants', icon: null },
+  { title: 'Tracks', url: '/favourite-tracks', icon: null },
+  { title: 'Articles', url: '/favourite-articles', icon: null },
+];
+
+const tileColours = [
+  colours.pink,
+  colours.green,
+  colours.purple,
+  colours.burgandy,
+  colours.dark,
+  colours.azure,
+  colours.blueish,
+  colours.pink,
+  colours.green,
+  colours.purple,
 ];
 
 const seo = {
@@ -77,17 +42,19 @@ export default function FavouritesHubPage() {
     <Layout preview={null} title="Favourites" seo={seo}>
       <Container>
         <HubHeader>Favourites</HubHeader>
-        <Intro>Ten lists of things I love — books, beer, music, food, and more.</Intro>
-        <Grid>
-          {categories.map(({ title, url, emoji, description }) => (
-            <Card key={url} href={url}>
-              <Emoji>{emoji}</Emoji>
-              <CardTitle>{title}</CardTitle>
-              <CardDescription>{description}</CardDescription>
-            </Card>
-          ))}
-        </Grid>
       </Container>
+      <Grid>
+        {categories.map(({ title, url }, index) => (
+          <Tile key={url} href={url} backgroundColour={tileColours[index]}>
+            <TileInner>
+              <StyledIcon>
+                <Image src="/icons/007-star.png" alt="" width={64} height={64} />
+              </StyledIcon>
+              <p>{title}</p>
+            </TileInner>
+          </Tile>
+        ))}
+      </Grid>
     </Layout>
   );
 }
@@ -95,50 +62,66 @@ export default function FavouritesHubPage() {
 const HubHeader = styled.h1`
   font-size: 3rem;
   line-height: 4rem;
-  margin: 2rem 0 0.5rem;
-`;
-
-const Intro = styled.p`
-  margin: 0 0 2rem;
-  font-size: 1.125rem;
+  margin: 2rem 0 1rem;
 `;
 
 const Grid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 1.25rem;
-  margin-bottom: 3rem;
-`;
-
-const Card = styled(Link)`
   display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  padding: 1.25rem;
-  border: 1px solid #e5e5e5;
-  border-radius: 8px;
-  text-decoration: none;
-  color: inherit;
-  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  flex-wrap: wrap;
+  padding: 0 10px 10px;
 
-  &:hover {
-    border-color: #999;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  @media (min-width: 769px) {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 8px;
   }
 `;
 
-const Emoji = styled.span`
-  font-size: 2rem;
-  line-height: 1;
+const Tile = styled(Link)<{ backgroundColour: string }>`
+  background-color: ${(props) => props.backgroundColour};
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 1;
+  text-decoration: none;
+  border: 1px solid #ccc;
+  margin: 2px;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+
+  @media (max-width: 768px) {
+    border: 0;
+    margin: 0;
+    width: 50%;
+  }
+
+  &:hover p {
+    text-decoration: underline;
+  }
 `;
 
-const CardTitle = styled.h2`
-  font-size: 1.25rem;
-  margin: 0;
+const TileInner = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  gap: 0.5rem;
+
+  p {
+    font-size: 1.5rem;
+    font-weight: 700;
+    padding: 0 10px;
+    margin: 0;
+    text-align: center;
+  }
 `;
 
-const CardDescription = styled.p`
-  font-size: 0.9rem;
-  margin: 0;
-  color: #555;
+const StyledIcon = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
