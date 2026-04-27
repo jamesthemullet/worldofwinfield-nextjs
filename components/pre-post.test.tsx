@@ -17,6 +17,8 @@ jest.mock('../pages/_app', () => ({
 }));
 
 const noTags = { edges: [] };
+const exiledTag = { edges: [{ node: { name: 'ExiledToryRemainerScum' } }] };
+const politicsTag = { edges: [{ node: { name: 'Politics' } }] };
 
 describe('PrePost', () => {
   it('shows reading time when content is provided', () => {
@@ -32,21 +34,28 @@ describe('PrePost', () => {
   });
 
   it('shows the ExiledToryRemainerScum note when the tag is present', () => {
-    const tags = { edges: [{ node: { name: 'ExiledToryRemainerScum' } }] };
-    render(<PrePost tags={tags} date="2023-01-01" />);
+    render(<PrePost tags={exiledTag} date="2023-01-01" />);
     expect(screen.getByText(/Originally posted on the now-defunct/)).toBeInTheDocument();
   });
 
-  it('shows an age notice for a Politics post more than 2 years old', () => {
-    const tags = { edges: [{ node: { name: 'Politics' } }] };
-    render(<PrePost tags={tags} date="2020-01-01" />);
-    expect(screen.getByText(/This post is \d+ years old/)).toBeInTheDocument();
-  });
+  describe('Politics staleness note', () => {
+    beforeEach(() => {
+      jest.useFakeTimers();
+      jest.setSystemTime(new Date('2026-01-01'));
+    });
 
-  it('does not show an age notice for a recent Politics post', () => {
-    const recentYear = new Date().getFullYear();
-    const tags = { edges: [{ node: { name: 'Politics' } }] };
-    render(<PrePost tags={tags} date={`${recentYear}-01-01`} />);
-    expect(screen.queryByText(/This post is \d+ years old/)).not.toBeInTheDocument();
+    afterEach(() => {
+      jest.useRealTimers();
+    });
+
+    it('shows staleness note for a Politics post more than 2 years old', () => {
+      render(<PrePost tags={politicsTag} date="2020-01-01" />);
+      expect(screen.getByText(/This post is \d+ years old/)).toBeInTheDocument();
+    });
+
+    it('does not show staleness note for a recent Politics post', () => {
+      render(<PrePost tags={politicsTag} date="2025-06-01" />);
+      expect(screen.queryByText(/This post is \d+ years old/)).not.toBeInTheDocument();
+    });
   });
 });

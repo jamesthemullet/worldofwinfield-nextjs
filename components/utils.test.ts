@@ -1,4 +1,4 @@
-import { getMonthNumber, getMonthName } from './utils';
+import { getMonthNumber, getMonthName, calculateReadingTime } from './utils';
 
 describe('getMonthNumber', () => {
   it.each([
@@ -54,5 +54,25 @@ describe('getMonthName', () => {
     for (let i = 1; i <= 12; i++) {
       expect(getMonthNumber(getMonthName(i))).toBe(i);
     }
+  });
+});
+
+describe('calculateReadingTime', () => {
+  it('returns 1 for an empty string', () => {
+    expect(calculateReadingTime('')).toBe(1);
+  });
+
+  it('returns 1 for content with fewer than 200 words', () => {
+    const content = '<p>' + 'word '.repeat(100).trim() + '</p>';
+    expect(calculateReadingTime(content)).toBe(1);
+  });
+
+  it('returns 2 for content with 201 words', () => {
+    const content = '<p>' + Array(201).fill('word').join(' ') + '</p>';
+    expect(calculateReadingTime(content)).toBe(2);
+  });
+
+  it('strips HTML tags before counting words', () => {
+    expect(calculateReadingTime('<h1>Title</h1><p>Hello world</p>')).toBe(1);
   });
 });
