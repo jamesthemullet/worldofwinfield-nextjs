@@ -71,11 +71,11 @@ const Grid = styled.div`
   flex-wrap: wrap;
 
   @media (min-width: 769px) {
+    margin: 20px auto;
     display: grid;
     grid-template-columns: repeat(5, 1fr);
-    gap: 8px;
+    gap: 16px;
     max-width: 1100px;
-    margin: 0 auto;
   }
 `;
 
@@ -88,7 +88,6 @@ const Tile = styled(Link)<{ backgroundColour: string }>`
   aspect-ratio: 1;
   text-decoration: none;
   border: 1px solid #ccc;
-  margin: 2px;
   position: relative;
   overflow: hidden;
   width: 100%;
@@ -115,7 +114,6 @@ const TileInner = styled.div`
 
   p {
     font-size: 1.5rem;
-    font-weight: 700;
     padding: 0 10px;
     margin: 0;
     text-align: center;
