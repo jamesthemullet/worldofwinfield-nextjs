@@ -105,12 +105,12 @@ const Tile = styled(Link)<{ backgroundColour: string }>`
 `;
 
 const TileInner = styled.div`
+  position: absolute;
+  inset: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 100%;
-  height: 100%;
   gap: 0.5rem;
 
   p {

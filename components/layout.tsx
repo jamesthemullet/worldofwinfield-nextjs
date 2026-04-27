@@ -9,14 +9,22 @@ export default function Layout({ preview, children, seo, title, ogType, articleD
     <>
       <SkipLink href="#main-content">Skip to main content</SkipLink>
       <Meta seo={seo ?? undefined} title={title} ogType={ogType} articleDate={articleDate} articleModified={articleModified} articleAuthor={articleAuthor} />
-      <StyledDiv>
-        <Alert preview={preview} />
-        <main id="main-content">{children}</main>
-      </StyledDiv>
-      <Footer />
+      <PageWrapper>
+        <StyledDiv>
+          <Alert preview={preview} />
+          <main id="main-content">{children}</main>
+        </StyledDiv>
+        <Footer />
+      </PageWrapper>
     </>
   );
 }
+
+const PageWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 3.5rem);
+`;
 
 const StyledDiv = styled.div`
   flex: 1;
