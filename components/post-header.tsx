@@ -58,9 +58,13 @@ export default function PostHeader({
           )}
         </ImageContainer>
       )}
-      <StyledLink href={`/${slug}`} aria-label={title}>
+      {slug ? (
+        <StyledLink href={`/${slug}`} aria-label={title}>
+          <PostTitle backgroundColour={randomColour1}>{title}</PostTitle>
+        </StyledLink>
+      ) : (
         <PostTitle backgroundColour={randomColour1}>{title}</PostTitle>
-      </StyledLink>
+      )}
       <div>
         <PostedContainer backgroundColour={randomColour2} colour={colours.white}>
           {date && (
