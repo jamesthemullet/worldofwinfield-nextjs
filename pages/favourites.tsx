@@ -120,6 +120,7 @@ const TileInner = styled.div`
     margin: 0;
     text-align: center;
     font-family: 'Oswald', sans-serif;
+    letter-spacing: 2px;
   }
 `;
 
