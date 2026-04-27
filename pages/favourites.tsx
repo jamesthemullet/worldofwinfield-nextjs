@@ -42,19 +42,19 @@ export default function FavouritesHubPage() {
     <Layout preview={null} title="Favourites" seo={seo}>
       <Container>
         <HubHeader>Favourites</HubHeader>
+        <Grid>
+          {categories.map(({ title, url }, index) => (
+            <Tile key={url} href={url} backgroundColour={tileColours[index]}>
+              <TileInner>
+                <StyledIcon>
+                  <Image src="/icons/007-star.png" alt="" width={64} height={64} />
+                </StyledIcon>
+                <p>{title}</p>
+              </TileInner>
+            </Tile>
+          ))}
+        </Grid>
       </Container>
-      <Grid>
-        {categories.map(({ title, url }, index) => (
-          <Tile key={url} href={url} backgroundColour={tileColours[index]}>
-            <TileInner>
-              <StyledIcon>
-                <Image src="/icons/007-star.png" alt="" width={64} height={64} />
-              </StyledIcon>
-              <p>{title}</p>
-            </TileInner>
-          </Tile>
-        ))}
-      </Grid>
     </Layout>
   );
 }
@@ -68,13 +68,13 @@ const HubHeader = styled.h1`
 const Grid = styled.div`
   display: flex;
   flex-wrap: wrap;
-  padding: 0 10px 10px;
 
   @media (min-width: 769px) {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     gap: 8px;
     max-width: 1100px;
+    margin: 0 auto;
   }
 `;
 
