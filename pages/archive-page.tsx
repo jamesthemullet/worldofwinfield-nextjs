@@ -1,5 +1,4 @@
 import React from 'react';
-import ErrorPage from 'next/error';
 import { useRouter } from 'next/router';
 import { getPostsByDate } from '../lib/api';
 import { ArchivePageProps } from '../lib/types';
@@ -14,34 +13,33 @@ import styled from '@emotion/styled';
 const ArchivePage = ({ posts: { posts }, month, year }: ArchivePageProps) => {
   const router = useRouter();
   const wordyMonth = getMonthName(month);
+  const title = `Archives Posts from ${wordyMonth} ${year}`;
+  const hasPosts = posts.length > 0 && posts[0]?.slug;
 
-  if (!router.isFallback && !posts[0]?.slug) {
-    return <ErrorPage statusCode={404} />;
+  if (router.isFallback) {
+    return <PostTitle>Loading…</PostTitle>;
   }
+
   return (
-    <Layout preview={null} seo={posts[0]?.seo}>
+    <Layout preview={null} seo={hasPosts ? posts[0]?.seo : null}>
       <Container>
-        {router.isFallback ? (
-          <PostTitle>Loading…</PostTitle>
+        <PostHeader
+          title={title}
+          coverImage={hasPosts ? posts[0].featuredImage : undefined}
+          date={hasPosts ? posts[0].date : undefined}
+        />
+        {hasPosts ? (
+          <SearchResultsContainer>
+            <ul>
+              {posts.map((post) => (
+                <li key={post.id}>
+                  <a href={`/${post.slug}`}>{post.title}</a>
+                </li>
+              ))}
+            </ul>
+          </SearchResultsContainer>
         ) : (
-          <>
-            <PostHeader
-              title={`Archives Posts from ${wordyMonth} ${year}`}
-              coverImage={posts[0].featuredImage}
-              date={posts[0].date}
-              author={posts[0].author}
-              categories={posts[0].categories}
-            />
-            <SearchResultsContainer>
-              <ul>
-                {posts.map((post) => (
-                  <li key={post.id}>
-                    <a href={`/${post.slug}`}>{post.title}</a>
-                  </li>
-                ))}
-              </ul>
-            </SearchResultsContainer>
-          </>
+          <NoPostsMessage>No posts found for {wordyMonth} {year}</NoPostsMessage>
         )}
       </Container>
     </Layout>
@@ -66,6 +64,13 @@ export async function getServerSideProps(context: { query: { month: string; year
 }
 
 export default ArchivePage;
+
+const NoPostsMessage = styled.p`
+  color: ${colours.dark};
+  font-size: 1.25rem;
+  padding: 2rem;
+  text-align: center;
+`;
 
 const SearchResultsContainer = styled.div`
   list-style: none;
