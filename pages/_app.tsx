@@ -24,6 +24,12 @@ export const colours = {
 };
 
 export const globalStyles = css`
+  #__next {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+
   @font-face {
     font-family: 'Oswald';
     src: url('/fonts/Oswald-VariableFont_rght.ttf') format('truetype');
