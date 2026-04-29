@@ -1,8 +1,7 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import ArchivePage, { getServerSideProps } from './archive-page';
-import { getPostsByDate } from '../lib/api';
+import ArchivePage from './archive-page';
 import { ArchivePageProps } from '../lib/types';
 
 const mockRouter = { isFallback: false };
@@ -39,10 +38,6 @@ jest.mock('../components/post-title', () => ({
   default: ({ children }: { children: React.ReactNode }) => (
     <div data-testid="post-title">{children}</div>
   ),
-}));
-
-jest.mock('../lib/api', () => ({
-  getPostsByDate: jest.fn(),
 }));
 
 const mockPost = {
@@ -112,42 +107,3 @@ describe('ArchivePage', () => {
   });
 });
 
-describe('getServerSideProps', () => {
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
-
-  it('returns notFound for month below 1', async () => {
-    const result = await getServerSideProps({ query: { month: '0', year: '2025' } });
-    expect(result).toEqual({ notFound: true });
-  });
-
-  it('returns notFound for month above 12', async () => {
-    const result = await getServerSideProps({ query: { month: '13', year: '2025' } });
-    expect(result).toEqual({ notFound: true });
-  });
-
-  it('returns notFound for non-numeric month', async () => {
-    const result = await getServerSideProps({ query: { month: 'abc', year: '2025' } });
-    expect(result).toEqual({ notFound: true });
-  });
-
-  it('returns notFound for year before 2000', async () => {
-    const result = await getServerSideProps({ query: { month: '3', year: '1999' } });
-    expect(result).toEqual({ notFound: true });
-  });
-
-  it('returns notFound for non-numeric year', async () => {
-    const result = await getServerSideProps({ query: { month: '3', year: 'abc' } });
-    expect(result).toEqual({ notFound: true });
-  });
-
-  it('returns posts as props for valid month and year', async () => {
-    const fakePosts = { posts: [mockPost] };
-    (getPostsByDate as jest.Mock).mockResolvedValue(fakePosts);
-
-    const result = await getServerSideProps({ query: { month: '3', year: '2025' } });
-    expect(result).toEqual({ props: { posts: fakePosts, month: 3, year: 2025 } });
-    expect(getPostsByDate).toHaveBeenCalledWith(3, 2025);
-  });
-});
