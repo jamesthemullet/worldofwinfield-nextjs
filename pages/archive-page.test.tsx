@@ -3,6 +3,7 @@ import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import ArchivePage, { getServerSideProps } from './archive-page';
 import { getPostsByDate } from '../lib/api';
+import { ArchivePageProps } from '../lib/types';
 
 const mockRouter = { isFallback: false };
 
@@ -49,17 +50,19 @@ const mockPost = {
   slug: 'test-post',
   title: 'Test Post',
   date: '2025-03-01',
+  excerpt: '',
+  content: '',
   featuredImage: null,
   seo: null,
   author: null,
+  tags: { edges: [] },
   categories: { edges: [] },
 };
 
-const defaultProps = {
-  posts: { posts: [mockPost] },
-  month: 3,
-  year: 2025,
-};
+const makeProps = (posts: typeof mockPost[]): ArchivePageProps =>
+  ({ posts: { posts }, month: 3, year: 2025 } as unknown as ArchivePageProps);
+
+const defaultProps = makeProps([mockPost]);
 
 describe('ArchivePage', () => {
   beforeEach(() => {
@@ -80,19 +83,19 @@ describe('ArchivePage', () => {
 
   it('renders multiple posts', () => {
     const secondPost = { ...mockPost, id: '2', slug: 'second-post', title: 'Second Post' };
-    render(<ArchivePage {...defaultProps} posts={{ posts: [mockPost, secondPost] }} />);
+    render(<ArchivePage {...makeProps([mockPost, secondPost])} />);
     expect(screen.getByText('Test Post')).toBeInTheDocument();
     expect(screen.getByText('Second Post')).toBeInTheDocument();
   });
 
   it('renders the header and no-posts message when there are no posts', () => {
-    render(<ArchivePage {...defaultProps} posts={{ posts: [] }} />);
+    render(<ArchivePage {...makeProps([])} />);
     expect(screen.getByTestId('post-header')).toHaveTextContent('Archives Posts from March 2025');
     expect(screen.getByText('No posts found for March 2025')).toBeInTheDocument();
   });
 
   it('does not render a post list when there are no posts', () => {
-    render(<ArchivePage {...defaultProps} posts={{ posts: [] }} />);
+    render(<ArchivePage {...makeProps([])} />);
     expect(screen.queryByRole('list')).not.toBeInTheDocument();
   });
 
