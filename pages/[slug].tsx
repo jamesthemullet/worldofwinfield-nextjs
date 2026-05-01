@@ -12,6 +12,7 @@ import { getAllPostsWithSlug, getPost, getRelatedPosts } from '../lib/api';
 import { PostProps } from '../lib/types';
 import PrePost from '../components/pre-post';
 import RelatedPosts from '../components/related-posts';
+import ShareBar from '../components/share-bar';
 import Custom404 from './404';
 
 export default function Post({ post, preview, relatedPosts }: PostProps) {
@@ -51,6 +52,10 @@ export default function Post({ post, preview, relatedPosts }: PostProps) {
               <PrePost tags={post.tags} date={post.date} content={post.content} />
               <PostBody content={post.content} />
               {post.tags.edges.length > 0 && <Tags tags={post.tags} />}
+              <ShareBar
+                title={post.title}
+                url={`https://worldofwinfield.co.uk/${post.slug}`}
+              />
             </article>
             {relatedPosts?.length > 0 && <RelatedPosts posts={relatedPosts} />}
             <SectionSeparator />

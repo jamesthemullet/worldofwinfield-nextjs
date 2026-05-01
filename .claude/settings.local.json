@@ -14,7 +14,8 @@
       "Bash(yarn lint *)",
       "Bash(git stash *)",
       "Bash(yarn build *)",
-      "Bash(xargs grep *)"
+      "Bash(xargs grep *)",
+      "Bash(git branch *)"
     ]
   }
 }
