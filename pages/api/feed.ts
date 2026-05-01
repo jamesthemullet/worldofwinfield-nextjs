@@ -3,7 +3,7 @@ import { getAllPostsForHome } from '../../lib/api';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const data = await getAllPostsForHome(false);
-  const posts = data.posts.edges.map(({ node }: { node: Record<string, unknown> }) => node);
+  const posts = data.edges.map(({ node }: { node: Record<string, unknown> }) => node);
 
   const siteUrl = 'https://www.worldofwinfield.com';
 
