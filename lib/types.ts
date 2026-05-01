@@ -70,6 +70,7 @@ export type TagsPostProps = {
     slug: string;
     date: string;
     id: string;
+    excerpt: string;
   }[];
   tag: string;
 };

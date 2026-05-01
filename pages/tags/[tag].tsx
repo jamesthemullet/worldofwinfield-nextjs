@@ -10,6 +10,9 @@ import { getPostsByTag } from '../../lib/api';
 import { TagsPostProps } from '../../lib/types';
 import Link from 'next/link';
 import { ContentContainer } from '../../components/post-body';
+import Date from '../../components/date';
+import styled from '@emotion/styled';
+import { sanitize } from '../../lib/sanitize';
 
 export default function Post({ posts, tag }: TagsPostProps) {
   const router = useRouter();
@@ -35,13 +38,23 @@ export default function Post({ posts, tag }: TagsPostProps) {
             <article>
               <PostHeader title={`Tagged: ${tag}`} />
               <ContentContainer>
-                <p>All the posts that are tagged with {tag}</p>
+                <PostCount>
+                  {posts.length} {posts.length === 1 ? 'post' : 'posts'} tagged with {tag}
+                </PostCount>
                 {posts.map((post) => (
-                  <div key={post.id}>
-                    <Link href={`/${post.slug}`} aria-label={post.title}>
-                      {post.title}
-                    </Link>
-                  </div>
+                  <TagPostCard key={post.id}>
+                    <TagPostTitle>
+                      <Link href={`/${post.slug}`}>{post.title}</Link>
+                    </TagPostTitle>
+                    <TagPostDate>
+                      <Date dateString={post.date} />
+                    </TagPostDate>
+                    {post.excerpt && (
+                      <TagPostExcerpt
+                        dangerouslySetInnerHTML={{ __html: sanitize(post.excerpt) }}
+                      />
+                    )}
+                  </TagPostCard>
                 ))}
               </ContentContainer>
             </article>
@@ -51,6 +64,52 @@ export default function Post({ posts, tag }: TagsPostProps) {
     </Layout>
   );
 }
+
+const PostCount = styled.p`
+  font-size: 1rem;
+  color: #666;
+  margin-bottom: 2rem;
+`;
+
+const TagPostCard = styled.div`
+  margin-bottom: 2rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid #eee;
+
+  &:last-child {
+    border-bottom: none;
+  }
+`;
+
+const TagPostTitle = styled.h2`
+  font-size: 1.5rem;
+  margin: 0 0 0.25rem;
+
+  a {
+    text-decoration: none;
+    color: inherit;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+`;
+
+const TagPostDate = styled.div`
+  font-size: 0.875rem;
+  color: #666;
+  margin-bottom: 0.5rem;
+`;
+
+const TagPostExcerpt = styled.div`
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #333;
+
+  p {
+    margin: 0;
+  }
+`;
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const tag = params?.tag as string;
