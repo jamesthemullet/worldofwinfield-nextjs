@@ -11,6 +11,7 @@ export default function Footer() {
           <FlexRow>
             <ArchiveDropdown />
             <p>World Of Winfield</p>
+            <RssLink href="/api/feed">Subscribe via RSS</RssLink>
           </FlexRow>
           <IconAttribution>
             Icons made by{' '}
@@ -63,6 +64,18 @@ const FlexRow = styled.div`
 
   @media screen and (max-width: 768px) {
     flex-direction: column;
+  }
+`;
+
+const RssLink = styled.a`
+  color: ${colours.white};
+  text-decoration: none;
+  font-size: 1rem;
+  letter-spacing: 1px;
+  align-self: center;
+
+  &:hover {
+    text-decoration: underline;
   }
 `;
 
