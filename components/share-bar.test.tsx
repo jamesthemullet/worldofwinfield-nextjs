@@ -23,26 +23,26 @@ describe('ShareBar', () => {
     expect(screen.getByText('Share this post:')).toBeInTheDocument();
   });
 
-  it('renders the Twitter/X share link with correct href', () => {
+  it('renders the Bluesky share link with correct href', () => {
     render(<ShareBar {...defaultProps} />);
-    const twitterLink = screen.getByRole('link', { name: /share on x/i });
-    expect(twitterLink).toHaveAttribute(
+    const blueskyLink = screen.getByRole('link', { name: /share on bluesky/i });
+    expect(blueskyLink).toHaveAttribute(
       'href',
-      `https://x.com/intent/tweet?text=${encodeURIComponent(defaultProps.title)}&url=${encodeURIComponent(defaultProps.url)}`
+      `https://bsky.app/intent/compose?text=${encodeURIComponent(defaultProps.title)}%20${encodeURIComponent(defaultProps.url)}`
     );
-    expect(twitterLink).toHaveAttribute('target', '_blank');
-    expect(twitterLink).toHaveAttribute('rel', 'noopener noreferrer');
+    expect(blueskyLink).toHaveAttribute('target', '_blank');
+    expect(blueskyLink).toHaveAttribute('rel', 'noopener noreferrer');
   });
 
-  it('renders the LinkedIn share link with correct href', () => {
+  it('renders the Threads share link with correct href', () => {
     render(<ShareBar {...defaultProps} />);
-    const linkedInLink = screen.getByRole('link', { name: /share on linkedin/i });
-    expect(linkedInLink).toHaveAttribute(
+    const threadsLink = screen.getByRole('link', { name: /share on threads/i });
+    expect(threadsLink).toHaveAttribute(
       'href',
-      `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(defaultProps.url)}`
+      `https://www.threads.net/intent/post?text=${encodeURIComponent(defaultProps.title)}%20${encodeURIComponent(defaultProps.url)}`
     );
-    expect(linkedInLink).toHaveAttribute('target', '_blank');
-    expect(linkedInLink).toHaveAttribute('rel', 'noopener noreferrer');
+    expect(threadsLink).toHaveAttribute('target', '_blank');
+    expect(threadsLink).toHaveAttribute('rel', 'noopener noreferrer');
   });
 
   it('renders the copy link button', () => {
