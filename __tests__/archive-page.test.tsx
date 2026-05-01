@@ -1,8 +1,8 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import ArchivePage from '../archive-page';
-import { ArchivePageProps } from '../../lib/types';
+import ArchivePage from '../pages/archive-page';
+import { ArchivePageProps } from '../lib/types';
 
 const mockRouter = { isFallback: false };
 
@@ -10,7 +10,7 @@ jest.mock('next/router', () => ({
   useRouter: () => mockRouter,
 }));
 
-jest.mock('../_app', () => ({
+jest.mock('../pages/_app', () => ({
   colours: {
     dark: '#291720',
     white: '#FFFFFF',
@@ -23,17 +23,17 @@ jest.mock('../_app', () => ({
   },
 }));
 
-jest.mock('../../components/layout', () => ({
+jest.mock('../components/layout', () => ({
   __esModule: true,
   default: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
 }));
 
-jest.mock('../../components/post-header', () => ({
+jest.mock('../components/post-header', () => ({
   __esModule: true,
   default: ({ title }: { title: string }) => <div data-testid="post-header">{title}</div>,
 }));
 
-jest.mock('../../components/post-title', () => ({
+jest.mock('../components/post-title', () => ({
   __esModule: true,
   default: ({ children }: { children: React.ReactNode }) => (
     <div data-testid="post-title">{children}</div>
@@ -106,4 +106,3 @@ describe('ArchivePage', () => {
     expect(screen.queryByTestId('post-header')).not.toBeInTheDocument();
   });
 });
-
