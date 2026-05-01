@@ -19,7 +19,7 @@ describe('Nav', () => {
 
   it('renders the dropdown toggle buttons', () => {
     render(<Nav />);
-    expect(screen.getByRole('button', { name: 'Favourites' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Favourites', hidden: true })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Wish Lists' })).toBeInTheDocument();
   });
 
@@ -58,18 +58,15 @@ describe('Nav', () => {
     expect(screen.getByRole('link', { name: 'Books', hidden: true })).toHaveAttribute('href', '/favourite-books');
   });
 
-  it('toggles the Favourites dropdown open and closed when the button is clicked', () => {
+  it('toggles the Favourites dropdown open and closed when the arrow is clicked', () => {
     render(<Nav />);
-    const favouritesButton = screen.getByRole('button', { name: 'Favourites' });
+    const favouritesArrow = screen.getByRole('button', { name: 'Toggle Favourites submenu' });
 
-    // Initial state: dropdown is closed (pointer-events: none via styled-component)
-    // We verify the open state by checking the NavList class after burger toggle
-    // For the dropdown, we test that clicking the button does not throw and the DOM remains stable
-    fireEvent.click(favouritesButton);
-    expect(screen.getByRole('button', { name: 'Favourites' })).toBeInTheDocument();
+    fireEvent.click(favouritesArrow);
+    expect(screen.getByRole('button', { name: 'Toggle Favourites submenu' })).toBeInTheDocument();
 
-    fireEvent.click(favouritesButton);
-    expect(screen.getByRole('button', { name: 'Favourites' })).toBeInTheDocument();
+    fireEvent.click(favouritesArrow);
+    expect(screen.getByRole('button', { name: 'Toggle Favourites submenu' })).toBeInTheDocument();
   });
 
   it('toggles the Wish Lists dropdown when clicked', () => {
