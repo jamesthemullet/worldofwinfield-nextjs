@@ -415,6 +415,17 @@ export async function getPostsByTag(tag: string) {
           slug
           date
           id
+          excerpt
+          featuredImage {
+            node {
+              sourceUrl
+              mediaDetails {
+                height
+                width
+              }
+              caption
+            }
+          }
         }
       }
     }`,
