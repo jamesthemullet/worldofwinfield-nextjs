@@ -71,6 +71,18 @@ export type TagsPostProps = {
     date: string;
     id: string;
     excerpt: string;
+    featuredImage?: {
+      node: {
+        sourceUrl: string;
+        mediaDetails: {
+          height: number;
+          width: number;
+          sizes: string;
+          srcset: string;
+        };
+        caption: string;
+      };
+    };
   }[];
   tag: string;
 };
