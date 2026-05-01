@@ -15,6 +15,7 @@
       "Bash(git stash *)",
       "Bash(yarn build *)",
       "Bash(xargs grep *)",
+      "Bash(git branch *)"
       "Bash(gh issue *)",
       "Bash(yarn tsc *)"
     ]
