@@ -507,6 +507,51 @@ export async function getRelatedPosts(tag: string, excludeSlug: string) {
     .slice(0, 3);
 }
 
+export async function getAdjacentPosts(date: string) {
+  const parsedDate = new Date(date);
+  const year = parsedDate.getFullYear();
+  const month = parsedDate.getMonth() + 1;
+  const day = parsedDate.getDate();
+
+  const data = await fetchAPI(
+    `
+    query GetAdjacentPosts($year: Int!, $month: Int!, $day: Int!) {
+      previousPost: posts(
+        where: {
+          dateQuery: { before: { year: $year, month: $month, day: $day }, inclusive: false }
+          orderby: { field: DATE, order: DESC }
+        }
+        first: 1
+      ) {
+        nodes {
+          title
+          slug
+        }
+      }
+      nextPost: posts(
+        where: {
+          dateQuery: { after: { year: $year, month: $month, day: $day }, inclusive: false }
+          orderby: { field: DATE, order: ASC }
+        }
+        first: 1
+      ) {
+        nodes {
+          title
+          slug
+        }
+      }
+    }`,
+    {
+      variables: { year, month, day },
+    },
+  );
+
+  return {
+    previousPost: (data.previousPost?.nodes?.[0] as { title: string; slug: string }) ?? null,
+    nextPost: (data.nextPost?.nodes?.[0] as { title: string; slug: string }) ?? null,
+  };
+}
+
 export async function getRandomImage(randomMonth: number, randomYear: number) {
   const data = await fetchAPI(
     `

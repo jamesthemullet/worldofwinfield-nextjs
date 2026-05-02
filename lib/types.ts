@@ -34,8 +34,17 @@ type SinglePostProps = {
   seo: seoProps;
 };
 
+export type AdjacentPost = {
+  title: string;
+  slug: string;
+};
+
 export type PostProps = {
   post: SinglePostProps;
+  adjacentPosts: {
+    previousPost: AdjacentPost | null;
+    nextPost: AdjacentPost | null;
+  };
   posts: {
     edges: {
       node: {
