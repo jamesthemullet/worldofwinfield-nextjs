@@ -21,6 +21,7 @@ type HomePageBlockTypes = {
   date?: string;
   jamesImages: JamesImagesProps;
   icon?: string;
+  label?: string;
 };
 
 const PLACEHOLDER = 'placeholder';
@@ -45,6 +46,7 @@ export default function HomepageBlock({
   date,
   jamesImages,
   icon,
+  label,
 }: HomePageBlockTypes) {
   const [randomColour] = useState(
     () => blockColours[Math.floor(Math.random() * blockColours.length)]
@@ -66,6 +68,7 @@ export default function HomepageBlock({
       className={className}
       image={imageSrc}
       date={date}>
+      {label && <LabelBadge>{label}</LabelBadge>}
       {url && title !== RANDOM_PHOTO ? (
         <StyledLinkImage href={url} aria-label={title}>
           {imageSrc?.node && size === 1 && (
@@ -176,6 +179,21 @@ const StyledIcon = styled.div`
   transform: translate(-50%, -50%);
   top: 50%;
   left: 50%;
+`;
+
+const LabelBadge = styled.span`
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  background: rgba(0, 0, 0, 0.75);
+  color: white;
+  padding: 3px 8px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  z-index: 10;
+  pointer-events: none;
 `;
 
 const Block = styled.div<{

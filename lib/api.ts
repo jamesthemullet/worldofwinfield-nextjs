@@ -391,6 +391,21 @@ export async function getPostsByDate(month: number, year: number) {
           title
           date
           slug
+          featuredImage {
+            node {
+              mediaDetails {
+                sizes {
+                  height
+                  width
+                  sourceUrl
+                }
+                height
+                width
+              }
+              srcSet
+              sourceUrl
+            }
+          }
         }
       }
     }`,
@@ -403,6 +418,25 @@ export async function getPostsByDate(month: number, year: number) {
     month,
     year,
   };
+}
+
+export async function getArchivePost() {
+  const now = new Date();
+  const month = now.getMonth() + 1;
+
+  for (const offset of [3, 2, 4]) {
+    const year = now.getFullYear() - offset;
+    const result = await getPostsByDate(month, year);
+    if (result.posts.length > 0) {
+      const randomIndex = Math.floor(Math.random() * result.posts.length);
+      return {
+        post: result.posts[randomIndex],
+        yearsAgo: offset,
+      };
+    }
+  }
+
+  return null;
 }
 
 export async function getPostsByTag(tag: string) {

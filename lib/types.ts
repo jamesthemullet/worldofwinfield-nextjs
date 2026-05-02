@@ -246,6 +246,29 @@ export type IndexPageProps = {
         }[]
       | null;
   };
+  archivePost: {
+    post: {
+      title: string;
+      date: string;
+      slug: string;
+      featuredImage: {
+        node: {
+          mediaDetails: {
+            sizes: {
+              height: string;
+              width: string;
+              sourceUrl: string;
+            }[];
+            height: number;
+            width: number;
+          };
+          srcSet: string;
+          sourceUrl: string;
+        };
+      } | null;
+    };
+    yearsAgo: number;
+  } | null;
 };
 
 export type PrePostProps = {

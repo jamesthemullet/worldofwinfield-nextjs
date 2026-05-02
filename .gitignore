@@ -41,3 +41,4 @@ yarn.lock
 scripts/enrich-tracks-output.csv
 scripts/enrich-tracks-progress.json
 .claude/settings.local.json
+.claude/settings.local.json
