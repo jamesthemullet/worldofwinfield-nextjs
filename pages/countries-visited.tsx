@@ -163,7 +163,7 @@ const StyledPostHeader = styled.div`
 const StatBlock = styled.div`
   display: flex;
   gap: 2rem;
-  margin: 0 auto 2rem;
+  margin: 0 auto;
   padding: 1.5rem 2rem;
   max-width: 800px;
   background: #f5f5f5;
