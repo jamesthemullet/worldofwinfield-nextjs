@@ -2,7 +2,7 @@ import { GetStaticProps } from 'next';
 import { useEffect, useState } from 'react';
 import Intro from '../components/intro';
 import Layout from '../components/layout';
-import { getFirstPost, getJamesImages, getPostDisplayInfo, getRandomImage } from '../lib/api';
+import { getArchivePost, getFirstPost, getJamesImages, getPostDisplayInfo, getRandomImage } from '../lib/api';
 import { IndexPageProps } from '../lib/types';
 import HomepageBlock from '../components/homepage-block';
 import styled from '@emotion/styled';
@@ -16,6 +16,7 @@ export default function Index({
   firstPost,
   randomPosts,
   randomImageSet,
+  archivePost,
 }: IndexPageProps) {
   const [searchResults, setSearchResults] = useState<{ slug: string; title: string; date: string }[] | null>(null);
   const [randomImage, setRandomImage] = useState<IndexPageProps['jamesImages']['edges'][0]['node']['featuredImage'] | null>(null);
@@ -240,11 +241,12 @@ export default function Index({
     },
     {
       className: 'block-13',
-      title: randomPosts[2]?.title,
-      url: `/${randomPosts[2]?.slug}`,
+      title: archivePost?.post?.title ?? 'placeholder',
+      url: archivePost?.post ? `/${archivePost.post.slug}` : null,
       size: 2,
-      image: randomPosts[2]?.featuredImage,
-      date: randomPosts[2]?.date,
+      image: archivePost?.post?.featuredImage ?? null,
+      date: archivePost?.post?.date,
+      label: archivePost ? `${archivePost.yearsAgo} years ago` : undefined,
     },
     {
       className: 'block-13-1 placeholder',
@@ -337,6 +339,7 @@ export default function Index({
             date={block.date}
             jamesImages={jamesImages}
             icon={block.icon}
+            label={block.label}
           />
         ))}
       </HomepageBlocksContainer>
@@ -354,19 +357,19 @@ export const getStaticProps: GetStaticProps = async ({ preview = false }) => {
   const randomYear = years[Math.floor(Math.random() * years.length)];
   const randomMonth = Math.floor(Math.random() * 12) + 1;
 
-  const [jamesImages, firstPost, randomPosts, randomImageSet] = await Promise.all([
+  const [jamesImages, firstPost, randomPosts, randomImageSet, archivePost] = await Promise.all([
     getJamesImages({ first: 20 }),
     getFirstPost(),
     getPostDisplayInfo([
       String(getRandomPostId()),
       String(getRandomPostId()),
-      String(getRandomPostId()),
     ]),
     getRandomImage(randomMonth, randomYear),
+    getArchivePost(),
   ]);
 
   return {
-    props: { preview, jamesImages, firstPost, randomPosts, randomImageSet },
+    props: { preview, jamesImages, firstPost, randomPosts, randomImageSet, archivePost },
     revalidate: 3600,
   };
 };
