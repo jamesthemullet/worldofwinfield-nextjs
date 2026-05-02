@@ -95,9 +95,18 @@ export default function CountriesVisited({
   };
 }) {
   const router = useRouter();
+
+  const allCountries = Object.values(transformedData).flat();
+  const totalVisited = allCountries.filter((item) => item.visited).length;
+  const totalCountries = allCountries.length;
+  const continentsExplored = Object.values(transformedData).filter((countries) =>
+    countries.some((item) => item.visited)
+  ).length;
+  const totalContinents = Object.keys(transformedData).length;
+
   const seo = {
     opengraphTitle: 'Countries Visited | World Of Winfield',
-    opengraphDescription: 'Countries visited by James Winfield, organised by continent.',
+    opengraphDescription: `I've visited ${totalVisited} of ${totalCountries} countries across ${continentsExplored} continents.`,
     opengraphSiteName: 'World Of Winfield',
   };
 
@@ -112,6 +121,20 @@ export default function CountriesVisited({
               <StyledPostHeader>
                 <PostHeader title={'Countries Visited'} />
               </StyledPostHeader>
+              <StatBlock>
+                <StatItem>
+                  <StatNumber>
+                    {totalVisited} / {totalCountries}
+                  </StatNumber>
+                  <StatLabel>countries visited</StatLabel>
+                </StatItem>
+                <StatItem>
+                  <StatNumber>
+                    {continentsExplored} / {totalContinents}
+                  </StatNumber>
+                  <StatLabel>continents explored</StatLabel>
+                </StatItem>
+              </StatBlock>
               <CountryList transformedData={transformedData} />
             </PostContainer>
           </>
@@ -135,6 +158,34 @@ const PostContainer = styled.article`
 
 const StyledPostHeader = styled.div`
   margin: 0 auto;
+`;
+
+const StatBlock = styled.div`
+  display: flex;
+  gap: 2rem;
+  margin: 0 auto;
+  padding: 1.5rem 2rem;
+  max-width: 800px;
+  background: #f5f5f5;
+  border-left: 4px solid #000;
+`;
+
+const StatItem = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const StatNumber = styled.span`
+  font-size: 2.5rem;
+  font-weight: 700;
+  line-height: 1;
+`;
+
+const StatLabel = styled.span`
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-top: 0.25rem;
 `;
 
 const ContentContainer = styled.section`
