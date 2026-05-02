@@ -8,14 +8,15 @@ import SectionSeparator from '../components/section-separator';
 import Layout from '../components/layout';
 import PostTitle from '../components/post-title';
 import Tags from '../components/tags';
-import { getAllPostsWithSlug, getPost, getRelatedPosts } from '../lib/api';
+import { getAllPostsWithSlug, getAdjacentPosts, getPost, getRelatedPosts } from '../lib/api';
 import { PostProps } from '../lib/types';
 import PrePost from '../components/pre-post';
 import RelatedPosts from '../components/related-posts';
+import PostNavigation from '../components/post-navigation';
 import ShareBar from '../components/share-bar';
 import Custom404 from './404';
 
-export default function Post({ post, preview, relatedPosts }: PostProps) {
+export default function Post({ post, preview, relatedPosts, adjacentPosts }: PostProps) {
   const router = useRouter();
 
   if (!router.isFallback && !post?.slug) {
@@ -58,6 +59,10 @@ export default function Post({ post, preview, relatedPosts }: PostProps) {
               />
             </article>
             {relatedPosts?.length > 0 && <RelatedPosts posts={relatedPosts} />}
+            <PostNavigation
+              previousPost={adjacentPosts?.previousPost ?? null}
+              nextPost={adjacentPosts?.nextPost ?? null}
+            />
             <SectionSeparator />
           </>
         )}
@@ -76,12 +81,16 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   const data = await getPost(slug);
 
   const firstTag = data?.tags?.edges?.[0]?.node?.name;
-  const relatedPosts = firstTag ? await getRelatedPosts(firstTag, slug) : [];
+  const [relatedPosts, adjacentPosts] = await Promise.all([
+    firstTag ? getRelatedPosts(firstTag, slug) : Promise.resolve([]),
+    getAdjacentPosts(data.date),
+  ]);
 
   return {
     props: {
       post: data,
       relatedPosts,
+      adjacentPosts,
     },
     revalidate: 3600,
   };
