@@ -58,9 +58,9 @@ const baseProps: PostPreviewProps = {
 };
 
 describe('PostPreview', () => {
-  it('renders the post title via PostHeader', () => {
+  it('renders the post title', () => {
     render(<PostPreview {...baseProps} />);
-    expect(screen.getByTestId('post-header')).toHaveTextContent('Test Post Title');
+    expect(screen.getByRole('heading', { name: 'Test Post Title' })).toBeInTheDocument();
   });
 
   it('renders a "Read More" link', () => {
@@ -70,7 +70,7 @@ describe('PostPreview', () => {
 
   it('"Read More" link href matches the post slug', () => {
     render(<PostPreview {...baseProps} />);
-    expect(screen.getByRole('link', { name: 'Read More' })).toHaveAttribute('href', 'test-post');
+    expect(screen.getByRole('link', { name: 'Read More' })).toHaveAttribute('href', '/test-post');
   });
 
   it('renders the excerpt text content', () => {

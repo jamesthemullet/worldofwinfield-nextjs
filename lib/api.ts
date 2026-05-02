@@ -148,11 +148,11 @@ export async function getJamesImages({ first = 10, after = null }: { first?: num
   return data.jamesImages;
 }
 
-export async function getAllPostsForHome(preview: boolean) {
+export async function getAllPostsForHome(preview: boolean, after: string | null = null) {
   const data = await fetchAPI(
     `
-    query AllPosts {
-      posts(first: 20, where: { orderby: { field: DATE, order: DESC } }) {
+    query AllPosts($after: String) {
+      posts(first: 20, after: $after, where: { orderby: { field: DATE, order: DESC } }) {
         edges {
           node {
             title
@@ -198,6 +198,10 @@ export async function getAllPostsForHome(preview: boolean) {
             }
           }
         }
+        pageInfo {
+          hasNextPage
+          endCursor
+        }
       }
     }
   `,
@@ -205,6 +209,7 @@ export async function getAllPostsForHome(preview: boolean) {
       variables: {
         onlyEnabled: !preview,
         preview,
+        after,
       },
     },
   );

@@ -185,6 +185,10 @@ export type IndexPageProps = {
         seo: seoProps;
       };
     }[];
+    pageInfo: {
+      hasNextPage: boolean;
+      endCursor: string | null;
+    };
   };
   firstPost: {
     edges: {
