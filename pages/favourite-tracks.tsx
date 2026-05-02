@@ -6,6 +6,7 @@ import Layout from '../components/layout';
 import PostTitle from '../components/post-title';
 import styled from '@emotion/styled';
 import FavouriteResults from './favourites-results';
+import FavouritesHubLink from '../components/favourites-hub-link';
 import GenreDropdown from '../components/GenreDropdown';
 
 export default function FavouritesPage() {
@@ -114,6 +115,7 @@ export default function FavouritesPage() {
                 genreFilter={selectedGenre}
                 labelFilter={selectedLabel}
               />
+              <FavouritesHubLink />
             </PostContainer>
           </>
         )}

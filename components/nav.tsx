@@ -97,13 +97,11 @@ export default function Nav() {
               if (e.key === 'Escape') toggleFavouritesDropdown(false);
             }}>
             <SplitButtonContainer role="group" aria-label="Favourites navigation">
-              <DropdownButton
-                ref={favouritesButtonRef}
-                aria-expanded={isFavouritesDropdownOpen}
-                onClick={() => toggleFavouritesDropdown()}>
-                Favourites
-              </DropdownButton>
+              <Link href="/favourites" onClick={closeNavOnMobile}>
+                <TravelLink>Favourites</TravelLink>
+              </Link>
               <DropdownArrow
+                ref={favouritesButtonRef}
                 onKeyDown={(e) => {
                   if (e.key === 'Escape') {
                     toggleFavouritesDropdown(false);
