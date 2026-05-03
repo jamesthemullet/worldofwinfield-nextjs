@@ -139,7 +139,7 @@ export default function HomepageBlock({
       <StyledIconLinkBlock href={url ?? '/'} aria-label={title}>
         <p>{title}</p>
         <StyledIcon>
-          <Image src={`/icons/${icon}.png`} alt="" width={64} height={64} />
+          <Image src={`/icons/${icon}.png`} alt="" width={64} height={64} unoptimized />
         </StyledIcon>
       </StyledIconLinkBlock>
     </Block>
