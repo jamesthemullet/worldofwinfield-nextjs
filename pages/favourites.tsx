@@ -50,7 +50,7 @@ export default function FavouritesHubPage() {
             <Tile key={url} href={url} backgroundColour={tileColours[index]}>
               <TileInner>
                 <StyledIcon>
-                  <Image src="/icons/007-star.png" alt="" width={64} height={64} />
+                  <Image src="/icons/007-star.png" alt="" width={64} height={64} unoptimized />
                 </StyledIcon>
                 <p>{title}</p>
               </TileInner>

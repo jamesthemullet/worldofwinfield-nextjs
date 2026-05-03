@@ -20,8 +20,8 @@ export default function RelatedPosts({ posts }: RelatedPostsProps) {
                   <Image
                     src={post.featuredImage.node.sourceUrl}
                     alt={post.title}
-                    width={post.featuredImage.node.mediaDetails.width || 400}
-                    height={post.featuredImage.node.mediaDetails.height || 250}
+                    width={400}
+                    height={250}
                     style={{ objectFit: 'cover', width: '100%', height: '180px' }}
                   />
                 </Link>
