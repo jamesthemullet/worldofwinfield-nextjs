@@ -19,7 +19,7 @@ const SearchBar = ({ onSearch }: SearchBarProps) => {
     setLoading(true);
     const searchResults = await searchBlogPosts(query);
     setLoading(false);
-    onSearch(searchResults);
+    onSearch(searchResults, query);
   };
 
   return (

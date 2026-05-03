@@ -80,7 +80,7 @@ describe('SearchBar', () => {
     fireEvent.submit(form);
 
     await waitFor(() => {
-      expect(onSearch).toHaveBeenCalledWith(mockResults);
+      expect(onSearch).toHaveBeenCalledWith(mockResults, 'post');
     });
   });
 

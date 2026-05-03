@@ -11,14 +11,16 @@ import SearchResults from '../components/search-results';
 import styled from '@emotion/styled';
 
 export default function Index({ allPosts, preview }: IndexPageProps) {
-  const [searchResults, setSearchResults] = useState<{ slug: string; title: string; date: string }[]>([]);
+  const [searchResults, setSearchResults] = useState<{ slug: string; title: string; date: string; content: string }[]>([]);
+  const [searchTerm, setSearchTerm] = useState('');
   const [posts, setPosts] = useState(allPosts.edges);
   const [hasNextPage, setHasNextPage] = useState(allPosts.pageInfo.hasNextPage);
   const [endCursor, setEndCursor] = useState(allPosts.pageInfo.endCursor);
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleSearch = (results: { slug: string; title: string; date: string }[]) => {
+  const handleSearch = (results: { slug: string; title: string; date: string; content: string }[], query: string) => {
     setSearchResults(results);
+    setSearchTerm(query);
   };
 
   const loadMorePosts = async () => {
@@ -64,7 +66,7 @@ export default function Index({ allPosts, preview }: IndexPageProps) {
         )}
       </Container>
       <SearchBar onSearch={handleSearch} />
-      <SearchResults searchResults={searchResults} />
+      <SearchResults searchResults={searchResults} searchTerm={searchTerm} />
     </Layout>
   );
 }

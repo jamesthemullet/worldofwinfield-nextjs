@@ -18,7 +18,8 @@ export default function Index({
   randomImageSet,
   archivePost,
 }: IndexPageProps) {
-  const [searchResults, setSearchResults] = useState<{ slug: string; title: string; date: string }[] | null>(null);
+  const [searchResults, setSearchResults] = useState<{ slug: string; title: string; date: string; content: string }[] | null>(null);
+  const [searchTerm, setSearchTerm] = useState('');
   const [randomImage, setRandomImage] = useState<IndexPageProps['jamesImages']['edges'][0]['node']['featuredImage'] | null>(null);
 
   useEffect(() => {
@@ -30,8 +31,9 @@ export default function Index({
     }
   }, [randomImageSet]);
 
-  const handleSearch = (results: { slug: string; title: string; date: string }[]) => {
+  const handleSearch = (results: { slug: string; title: string; date: string; content: string }[], query: string) => {
     setSearchResults(results);
+    setSearchTerm(query);
   };
 
   const blocks = [
@@ -344,7 +346,7 @@ export default function Index({
         ))}
       </HomepageBlocksContainer>
       <SearchBar onSearch={handleSearch} />
-      <SearchResults searchResults={searchResults} />
+      <SearchResults searchResults={searchResults} searchTerm={searchTerm} />
     </Layout>
   );
 }

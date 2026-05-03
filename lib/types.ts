@@ -485,7 +485,7 @@ export type RelatedPostsProps = {
 };
 
 export type SearchBarProps = {
-  onSearch: (results: { slug: string; title: string; date: string }[]) => void;
+  onSearch: (results: { slug: string; title: string; date: string; content: string }[], query: string) => void;
 };
 
 export type SearchResultsProps = {
@@ -494,8 +494,10 @@ export type SearchResultsProps = {
         slug: string;
         title: string;
         date: string;
+        content: string;
       }[]
     | null;
+  searchTerm?: string;
 };
 
 export type ArchivePageProps = {

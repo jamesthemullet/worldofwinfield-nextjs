@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import SearchResults, { formatDate } from './search-results';
+import SearchResults, { formatDate, getSnippet, highlightTerm } from './search-results';
 
 jest.mock('../pages/_app', () => ({
   colours: {
@@ -70,6 +70,66 @@ describe('formatDate', () => {
   });
 });
 
+describe('getSnippet', () => {
+  it('strips HTML tags from content', () => {
+    const result = getSnippet('<p>Hello <strong>world</strong></p>', 'world');
+    expect(result).not.toContain('<');
+    expect(result).toContain('world');
+  });
+
+  it('returns content centred around the search term', () => {
+    const content = 'This is a long piece of text. We visited Japan last summer. It was amazing.';
+    const result = getSnippet(content, 'Japan');
+    expect(result).toContain('Japan');
+  });
+
+  it('returns the start of content when term is not found', () => {
+    const result = getSnippet('Some content here', 'notfound');
+    expect(result).toBe('Some content here');
+  });
+
+  it('returns the start of content when term is empty', () => {
+    const result = getSnippet('Some content here that is long', '');
+    expect(result).toBe('Some content here that is long');
+  });
+
+  it('limits output to the contextLength', () => {
+    const content = 'a'.repeat(300);
+    const result = getSnippet(content, 'a', 150);
+    expect(result.length).toBeLessThanOrEqual(150);
+  });
+
+  it('is case-insensitive when locating the term', () => {
+    const result = getSnippet('This talks about Japan a lot', 'japan');
+    expect(result).toContain('Japan');
+  });
+});
+
+describe('highlightTerm', () => {
+  it('returns plain string when term is empty', () => {
+    const result = highlightTerm('some text', '');
+    expect(result).toBe('some text');
+  });
+
+  it('returns plain string when term is not found', () => {
+    const result = highlightTerm('some text', 'xyz');
+    expect(result).toBe('some text');
+  });
+
+  it('wraps the matched term in a mark element', () => {
+    render(<>{highlightTerm('Hello world', 'world')}</>);
+    const mark = document.querySelector('mark');
+    expect(mark).toBeInTheDocument();
+    expect(mark?.textContent).toBe('world');
+  });
+
+  it('is case-insensitive when finding the term', () => {
+    render(<>{highlightTerm('Hello World', 'world')}</>);
+    const mark = document.querySelector('mark');
+    expect(mark).toBeInTheDocument();
+  });
+});
+
 describe('SearchResults', () => {
   it('renders nothing visible when searchResults is null', () => {
     const { container } = render(<SearchResults searchResults={null} />);
@@ -83,8 +143,8 @@ describe('SearchResults', () => {
 
   it('renders a list of results when searchResults has items', () => {
     const results = [
-      { slug: 'post-one', title: 'Post One', date: '2023-01-15' },
-      { slug: 'post-two', title: 'Post Two', date: '2023-06-20' },
+      { slug: 'post-one', title: 'Post One', date: '2023-01-15', content: '<p>Content one</p>' },
+      { slug: 'post-two', title: 'Post Two', date: '2023-06-20', content: '<p>Content two</p>' },
     ];
     render(<SearchResults searchResults={results} />);
     expect(screen.getByText('Search results:')).toBeInTheDocument();
@@ -93,15 +153,41 @@ describe('SearchResults', () => {
   });
 
   it('renders a link to each result using its slug', () => {
-    const results = [{ slug: 'my-post', title: 'My Post', date: '2023-01-15' }];
+    const results = [{ slug: 'my-post', title: 'My Post', date: '2023-01-15', content: '' }];
     render(<SearchResults searchResults={results} />);
     const link = screen.getByText('My Post').closest('a');
     expect(link).toHaveAttribute('href', '/my-post');
   });
 
   it('does not render "No results found." when results exist', () => {
-    const results = [{ slug: 'post-one', title: 'Post One', date: '2023-01-15' }];
+    const results = [{ slug: 'post-one', title: 'Post One', date: '2023-01-15', content: '' }];
     render(<SearchResults searchResults={results} />);
     expect(screen.queryByText('No results found.')).not.toBeInTheDocument();
+  });
+
+  it('renders a snippet when content and searchTerm are provided', () => {
+    const results = [
+      { slug: 'post-one', title: 'Post One', date: '2023-01-15', content: '<p>We went to Japan last year.</p>' },
+    ];
+    render(<SearchResults searchResults={results} searchTerm="Japan" />);
+    expect(screen.getByText(/Japan/)).toBeInTheDocument();
+  });
+
+  it('highlights the search term in the snippet with a mark element', () => {
+    const results = [
+      { slug: 'post-one', title: 'Post One', date: '2023-01-15', content: '<p>We went to Japan last year.</p>' },
+    ];
+    render(<SearchResults searchResults={results} searchTerm="Japan" />);
+    const mark = document.querySelector('mark');
+    expect(mark).toBeInTheDocument();
+    expect(mark?.textContent).toBe('Japan');
+  });
+
+  it('does not render a snippet when searchTerm is not provided', () => {
+    const results = [
+      { slug: 'post-one', title: 'Post One', date: '2023-01-15', content: '<p>Some content</p>' },
+    ];
+    render(<SearchResults searchResults={results} />);
+    expect(document.querySelector('mark')).not.toBeInTheDocument();
   });
 });
