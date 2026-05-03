@@ -20,7 +20,6 @@ const nextConfig = {
       { protocol: 'https', hostname: 'i0.wp.com' },
     ],
     formats: ['image/webp'],
-    qualities: [75],
     minimumCacheTTL: 2592000,
   },
   env: {
