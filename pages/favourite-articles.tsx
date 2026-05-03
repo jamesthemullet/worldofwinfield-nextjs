@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useRouter } from 'next/router';
 import Container from '../components/container';
 import PostHeader from '../components/post-header';
@@ -7,8 +6,6 @@ import PostTitle from '../components/post-title';
 import styled from '@emotion/styled';
 import FavouriteResults from './favourites-results';
 import FavouritesHubLink from '../components/favourites-hub-link';
-import SortDropdown from '../components/SortDropdown';
-
 export default function FavouritesPage() {
   const title = 'Favourite Articles Read';
   const sheetId = '1R928oTM4hiTFXZ6Ww9-2pMKLAWy2Wjf3Z9xrXC6GTa0';
@@ -17,10 +14,8 @@ export default function FavouritesPage() {
     opengraphDescription: "A curated list of James Winfield's favourite articles read.",
     opengraphSiteName: 'World Of Winfield',
   };
-  const sortOptions = ['Title', 'Score', 'Date'];
 
   const router = useRouter();
-  const [selectedSort, setSelectedSort] = useState('');
 
   return (
     <Layout preview={null} title={title} seo={seo}>
@@ -40,8 +35,7 @@ export default function FavouritesPage() {
                 />
               </StyledPostHeader>
 
-              <SortDropdown options={sortOptions} selected={selectedSort} onChange={setSelectedSort} />
-              <FavouriteResults sheetId={sheetId} sortBy={selectedSort} />
+              <FavouriteResults sheetId={sheetId} />
               <FavouritesHubLink />
             </PostContainer>
           </>

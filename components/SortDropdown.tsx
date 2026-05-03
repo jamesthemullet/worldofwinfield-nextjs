@@ -9,7 +9,7 @@ type SortDropdownProps = {
 
 const SortDropdown: React.FC<SortDropdownProps> = ({ options, selected, onChange }) => {
   return (
-    <div style={{ marginBottom: '1rem' }}>
+    <div style={{ margin: '1rem 0', textAlign: 'center' }}>
       <label htmlFor="sort-select" style={{ marginRight: '0.5rem' }}>
         Sort by:
       </label>
