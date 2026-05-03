@@ -8,18 +8,8 @@ if (!process.env.WORDPRESS_API_URL) {
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: process.env.WORDPRESS_API_URL.match(/(?!(w+)\.)\w*(?:\w+\.)+\w+/)[0],
-      },
-      { protocol: 'https', hostname: '0.gravatar.com' },
-      { protocol: 'https', hostname: '1.gravatar.com' },
-      { protocol: 'https', hostname: '2.gravatar.com' },
-      { protocol: 'https', hostname: 'secure.gravatar.com' },
-      { protocol: 'https', hostname: 'i0.wp.com' },
-    ],
-    formats: ['image/webp'],
+    loader: 'custom',
+    loaderFile: './lib/imageLoader.ts',
     minimumCacheTTL: 2592000,
   },
   env: {
