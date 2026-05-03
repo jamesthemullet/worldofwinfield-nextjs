@@ -19,8 +19,8 @@ const nextConfig = {
       { protocol: 'https', hostname: 'secure.gravatar.com' },
       { protocol: 'https', hostname: 'i0.wp.com' },
     ],
-    formats: ['image/avif', 'image/webp'],
-    qualities: [50, 75, 85],
+    formats: ['image/webp'],
+    minimumCacheTTL: 2592000,
   },
   env: {
     WORDPRESS_API_URL: process.env.WORDPRESS_API_URL,
