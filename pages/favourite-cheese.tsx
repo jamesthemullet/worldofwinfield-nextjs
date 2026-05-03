@@ -6,7 +6,6 @@ import PostTitle from '../components/post-title';
 import styled from '@emotion/styled';
 import FavouriteResults from './favourites-results';
 import FavouritesHubLink from '../components/favourites-hub-link';
-
 export default function FavouritesPage() {
   const title = 'Favourite Cheese';
   const sheetId = '1UDjT7_Q5rBPQasn4o2qxUOsEcElEI67nl-ep9YTLc-E';

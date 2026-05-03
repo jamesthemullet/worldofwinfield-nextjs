@@ -6,7 +6,6 @@ import PostTitle from '../components/post-title';
 import styled from '@emotion/styled';
 import FavouriteResults from './favourites-results';
 import FavouritesHubLink from '../components/favourites-hub-link';
-
 export default function FavouritesPage() {
   const title = 'Favourite Cities Visited';
   const sheetId = '1WBfOTfhC70AygxrTcIIgvigzlvOD65WfI9Ysrd3aF5o';

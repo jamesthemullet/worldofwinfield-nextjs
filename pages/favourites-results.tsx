@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import styled from '@emotion/styled';
+import SortDropdown from '../components/SortDropdown';
 
 type TypeProps = {
   sheetId: string;
@@ -36,6 +37,11 @@ const FavouriteResults = ({
 }: TypeProps) => {
   const [data, setData] = useState<string[][]>([]);
   const [loading, setLoading] = useState(false);
+  const [internalSortBy, setInternalSortBy] = useState('');
+  const [sortColumns, setSortColumns] = useState<string[]>([]);
+
+  const effectiveSortBy = sortBy !== undefined ? sortBy : internalSortBy;
+  const showInternalDropdown = sortBy === undefined;
 
   useEffect(() => {
     const fetchFavouriteData = async () => {
@@ -62,6 +68,10 @@ const FavouriteResults = ({
             }
           });
 
+          if (sortBy === undefined) {
+            setSortColumns([...headerRow]);
+          }
+
           let filteredRows = dataRows;
           if (genreFilter && headerRow.includes('Genre')) {
             const genreIndex = headerRow.indexOf('Genre');
@@ -85,9 +95,9 @@ const FavouriteResults = ({
 
           const chooseSortColumnIndex = () => {
             // If no explicit sort selected (Default), don't apply any sorting and preserve sheet order
-            if (!sortBy) return -1;
+            if (!effectiveSortBy) return -1;
 
-            const normSort = normalize(sortBy);
+            const normSort = normalize(effectiveSortBy);
             const exact = normalizedHeaders.indexOf(normSort);
             if (exact !== -1) return exact;
 
@@ -146,10 +156,13 @@ const FavouriteResults = ({
     };
 
     fetchFavouriteData();
-  }, [sheetId, JSON.stringify(columnsToHide), genreFilter, labelFilter, sortBy]);
+  }, [sheetId, JSON.stringify(columnsToHide), genreFilter, labelFilter, sortBy, internalSortBy]);
 
   return (
     <FavouritesContainer>
+      {showInternalDropdown && sortColumns.length > 0 && (
+        <SortDropdown options={sortColumns} selected={internalSortBy} onChange={setInternalSortBy} />
+      )}
       <StyledTable>
         {data.length > 0 && (
           <>
