@@ -7,7 +7,9 @@ import styled from '@emotion/styled';
 export default function Layout({ preview, children, seo, title, ogType, articleDate, articleModified, articleAuthor }: LayoutProps) {
   return (
     <>
-      <SkipLink href="#main-content">Skip to main content</SkipLink>
+      <header>
+        <SkipLink href="#main-content">Skip to main content</SkipLink>
+      </header>
       <Meta seo={seo ?? undefined} title={title} ogType={ogType} articleDate={articleDate} articleModified={articleModified} articleAuthor={articleAuthor} />
       <PageWrapper>
         <StyledDiv>

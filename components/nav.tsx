@@ -414,9 +414,11 @@ const DropdownMenu = styled.ul<{ isDropdownOpen: boolean }>`
   overflow: hidden;
   max-height: ${(props) => (props.isDropdownOpen ? '1000px' : '0')};
   opacity: ${(props) => (props.isDropdownOpen ? 1 : 0)};
-  transition:
-    max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-    opacity 0.2s;
+  visibility: ${(props) => (props.isDropdownOpen ? 'visible' : 'hidden')};
+  transition: ${(props) =>
+    props.isDropdownOpen
+      ? 'max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s, visibility 0s'
+      : 'max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s, visibility 0s 0.3s'};
   position: absolute;
   background-color: #333;
   list-style: none;

@@ -202,7 +202,7 @@ export default function Index({
     {
       className: 'block-11',
       title: randomPosts[0]?.title,
-      url: `/${randomPosts[0]?.slug}`,
+      url: randomPosts[0]?.slug ? `/${randomPosts[0].slug}` : null,
       size: 3,
       image: randomPosts[0]?.featuredImage,
       date: randomPosts[0]?.date,
@@ -228,7 +228,7 @@ export default function Index({
     {
       className: 'block-12',
       title: randomPosts[1]?.title,
-      url: `/${randomPosts[1]?.slug}`,
+      url: randomPosts[1]?.slug ? `/${randomPosts[1].slug}` : null,
       size: 2,
       image: randomPosts[1]?.featuredImage,
       date: randomPosts[1]?.date,
