@@ -1,9 +1,9 @@
-import { useMemo } from 'react';
-import Link from 'next/link';
-import Image from 'next/image';
-import { PostPreviewProps } from '../lib/types';
 import styled from '@emotion/styled';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useMemo } from 'react';
 import { sanitize } from '../lib/sanitize';
+import { PostPreviewProps } from '../lib/types';
 import { colours } from '../pages/_app';
 import DateComponent from './date';
 
@@ -22,7 +22,13 @@ const stripExternalLinks = (excerpt: string) => {
   return excerpt.replace(regex, '');
 };
 
-export default function PostPreview({ title, date, excerpt, slug, featuredImage }: PostPreviewProps) {
+export default function PostPreview({
+  title,
+  date,
+  excerpt,
+  slug,
+  featuredImage,
+}: PostPreviewProps) {
   const sanitizedExcerpt = useMemo(() => sanitize(stripExternalLinks(excerpt)), [excerpt]);
 
   const fallbackColour = useMemo(() => {

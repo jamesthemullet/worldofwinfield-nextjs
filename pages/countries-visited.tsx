@@ -1,9 +1,10 @@
+import styled from '@emotion/styled';
 import { useRouter } from 'next/router';
 import Container from '../components/container';
-import PostHeader from '../components/post-header';
 import Layout from '../components/layout';
+import PostHeader from '../components/post-header';
 import PostTitle from '../components/post-title';
-import styled from '@emotion/styled';
+
 const processData = (rawData: string[][]) => {
   const continents = [
     'Europe',
@@ -100,7 +101,7 @@ export default function CountriesVisited({
   const totalVisited = allCountries.filter((item) => item.visited).length;
   const totalCountries = allCountries.length;
   const continentsExplored = Object.values(transformedData).filter((countries) =>
-    countries.some((item) => item.visited)
+    countries.some((item) => item.visited),
   ).length;
   const totalContinents = Object.keys(transformedData).length;
 

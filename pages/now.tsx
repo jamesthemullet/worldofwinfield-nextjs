@@ -1,15 +1,15 @@
-import Container from '../components/container';
-import PostHeader from '../components/post-header';
-import Layout from '../components/layout';
 import styled from '@emotion/styled';
-import { colours } from './_app';
+import Container from '../components/container';
+import Layout from '../components/layout';
+import PostHeader from '../components/post-header';
 import { NOW_LAST_UPDATED } from '../data/now-meta';
+import { colours } from './_app';
 
 export default function NowPage() {
   const seo = {
     opengraphTitle: 'Now | World Of Winfield',
     opengraphDescription:
-      "What James Winfield is up to right now — current location, projects, and interests.",
+      'What James Winfield is up to right now — current location, projects, and interests.',
     opengraphSiteName: 'World Of Winfield',
   };
 

@@ -18,7 +18,8 @@
       "Bash(git branch *)",
       "Bash(gh issue *)",
       "Bash(yarn tsc *)",
-      "Bash(gh run *)"
+      "Bash(gh run *)",
+      "Bash(yarn biome *)"
     ]
   }
 }

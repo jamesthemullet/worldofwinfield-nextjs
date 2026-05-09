@@ -1,8 +1,8 @@
+import styled from '@emotion/styled';
+import DOMPurify from 'dompurify';
 import { useMemo } from 'react';
 import { PostBodyProps } from '../lib/types';
-import styled from '@emotion/styled';
 import { colours } from '../pages/_app';
-import DOMPurify from 'dompurify';
 
 const resolveDataSrc = (html: string): string =>
   html

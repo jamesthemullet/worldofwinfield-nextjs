@@ -1,5 +1,5 @@
-import { PrePostProps } from '../lib/types';
 import styled from '@emotion/styled';
+import { PrePostProps } from '../lib/types';
 import { calculateReadingTime } from './utils';
 
 export default function PrePost({ tags, date, content }: PrePostProps) {
@@ -7,9 +7,7 @@ export default function PrePost({ tags, date, content }: PrePostProps) {
   const readingTime = content ? calculateReadingTime(content) : null;
   return (
     <>
-      {readingTime !== null && (
-        <StyledReadingTime>{readingTime} min read</StyledReadingTime>
-      )}
+      {readingTime !== null && <StyledReadingTime>{readingTime} min read</StyledReadingTime>}
       {tags.edges.map((tag, index) => (
         <div key={index}>
           {tag.node.name.includes('ExiledToryRemainerScum') && (

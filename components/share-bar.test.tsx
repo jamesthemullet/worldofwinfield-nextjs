@@ -1,5 +1,5 @@
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import ShareBar from './share-bar';
 
@@ -28,7 +28,7 @@ describe('ShareBar', () => {
     const blueskyLink = screen.getByRole('link', { name: /share on bluesky/i });
     expect(blueskyLink).toHaveAttribute(
       'href',
-      `https://bsky.app/intent/compose?text=${encodeURIComponent(defaultProps.title)}%20${encodeURIComponent(defaultProps.url)}`
+      `https://bsky.app/intent/compose?text=${encodeURIComponent(defaultProps.title)}%20${encodeURIComponent(defaultProps.url)}`,
     );
     expect(blueskyLink).toHaveAttribute('target', '_blank');
     expect(blueskyLink).toHaveAttribute('rel', 'noopener noreferrer');
@@ -39,7 +39,7 @@ describe('ShareBar', () => {
     const threadsLink = screen.getByRole('link', { name: /share on threads/i });
     expect(threadsLink).toHaveAttribute(
       'href',
-      `https://www.threads.net/intent/post?text=${encodeURIComponent(defaultProps.title)}%20${encodeURIComponent(defaultProps.url)}`
+      `https://www.threads.net/intent/post?text=${encodeURIComponent(defaultProps.title)}%20${encodeURIComponent(defaultProps.url)}`,
     );
     expect(threadsLink).toHaveAttribute('target', '_blank');
     expect(threadsLink).toHaveAttribute('rel', 'noopener noreferrer');

@@ -1,17 +1,19 @@
+import styled from '@emotion/styled';
 import { GetStaticProps } from 'next';
 import { useState } from 'react';
 import Container from '../components/container';
-import MoreStories from '../components/more-stories';
 import HeroPost from '../components/hero-post';
 import Layout from '../components/layout';
-import { getAllPostsForHome } from '../lib/api';
-import { IndexPageProps } from '../lib/types';
+import MoreStories from '../components/more-stories';
 import SearchBar from '../components/search-bar';
 import SearchResults from '../components/search-results';
-import styled from '@emotion/styled';
+import { getAllPostsForHome } from '../lib/api';
+import { IndexPageProps } from '../lib/types';
 
 export default function Index({ allPosts, preview }: IndexPageProps) {
-  const [searchResults, setSearchResults] = useState<{ slug: string; title: string; date: string }[]>([]);
+  const [searchResults, setSearchResults] = useState<
+    { slug: string; title: string; date: string }[]
+  >([]);
   const [posts, setPosts] = useState(allPosts.edges);
   const [hasNextPage, setHasNextPage] = useState(allPosts.pageInfo.hasNextPage);
   const [endCursor, setEndCursor] = useState(allPosts.pageInfo.endCursor);

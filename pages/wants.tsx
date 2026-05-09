@@ -1,12 +1,12 @@
-import { useRouter } from 'next/router';
-import Container from '../components/container';
-import PostHeader from '../components/post-header';
-import Layout from '../components/layout';
-import PostTitle from '../components/post-title';
 import styled from '@emotion/styled';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
-import FavouriteResults from './favourites-results';
+import Container from '../components/container';
 import { StyledButton } from '../components/core-components';
+import Layout from '../components/layout';
+import PostHeader from '../components/post-header';
+import PostTitle from '../components/post-title';
+import FavouriteResults from './favourites-results';
 
 export default function WantsPage() {
   const [selectedType, setSelectedType] = useState<string | null>(null);

@@ -1,5 +1,5 @@
-import { sanitize } from './sanitize';
 import DOMPurify from 'dompurify';
+import { sanitize } from './sanitize';
 
 jest.mock('dompurify', () => ({
   __esModule: true,

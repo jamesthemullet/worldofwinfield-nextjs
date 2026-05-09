@@ -1,8 +1,8 @@
+import styled from '@emotion/styled';
 import React, { useState } from 'react';
 import { searchBlogPosts } from '../lib/api';
-import { colours } from '../pages/_app';
-import styled from '@emotion/styled';
 import { SearchBarProps } from '../lib/types';
+import { colours } from '../pages/_app';
 import { StyledButton, StyledInput } from './core-components';
 
 const SearchBar = ({ onSearch }: SearchBarProps) => {
@@ -25,7 +25,13 @@ const SearchBar = ({ onSearch }: SearchBarProps) => {
   return (
     <StyledForm onSubmit={handleSubmit}>
       <label htmlFor="blog-search-input">Search blog</label>
-      <StyledInput id="blog-search-input" type="text" placeholder="Search blog..." value={query} onChange={handleChange} />
+      <StyledInput
+        id="blog-search-input"
+        type="text"
+        placeholder="Search blog..."
+        value={query}
+        onChange={handleChange}
+      />
       <StyledButton type="submit">{loading ? 'Searching...' : 'Search'}</StyledButton>
     </StyledForm>
   );

@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useState } from 'react';
 import styled from '@emotion/styled';
+import { useEffect, useMemo, useState } from 'react';
 import Container from '../components/container';
 import Layout from '../components/layout';
 import PostHeader from '../components/post-header';
@@ -357,7 +357,11 @@ const getSortConfig = (
   return { window, direction };
 };
 
-const sortByPercentChange = (rows: StockRow[], mode: SortMode, window: ChangeWindow): StockRow[] => {
+const sortByPercentChange = (
+  rows: StockRow[],
+  mode: SortMode,
+  window: ChangeWindow,
+): StockRow[] => {
   const sortConfig = getSortConfig(mode, window);
 
   if (mode === 'default') {
@@ -640,7 +644,8 @@ export default function StocksPage() {
                         {selectedChange.change !== null && selectedChange.percent !== null && (
                           <Change className={direction || ''}>
                             {selectedLabel}: {selectedChange.change > 0 ? '+' : ''}
-                            {selectedChange.change.toFixed(2)} ({selectedChange.percent.toFixed(2)}%)
+                            {selectedChange.change.toFixed(2)} ({selectedChange.percent.toFixed(2)}
+                            %)
                           </Change>
                         )}
                       </td>
@@ -698,7 +703,8 @@ export default function StocksPage() {
                         {selectedChange.change !== null && selectedChange.percent !== null && (
                           <Change className={direction || ''}>
                             {selectedLabel}: {selectedChange.change > 0 ? '+' : ''}
-                            {selectedChange.change.toFixed(2)} ({selectedChange.percent.toFixed(2)}%)
+                            {selectedChange.change.toFixed(2)} ({selectedChange.percent.toFixed(2)}
+                            %)
                           </Change>
                         )}
                       </td>

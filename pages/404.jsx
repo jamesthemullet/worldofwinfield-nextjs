@@ -1,8 +1,8 @@
+import styled from '@emotion/styled';
+import Link from 'next/link';
 import Container from '../components/container';
 import Layout from '../components/layout';
-import Link from 'next/link';
 import { colours } from '../pages/_app';
-import styled from '@emotion/styled';
 
 export default function Custom404() {
   const words = ['Why', 'are', 'you', 'here?'];

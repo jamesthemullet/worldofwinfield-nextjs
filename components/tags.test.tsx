@@ -1,5 +1,5 @@
-import React from 'react';
 import { render, screen } from '@testing-library/react';
+import React from 'react';
 import '@testing-library/jest-dom';
 import Tags from './tags';
 
@@ -34,10 +34,7 @@ describe('Tags', () => {
 
   it('renders no tag links when all tags have spaces', () => {
     const tags = {
-      edges: [
-        { node: { name: 'web development' } },
-        { node: { name: 'open source' } },
-      ],
+      edges: [{ node: { name: 'web development' } }, { node: { name: 'open source' } }],
     };
     render(<Tags tags={tags} />);
     expect(screen.queryByRole('link')).not.toBeInTheDocument();
@@ -71,10 +68,7 @@ describe('Tags', () => {
 
   it('renders commas between tags but not after the last one', () => {
     const tags = {
-      edges: [
-        { node: { name: 'react' } },
-        { node: { name: 'typescript' } },
-      ],
+      edges: [{ node: { name: 'react' } }, { node: { name: 'typescript' } }],
     };
     const { container } = render(<Tags tags={tags} />);
     const spans = container.querySelectorAll('span');

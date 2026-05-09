@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
 import styled from '@emotion/styled';
+import { useState } from 'react';
 import { colours } from '../pages/_app';
 
 type ShareBarProps = {
@@ -30,16 +30,32 @@ export default function ShareBar({ title, url }: ShareBarProps) {
     <ShareBarWrapper>
       <ShareLabel>Share this post:</ShareLabel>
       <Buttons>
-        <ShareButton href={threadsUrl} target="_blank" rel="noopener noreferrer" aria-label="Share on Threads">
+        <ShareButton
+          href={threadsUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Share on Threads">
           Threads
         </ShareButton>
-        <ShareButton href={blueskyUrl} target="_blank" rel="noopener noreferrer" aria-label="Share on Bluesky">
+        <ShareButton
+          href={blueskyUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Share on Bluesky">
           Bluesky
         </ShareButton>
-        <ShareButton href={facebookUrl} target="_blank" rel="noopener noreferrer" aria-label="Share on Facebook">
+        <ShareButton
+          href={facebookUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Share on Facebook">
           Facebook
         </ShareButton>
-        <ShareButton href={whatsappUrl} target="_blank" rel="noopener noreferrer" aria-label="Share on WhatsApp">
+        <ShareButton
+          href={whatsappUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Share on WhatsApp">
           WhatsApp
         </ShareButton>
         <CopyButton onClick={handleCopy} aria-label="Copy link to clipboard">

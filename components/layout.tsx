@@ -1,16 +1,32 @@
+import styled from '@emotion/styled';
+import { LayoutProps } from '../lib/types';
 import Alert from './alert';
 import Footer from './footer';
 import Meta from './meta';
-import { LayoutProps } from '../lib/types';
-import styled from '@emotion/styled';
 
-export default function Layout({ preview, children, seo, title, ogType, articleDate, articleModified, articleAuthor }: LayoutProps) {
+export default function Layout({
+  preview,
+  children,
+  seo,
+  title,
+  ogType,
+  articleDate,
+  articleModified,
+  articleAuthor,
+}: LayoutProps) {
   return (
     <>
       <header>
         <SkipLink href="#main-content">Skip to main content</SkipLink>
       </header>
-      <Meta seo={seo ?? undefined} title={title} ogType={ogType} articleDate={articleDate} articleModified={articleModified} articleAuthor={articleAuthor} />
+      <Meta
+        seo={seo ?? undefined}
+        title={title}
+        ogType={ogType}
+        articleDate={articleDate}
+        articleModified={articleModified}
+        articleAuthor={articleAuthor}
+      />
       <PageWrapper>
         <StyledDiv>
           <Alert preview={preview} />

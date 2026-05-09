@@ -1,5 +1,5 @@
-import React from 'react';
 import { render, screen } from '@testing-library/react';
+import React from 'react';
 import '@testing-library/jest-dom';
 import Layout from './layout';
 
@@ -24,7 +24,7 @@ describe('Layout', () => {
     render(
       <Layout preview={null}>
         <p>Page content</p>
-      </Layout>
+      </Layout>,
     );
     expect(screen.getByRole('main')).toBeInTheDocument();
     expect(screen.getByText('Page content')).toBeInTheDocument();
@@ -34,7 +34,7 @@ describe('Layout', () => {
     render(
       <Layout preview={null}>
         <p>Content</p>
-      </Layout>
+      </Layout>,
     );
     const skipLink = screen.getByText('Skip to main content');
     expect(skipLink).toBeInTheDocument();
@@ -45,7 +45,7 @@ describe('Layout', () => {
     render(
       <Layout preview={null}>
         <p>Content</p>
-      </Layout>
+      </Layout>,
     );
     expect(screen.getByRole('main')).toHaveAttribute('id', 'main-content');
   });
@@ -54,7 +54,7 @@ describe('Layout', () => {
     render(
       <Layout preview={null}>
         <p>Content</p>
-      </Layout>
+      </Layout>,
     );
     expect(screen.getByTestId('footer')).toBeInTheDocument();
   });
@@ -63,7 +63,7 @@ describe('Layout', () => {
     render(
       <Layout preview="true">
         <p>Content</p>
-      </Layout>
+      </Layout>,
     );
     expect(screen.getByTestId('alert')).toBeInTheDocument();
   });
@@ -72,7 +72,7 @@ describe('Layout', () => {
     render(
       <Layout preview={null}>
         <p>Content</p>
-      </Layout>
+      </Layout>,
     );
     expect(screen.queryByTestId('alert')).not.toBeInTheDocument();
   });

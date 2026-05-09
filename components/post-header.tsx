@@ -1,12 +1,12 @@
-import Date from './date';
-import CoverImage from './cover-image';
-import PostTitle from './post-title';
-import Link from 'next/link';
-import { PostHeaderProps } from '../lib/types';
 import styled from '@emotion/styled';
-import { colours } from '../pages/_app';
-import { sanitize } from '../lib/sanitize';
+import Link from 'next/link';
 import { useMemo } from 'react';
+import { sanitize } from '../lib/sanitize';
+import { PostHeaderProps } from '../lib/types';
+import { colours } from '../pages/_app';
+import CoverImage from './cover-image';
+import Date from './date';
+import PostTitle from './post-title';
 
 export default function PostHeader({
   title,

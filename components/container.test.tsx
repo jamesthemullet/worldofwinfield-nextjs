@@ -1,5 +1,5 @@
-import React from 'react';
 import { render, screen } from '@testing-library/react';
+import React from 'react';
 import '@testing-library/jest-dom';
 import Container from './container';
 
@@ -8,7 +8,7 @@ describe('Container', () => {
     render(
       <Container>
         <p>Child content</p>
-      </Container>
+      </Container>,
     );
     expect(screen.getByText('Child content')).toBeInTheDocument();
   });
@@ -18,7 +18,7 @@ describe('Container', () => {
       <Container>
         <p>First child</p>
         <p>Second child</p>
-      </Container>
+      </Container>,
     );
     expect(screen.getByText('First child')).toBeInTheDocument();
     expect(screen.getByText('Second child')).toBeInTheDocument();

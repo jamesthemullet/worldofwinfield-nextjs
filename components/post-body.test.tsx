@@ -1,8 +1,8 @@
-import React from 'react';
 import { render, screen } from '@testing-library/react';
+import React from 'react';
 import '@testing-library/jest-dom';
-import PostBody from './post-body';
 import DOMPurify from 'dompurify';
+import PostBody from './post-body';
 
 jest.mock('../pages/_app', () => ({
   colours: {
@@ -45,7 +45,7 @@ describe('PostBody', () => {
     render(<PostBody content="<p>Test content</p>" />);
     expect(DOMPurify.sanitize).toHaveBeenCalledWith(
       '<p>Test content</p>',
-      expect.objectContaining({ ADD_ATTR: expect.arrayContaining(['srcset']) })
+      expect.objectContaining({ ADD_ATTR: expect.arrayContaining(['srcset']) }),
     );
   });
 
@@ -53,7 +53,7 @@ describe('PostBody', () => {
     render(<PostBody content='<img data-src="/foo.jpg" />' />);
     expect(DOMPurify.sanitize).toHaveBeenCalledWith(
       expect.stringContaining('src="/foo.jpg"'),
-      expect.anything()
+      expect.anything(),
     );
   });
 
@@ -61,11 +61,11 @@ describe('PostBody', () => {
     render(<PostBody content='<img src="data:image/gif;base64,ABC" data-src="/real.jpg" />' />);
     expect(DOMPurify.sanitize).toHaveBeenCalledWith(
       expect.stringMatching(/src="\/real\.jpg"/),
-      expect.anything()
+      expect.anything(),
     );
     expect(DOMPurify.sanitize).not.toHaveBeenCalledWith(
       expect.stringContaining('data:image/gif'),
-      expect.anything()
+      expect.anything(),
     );
   });
 });

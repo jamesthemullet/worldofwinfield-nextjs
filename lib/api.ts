@@ -19,7 +19,6 @@ async function fetchAPI(query = '', { variables }: Record<string, unknown> = {})
 
   const json = await res.json();
   if (json.errors) {
-     
     console.error(json.errors);
     throw new Error('Failed to fetch API');
   }
@@ -107,7 +106,13 @@ export async function getFirstPost() {
   return data?.posts;
 }
 
-export async function getJamesImages({ first = 10, after = null }: { first?: number; after?: string | null } = {}) {
+export async function getJamesImages({
+  first = 10,
+  after = null,
+}: {
+  first?: number;
+  after?: string | null;
+} = {}) {
   const data = await fetchAPI(
     `
     query JamesImages($first: Int, $after: String) {

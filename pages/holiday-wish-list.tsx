@@ -1,19 +1,20 @@
-import { useRouter } from 'next/router';
-import Container from '../components/container';
-import PostHeader from '../components/post-header';
-import Layout from '../components/layout';
-import PostTitle from '../components/post-title';
 import styled from '@emotion/styled';
-import FavouriteResults from './favourites-results';
-import SortDropdown from '../components/SortDropdown';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
+import Container from '../components/container';
+import Layout from '../components/layout';
+import PostHeader from '../components/post-header';
+import PostTitle from '../components/post-title';
+import SortDropdown from '../components/SortDropdown';
+import FavouriteResults from './favourites-results';
 
 export default function WishListPage() {
   const title = 'Holiday Wish List';
   const sheetId = '1GX6KF20f3Nrb3m8T9th7UIV_uuePj4Ivlc_yLgo-4Bo';
   const seo = {
     opengraphTitle: 'Holiday Wish List | World Of Winfield',
-    opengraphDescription: "James Winfield's holiday wish list — places around the world still to visit.",
+    opengraphDescription:
+      "James Winfield's holiday wish list — places around the world still to visit.",
     opengraphSiteName: 'World Of Winfield',
   };
 

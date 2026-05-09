@@ -1,10 +1,9 @@
-import { AppProps } from 'next/app';
-import Nav from '../components/nav';
-import { Global, css, CacheProvider } from '@emotion/react';
-import createCache from '@emotion/cache';
-import { EmotionCache } from '@emotion/cache';
-import Head from 'next/head';
+import createCache, { EmotionCache } from '@emotion/cache';
+import { CacheProvider, css, Global } from '@emotion/react';
 import { GoogleAnalytics } from '@next/third-parties/google';
+import { AppProps } from 'next/app';
+import Head from 'next/head';
+import Nav from '../components/nav';
 
 function createEmotionCache() {
   return createCache({ key: 'css' });
@@ -54,7 +53,11 @@ if (process.env.NODE_ENV === 'development' && typeof window !== 'undefined') {
   import('accented').then(({ accented }) => accented());
 }
 
-function MyApp({ Component, pageProps, emotionCache = clientSideEmotionCache }: AppProps & { emotionCache?: EmotionCache }) {
+function MyApp({
+  Component,
+  pageProps,
+  emotionCache = clientSideEmotionCache,
+}: AppProps & { emotionCache?: EmotionCache }) {
   return (
     <CacheProvider value={emotionCache}>
       <Head>

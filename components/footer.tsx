@@ -1,7 +1,7 @@
-import Container from './container';
-import { colours } from '../pages/_app';
 import styled from '@emotion/styled';
+import { colours } from '../pages/_app';
 import ArchiveDropdown from './archive';
+import Container from './container';
 
 export default function Footer() {
   return (

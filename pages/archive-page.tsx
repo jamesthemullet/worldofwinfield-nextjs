@@ -1,14 +1,14 @@
-import React from 'react';
+import styled from '@emotion/styled';
 import { useRouter } from 'next/router';
-import { getPostsByDate } from '../lib/api';
-import { ArchivePageProps } from '../lib/types';
+import React from 'react';
 import Container from '../components/container';
 import Layout from '../components/layout';
-import PostTitle from '../components/post-title';
 import PostHeader from '../components/post-header';
+import PostTitle from '../components/post-title';
 import { getMonthName } from '../components/utils';
+import { getPostsByDate } from '../lib/api';
+import { ArchivePageProps } from '../lib/types';
 import { colours } from './_app';
-import styled from '@emotion/styled';
 
 const ArchivePage = ({ posts: { posts }, month, year }: ArchivePageProps) => {
   const router = useRouter();
@@ -39,7 +39,9 @@ const ArchivePage = ({ posts: { posts }, month, year }: ArchivePageProps) => {
             </ul>
           </SearchResultsContainer>
         ) : (
-          <NoPostsMessage>No posts found for {wordyMonth} {year}</NoPostsMessage>
+          <NoPostsMessage>
+            No posts found for {wordyMonth} {year}
+          </NoPostsMessage>
         )}
       </Container>
     </Layout>

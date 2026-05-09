@@ -1,8 +1,8 @@
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import SearchBar from './search-bar';
 import { searchBlogPosts } from '../lib/api';
+import SearchBar from './search-bar';
 
 jest.mock('../lib/api', () => ({
   searchBlogPosts: jest.fn(),

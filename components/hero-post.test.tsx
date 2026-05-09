@@ -1,8 +1,8 @@
-import React from 'react';
 import { render, screen } from '@testing-library/react';
+import React from 'react';
 import '@testing-library/jest-dom';
-import HeroPost from './hero-post';
 import { HeroPostProps } from '../lib/types';
+import HeroPost from './hero-post';
 
 jest.mock('dompurify', () => ({
   __esModule: true,
@@ -61,7 +61,7 @@ describe('HeroPost', () => {
     render(<HeroPost {...baseProps} />);
     expect(screen.getByRole('link', { name: 'Read More' })).toHaveAttribute(
       'href',
-      'hero-post-slug'
+      'hero-post-slug',
     );
   });
 
@@ -71,8 +71,7 @@ describe('HeroPost', () => {
   });
 
   it('strips external anchor links from the excerpt', () => {
-    const excerptWithLink =
-      '<p>Some text. <a href="https://external.com">External Link</a></p>';
+    const excerptWithLink = '<p>Some text. <a href="https://external.com">External Link</a></p>';
     render(<HeroPost {...baseProps} excerpt={excerptWithLink} />);
     expect(screen.queryByText('External Link')).not.toBeInTheDocument();
     expect(screen.getByText(/Some text\./)).toBeInTheDocument();

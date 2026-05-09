@@ -18,7 +18,10 @@ export const getMonthNumber = (monthName: string): number => {
 };
 
 export const calculateReadingTime = (htmlContent: string): number => {
-  const text = htmlContent.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+  const text = htmlContent
+    .replace(/<[^>]*>/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
   const wordCount = text.split(' ').filter((word) => word.length > 0).length;
   return Math.max(1, Math.ceil(wordCount / 200));
 };

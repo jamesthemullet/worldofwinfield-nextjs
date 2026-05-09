@@ -1,6 +1,6 @@
-import React, { useRef, useState, useEffect } from 'react';
-import Link from 'next/link';
 import styled from '@emotion/styled';
+import Link from 'next/link';
+import React, { useEffect, useRef, useState } from 'react';
 
 export default function Nav() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -60,7 +60,10 @@ export default function Nav() {
 
   return (
     <StyledNav>
-      <BurgerButton onClick={toggleDropdown} aria-label="Toggle navigation menu" aria-expanded={isDropdownOpen}>
+      <BurgerButton
+        onClick={toggleDropdown}
+        aria-label="Toggle navigation menu"
+        aria-expanded={isDropdownOpen}>
         <span></span>
         <span></span>
         <span></span>

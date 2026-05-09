@@ -1,9 +1,9 @@
+import styled from '@emotion/styled';
 import { useRouter } from 'next/router';
 import Container from '../components/container';
-import PostHeader from '../components/post-header';
 import Layout from '../components/layout';
+import PostHeader from '../components/post-header';
 import PostTitle from '../components/post-title';
-import styled from '@emotion/styled';
 import FavouriteResults from './favourites-results';
 
 export default function WishListPage() {
@@ -11,7 +11,8 @@ export default function WishListPage() {
   const sheetId = '13gz7lPQ61f_WKQ_xio_QBlUcFB9Dl0yVBynwEadVO_4';
   const seo = {
     opengraphTitle: 'Restaurant Wish List | World Of Winfield',
-    opengraphDescription: "James Winfield's restaurant wish list — restaurants he still wants to try.",
+    opengraphDescription:
+      "James Winfield's restaurant wish list — restaurants he still wants to try.",
     opengraphSiteName: 'World Of Winfield',
   };
 
