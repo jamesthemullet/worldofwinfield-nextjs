@@ -1,12 +1,14 @@
-import React from 'react';
-import { colours } from '../pages/_app';
 import styled from '@emotion/styled';
+import React from 'react';
 import { SearchResultsProps } from '../lib/types';
+import { colours } from '../pages/_app';
 
 const SearchResults = ({ searchResults }: SearchResultsProps) => {
   return (
     <SearchResultsContainer>
-      {searchResults !== null && searchResults.length === 0 && <p className="center">No results found.</p>}
+      {searchResults !== null && searchResults.length === 0 && (
+        <p className="center">No results found.</p>
+      )}
       {(searchResults?.length ?? 0) > 0 && (
         <>
           <p>Search results:</p>

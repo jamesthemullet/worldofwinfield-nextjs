@@ -9,9 +9,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   const items = posts
     .map((post: { title: string; slug: string; date: string; excerpt: string }) => {
-      const excerpt = post.excerpt
-        ? post.excerpt.replace(/<[^>]*>/g, '').trim()
-        : '';
+      const excerpt = post.excerpt ? post.excerpt.replace(/<[^>]*>/g, '').trim() : '';
       return `
     <item>
       <title><![CDATA[${post.title}]]></title>

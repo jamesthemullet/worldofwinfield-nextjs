@@ -1,9 +1,9 @@
-import Link from 'next/link';
-import Image from 'next/image';
-import Container from '../components/container';
-import PostHeader from '../components/post-header';
-import Layout from '../components/layout';
 import styled from '@emotion/styled';
+import Image from 'next/image';
+import Link from 'next/link';
+import Container from '../components/container';
+import Layout from '../components/layout';
+import PostHeader from '../components/post-header';
 import { colours } from './_app';
 
 const categories = [

@@ -1,6 +1,6 @@
-import PostPreview from './post-preview';
-import { MoreStoriesProps } from '../lib/types';
 import styled from '@emotion/styled';
+import { MoreStoriesProps } from '../lib/types';
+import PostPreview from './post-preview';
 
 export default function MoreStories({ posts }: MoreStoriesProps) {
   return (

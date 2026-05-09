@@ -1,6 +1,6 @@
-import Document, { Html, Head, Main, NextScript, DocumentContext } from 'next/document';
-import createEmotionServer from '@emotion/server/create-instance';
 import createCache from '@emotion/cache';
+import createEmotionServer from '@emotion/server/create-instance';
+import Document, { DocumentContext, Head, Html, Main, NextScript } from 'next/document';
 
 const EMOTION_KEY = 'css';
 
@@ -21,7 +21,16 @@ export default function MyDocument({ emotionStyleTags }: { emotionStyleTags: Rea
         />
         {emotionStyleTags}
       </Head>
-      <body style={{ margin: 0, padding: 0, fontFamily: 'sans-serif', fontSize: '1.2rem', lineHeight: '1.5', color: '#333', backgroundColor: '#fff' }}>
+      <body
+        style={{
+          margin: 0,
+          padding: 0,
+          fontFamily: 'sans-serif',
+          fontSize: '1.2rem',
+          lineHeight: '1.5',
+          color: '#333',
+          backgroundColor: '#fff',
+        }}>
         <Main />
         <NextScript />
       </body>
@@ -36,9 +45,7 @@ MyDocument.getInitialProps = async (ctx: DocumentContext) => {
   const originalRenderPage = ctx.renderPage;
   ctx.renderPage = () =>
     originalRenderPage({
-       
       enhanceApp: (App: any) =>
-         
         function EnhancedApp(props: any) {
           return <App emotionCache={cache} {...props} />;
         },

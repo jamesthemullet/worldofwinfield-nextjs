@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
 import styled from '@emotion/styled';
+import { useEffect, useState } from 'react';
 import SortDropdown from '../components/SortDropdown';
 
 type TypeProps = {
@@ -21,7 +21,6 @@ const fetchDataFromGoogleSheets = async (sheetID: string): Promise<string[][] | 
     const json = await response.json();
     return json.values;
   } catch (error) {
-     
     console.error('Error fetching data from Google Sheets:', error);
     return null;
   }
@@ -161,7 +160,11 @@ const FavouriteResults = ({
   return (
     <FavouritesContainer>
       {showInternalDropdown && sortColumns.length > 0 && (
-        <SortDropdown options={sortColumns} selected={internalSortBy} onChange={setInternalSortBy} />
+        <SortDropdown
+          options={sortColumns}
+          selected={internalSortBy}
+          onChange={setInternalSortBy}
+        />
       )}
       <StyledTable>
         {data.length > 0 && (

@@ -1,4 +1,4 @@
-import { getMonthNumber, getMonthName, calculateReadingTime } from './utils';
+import { calculateReadingTime, getMonthName, getMonthNumber } from './utils';
 
 describe('getMonthNumber', () => {
   it.each([

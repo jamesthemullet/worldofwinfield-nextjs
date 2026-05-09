@@ -1,14 +1,20 @@
+import styled from '@emotion/styled';
 import { GetStaticProps } from 'next';
 import { useEffect, useState } from 'react';
+import HomepageBlock from '../components/homepage-block';
 import Intro from '../components/intro';
 import Layout from '../components/layout';
-import { getArchivePost, getFirstPost, getJamesImages, getPostDisplayInfo, getRandomImage } from '../lib/api';
-import { IndexPageProps } from '../lib/types';
-import HomepageBlock from '../components/homepage-block';
-import styled from '@emotion/styled';
 import SearchBar from '../components/search-bar';
 import SearchResults from '../components/search-results';
 import { hardCodedListOfPostIds } from '../data/allIds';
+import {
+  getArchivePost,
+  getFirstPost,
+  getJamesImages,
+  getPostDisplayInfo,
+  getRandomImage,
+} from '../lib/api';
+import { IndexPageProps } from '../lib/types';
 
 export default function Index({
   preview,
@@ -18,15 +24,23 @@ export default function Index({
   randomImageSet,
   archivePost,
 }: IndexPageProps) {
-  const [searchResults, setSearchResults] = useState<{ slug: string; title: string; date: string }[] | null>(null);
-  const [randomImage, setRandomImage] = useState<IndexPageProps['jamesImages']['edges'][0]['node']['featuredImage'] | null>(null);
+  const [searchResults, setSearchResults] = useState<
+    { slug: string; title: string; date: string }[] | null
+  >(null);
+  const [randomImage, setRandomImage] = useState<
+    IndexPageProps['jamesImages']['edges'][0]['node']['featuredImage'] | null
+  >(null);
 
   useEffect(() => {
     if (!randomImageSet.images?.length) {
       setRandomImage(jamesImages.edges[0].node.featuredImage);
     } else {
       const randomIndex = Math.floor(Math.random() * randomImageSet.images?.length);
-      setRandomImage(randomImageSet.images[randomIndex] as unknown as IndexPageProps['jamesImages']['edges'][0]['node']['featuredImage']);
+      setRandomImage(
+        randomImageSet.images[
+          randomIndex
+        ] as unknown as IndexPageProps['jamesImages']['edges'][0]['node']['featuredImage'],
+      );
     }
   }, [randomImageSet]);
 
@@ -360,10 +374,7 @@ export const getStaticProps: GetStaticProps = async ({ preview = false }) => {
   const [jamesImages, firstPost, randomPosts, randomImageSet, archivePost] = await Promise.all([
     getJamesImages({ first: 20 }),
     getFirstPost(),
-    getPostDisplayInfo([
-      String(getRandomPostId()),
-      String(getRandomPostId()),
-    ]),
+    getPostDisplayInfo([String(getRandomPostId()), String(getRandomPostId())]),
     getRandomImage(randomMonth, randomYear),
     getArchivePost(),
   ]);

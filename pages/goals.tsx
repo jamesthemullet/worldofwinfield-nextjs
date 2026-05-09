@@ -1,15 +1,15 @@
-import { useRouter } from 'next/router';
-import ErrorPage from 'next/error';
+import styled from '@emotion/styled';
 import { GetStaticProps } from 'next';
+import ErrorPage from 'next/error';
+import { useRouter } from 'next/router';
 import Container from '../components/container';
-import PostHeader from '../components/post-header';
 import Layout from '../components/layout';
+import PostHeader from '../components/post-header';
 import PostTitle from '../components/post-title';
 import { filterPostsByTag } from '../lib/api';
-import { PostsProps } from '../lib/types';
-import styled from '@emotion/styled';
-import { colours } from './_app';
 import { sanitize } from '../lib/sanitize';
+import { PostsProps } from '../lib/types';
+import { colours } from './_app';
 
 export default function Post({ posts }: PostsProps) {
   const router = useRouter();

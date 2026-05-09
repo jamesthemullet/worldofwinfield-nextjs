@@ -1,8 +1,8 @@
-import React from 'react';
 import { render, screen } from '@testing-library/react';
+import React from 'react';
 import '@testing-library/jest-dom';
-import RelatedPosts from './related-posts';
 import { RelatedPost } from '../lib/types';
+import RelatedPosts from './related-posts';
 
 jest.mock('../pages/_app', () => ({
   colours: {
@@ -66,7 +66,7 @@ describe('RelatedPosts', () => {
     // Second post has no image so only the title link
     expect(screen.getByRole('link', { name: 'Related Post Two' })).toHaveAttribute(
       'href',
-      '/related-post-two'
+      '/related-post-two',
     );
   });
 

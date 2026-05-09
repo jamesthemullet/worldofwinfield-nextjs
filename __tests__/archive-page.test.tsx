@@ -1,8 +1,8 @@
-import React from 'react';
 import { render, screen } from '@testing-library/react';
+import React from 'react';
 import '@testing-library/jest-dom';
-import ArchivePage from '../pages/archive-page';
 import { ArchivePageProps } from '../lib/types';
+import ArchivePage from '../pages/archive-page';
 
 const mockRouter = { isFallback: false };
 
@@ -54,8 +54,8 @@ const mockPost = {
   categories: { edges: [] },
 };
 
-const makeProps = (posts: typeof mockPost[]): ArchivePageProps =>
-  ({ posts: { posts }, month: 3, year: 2025 } as unknown as ArchivePageProps);
+const makeProps = (posts: (typeof mockPost)[]): ArchivePageProps =>
+  ({ posts: { posts }, month: 3, year: 2025 }) as unknown as ArchivePageProps;
 
 const defaultProps = makeProps([mockPost]);
 

@@ -1,5 +1,5 @@
-import { ContainerProps } from '../lib/types';
 import styled from '@emotion/styled';
+import { ContainerProps } from '../lib/types';
 
 export default function Container({ children }: ContainerProps) {
   return <StyledContainer>{children}</StyledContainer>;

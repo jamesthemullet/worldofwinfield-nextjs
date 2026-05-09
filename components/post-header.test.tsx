@@ -1,5 +1,5 @@
-import React from 'react';
 import { render, screen } from '@testing-library/react';
+import React from 'react';
 import '@testing-library/jest-dom';
 import PostHeader from './post-header';
 
@@ -30,9 +30,7 @@ jest.mock('./date', () => ({
 
 jest.mock('./cover-image', () => ({
   __esModule: true,
-  default: ({ title }: { title: string }) => (
-    <div data-testid="cover-image" aria-label={title} />
-  ),
+  default: ({ title }: { title: string }) => <div data-testid="cover-image" aria-label={title} />,
 }));
 
 jest.mock('./post-title', () => ({

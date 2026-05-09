@@ -1,19 +1,18 @@
-import { useRouter } from 'next/router';
-
 import { GetStaticPaths, GetStaticProps } from 'next';
+import { useRouter } from 'next/router';
 import Container from '../components/container';
+import Layout from '../components/layout';
 import PostBody from '../components/post-body';
 import PostHeader from '../components/post-header';
-import SectionSeparator from '../components/section-separator';
-import Layout from '../components/layout';
+import PostNavigation from '../components/post-navigation';
 import PostTitle from '../components/post-title';
-import Tags from '../components/tags';
-import { getAllPostsWithSlug, getAdjacentPosts, getPost, getRelatedPosts } from '../lib/api';
-import { PostProps } from '../lib/types';
 import PrePost from '../components/pre-post';
 import RelatedPosts from '../components/related-posts';
-import PostNavigation from '../components/post-navigation';
+import SectionSeparator from '../components/section-separator';
 import ShareBar from '../components/share-bar';
+import Tags from '../components/tags';
+import { getAdjacentPosts, getAllPostsWithSlug, getPost, getRelatedPosts } from '../lib/api';
+import { PostProps } from '../lib/types';
 import Custom404 from './404';
 
 export default function Post({ post, preview, relatedPosts, adjacentPosts }: PostProps) {
@@ -30,8 +29,7 @@ export default function Post({ post, preview, relatedPosts, adjacentPosts }: Pos
       ogType="article"
       articleDate={post?.date}
       articleModified={post?.modified}
-      articleAuthor={post?.author?.node?.name}
-    >
+      articleAuthor={post?.author?.node?.name}>
       <Container>
         {router.isFallback ? (
           <PostTitle>Loading…</PostTitle>
@@ -53,10 +51,7 @@ export default function Post({ post, preview, relatedPosts, adjacentPosts }: Pos
               <PrePost tags={post.tags} date={post.date} content={post.content} />
               <PostBody content={post.content} />
               {post.tags.edges.length > 0 && <Tags tags={post.tags} />}
-              <ShareBar
-                title={post.title}
-                url={`https://worldofwinfield.co.uk/${post.slug}`}
-              />
+              <ShareBar title={post.title} url={`https://worldofwinfield.co.uk/${post.slug}`} />
             </article>
             {relatedPosts?.length > 0 && <RelatedPosts posts={relatedPosts} />}
             <PostNavigation

@@ -1,8 +1,8 @@
-import React from 'react';
 import { render, screen } from '@testing-library/react';
+import React from 'react';
 import '@testing-library/jest-dom';
-import PostPreview from './post-preview';
 import { PostPreviewProps } from '../lib/types';
+import PostPreview from './post-preview';
 
 jest.mock('dompurify', () => ({
   __esModule: true,
@@ -93,5 +93,4 @@ describe('PostPreview', () => {
     expect(screen.queryByText('Link text')).not.toBeInTheDocument();
     expect(screen.getByText(/Introduction\./)).toBeInTheDocument();
   });
-
 });

@@ -1,10 +1,10 @@
 import styled from '@emotion/styled';
-import { colours } from '../pages/_app';
-import Link from 'next/link';
 import Image from 'next/image';
-import { formatDate } from './search-results';
-import { JamesImagesProps } from '../lib/types';
+import Link from 'next/link';
 import { useMemo, useState } from 'react';
+import { JamesImagesProps } from '../lib/types';
+import { colours } from '../pages/_app';
+import { formatDate } from './search-results';
 
 type BlockImage = {
   node: {
@@ -49,16 +49,20 @@ export default function HomepageBlock({
   label,
 }: HomePageBlockTypes) {
   const [randomColour] = useState(
-    () => blockColours[Math.floor(Math.random() * blockColours.length)]
+    () => blockColours[Math.floor(Math.random() * blockColours.length)],
   );
   const [randomJamesIndex] = useState(() => Math.floor(Math.random() * jamesImages.edges.length));
 
   const imageSrc = useMemo(
-    () => (title === PLACEHOLDER ? jamesImages.edges[randomJamesIndex].node.featuredImage : image ?? null),
-    [title, image, jamesImages, randomJamesIndex]
+    () =>
+      title === PLACEHOLDER
+        ? jamesImages.edges[randomJamesIndex].node.featuredImage
+        : (image ?? null),
+    [title, image, jamesImages, randomJamesIndex],
   );
 
-  const eagerOrLazy = className?.includes('block-1-') || className?.includes('block-2-') ? 'eager' : 'lazy';
+  const eagerOrLazy =
+    className?.includes('block-1-') || className?.includes('block-2-') ? 'eager' : 'lazy';
 
   return !icon ? (
     <Block
@@ -115,7 +119,11 @@ export default function HomepageBlock({
             alt=""
             width={size === 1 ? 270 : 550}
             height={size === 1 ? 270 : 550}
-            sizes={size === 1 ? '(max-width: 768px) 50vw, (max-width: 1200px) 15vw, 270px' : '(max-width: 768px) 100vw, (max-width: 1200px) 30vw, 550px'}
+            sizes={
+              size === 1
+                ? '(max-width: 768px) 50vw, (max-width: 1200px) 15vw, 270px'
+                : '(max-width: 768px) 100vw, (max-width: 1200px) 30vw, 550px'
+            }
             quality={80}
             loading={eagerOrLazy}
           />

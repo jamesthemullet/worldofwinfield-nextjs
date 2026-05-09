@@ -24,13 +24,21 @@ type seoProps = {
   articleAuthor?: string;
 };
 
-export default function Meta({ seo, title, ogType = 'article', articleDate, articleModified, articleAuthor }: seoProps) {
+export default function Meta({
+  seo,
+  title,
+  ogType = 'article',
+  articleDate,
+  articleModified,
+  articleAuthor,
+}: seoProps) {
   const router = useRouter();
   const currentUrl = router.asPath;
   const siteAddress = 'https://www.worldofwinfield.co.uk';
   const defaultImageUrl = '/images/jameswinfieldcover.png';
 
-  const { opengraphImage, opengraphTitle, opengraphDescription, opengraphSiteName, metaKeywords } = seo || {};
+  const { opengraphImage, opengraphTitle, opengraphDescription, opengraphSiteName, metaKeywords } =
+    seo || {};
   const canonicalUrl = `${siteAddress}${currentUrl}`;
 
   return (

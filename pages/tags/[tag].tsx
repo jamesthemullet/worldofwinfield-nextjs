@@ -1,19 +1,18 @@
-import { useRouter } from 'next/router';
-import ErrorPage from 'next/error';
+import styled from '@emotion/styled';
 import { GetStaticPaths, GetStaticProps } from 'next';
+import ErrorPage from 'next/error';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 import Container from '../../components/container';
-import PostHeader from '../../components/post-header';
+import CoverImage from '../../components/cover-image';
+import Date from '../../components/date';
 import Layout from '../../components/layout';
+import { ContentContainer } from '../../components/post-body';
+import PostHeader from '../../components/post-header';
 import PostTitle from '../../components/post-title';
 import { getPostsByTag } from '../../lib/api';
-
-import { TagsPostProps } from '../../lib/types';
-import Link from 'next/link';
-import { ContentContainer } from '../../components/post-body';
-import Date from '../../components/date';
-import CoverImage from '../../components/cover-image';
-import styled from '@emotion/styled';
 import { sanitize } from '../../lib/sanitize';
+import { TagsPostProps } from '../../lib/types';
 import { colours } from '../_app';
 
 const blockColours = [
@@ -85,10 +84,14 @@ export default function Post({ posts, tag }: TagsPostProps) {
                       </TagPostDate>
                       {post.excerpt && (
                         <TagPostExcerpt
-                          dangerouslySetInnerHTML={{ __html: sanitize(stripReadMoreParagraph(post.excerpt)) }}
+                          dangerouslySetInnerHTML={{
+                            __html: sanitize(stripReadMoreParagraph(post.excerpt)),
+                          }}
                         />
                       )}
-                      <ContinueReadingLink href={`/${post.slug}`} colour={getColourFromTitle(post.title)}>
+                      <ContinueReadingLink
+                        href={`/${post.slug}`}
+                        colour={getColourFromTitle(post.title)}>
                         Continue reading
                       </ContinueReadingLink>
                     </TagPostContent>

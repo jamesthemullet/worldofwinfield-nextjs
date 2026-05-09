@@ -1,8 +1,8 @@
-import React from 'react';
 import { render, screen } from '@testing-library/react';
+import React from 'react';
 import '@testing-library/jest-dom';
-import MoreStories from './more-stories';
 import { MoreStoriesProps } from '../lib/types';
+import MoreStories from './more-stories';
 
 jest.mock('./post-preview', () => ({
   __esModule: true,

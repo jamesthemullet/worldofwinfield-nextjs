@@ -1,7 +1,7 @@
-import React from 'react';
 import { useRouter } from 'next/router';
-import { getMonthNumber } from './utils';
+import React from 'react';
 import { StyledSelect } from './core-components';
+import { getMonthNumber } from './utils';
 
 const ArchiveDropdown = () => {
   const router = useRouter();

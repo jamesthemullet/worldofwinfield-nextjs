@@ -1,10 +1,10 @@
-import { useMemo } from 'react';
-import { HeroPostProps } from '../lib/types';
 import styled from '@emotion/styled';
-import PostHeader from './post-header';
-import { StyledButton } from './core-components';
 import Link from 'next/link';
+import { useMemo } from 'react';
 import { sanitize } from '../lib/sanitize';
+import { HeroPostProps } from '../lib/types';
+import { StyledButton } from './core-components';
+import PostHeader from './post-header';
 
 const stripExternalLinks = (excerpt: string): string => {
   const regex = /<a\s+(?:[^>]*?\s+)?href="https?:\/\/[^"]*"[^>]*>.*?<\/a>/g;
@@ -19,10 +19,7 @@ export default function HeroPost({
   slug,
   featuredImage,
 }: HeroPostProps) {
-  const sanitizedExcerpt = useMemo(
-    () => sanitize(stripExternalLinks(excerpt)),
-    [excerpt]
-  );
+  const sanitizedExcerpt = useMemo(() => sanitize(stripExternalLinks(excerpt)), [excerpt]);
 
   return (
     <StyledSection>
