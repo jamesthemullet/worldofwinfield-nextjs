@@ -25,7 +25,7 @@
     "@types/dompurify": "^3.2.0",
     "@types/jest": "30.0.0",
     "@types/node": "24.12.4",
-    "@types/react": "19.2.14",
+    "@types/react": "19.2.15",
     "@types/react-dom": "19.2.3",
     "accented": "^1.2.0",
     "date-fns": "^4.0.0",
