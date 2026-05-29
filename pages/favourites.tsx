@@ -1,22 +1,60 @@
 import styled from '@emotion/styled';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 import Container from '../components/container';
 import Layout from '../components/layout';
 import PostHeader from '../components/post-header';
+import { fetchDataFromGoogleSheets } from '../lib/sheets';
 import { colours } from './_app';
 
 const categories = [
-  { title: 'Books', url: '/favourite-books', icon: null },
-  { title: 'Beers', url: '/favourite-beers', icon: null },
-  { title: 'Cheese', url: '/favourite-cheese', icon: null },
-  { title: 'Cities', url: '/favourite-cities', icon: null },
-  { title: 'Countries', url: '/favourite-countries', icon: null },
-  { title: 'DJs', url: '/favourite-djs', icon: null },
-  { title: 'Movies', url: '/favourite-movies', icon: null },
-  { title: 'Restaurants', url: '/favourite-restaurants', icon: null },
-  { title: 'Tracks', url: '/favourite-tracks', icon: null },
-  { title: 'Articles', url: '/favourite-articles', icon: null },
+  {
+    title: 'Books',
+    url: '/favourite-books',
+    sheetId: '1G-QrN1NDpKAr12VyIi50Nod8_g-YOSGP3bovCXxDHlY',
+  },
+  {
+    title: 'Beers',
+    url: '/favourite-beers',
+    sheetId: '1pNNIw849xWrQHtDptwInGs6Un0AZh-fgXUssC3XIrHM',
+  },
+  {
+    title: 'Cheese',
+    url: '/favourite-cheese',
+    sheetId: '1UDjT7_Q5rBPQasn4o2qxUOsEcElEI67nl-ep9YTLc-E',
+  },
+  {
+    title: 'Cities',
+    url: '/favourite-cities',
+    sheetId: '1WBfOTfhC70AygxrTcIIgvigzlvOD65WfI9Ysrd3aF5o',
+  },
+  {
+    title: 'Countries',
+    url: '/favourite-countries',
+    sheetId: '1zyzuLzWY0S6mUp-FVjcIa3QFAENcU94WVD9ZF0JWERY',
+  },
+  { title: 'DJs', url: '/favourite-djs', sheetId: '1_zpDBFlpW2ZWTVsXQHoW6Y4FbGw8Vi53nMYpZiOypbg' },
+  {
+    title: 'Movies',
+    url: '/favourite-movies',
+    sheetId: '1q3LFzLYqK0tLWHjvHYxFE1IIF-FrOJuqJ6XBIQIEl6U',
+  },
+  {
+    title: 'Restaurants',
+    url: '/favourite-restaurants',
+    sheetId: '1J1znKQxeNR3Y6Q1mEPzZyMfCAGK4FQyxasoCQx35NVQ',
+  },
+  {
+    title: 'Tracks',
+    url: '/favourite-tracks',
+    sheetId: '1ifEAiSgIMKrtTJ6fSHNGmQ-kMzR_MyAa-PjvBWOsBRA',
+  },
+  {
+    title: 'Articles',
+    url: '/favourite-articles',
+    sheetId: '1R928oTM4hiTFXZ6Ww9-2pMKLAWy2Wjf3Z9xrXC6GTa0',
+  },
 ];
 
 const tileColours = [
@@ -39,6 +77,23 @@ const seo = {
 };
 
 export default function FavouritesHubPage() {
+  const [counts, setCounts] = useState<Record<string, number | null>>({});
+
+  useEffect(() => {
+    const fetchCounts = async () => {
+      const results = await Promise.all(
+        categories.map(async ({ title, sheetId }) => {
+          const data = await fetchDataFromGoogleSheets(sheetId);
+          const count = data && data.length > 1 ? data.length - 1 : null;
+          return [title, count] as [string, number | null];
+        }),
+      );
+      setCounts(Object.fromEntries(results));
+    };
+
+    fetchCounts();
+  }, []);
+
   return (
     <Layout preview={null} title="Favourites" seo={seo}>
       <Container>
@@ -53,6 +108,7 @@ export default function FavouritesHubPage() {
                   <Image src="/icons/007-star.png" alt="" width={64} height={64} unoptimized />
                 </StyledIcon>
                 <p>{title}</p>
+                <Count>{counts[title] != null ? `${counts[title]} entries` : '—'}</Count>
               </TileInner>
             </Tile>
           ))}
@@ -120,6 +176,13 @@ const TileInner = styled.div`
     font-family: 'Oswald', sans-serif;
     letter-spacing: 2px;
   }
+`;
+
+const Count = styled.span`
+  font-size: 0.85rem;
+  opacity: 0.85;
+  font-family: 'Oswald', sans-serif;
+  letter-spacing: 1px;
 `;
 
 const StyledIcon = styled.div`
