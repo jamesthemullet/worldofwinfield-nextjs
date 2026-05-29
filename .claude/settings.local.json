@@ -19,7 +19,9 @@
       "Bash(gh issue *)",
       "Bash(yarn tsc *)",
       "Bash(gh run *)",
-      "Bash(yarn biome *)"
+      "Bash(yarn biome *)",
+      "Bash(gh label *)",
+      "Bash(git pull *)"
     ]
   }
 }

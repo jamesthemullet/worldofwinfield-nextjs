@@ -101,6 +101,14 @@ gh label create product --color "0075ca" --description "Product feature opportun
 
 Report the issue URL once created.
 
+## Already implemented or rejected ideas
+
+Before proposing a feature, check this list. Do **not** re-propose anything here.
+
+| Idea | Status | Notes |
+|------|--------|-------|
+| Favourites Hub Item Counts — display entry counts on each `/favourites` tile | ✅ Implemented | PR on branch `issue-388-favourites-hub-item-counts`; counts fetched in parallel from Google Sheets on mount |
+
 ## Known project patterns
 
 - **Data fetching:** All content comes from WordPress GraphQL — `lib/api.ts` exports typed fetch functions; new features should reuse these rather than adding new queries unless essential
