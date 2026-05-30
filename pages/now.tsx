@@ -50,7 +50,8 @@ export default function NowPage() {
             <Section>
               <SectionHeading>📖 What I'm reading</SectionHeading>
               <p>
-                The book I'm reading is too naff to share. But my favourite blog at the moment is{' '}
+                Just finished reading Hitler, Stalin, Mum & Dad by Daniel Finkelstein - amazingly
+                written but haunting too. My favourite blog at the moment is{' '}
                 <a href="https://jmarriott.substack.com/" target="_blank" rel="noopener noreferrer">
                   Cultural Capital by James Marriott
                 </a>
@@ -61,8 +62,9 @@ export default function NowPage() {
             <Section>
               <SectionHeading>✈️ What's next</SectionHeading>
               <p>
-                Hoping to go to Japan next month...assuming sufficient jet fuel. Was booked for May
-                2020 but you know what happened then.
+                Well I've just got back from Japan so there's a need to book another holiday. Maybe
+                Montenegro (new country) and then Athens? Also guess I should watch some of the
+                World Cup, but also FUCK TRUMP.
               </p>
             </Section>
 
