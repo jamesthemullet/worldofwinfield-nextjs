@@ -1,16 +1,16 @@
-import styled from "@emotion/styled";
-import Container from "../components/container";
-import Layout from "../components/layout";
-import PostHeader from "../components/post-header";
-import { NOW_LAST_UPDATED } from "../data/now-meta";
-import { colours } from "./_app";
+import styled from '@emotion/styled';
+import Container from '../components/container';
+import Layout from '../components/layout';
+import PostHeader from '../components/post-header';
+import { NOW_LAST_UPDATED } from '../data/now-meta';
+import { colours } from './_app';
 
 export default function NowPage() {
   const seo = {
-    opengraphTitle: "Now | World Of Winfield",
+    opengraphTitle: 'Now | World Of Winfield',
     opengraphDescription:
-      "What James Winfield is up to right now — current location, projects, and interests.",
-    opengraphSiteName: "World Of Winfield",
+      'What James Winfield is up to right now — current location, projects, and interests.',
+    opengraphSiteName: 'World Of Winfield',
   };
 
   return (
@@ -32,35 +32,27 @@ export default function NowPage() {
               <SectionHeading>💼 What I'm working on</SectionHeading>
               <p>At work, an internal merchandising app at M&S.</p>
               <p>
-                On the side I've started making a site called{" "}
-                <strong>Croydon Chicken Mile</strong> just for a laugh — to
-                celebrate the best chicken shops in the country. There's a
-                serious amount of talent out there and someone has to document
-                it.
+                On the side I've started making a site called <strong>Croydon Chicken Mile</strong>{' '}
+                just for a laugh — to celebrate the best chicken shops in the country. There's a
+                serious amount of talent out there and someone has to document it.
               </p>
             </Section>
 
             <Section>
               <SectionHeading>🤖 What I'm learning</SectionHeading>
               <p>
-                Kind of obsessed with Claude Code at the moment and trying to
-                actually integrate myself into the AI ecosystem rather than just
-                messing about with it. Also still slowly chugging away at
-                Spanish.
+                Kind of obsessed with Claude Code at the moment and trying to actually integrate
+                myself into the AI ecosystem rather than just messing about with it. Also still
+                slowly chugging away at Spanish.
               </p>
             </Section>
 
             <Section>
               <SectionHeading>📖 What I'm reading</SectionHeading>
               <p>
-                Just finished reading Hitler, Stalin, Mum & Dad by Daniel
-                Finkelstein - amazingly written but haunting too. My favourite
-                blog at the moment is{" "}
-                <a
-                  href="https://jmarriott.substack.com/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
+                Just finished reading Hitler, Stalin, Mum & Dad by Daniel Finkelstein - amazingly
+                written but haunting too. My favourite blog at the moment is{' '}
+                <a href="https://jmarriott.substack.com/" target="_blank" rel="noopener noreferrer">
                   Cultural Capital by James Marriott
                 </a>
                 .
@@ -70,21 +62,16 @@ export default function NowPage() {
             <Section>
               <SectionHeading>✈️ What's next</SectionHeading>
               <p>
-                Well I've just got back from Japan so there's a need to book
-                another holiday. Maybe Montenegro (new country) and then Athens?
-                Also guess I should watch some of the World Cup, but also FUCK
-                TRUMP.
+                Well I've just got back from Japan so there's a need to book another holiday. Maybe
+                Montenegro (new country) and then Athens? Also guess I should watch some of the
+                World Cup, but also FUCK TRUMP.
               </p>
             </Section>
 
             <Footer>
               <p>
-                This is a{" "}
-                <a
-                  href="https://nownownow.com/about"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
+                This is a{' '}
+                <a href="https://nownownow.com/about" target="_blank" rel="noopener noreferrer">
                   /now page
                 </a>
                 . If you have one too, I'd love to know.
