@@ -1,6 +1,9 @@
-import createCache from '@emotion/cache';
+import createCache, { EmotionCache } from '@emotion/cache';
 import createEmotionServer from '@emotion/server/create-instance';
+import type { AppProps } from 'next/app';
 import Document, { DocumentContext, Head, Html, Main, NextScript } from 'next/document';
+import type { AppType } from 'next/dist/shared/lib/utils';
+import type { ComponentType } from 'react';
 
 const EMOTION_KEY = 'css';
 
@@ -45,10 +48,13 @@ MyDocument.getInitialProps = async (ctx: DocumentContext) => {
   const originalRenderPage = ctx.renderPage;
   ctx.renderPage = () =>
     originalRenderPage({
-      enhanceApp: (App: any) =>
-        function EnhancedApp(props: any) {
-          return <App emotionCache={cache} {...props} />;
-        },
+      // Cast required: Next.js Enhancer<AppType> expects (AppType) => AppType, but we return
+      // a wrapper that passes an extra emotionCache prop — no way to express this without assertion.
+      enhanceApp: (App: AppType) =>
+        (function EnhancedApp(props: AppProps) {
+          const TypedApp = App as ComponentType<AppProps & { emotionCache: EmotionCache }>;
+          return <TypedApp emotionCache={cache} {...props} />;
+        }) as unknown as AppType,
     });
 
   const initialProps = await Document.getInitialProps(ctx);
