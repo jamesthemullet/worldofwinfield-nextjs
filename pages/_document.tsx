@@ -45,7 +45,12 @@ MyDocument.getInitialProps = async (ctx: DocumentContext) => {
   const originalRenderPage = ctx.renderPage;
   ctx.renderPage = () =>
     originalRenderPage({
+      // `any` is necessary here: Next.js types `enhanceApp` as `Enhancer<AppType>` which requires
+      // the same prop type in and out, but Emotion's pattern injects `emotionCache` into App props,
+      // changing the interface — a transformation the type system cannot express without `any`.
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       enhanceApp: (App: any) =>
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         function EnhancedApp(props: any) {
           return <App emotionCache={cache} {...props} />;
         },

@@ -5,7 +5,9 @@ import MyApp from './_app';
 
 type AppProps = {
   Component: React.ComponentType;
-  pageProps: Record<string, any>;
+  pageProps: Record<string, unknown>;
+  // Next.js's Router type has ~30 required fields; `{}` is a deliberate minimal test mock.
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   router: any;
 };
 
