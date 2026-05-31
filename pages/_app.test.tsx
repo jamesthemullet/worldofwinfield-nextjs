@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import React from 'react';
 import type { AppProps } from 'next/app';
+import React from 'react';
 import MyApp from './_app';
 
 const pageContent = 'test content';
