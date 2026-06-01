@@ -4,6 +4,7 @@ import Container from '../components/container';
 import Layout from '../components/layout';
 import PostHeader from '../components/post-header';
 import PostTitle from '../components/post-title';
+import ShareBar from '../components/share-bar';
 
 const processData = (rawData: string[][]) => {
   const continents = [
@@ -136,6 +137,10 @@ export default function CountriesVisited({
                   <StatLabel>continents explored</StatLabel>
                 </StatItem>
               </StatBlock>
+              <ShareBar
+                title={`I've visited ${totalVisited} of ${totalCountries} countries across ${continentsExplored} continents! 🌍`}
+                url="https://worldofwinfield.co.uk/countries-visited"
+              />
               <CountryList transformedData={transformedData} />
             </PostContainer>
           </>
