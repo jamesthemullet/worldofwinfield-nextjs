@@ -42,13 +42,13 @@ describe('CoverImage', () => {
     expect(screen.queryByRole('link')).not.toBeInTheDocument();
   });
 
-  it('loads the image eagerly when heroPost is true', () => {
+  it('sets fetchpriority to high when heroPost is true', () => {
     render(<CoverImage title="Test Post" coverImage={coverImageData} heroPost />);
-    expect(screen.getByRole('img')).toHaveAttribute('loading', 'eager');
+    expect(screen.getByRole('img')).toHaveAttribute('fetchpriority', 'high');
   });
 
-  it('loads the image lazily by default', () => {
+  it('does not set fetchpriority to high by default', () => {
     render(<CoverImage title="Test Post" coverImage={coverImageData} />);
-    expect(screen.getByRole('img')).toHaveAttribute('loading', 'lazy');
+    expect(screen.getByRole('img')).not.toHaveAttribute('fetchpriority', 'high');
   });
 });

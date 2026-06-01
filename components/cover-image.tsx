@@ -28,7 +28,7 @@ export default function CoverImage({ title, coverImage, imageSize, slug, heroPos
       sizes={imageSize || '(max-width: 768px) 100vw, 50vw'}
       quality={75}
       fill
-      loading={heroPost ? 'eager' : 'lazy'}
+      priority={!!heroPost}
     />
   );
   return (
