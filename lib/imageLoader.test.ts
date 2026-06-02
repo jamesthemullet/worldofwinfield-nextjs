@@ -7,7 +7,11 @@ describe('imageLoader', () => {
   });
 
   it('transforms external URLs to the Jetpack CDN format', () => {
-    const result = imageLoader({ src: 'https://example.com/uploads/photo.jpg', width: 600, quality: 80 });
+    const result = imageLoader({
+      src: 'https://example.com/uploads/photo.jpg',
+      width: 600,
+      quality: 80,
+    });
     expect(result).toBe('https://i0.wp.com/example.com/uploads/photo.jpg?w=600&q=80&strip=all');
   });
 
