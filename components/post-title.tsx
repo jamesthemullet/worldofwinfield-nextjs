@@ -8,7 +8,7 @@ export default function PostTitle({ backgroundColour, children }: PostTitleProps
     <StyledTitleContainer backgroundColour={backgroundColour ?? ''}>
       <Title
         colour={colours.white}
-        dangerouslySetInnerHTML={{ __html: sanitize(children as string) }}
+        dangerouslySetInnerHTML={{ __html: sanitize(children) }}
       />
     </StyledTitleContainer>
   );
