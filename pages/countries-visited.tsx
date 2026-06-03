@@ -5,7 +5,9 @@ import Layout from '../components/layout';
 import PostHeader from '../components/post-header';
 import PostTitle from '../components/post-title';
 
-const processData = (rawData: string[][]): Record<string, { country: string; visited: string }[]> => {
+const processData = (
+  rawData: string[][],
+): Record<string, { country: string; visited: string }[]> => {
   const continents = [
     'Europe',
     'North America',
