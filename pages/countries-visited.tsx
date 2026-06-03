@@ -6,7 +6,9 @@ import PostHeader from '../components/post-header';
 import PostTitle from '../components/post-title';
 import ShareBar from '../components/share-bar';
 
-const processData = (rawData: string[][]) => {
+const processData = (
+  rawData: string[][],
+): Record<string, { country: string; visited: string }[]> => {
   const continents = [
     'Europe',
     'North America',
@@ -43,7 +45,7 @@ const processData = (rawData: string[][]) => {
   return result;
 };
 
-const fetchDataFromGoogleSheets = async () => {
+const fetchDataFromGoogleSheets = async (): Promise<string[][] | null> => {
   try {
     const API_KEY = process.env.NEXT_PUBLIC_GOOGLE_SHEETS_API_KEY;
     const sheetID = '1OBRmcLtmwbb8AjoUj8F9wUe5j7AERFlI-iG2iYkA3Jg';
@@ -212,7 +214,7 @@ const ContentContainer = styled.section`
 
 export async function getServerSideProps() {
   const rawData = await fetchDataFromGoogleSheets();
-  const transformedData = processData(rawData);
+  const transformedData = rawData ? processData(rawData) : {};
 
   return {
     props: {
