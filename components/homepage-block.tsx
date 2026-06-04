@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { JamesImagesProps } from '../lib/types';
 import { colours } from '../pages/_app';
 import { formatDate } from './search-results';
@@ -53,16 +53,12 @@ export default function HomepageBlock({
   );
   const [randomJamesIndex] = useState(() => Math.floor(Math.random() * jamesImages.edges.length));
 
-  const imageSrc = useMemo(
-    () =>
-      title === PLACEHOLDER
-        ? jamesImages.edges[randomJamesIndex].node.featuredImage
-        : (image ?? null),
-    [title, image, jamesImages, randomJamesIndex],
-  );
+  const imageSrc =
+    title === PLACEHOLDER
+      ? jamesImages.edges[randomJamesIndex].node.featuredImage
+      : (image ?? null);
 
-  const eagerOrLazy =
-    className?.includes('block-1-') || className?.includes('block-2-') ? 'eager' : 'lazy';
+  const isPriority = className?.includes('block-1-') || className?.includes('block-2-');
 
   return !icon ? (
     <Block
@@ -83,7 +79,7 @@ export default function HomepageBlock({
               height={230}
               sizes="(max-width: 768px) 50vw, (max-width: 1200px) 15vw, 230px"
               quality={75}
-              loading={eagerOrLazy}
+              priority={isPriority}
             />
           )}
 
@@ -95,7 +91,7 @@ export default function HomepageBlock({
               height={474}
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 30vw, 474px"
               quality={75}
-              loading={eagerOrLazy}
+              priority={isPriority}
             />
           )}
 
@@ -107,7 +103,7 @@ export default function HomepageBlock({
               height={840}
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 840px"
               quality={75}
-              loading={eagerOrLazy}
+              priority={isPriority}
             />
           )}
         </StyledLinkImage>
