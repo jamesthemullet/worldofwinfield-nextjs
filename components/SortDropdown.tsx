@@ -9,10 +9,8 @@ type SortDropdownProps = {
 
 const SortDropdown: React.FC<SortDropdownProps> = ({ options, selected, onChange }) => {
   return (
-    <div style={{ margin: '1rem 0', textAlign: 'center' }}>
-      <label htmlFor="sort-select" style={{ marginRight: '0.5rem' }}>
-        Sort by:
-      </label>
+    <Wrapper>
+      <Label htmlFor="sort-select">Sort by:</Label>
       <Select id="sort-select" value={selected} onChange={(e) => onChange(e.target.value)}>
         <option value="">Default</option>
         {options.map((opt) => (
@@ -21,9 +19,18 @@ const SortDropdown: React.FC<SortDropdownProps> = ({ options, selected, onChange
           </option>
         ))}
       </Select>
-    </div>
+    </Wrapper>
   );
 };
+
+const Wrapper = styled.div`
+  margin: 1rem 0;
+  text-align: center;
+`;
+
+const Label = styled.label`
+  margin-right: 0.5rem;
+`;
 
 const Select = styled.select`
   padding: 0.5rem;
