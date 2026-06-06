@@ -41,18 +41,27 @@ Read the relevant source files in `components/`, `lib/`, and `pages/`. Identify 
 
 Make the fix. Keep scope tight — one issue, one or two files. Do not refactor beyond what is needed to address the specific finding.
 
-### Step 4 — Report
+### Step 4 — Open a PR
 
-Output exactly this structure:
+Create a git branch, commit the fix, push, and open a pull request:
 
+1. Create a branch named `quality/<short-kebab-description>` (e.g. `quality/remove-inline-styles-genre-dropdown`)
+2. Stage only the files you changed and commit with a concise message following the pattern: `quality: <what was fixed>`
+3. Push the branch and open a PR using `gh pr create` with:
+   - Title: `quality: <what was fixed>` (under 70 chars)
+   - Body describing the category, the issue, and the fix (use the template below)
+4. Return the PR URL to the user
+
+PR body template:
 ```
 ## Quality improvement
 
 **Category:** <chosen category name>
-**File:** <path:line>
 **Issue:** <one sentence describing the problem>
 **Fix:** <what was changed and why>
 **Next suggestion:** <the next candidate worth tackling in this category, with file path>
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
 ```
 
 ## Known project patterns
