@@ -4,14 +4,6 @@ import type { AppProps } from 'next/app';
 import React from 'react';
 import MyApp from './_app';
 
-type AppProps = {
-  Component: React.ComponentType;
-  pageProps: Record<string, unknown>;
-  // Next.js's Router type has ~30 required fields; `{}` is a deliberate minimal test mock.
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  router: any;
-};
-
 const pageContent = 'test content';
 
 jest.mock('@next/third-parties/google', () => ({
