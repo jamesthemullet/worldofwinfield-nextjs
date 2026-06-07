@@ -1,5 +1,4 @@
 import styled from '@emotion/styled';
-import React from 'react';
 import { SearchResultsProps } from '../lib/types';
 import { colours } from '../pages/_app';
 
