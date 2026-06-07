@@ -132,7 +132,7 @@ export default function HomepageBlock({
 
       {url && date && (
         <StyledLink href={url}>
-          {title !== PLACEHOLDER && title !== RANDOM_PHOTO && <p aria-label={title}>{title}</p>}
+          {title !== PLACEHOLDER && title !== RANDOM_PHOTO && <p>{title}</p>}
           {date && title !== PLACEHOLDER && <p className="date">{formatDate(date)}</p>}
         </StyledLink>
       )}
