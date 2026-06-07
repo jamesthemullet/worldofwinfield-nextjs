@@ -62,6 +62,14 @@ function MyApp({
     <CacheProvider value={emotionCache}>
       <Head>
         <title>World Of Winfield</title>
+        <link
+          rel="preload"
+          href="/fonts/Oswald-VariableFont_rght.ttf"
+          as="font"
+          type="font/truetype"
+          crossOrigin="anonymous"
+        />
+        <link rel="preconnect" href="https://i0.wp.com" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://www.googletagmanager.com" />
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
       </Head>

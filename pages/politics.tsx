@@ -11,6 +11,12 @@ import { sanitize } from '../lib/sanitize';
 import { PostsProps } from '../lib/types';
 import { colours } from './_app';
 
+const politicsSeo = {
+  opengraphTitle: 'Posts About Politics | World Of Winfield',
+  opengraphDescription: 'A collection of posts about politics from World Of Winfield.',
+  opengraphSiteName: 'World Of Winfield',
+};
+
 export default function Post({ posts }: PostsProps) {
   const router = useRouter();
 
@@ -19,7 +25,7 @@ export default function Post({ posts }: PostsProps) {
   }
 
   return (
-    <Layout preview={null} seo={posts[0]?.seo} title="Posts About Politics">
+    <Layout preview={null} seo={politicsSeo} title="Posts About Politics | World Of Winfield">
       <Container>
         {router.isFallback ? (
           <PostTitle>Loading…</PostTitle>

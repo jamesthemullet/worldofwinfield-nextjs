@@ -124,7 +124,7 @@ export default function HomepageBlock({
                 ? '(max-width: 768px) 50vw, (max-width: 1200px) 15vw, 270px'
                 : '(max-width: 768px) 100vw, (max-width: 1200px) 30vw, 550px'
             }
-            quality={80}
+            quality={75}
             loading={eagerOrLazy}
           />
         )
@@ -132,7 +132,7 @@ export default function HomepageBlock({
 
       {url && date && (
         <StyledLink href={url}>
-          {title !== PLACEHOLDER && title !== RANDOM_PHOTO && <p aria-label={title}>{title}</p>}
+          {title !== PLACEHOLDER && title !== RANDOM_PHOTO && <p>{title}</p>}
           {date && title !== PLACEHOLDER && <p className="date">{formatDate(date)}</p>}
         </StyledLink>
       )}

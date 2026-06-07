@@ -22,6 +22,7 @@ export default function RelatedPosts({ posts }: RelatedPostsProps) {
                     alt={post.title}
                     width={400}
                     height={250}
+                    sizes="(max-width: 768px) 100vw, (max-width: 960px) 33vw, 320px"
                     style={{ objectFit: 'cover', width: '100%', height: '180px' }}
                   />
                 </Link>

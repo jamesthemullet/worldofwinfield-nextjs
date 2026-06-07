@@ -19,10 +19,8 @@ const GenreDropdown: React.FC<GenreDropdownProps> = ({
   selectId = 'genre-select',
 }) => {
   return (
-    <div style={{ marginBottom: '1rem' }}>
-      <label htmlFor={selectId} style={{ marginRight: '0.5rem' }}>
-        {filterLabel}
-      </label>
+    <Wrapper>
+      <Label htmlFor={selectId}>{filterLabel}</Label>
       <StyledSelect id={selectId} value={selectedGenre} onChange={(e) => onChange(e.target.value)}>
         {allOptionText && <option value="">{allOptionText}</option>}
         {genres.map((genre) => (
@@ -31,9 +29,17 @@ const GenreDropdown: React.FC<GenreDropdownProps> = ({
           </option>
         ))}
       </StyledSelect>
-    </div>
+    </Wrapper>
   );
 };
+
+const Wrapper = styled.div`
+  margin-bottom: 1rem;
+`;
+
+const Label = styled.label`
+  margin-right: 0.5rem;
+`;
 
 const StyledSelect = styled.select`
   padding: 0.5rem;

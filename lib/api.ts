@@ -1,3 +1,5 @@
+import type { AdjacentPost, RelatedPost } from './types';
+
 const API_URL = process.env.NEXT_PUBLIC_WORDPRESS_API_URL;
 
 async function fetchAPI(query = '', { variables }: Record<string, unknown> = {}) {
@@ -480,7 +482,7 @@ export async function getPostsByTag(tag: string) {
   return data.posts.nodes;
 }
 
-export async function getRelatedPosts(tag: string, excludeSlug: string) {
+export async function getRelatedPosts(tag: string, excludeSlug: string): Promise<RelatedPost[]> {
   const data = await fetchAPI(
     `
     query GetRelatedPosts($tag: String!) {
@@ -507,12 +509,15 @@ export async function getRelatedPosts(tag: string, excludeSlug: string) {
       variables: { tag },
     },
   );
-  return (data.posts.nodes as { slug: string }[])
+  return (data.posts.nodes as RelatedPost[])
     .filter((post) => post.slug !== excludeSlug)
     .slice(0, 3);
 }
 
-export async function getAdjacentPosts(date: string) {
+export async function getAdjacentPosts(date: string): Promise<{
+  previousPost: AdjacentPost | null;
+  nextPost: AdjacentPost | null;
+}> {
   const parsedDate = new Date(date);
   const year = parsedDate.getFullYear();
   const month = parsedDate.getMonth() + 1;

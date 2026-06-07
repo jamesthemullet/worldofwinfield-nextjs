@@ -4,6 +4,10 @@ import Container from '../components/container';
 import Layout from '../components/layout';
 import { colours } from '../pages/_app';
 
+interface BlockProps {
+  backgroundColour: string;
+}
+
 export default function Custom404() {
   const words = ['Why', 'are', 'you', 'here?'];
   const blockColours = [
@@ -16,7 +20,7 @@ export default function Custom404() {
     colours.blueish,
   ];
 
-  const shuffleArray = (array) => {
+  const shuffleArray = (array: string[]): string[] => {
     for (let i = array.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [array[i], array[j]] = [array[j], array[i]];
@@ -63,7 +67,7 @@ const Grid = styled.div`
   }
 `;
 
-const Block = styled.div`
+const Block = styled.div<BlockProps>`
   background-color: ${(props) => props.backgroundColour};
   color: white;
   padding: 0;
