@@ -2,7 +2,7 @@ import type { AdjacentPost, RelatedPost } from './types';
 
 const API_URL = process.env.NEXT_PUBLIC_WORDPRESS_API_URL;
 
-async function fetchAPI(query = '', { variables }: Record<string, unknown> = {}) {
+async function fetchAPI(query = '', { variables }: { variables?: Record<string, unknown> } = {}) {
   const headers: Record<string, string> = { 'Content-Type': 'application/json' };
 
   if (process.env.WORDPRESS_AUTH_REFRESH_TOKEN) {

@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import Link from 'next/link';
+import type { GetServerSidePropsContext } from 'next';
 import { useRouter } from 'next/router';
 import React from 'react';
 import Container from '../components/container';
@@ -81,9 +82,9 @@ const ArchivePage = ({ posts: { posts }, month, year }: ArchivePageProps) => {
   );
 };
 
-export async function getServerSideProps(context: { query: { month: string; year: string } }) {
-  const month = parseInt(context.query.month, 10);
-  const year = parseInt(context.query.year, 10);
+export async function getServerSideProps({ query }: GetServerSidePropsContext) {
+  const month = parseInt(query.month as string, 10);
+  const year = parseInt(query.year as string, 10);
 
   if (isNaN(month) || month < 1 || month > 12) {
     return { notFound: true };

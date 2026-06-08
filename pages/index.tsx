@@ -34,11 +34,7 @@ export default function Index({
       setRandomImage(jamesImages.edges[0].node.featuredImage);
     } else {
       const randomIndex = Math.floor(Math.random() * randomImageSet.images?.length);
-      setRandomImage(
-        randomImageSet.images[
-          randomIndex
-        ] as unknown as IndexPageProps['jamesImages']['edges'][0]['node']['featuredImage'],
-      );
+      setRandomImage(randomImageSet.images[randomIndex]);
     }
   }, [randomImageSet]);
 
