@@ -73,6 +73,16 @@ export type PostProps = {
   relatedPosts: RelatedPost[];
 };
 
+export type TagItem = {
+  name: string;
+  slug: string;
+  count: number;
+};
+
+export type TagsIndexProps = {
+  tags: TagItem[];
+};
+
 export type TagsPostProps = {
   posts: {
     title: string;

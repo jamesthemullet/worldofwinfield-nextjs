@@ -10,7 +10,7 @@ import Layout from '../../components/layout';
 import { ContentContainer } from '../../components/post-body';
 import PostHeader from '../../components/post-header';
 import PostTitle from '../../components/post-title';
-import { getPostsByTag } from '../../lib/api';
+import { getAllTags, getPostsByTag } from '../../lib/api';
 import { sanitize } from '../../lib/sanitize';
 import { TagsPostProps } from '../../lib/types';
 import { colours } from '../_app';
@@ -212,19 +212,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const frequentlyUsedTags = [
-    'react',
-    'javascript',
-    'nextjs',
-    'travel',
-    'food',
-    'lifestyle',
-    'personal',
-  ];
-
-  const paths = frequentlyUsedTags.map((tag) => ({
-    params: { tag },
-  }));
-
+  const tags = await getAllTags();
+  const paths = tags.map(({ slug }) => ({ params: { tag: slug } }));
   return { paths, fallback: 'blocking' };
 };

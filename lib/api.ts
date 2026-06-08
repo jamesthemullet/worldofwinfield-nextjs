@@ -451,6 +451,21 @@ export async function getArchivePost() {
   return null;
 }
 
+export async function getAllTags() {
+  const data = await fetchAPI(`
+    {
+      tags(first: 100, where: { hideEmpty: true }) {
+        nodes {
+          name
+          slug
+          count
+        }
+      }
+    }
+  `);
+  return data.tags.nodes as { name: string; slug: string; count: number }[];
+}
+
 export async function getPostsByTag(tag: string) {
   const data = await fetchAPI(
     `
