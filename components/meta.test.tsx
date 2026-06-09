@@ -75,6 +75,8 @@ describe('Meta', () => {
       />,
     );
     const canonical = findChild('link', (p) => p.rel === 'canonical');
-    expect(canonical?.props.href).toBe('https://www.worldofwinfield.co.uk/test-path');
+    expect((canonical?.props as { href?: string })?.href).toBe(
+      'https://www.worldofwinfield.co.uk/test-path',
+    );
   });
 });
