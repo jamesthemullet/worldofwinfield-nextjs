@@ -1,8 +1,8 @@
 import { render, screen } from '@testing-library/react';
 import React from 'react';
 import '@testing-library/jest-dom';
-import Intro from './intro';
 import { JamesImagesProps } from '../lib/types';
+import Intro from './intro';
 
 jest.mock('../pages/_app', () => ({
   colours: {

@@ -22,8 +22,11 @@ jest.mock('next/head', () => ({
 
 function findChild(type: string, matcher: (props: Record<string, string>) => boolean) {
   const children = React.Children.toArray(capturedChildren);
-  return children.find((child): child is React.ReactElement =>
-    React.isValidElement(child) && child.type === type && matcher(child.props as Record<string, string>),
+  return children.find(
+    (child): child is React.ReactElement =>
+      React.isValidElement(child) &&
+      child.type === type &&
+      matcher(child.props as Record<string, string>),
   );
 }
 
@@ -39,8 +42,7 @@ describe('Meta', () => {
       />,
     );
     const titleEl = React.Children.toArray(capturedChildren).find(
-      (child): child is React.ReactElement =>
-        React.isValidElement(child) && child.type === 'title',
+      (child): child is React.ReactElement => React.isValidElement(child) && child.type === 'title',
     );
     expect((titleEl?.props as { children?: string })?.children).toBe('SEO Page Title');
   });
@@ -57,8 +59,7 @@ describe('Meta', () => {
       />,
     );
     const titleEl = React.Children.toArray(capturedChildren).find(
-      (child): child is React.ReactElement =>
-        React.isValidElement(child) && child.type === 'title',
+      (child): child is React.ReactElement => React.isValidElement(child) && child.type === 'title',
     );
     expect((titleEl?.props as { children?: string })?.children).toBe('Custom Title');
   });
