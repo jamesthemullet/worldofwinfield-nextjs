@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
 import Container from '../components/container';
@@ -33,7 +34,7 @@ const ArchivePage = ({ posts: { posts }, month, year }: ArchivePageProps) => {
             <ul>
               {posts.map((post) => (
                 <li key={post.id}>
-                  <a href={`/${post.slug}`}>{post.title}</a>
+                  <Link href={`/${post.slug}`}>{post.title}</Link>
                 </li>
               ))}
             </ul>

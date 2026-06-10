@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import Link from 'next/link';
 import React from 'react';
 import { SearchResultsProps } from '../lib/types';
 import { colours } from '../pages/_app';
@@ -16,7 +17,7 @@ const SearchResults = ({ searchResults }: SearchResultsProps) => {
             {searchResults?.map((post) => (
               <li key={post.slug}>
                 <p>
-                  <a href={`/${post.slug}`}>{post.title}</a> - {formatDate(post.date)}
+                  <Link href={`/${post.slug}`}>{post.title}</Link> - {formatDate(post.date)}
                 </p>
               </li>
             ))}
