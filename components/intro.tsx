@@ -131,6 +131,10 @@ const Flipper = styled.div<FlipperProps>`
   transform-style: preserve-3d;
   width: 100%;
   height: 100%;
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
 `;
 
 const Front = styled.div`

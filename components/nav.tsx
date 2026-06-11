@@ -117,11 +117,13 @@ export default function Nav() {
                   toggleFavouritesDropdown();
                 }}
                 aria-label="Toggle Favourites submenu"
-                aria-expanded={isFavouritesDropdownOpen}>
+                aria-expanded={isFavouritesDropdownOpen}
+                aria-controls="favourites-menu">
                 ▼
               </DropdownArrow>
             </SplitButtonContainer>
             <DropdownMenu
+              id="favourites-menu"
               isDropdownOpen={isFavouritesDropdownOpen}
               aria-hidden={!isFavouritesDropdownOpen}>
               <li>
@@ -212,11 +214,13 @@ export default function Nav() {
                   toggleWishListDropdown();
                 }}
                 aria-label="Toggle Wish Lists submenu"
-                aria-expanded={isWishListDropdownOpen}>
+                aria-expanded={isWishListDropdownOpen}
+                aria-controls="wishlist-menu">
                 ▼
               </DropdownArrow>
             </SplitButtonContainer>
             <DropdownMenu
+              id="wishlist-menu"
               isDropdownOpen={isWishListDropdownOpen}
               aria-hidden={!isWishListDropdownOpen}>
               <li>
@@ -265,11 +269,15 @@ export default function Nav() {
                   toggleTravelDropdown();
                 }}
                 aria-label="Toggle Travel submenu"
-                aria-expanded={isTravelDropdownOpen}>
+                aria-expanded={isTravelDropdownOpen}
+                aria-controls="travel-menu">
                 ▼
               </DropdownArrow>
             </SplitButtonContainer>
-            <DropdownMenu isDropdownOpen={isTravelDropdownOpen} aria-hidden={!isTravelDropdownOpen}>
+            <DropdownMenu
+              id="travel-menu"
+              isDropdownOpen={isTravelDropdownOpen}
+              aria-hidden={!isTravelDropdownOpen}>
               <li>
                 <Link href="/countries-visited" onClick={closeNavOnMobile}>
                   Countries Visited
@@ -355,6 +363,11 @@ const NavList = styled.ul`
     color: #fff;
     text-decoration: none;
     font-size: 1.5rem;
+
+    &:focus-visible {
+      outline: 2px solid #fff;
+      outline-offset: 2px;
+    }
   }
 `;
 
@@ -395,6 +408,11 @@ const BurgerButton = styled.button`
     span:nth-of-type(3) {
       bottom: 0;
     }
+
+    &:focus-visible {
+      outline: 2px solid #fff;
+      outline-offset: 2px;
+    }
   }
 `;
 
@@ -411,6 +429,11 @@ const DropdownButton = styled.button`
   cursor: pointer;
   font-family: 'Oswald', sans-serif;
   letter-spacing: 2px;
+
+  &:focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: 2px;
+  }
 `;
 
 const DropdownMenu = styled.ul<{ isDropdownOpen: boolean }>`
@@ -480,6 +503,12 @@ const DropdownArrow = styled.button`
 
   &:hover {
     background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+  }
+
+  &:focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: 2px;
     border-radius: 2px;
   }
 `;
