@@ -1,11 +1,25 @@
 {
   "$schema": "https://unpkg.com/knip@5/schema.json",
-  "entry": ["next-sitemap.config.js", "realtime/server.js", "scripts/enrich-tracks.js"],
+  "entry": [
+    "jest.config.js",
+    "next-sitemap.config.js",
+    "realtime/server.js",
+    "scripts/enrich-tracks.js",
+    "lib/imageLoader.ts"
+  ],
   "ignoreBinaries": ["wait-on", "axe", "dev", "start"],
-  "ignoreDependencies": ["tsc-files", "ts-node", "ws", "dotenv"],
+  "ignoreDependencies": ["tsc-files", "ts-node", "ws", "dotenv", "jest-environment-jsdom"],
   "ignoreExportsUsedInFile": {
     "interface": true,
     "type": true
   },
-  "tags": ["-lintignore"]
+  "tags": ["-lintignore"],
+  "jest": {
+    "config": [],
+    "entry": [
+      "jest.setup.ts",
+      "**/*.test.{ts,tsx}",
+      "__mocks__/**/*.{ts,tsx}"
+    ]
+  }
 }
