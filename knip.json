@@ -1,6 +1,14 @@
 {
   "$schema": "https://unpkg.com/knip@5/schema.json",
-  "entry": ["next-sitemap.config.js", "realtime/server.js", "scripts/enrich-tracks.js"],
+  "entry": [
+    "next-sitemap.config.js",
+    "realtime/server.js",
+    "scripts/enrich-tracks.js",
+    "lib/imageLoader.ts",
+    "__mocks__/**/*.{ts,tsx}",
+    "**/*.test.{ts,tsx}",
+    "**/*.test.ts"
+  ],
   "ignoreBinaries": ["wait-on", "axe", "dev", "start"],
   "ignoreDependencies": ["tsc-files", "ts-node", "ws", "dotenv"],
   "ignoreExportsUsedInFile": {
