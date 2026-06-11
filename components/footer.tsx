@@ -77,6 +77,11 @@ const RssLink = styled.a`
   &:hover {
     text-decoration: underline;
   }
+
+  &:focus-visible {
+    outline: 2px solid ${colours.white};
+    outline-offset: 2px;
+  }
 `;
 
 const IconAttribution = styled.div`
@@ -85,5 +90,10 @@ const IconAttribution = styled.div`
   a {
     text-decoration: none;
     color: ${colours.white};
+
+    &:focus-visible {
+      outline: 2px solid ${colours.white};
+      outline-offset: 2px;
+    }
   }
 `;
