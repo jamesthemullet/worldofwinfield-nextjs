@@ -16,10 +16,6 @@
   "tags": ["-lintignore"],
   "jest": {
     "config": [],
-    "entry": [
-      "jest.setup.ts",
-      "**/*.test.{ts,tsx}",
-      "__mocks__/**/*.{ts,tsx}"
-    ]
+    "entry": ["jest.setup.ts", "**/*.test.{ts,tsx}", "__mocks__/**/*.{ts,tsx}"]
   }
 }
