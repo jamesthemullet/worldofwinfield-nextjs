@@ -9,6 +9,7 @@
     "lint": "tsc --noEmit && biome check .",
     "lint:fix": "biome check --write .",
     "format": "biome format --write .",
+    "knip": "knip",
     "test": "jest",
     "postbuild": "next-sitemap"
   },
