@@ -1,8 +1,8 @@
 {
   "$schema": "https://unpkg.com/knip@5/schema.json",
-  "entry": ["next-sitemap.config.js"],
-  "ignoreBinaries": ["wait-on", "axe"],
-  "ignoreDependencies": ["eslint-config-next", "tsc-files", "ts-node"],
+  "entry": ["next-sitemap.config.js", "realtime/server.js", "scripts/enrich-tracks.js"],
+  "ignoreBinaries": ["wait-on", "axe", "dev", "start"],
+  "ignoreDependencies": ["tsc-files", "ts-node", "ws", "dotenv"],
   "ignoreExportsUsedInFile": {
     "interface": true,
     "type": true
