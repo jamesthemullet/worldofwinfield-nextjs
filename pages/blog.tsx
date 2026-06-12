@@ -8,18 +8,16 @@ import MoreStories from '../components/more-stories';
 import SearchBar from '../components/search-bar';
 import SearchResults from '../components/search-results';
 import { getAllPostsForHome } from '../lib/api';
-import { IndexPageProps } from '../lib/types';
+import { IndexPageProps, SearchResult } from '../lib/types';
 
 export default function Index({ allPosts, preview }: IndexPageProps) {
-  const [searchResults, setSearchResults] = useState<
-    { slug: string; title: string; date: string }[]
-  >([]);
+  const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
   const [posts, setPosts] = useState(allPosts.edges);
   const [hasNextPage, setHasNextPage] = useState(allPosts.pageInfo.hasNextPage);
   const [endCursor, setEndCursor] = useState(allPosts.pageInfo.endCursor);
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleSearch = (results: { slug: string; title: string; date: string }[]) => {
+  const handleSearch = (results: SearchResult[]) => {
     setSearchResults(results);
   };
 

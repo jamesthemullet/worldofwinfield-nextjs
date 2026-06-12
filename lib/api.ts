@@ -341,8 +341,14 @@ export async function searchBlogPosts(searchTerm: string) {
         nodes {
           slug
           title
-          content
           date
+          excerpt
+          featuredImage {
+            node {
+              sourceUrl
+              altText
+            }
+          }
         }
       }
     }`,
