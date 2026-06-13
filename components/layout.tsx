@@ -13,6 +13,7 @@ export default function Layout({
   articleDate,
   articleModified,
   articleAuthor,
+  jsonLd,
 }: LayoutProps) {
   return (
     <>
@@ -26,6 +27,7 @@ export default function Layout({
         articleDate={articleDate}
         articleModified={articleModified}
         articleAuthor={articleAuthor}
+        jsonLd={jsonLd}
       />
       <PageWrapper>
         <StyledDiv>

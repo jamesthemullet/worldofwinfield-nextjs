@@ -338,8 +338,21 @@ export default function Index({
     opengraphSiteName: `World Of Winfield`,
   };
 
+  const jsonLd: Record<string, unknown> = {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: 'World Of Winfield',
+    url: 'https://www.worldofwinfield.co.uk',
+    description: 'World Of Winfield - all about James Winfield',
+    author: {
+      '@type': 'Person',
+      name: 'James Winfield',
+      url: 'https://www.worldofwinfield.co.uk',
+    },
+  };
+
   return (
-    <Layout preview={preview} seo={seo}>
+    <Layout preview={preview} seo={seo} jsonLd={jsonLd}>
       <Intro jamesImages={jamesImages} />
       <HomepageBlocksContainer>
         {blocks.map((block) => (
