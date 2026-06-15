@@ -36,7 +36,9 @@ const SearchResults = ({ searchResults }: SearchResultsProps) => {
       )}
       {(searchResults?.length ?? 0) > 0 && (
         <>
-          <ResultCount>{searchResults!.length} result{searchResults!.length !== 1 ? 's' : ''}</ResultCount>
+          <ResultCount>
+            {searchResults!.length} result{searchResults!.length !== 1 ? 's' : ''}
+          </ResultCount>
           {searchResults!.map((post) => (
             <SearchCard key={post.slug}>
               {post.featuredImage?.node.sourceUrl && (

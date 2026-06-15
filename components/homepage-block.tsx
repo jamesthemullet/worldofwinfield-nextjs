@@ -140,11 +140,7 @@ export default function HomepageBlock({
       )}
     </Block>
   ) : (
-    <Block
-      size={size}
-      image={imageSrc}
-      date={date}
-      style={{ backgroundColor: randomColour }}>
+    <Block size={size} image={imageSrc} date={date} style={{ backgroundColor: randomColour }}>
       <StyledIconLinkBlock href={url ?? '/'} aria-label={title}>
         <p>{title}</p>
         <StyledIcon>
