@@ -14,7 +14,7 @@ import {
   getPostDisplayInfo,
   getRandomImage,
 } from '../lib/api';
-import { IndexPageProps } from '../lib/types';
+import { IndexPageProps, SearchResult } from '../lib/types';
 
 export default function Index({
   preview,
@@ -24,9 +24,7 @@ export default function Index({
   randomImageSet,
   archivePost,
 }: IndexPageProps) {
-  const [searchResults, setSearchResults] = useState<
-    { slug: string; title: string; date: string }[] | null
-  >(null);
+  const [searchResults, setSearchResults] = useState<SearchResult[] | null>(null);
   const [randomImage, setRandomImage] = useState<
     IndexPageProps['jamesImages']['edges'][0]['node']['featuredImage'] | null
   >(null);
@@ -44,7 +42,7 @@ export default function Index({
     }
   }, [randomImageSet]);
 
-  const handleSearch = (results: { slug: string; title: string; date: string }[]) => {
+  const handleSearch = (results: SearchResult[]) => {
     setSearchResults(results);
   };
 
