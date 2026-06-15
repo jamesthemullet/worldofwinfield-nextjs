@@ -36,6 +36,7 @@ const ArchiveDropdown = () => {
   return (
     <div>
       <p>Posts from the archives</p>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', justifyContent: 'center' }}>
       <label htmlFor="archive-month-select">Select month</label>
       <StyledSelect id="archive-month-select" onChange={handleSelectMonth}>
         <option value="">Select Month</option>
@@ -45,6 +46,7 @@ const ArchiveDropdown = () => {
           </option>
         ))}
       </StyledSelect>
+      </div>
     </div>
   );
 };

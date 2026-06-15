@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { JamesImagesProps } from '../lib/types';
 import { colours } from '../pages/_app';
 import { formatDate } from './search-results';
@@ -48,10 +48,13 @@ export default function HomepageBlock({
   icon,
   label,
 }: HomePageBlockTypes) {
-  const [randomColour] = useState(
-    () => blockColours[Math.floor(Math.random() * blockColours.length)],
-  );
-  const [randomJamesIndex] = useState(() => Math.floor(Math.random() * jamesImages.edges.length));
+  const [randomColour, setRandomColour] = useState(blockColours[0]);
+  const [randomJamesIndex, setRandomJamesIndex] = useState(0);
+
+  useEffect(() => {
+    setRandomColour(blockColours[Math.floor(Math.random() * blockColours.length)]);
+    setRandomJamesIndex(Math.floor(Math.random() * jamesImages.edges.length));
+  }, [jamesImages.edges.length]);
 
   const imageSrc = useMemo(
     () =>
@@ -66,12 +69,11 @@ export default function HomepageBlock({
 
   return !icon ? (
     <Block
-      backgroundColour={randomColour}
-      colour={colours.white}
       size={size}
       className={className}
       image={imageSrc}
-      date={date}>
+      date={date}
+      style={{ backgroundColor: randomColour }}>
       {label && <LabelBadge>{label}</LabelBadge>}
       {url && title !== RANDOM_PHOTO ? (
         <StyledLinkImage href={url} aria-label={title}>
@@ -139,11 +141,10 @@ export default function HomepageBlock({
     </Block>
   ) : (
     <Block
-      backgroundColour={randomColour}
-      colour={colours.white}
       size={size}
       image={imageSrc}
-      date={date}>
+      date={date}
+      style={{ backgroundColor: randomColour }}>
       <StyledIconLinkBlock href={url ?? '/'} aria-label={title}>
         <p>{title}</p>
         <StyledIcon>
@@ -205,14 +206,11 @@ const LabelBadge = styled.span`
 `;
 
 const Block = styled.div<{
-  backgroundColour: string;
-  colour: string;
   size: number;
   image: BlockImage | null;
   date: string | undefined;
 }>`
-  background-color: ${(props) => props.backgroundColour};
-  color: ${(props) => props.colour};
+  color: ${colours.white};
   display: flex;
   min-height: 100px;
   border: 1px solid #ccc;

@@ -111,9 +111,14 @@ const addOrdinalIndicator = (day: number): string => {
 };
 
 const SearchResultsContainer = styled.div`
-  padding: 0;
+  padding: 0 1rem;
   margin: 0 auto 10px;
+  max-width: 900px;
   color: ${colours.dark};
+
+  @media (min-width: 768px) {
+    padding: 0;
+  }
 
   p.center {
     text-align: center;
