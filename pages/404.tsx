@@ -5,9 +5,9 @@ import Container from '../components/container';
 import Layout from '../components/layout';
 import { colours } from '../pages/_app';
 
-interface BlockProps {
+type BlockProps = {
   backgroundColour: string;
-}
+};
 
 const baseColours = [
   colours.pink,
