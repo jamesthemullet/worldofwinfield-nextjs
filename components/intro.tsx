@@ -35,8 +35,12 @@ export default function Intro({ jamesImages }: IntroProps) {
     setImageUrls(urls);
   }, [jamesImages]);
 
-  const handleBlockHover = useCallback((index: number) => {
-    setHoveredIndex(index);
+  const handleMouseEnter = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    setHoveredIndex(Number(e.currentTarget.dataset.index));
+  }, []);
+
+  const handleMouseLeave = useCallback(() => {
+    setHoveredIndex(-1);
   }, []);
 
   return (
@@ -52,8 +56,9 @@ export default function Intro({ jamesImages }: IntroProps) {
             <Block
               key={index}
               color={blockColours[getColour(index)]}
-              onMouseEnter={() => handleBlockHover(index)}
-              onMouseLeave={() => handleBlockHover(-1)}>
+              data-index={index}
+              onMouseEnter={handleMouseEnter}
+              onMouseLeave={handleMouseLeave}>
               <FlipContainer>
                 <Flipper flipped={hoveredIndex === index}>
                   <Front>{letter}</Front>
