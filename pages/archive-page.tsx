@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
 import Container from '../components/container';
@@ -9,6 +10,36 @@ import { getMonthName } from '../components/utils';
 import { getPostsByDate } from '../lib/api';
 import { ArchivePageProps } from '../lib/types';
 import { colours } from './_app';
+
+const getPrevMonth = (month: number, year: number) =>
+  month === 1 ? { month: 12, year: year - 1 } : { month: month - 1, year };
+
+const getNextMonth = (month: number, year: number) =>
+  month === 12 ? { month: 1, year: year + 1 } : { month: month + 1, year };
+
+const isFuture = (month: number, year: number) => {
+  const now = new Date();
+  return year > now.getFullYear() || (year === now.getFullYear() && month > now.getMonth() + 1);
+};
+
+const MonthNavBar = ({ month, year }: { month: number; year: number }) => {
+  const prev = getPrevMonth(month, year);
+  const next = getNextMonth(month, year);
+  const nextIsFuture = isFuture(next.month, next.year);
+
+  return (
+    <MonthNav>
+      <Link href={{ pathname: '/archive-page', query: prev }}>
+        ← {getMonthName(prev.month)} {prev.year}
+      </Link>
+      {!nextIsFuture && (
+        <Link href={{ pathname: '/archive-page', query: next }}>
+          {getMonthName(next.month)} {next.year} →
+        </Link>
+      )}
+    </MonthNav>
+  );
+};
 
 const ArchivePage = ({ posts: { posts }, month, year }: ArchivePageProps) => {
   const router = useRouter();
@@ -28,6 +59,7 @@ const ArchivePage = ({ posts: { posts }, month, year }: ArchivePageProps) => {
           coverImage={hasPosts ? posts[0].featuredImage : undefined}
           date={hasPosts ? posts[0].date : undefined}
         />
+        <MonthNavBar month={month} year={year} />
         {hasPosts ? (
           <SearchResultsContainer>
             <ul>
@@ -43,6 +75,7 @@ const ArchivePage = ({ posts: { posts }, month, year }: ArchivePageProps) => {
             No posts found for {wordyMonth} {year}
           </NoPostsMessage>
         )}
+        <MonthNavBar month={month} year={year} />
       </Container>
     </Layout>
   );
@@ -66,6 +99,24 @@ export async function getServerSideProps(context: { query: { month: string; year
 }
 
 export default ArchivePage;
+
+const MonthNav = styled.nav`
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem 20px;
+  max-width: 400px;
+  margin: 0 auto;
+
+  a {
+    color: ${colours.dark};
+    font-weight: bold;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+`;
 
 const NoPostsMessage = styled.p`
   color: ${colours.dark};
