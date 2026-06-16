@@ -52,7 +52,9 @@ export default function Post({ posts }: PostsProps) {
                 </StyledPostHeader>
                 <ExcerptArea>
                   <StyledExcerpt
-                    dangerouslySetInnerHTML={{ __html: sanitize(stripReadMoreParagraph(post.excerpt)) }}
+                    dangerouslySetInnerHTML={{
+                      __html: sanitize(stripReadMoreParagraph(post.excerpt)),
+                    }}
                     backgroundColour={colours.dark}
                   />
                   <ReadMoreLink href={`/${post.slug}`}>Read this post →</ReadMoreLink>
