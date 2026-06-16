@@ -12,6 +12,10 @@ import { sanitize } from '../lib/sanitize';
 import { PostsProps } from '../lib/types';
 import { colours } from './_app';
 
+const stripReadMoreParagraph = (excerpt: string) => {
+  return excerpt.replace(/\s*<a\b[^>]*>.*?<\/a>/gi, '').trim();
+};
+
 const politicsSeo = {
   opengraphTitle: 'Posts About Politics | World Of Winfield',
   opengraphDescription: 'A collection of posts about politics from World Of Winfield.',
@@ -47,7 +51,7 @@ export default function Post({ posts }: PostsProps) {
                 </StyledPostHeader>
                 <ExcerptArea>
                   <StyledExcerpt
-                    dangerouslySetInnerHTML={{ __html: sanitize(post.excerpt) }}
+                    dangerouslySetInnerHTML={{ __html: sanitize(stripReadMoreParagraph(post.excerpt)) }}
                     backgroundColour={colours.dark}
                   />
                   <ReadMoreLink href={`/${post.slug}`}>Read this post →</ReadMoreLink>
