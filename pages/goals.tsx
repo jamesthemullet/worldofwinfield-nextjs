@@ -1,6 +1,7 @@
 import styled from '@emotion/styled';
 import { GetStaticProps } from 'next';
 import ErrorPage from 'next/error';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import Container from '../components/container';
 import Layout from '../components/layout';
@@ -44,9 +45,13 @@ export default function Post({ posts }: PostsProps) {
                     heroPost={index === 0 || index === 1 ? true : false}
                   />
                 </StyledPostHeader>
-                <StyledExcerpt
-                  dangerouslySetInnerHTML={{ __html: sanitize(post.excerpt) }}
-                  backgroundColour={colours.dark}></StyledExcerpt>
+                <ExcerptArea>
+                  <StyledExcerpt
+                    dangerouslySetInnerHTML={{ __html: sanitize(post.excerpt) }}
+                    backgroundColour={colours.dark}
+                  />
+                  <ReadMoreLink href={`/${post.slug}`}>Read this post →</ReadMoreLink>
+                </ExcerptArea>
               </PostContainer>
             ))}
           </>
@@ -67,21 +72,44 @@ export const getStaticProps: GetStaticProps = async () => {
   };
 };
 
-const StyledExcerpt = styled.div<{ backgroundColour: string }>`
-  font-size: 1.2rem;
-  line-height: 1.5;
-  margin: 4rem auto;
+const ExcerptArea = styled.div`
   width: calc(50% - 4rem);
-  border-top: 5px solid ${(props) => props.backgroundColour};
+  margin: 4rem auto;
 
   @media screen and (max-width: 768px) {
     width: 100%;
     margin: 0 1rem;
+  }
+`;
+
+const StyledExcerpt = styled.div<{ backgroundColour: string }>`
+  font-size: 1.2rem;
+  line-height: 1.5;
+  border-top: 5px solid ${(props) => props.backgroundColour};
+
+  @media screen and (max-width: 768px) {
     border: none;
 
     p {
       margin: 1rem;
     }
+  }
+`;
+
+const ReadMoreLink = styled(Link)`
+  display: inline-block;
+  margin-top: 1rem;
+  padding: 10px;
+  font-size: 1rem;
+  min-width: 100px;
+  background-color: ${colours.azure};
+  color: ${colours.white};
+  font-weight: bold;
+  text-decoration: none;
+  text-align: center;
+
+  &:hover {
+    opacity: 0.85;
   }
 `;
 
