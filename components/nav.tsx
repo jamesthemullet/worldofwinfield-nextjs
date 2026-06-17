@@ -22,7 +22,7 @@ export default function Nav() {
   const travelArrowRef = useRef<HTMLButtonElement>(null);
 
   const toggleDropdown = () => {
-    setIsDropdownOpen(!isDropdownOpen);
+    setIsDropdownOpen((prev) => !prev);
   };
 
   const toggleFavouritesDropdown = (open?: boolean) => {
