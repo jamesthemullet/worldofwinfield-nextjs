@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import Image from 'next/image';
 import Link from 'next/link';
 
-interface Props {
+type Props = {
   title: string;
   coverImage?: {
     node: {
@@ -18,7 +18,7 @@ interface Props {
   imageSize?: string;
   slug?: string;
   heroPost?: boolean;
-}
+};
 
 export default function CoverImage({ title, coverImage, imageSize, slug, heroPost }: Props) {
   const image = coverImage?.node.sourceUrl && (
