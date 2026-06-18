@@ -38,7 +38,7 @@ export default function HeroPost({
         <StyledExcerptContainer>
           <StyledExcerpt dangerouslySetInnerHTML={{ __html: sanitizedExcerpt }} />
           <StyledButton>
-            <Link href={slug}>Read More</Link>
+            <Link href={slug} aria-label={`Read more about ${title}`}>Read More</Link>
           </StyledButton>
         </StyledExcerptContainer>
       </div>

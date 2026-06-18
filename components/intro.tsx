@@ -43,6 +43,14 @@ export default function Intro({ jamesImages }: IntroProps) {
     setHoveredIndex(-1);
   }, []);
 
+  const handleFocus = useCallback((e: React.FocusEvent<HTMLDivElement>) => {
+    setHoveredIndex(Number(e.currentTarget.dataset.index));
+  }, []);
+
+  const handleBlur = useCallback(() => {
+    setHoveredIndex(-1);
+  }, []);
+
   return (
     <section>
       <HiddenHeading>World Of Winfield</HiddenHeading>
@@ -57,8 +65,11 @@ export default function Intro({ jamesImages }: IntroProps) {
               key={index}
               color={blockColours[getColour(index)]}
               data-index={index}
+              tabIndex={0}
               onMouseEnter={handleMouseEnter}
-              onMouseLeave={handleMouseLeave}>
+              onMouseLeave={handleMouseLeave}
+              onFocus={handleFocus}
+              onBlur={handleBlur}>
               <FlipContainer>
                 <Flipper flipped={hoveredIndex === index}>
                   <Front>{letter}</Front>
@@ -120,6 +131,11 @@ const Block = styled.div`
   @media (min-width: 769px) {
     background-color: ${(props) => props.color};
     border: 5px solid ${colours.white};
+  }
+
+  &:focus-visible {
+    outline: 3px solid ${colours.white};
+    outline-offset: -3px;
   }
 `;
 
