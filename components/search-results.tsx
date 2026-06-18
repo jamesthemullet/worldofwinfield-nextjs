@@ -66,7 +66,10 @@ const SearchResults = ({ searchResults }: SearchResultsProps) => {
                     }}
                   />
                 )}
-                <ContinueReadingLink href={`/${post.slug}`} colour={getColourFromTitle(post.title)}>
+                <ContinueReadingLink
+                  href={`/${post.slug}`}
+                  colour={getColourFromTitle(post.title)}
+                  aria-label={`Continue reading ${post.title}`}>
                   Continue reading
                 </ContinueReadingLink>
               </SearchCardContent>
