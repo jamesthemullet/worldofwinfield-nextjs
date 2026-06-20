@@ -303,7 +303,7 @@ export default function Nav() {
         </li>
         <li>
           <Link href="/stats" onClick={closeNavOnMobile}>
-            At a Glance
+            James Stats
           </Link>
         </li>
       </NavList>

@@ -92,19 +92,19 @@ export default function Stats({
     totalCountries > 0 ? Math.round((countriesVisited / totalCountries) * 100) : 0;
 
   const seo = {
-    opengraphTitle: 'At a Glance | World Of Winfield',
+    opengraphTitle: 'James Stats | World Of Winfield',
     opengraphDescription: `${countriesVisited} countries visited, ${totalPosts}+ blog posts, and much more.`,
     opengraphSiteName: 'World Of Winfield',
   };
 
   return (
-    <Layout preview={null} title="At a Glance" seo={seo}>
+    <Layout preview={null} title="James Stats" seo={seo}>
       <Container>
         {router.isFallback ? (
           <PostTitle>Loading…</PostTitle>
         ) : (
           <PostContainer>
-            <PostHeader title="At a Glance" />
+            <PostHeader title="James Stats" />
             <Intro>A snapshot of everything tracked on this site.</Intro>
 
             <Section>
