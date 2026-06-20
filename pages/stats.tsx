@@ -88,7 +88,8 @@ export default function Stats({
 }: StatsProps) {
   const router = useRouter();
   const yearsActive = new Date().getFullYear() - 2017;
-  const worldPercent = totalCountries > 0 ? Math.round((countriesVisited / totalCountries) * 100) : 0;
+  const worldPercent =
+    totalCountries > 0 ? Math.round((countriesVisited / totalCountries) * 100) : 0;
 
   const seo = {
     opengraphTitle: 'At a Glance | World Of Winfield',
