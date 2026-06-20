@@ -65,12 +65,17 @@ describe('PostPreview', () => {
 
   it('renders a "Read More" link', () => {
     render(<PostPreview {...baseProps} />);
-    expect(screen.getByRole('link', { name: 'Read more about Test Post Title' })).toBeInTheDocument();
+    expect(
+      screen.getByRole('link', { name: 'Read more about Test Post Title' }),
+    ).toBeInTheDocument();
   });
 
   it('"Read More" link href matches the post slug', () => {
     render(<PostPreview {...baseProps} />);
-    expect(screen.getByRole('link', { name: 'Read more about Test Post Title' })).toHaveAttribute('href', '/test-post');
+    expect(screen.getByRole('link', { name: 'Read more about Test Post Title' })).toHaveAttribute(
+      'href',
+      '/test-post',
+    );
   });
 
   it('renders the excerpt text content', () => {
