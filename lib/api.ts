@@ -600,3 +600,13 @@ export async function getRandomImage(randomMonth: number, randomYear: number) {
     randomYear,
   };
 }
+
+export async function getTotalPostCount(): Promise<number> {
+  try {
+    const res = await fetch('https://blog.worldofwinfield.co.uk/wp-json/wp/v2/posts?per_page=1');
+    const total = res.headers.get('X-WP-Total');
+    return total ? parseInt(total, 10) : 0;
+  } catch {
+    return 0;
+  }
+}

@@ -301,6 +301,11 @@ export default function Nav() {
             Stocks
           </Link>
         </li>
+        <li>
+          <Link href="/stats" onClick={closeNavOnMobile}>
+            James Stats
+          </Link>
+        </li>
       </NavList>
     </StyledNav>
   );
