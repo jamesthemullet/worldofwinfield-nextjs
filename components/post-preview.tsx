@@ -63,7 +63,9 @@ export default function PostPreview({
           <DateComponent dateString={date} />
         </PostedDate>
         <CardExcerpt dangerouslySetInnerHTML={{ __html: sanitizedExcerpt }} />
-        <ReadMoreLink href={`/${slug}`}>Read More</ReadMoreLink>
+        <ReadMoreLink href={`/${slug}`} aria-label={`Read more about ${title}`}>
+          Read More
+        </ReadMoreLink>
       </ContentSide>
     </CardContainer>
   );
