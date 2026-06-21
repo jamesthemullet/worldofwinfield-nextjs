@@ -67,7 +67,7 @@ const FavouriteResults = ({
             filteredRows = filteredRows.filter((row: string[]) => row[labelIndex] === labelFilter);
           }
 
-          const normalize = (s: string) =>
+          const normalize = (s: string): string =>
             (s || '')
               .toString()
               .normalize('NFKD')
@@ -78,7 +78,7 @@ const FavouriteResults = ({
 
           const normalizedHeaders = headerRow.map((h: string) => normalize(h));
 
-          const chooseSortColumnIndex = () => {
+          const chooseSortColumnIndex = (): number => {
             // If no explicit sort selected (Default), don't apply any sorting and preserve sheet order
             if (!effectiveSortBy) return -1;
 
