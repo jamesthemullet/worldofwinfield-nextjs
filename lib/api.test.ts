@@ -1,9 +1,9 @@
 import {
-  searchBlogPosts,
-  getRelatedPosts,
   getAdjacentPosts,
-  getPostsByDate,
   getArchivePost,
+  getPostsByDate,
+  getRelatedPosts,
+  searchBlogPosts,
 } from './api';
 
 const mockFetch = jest.fn();
@@ -43,9 +43,7 @@ describe('fetchAPI (via exported functions)', () => {
     await searchBlogPosts('hello');
 
     const [, init] = mockFetch.mock.calls[0] as [string, RequestInit];
-    expect((init.headers as Record<string, string>)['Authorization']).toBe(
-      'Bearer secret-token',
-    );
+    expect((init.headers as Record<string, string>)['Authorization']).toBe('Bearer secret-token');
   });
 });
 
@@ -87,9 +85,7 @@ describe('getAdjacentPosts', () => {
 
     await getAdjacentPosts(dateStr);
 
-    const body = JSON.parse(
-      (mockFetch.mock.calls[0][1] as RequestInit).body as string,
-    );
+    const body = JSON.parse((mockFetch.mock.calls[0][1] as RequestInit).body as string);
     expect(body.variables).toEqual({
       year: parsed.getFullYear(),
       month: parsed.getMonth() + 1,
