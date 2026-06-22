@@ -29,7 +29,7 @@ const FavouriteResults = ({
   const showInternalDropdown = sortBy === undefined;
 
   useEffect(() => {
-    const fetchFavouriteData = async () => {
+    const fetchFavouriteData = async (): Promise<void> => {
       if (sheetId && !loading) {
         setLoading(true);
         try {

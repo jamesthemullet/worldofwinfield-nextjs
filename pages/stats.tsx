@@ -53,7 +53,7 @@ const parseCountriesData = (
   return { visited, total, continents: continentsVisited.size };
 };
 
-interface StatsProps {
+type StatsProps = {
   countriesVisited: number;
   totalCountries: number;
   continentsVisited: number;
@@ -68,7 +68,7 @@ interface StatsProps {
   cities: number;
   favouriteCountries: number;
   totalPosts: number;
-}
+};
 
 export default function Stats({
   countriesVisited,
