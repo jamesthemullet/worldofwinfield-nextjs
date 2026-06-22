@@ -601,6 +601,24 @@ export async function getRandomImage(randomMonth: number, randomYear: number) {
   };
 }
 
+export async function getAllTags(): Promise<{ name: string; count: number }[]> {
+  const data = await fetchAPI(`
+    {
+      tags(first: 100) {
+        nodes {
+          name
+          count
+        }
+      }
+    }
+  `);
+  return (data?.tags?.nodes ?? [])
+    .filter((tag: { name: string; count: number | null }) => tag.count && tag.count > 0)
+    .sort(
+      (a: { name: string; count: number }, b: { name: string; count: number }) => b.count - a.count,
+    );
+}
+
 export async function getTotalPostCount(): Promise<number> {
   try {
     const res = await fetch('https://blog.worldofwinfield.co.uk/wp-json/wp/v2/posts?per_page=1');

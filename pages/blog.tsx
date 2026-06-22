@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import { GetStaticProps } from 'next';
+import Link from 'next/link';
 import { useState } from 'react';
 import Container from '../components/container';
 import HeroPost from '../components/hero-post';
@@ -63,6 +64,9 @@ export default function Index({ allPosts, preview }: IndexPageProps) {
           </LoadMoreContainer>
         )}
       </Container>
+      <BrowseTopicsBar>
+        <Link href="/tags">Browse all topics →</Link>
+      </BrowseTopicsBar>
       <SearchBar onSearch={handleSearch} />
       <SearchResults searchResults={searchResults} />
     </Layout>
@@ -77,6 +81,22 @@ export const getStaticProps: GetStaticProps = async ({ preview = false }) => {
     revalidate: 3600,
   };
 };
+
+const BrowseTopicsBar = styled.div`
+  text-align: center;
+  padding: 1rem 0;
+
+  a {
+    font-size: 1rem;
+    color: #000;
+    text-decoration: none;
+    font-weight: 600;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+`;
 
 const LoadMoreContainer = styled.div`
   display: flex;
