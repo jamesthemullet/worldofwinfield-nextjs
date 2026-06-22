@@ -18,7 +18,6 @@ const nextConfig = {
   },
   env: {
     WORDPRESS_API_URL: process.env.WORDPRESS_API_URL,
-    WORDPRESS_AUTH_REFRESH_TOKEN: process.env.WORDPRESS_AUTH_REFRESH_TOKEN,
   },
   async headers() {
     return [
