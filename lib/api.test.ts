@@ -1,9 +1,4 @@
-import {
-  getAdjacentPosts,
-  getArchivePost,
-  getRelatedPosts,
-  searchBlogPosts,
-} from './api';
+import { getAdjacentPosts, getArchivePost, getRelatedPosts, searchBlogPosts } from './api';
 
 const mockFetch = jest.fn();
 global.fetch = mockFetch;
@@ -19,9 +14,7 @@ beforeEach(() => {
 
 describe('fetchAPI', () => {
   it('throws when the GraphQL response contains errors', async () => {
-    mockFetch.mockResolvedValueOnce(
-      makeResponse({ errors: [{ message: 'Bad request' }] }),
-    );
+    mockFetch.mockResolvedValueOnce(makeResponse({ errors: [{ message: 'Bad request' }] }));
     await expect(searchBlogPosts('test')).rejects.toThrow('Failed to fetch API');
   });
 });
@@ -33,8 +26,20 @@ describe('getRelatedPosts', () => {
         data: {
           posts: {
             nodes: [
-              { title: 'Post A', slug: 'post-a', date: '2024-01-01', excerpt: '', featuredImage: null },
-              { title: 'Post B', slug: 'post-b', date: '2024-01-02', excerpt: '', featuredImage: null },
+              {
+                title: 'Post A',
+                slug: 'post-a',
+                date: '2024-01-01',
+                excerpt: '',
+                featuredImage: null,
+              },
+              {
+                title: 'Post B',
+                slug: 'post-b',
+                date: '2024-01-02',
+                excerpt: '',
+                featuredImage: null,
+              },
             ],
           },
         },
@@ -89,7 +94,14 @@ describe('getArchivePost', () => {
       makeResponse({
         data: {
           posts: {
-            nodes: [{ title: 'Throwback Post', slug: 'throwback', date: '2021-01-01', featuredImage: null }],
+            nodes: [
+              {
+                title: 'Throwback Post',
+                slug: 'throwback',
+                date: '2021-01-01',
+                featuredImage: null,
+              },
+            ],
           },
         },
       }),
