@@ -18,7 +18,11 @@ const mockMatchMedia = (matches: boolean) => {
     writable: true,
     value: jest.fn().mockReturnValue(mq),
   });
-  return { mq, triggerChange: (newMatches: boolean) => listeners.forEach((h) => h({ matches: newMatches } as MediaQueryListEvent)) };
+  return {
+    mq,
+    triggerChange: (newMatches: boolean) =>
+      listeners.forEach((h) => h({ matches: newMatches } as MediaQueryListEvent)),
+  };
 };
 
 describe('Nav', () => {
@@ -83,7 +87,9 @@ describe('Nav', () => {
   describe('burger menu', () => {
     it('toggles aria-expanded when burger button is clicked', () => {
       const { container } = render(<Nav />);
-      const burgerButton = container.querySelector('button[aria-label="Toggle navigation menu"]') as HTMLElement;
+      const burgerButton = container.querySelector(
+        'button[aria-label="Toggle navigation menu"]',
+      ) as HTMLElement;
       expect(burgerButton).toBeInTheDocument();
       expect(burgerButton).toHaveAttribute('aria-expanded', 'false');
       fireEvent.click(burgerButton);
@@ -109,7 +115,10 @@ describe('Nav', () => {
       const arrow = screen.getByRole('button', { name: 'Toggle Favourites submenu' });
       const dropdown = arrow.closest('[role="group"]')!.parentElement!;
       fireEvent.mouseEnter(dropdown);
-      expect(screen.getByRole('button', { name: 'Toggle Favourites submenu' })).toHaveAttribute('aria-expanded', 'true');
+      expect(screen.getByRole('button', { name: 'Toggle Favourites submenu' })).toHaveAttribute(
+        'aria-expanded',
+        'true',
+      );
     });
 
     it('closes on mouse leave (desktop)', () => {
@@ -166,7 +175,10 @@ describe('Nav', () => {
       const wishListButton = screen.getByRole('button', { name: 'Wish Lists' });
       const dropdown = wishListButton.closest('[role="group"]')!.parentElement!;
       fireEvent.mouseEnter(dropdown);
-      expect(screen.getByRole('button', { name: 'Wish Lists' })).toHaveAttribute('aria-expanded', 'true');
+      expect(screen.getByRole('button', { name: 'Wish Lists' })).toHaveAttribute(
+        'aria-expanded',
+        'true',
+      );
     });
 
     it('closes on mouse leave (desktop)', () => {
