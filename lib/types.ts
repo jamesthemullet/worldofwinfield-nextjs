@@ -510,3 +510,7 @@ export type ArchivePageProps = {
   month: number;
   year: number;
 };
+
+export type TagIndexPageProps = {
+  tags: { name: string; count: number }[];
+};
