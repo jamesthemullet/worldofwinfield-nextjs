@@ -22,7 +22,7 @@
       "Bash(yarn biome *)",
       "Bash(gh label *)",
       "Bash(git pull *)",
-      "Bash(yarn knip *)",
+      "Bash(git fetch *)",
       "Bash(git rebase *)"
     ]
   }

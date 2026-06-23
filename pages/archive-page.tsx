@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
-import Link from 'next/link';
 import type { GetServerSidePropsContext } from 'next';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
 import Container from '../components/container';
