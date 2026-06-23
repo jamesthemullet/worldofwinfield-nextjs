@@ -7,6 +7,7 @@ import Container from '../components/container';
 import Layout from '../components/layout';
 import PostHeader from '../components/post-header';
 import PostTitle from '../components/post-title';
+import RelatedSections from '../components/related-sections';
 import { filterPostsByTag } from '../lib/api';
 import { sanitize } from '../lib/sanitize';
 import { PostsProps } from '../lib/types';
@@ -62,6 +63,12 @@ export default function Post({ posts }: PostsProps) {
             ))}
           </>
         )}
+        <RelatedSections
+          sections={[
+            { label: 'Now', href: '/now', colour: colours.azure },
+            { label: 'Wants', href: '/wants', colour: colours.green },
+          ]}
+        />
       </Container>
     </Layout>
   );
