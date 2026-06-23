@@ -248,16 +248,15 @@ export type IndexPageProps = {
     };
   }[];
   randomImageSet: {
-    images:
-      | {
-          edges: {
-            node: {
-              srcSet: string;
-              id: string;
-            };
-          };
-        }[]
-      | null;
+    images: Array<{
+      node: {
+        id: string;
+        srcSet: string;
+        sourceUrl: string;
+      };
+    }> | null;
+    randomMonth: number;
+    randomYear: number;
   };
   archivePost: {
     post: {

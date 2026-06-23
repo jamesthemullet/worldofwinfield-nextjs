@@ -26,7 +26,9 @@ export default function Index({
 }: IndexPageProps) {
   const [searchResults, setSearchResults] = useState<SearchResult[] | null>(null);
   const [randomImage, setRandomImage] = useState<
-    IndexPageProps['jamesImages']['edges'][0]['node']['featuredImage'] | null
+    | IndexPageProps['jamesImages']['edges'][0]['node']['featuredImage']
+    | NonNullable<IndexPageProps['randomImageSet']['images']>[number]
+    | null
   >(null);
 
   useEffect(() => {
@@ -34,11 +36,7 @@ export default function Index({
       setRandomImage(jamesImages.edges[0].node.featuredImage);
     } else {
       const randomIndex = Math.floor(Math.random() * randomImageSet.images?.length);
-      setRandomImage(
-        randomImageSet.images[
-          randomIndex
-        ] as unknown as IndexPageProps['jamesImages']['edges'][0]['node']['featuredImage'],
-      );
+      setRandomImage(randomImageSet.images[randomIndex]);
     }
   }, [randomImageSet]);
 
