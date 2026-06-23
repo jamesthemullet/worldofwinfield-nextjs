@@ -26,7 +26,9 @@ export default function Index({
 }: IndexPageProps) {
   const [searchResults, setSearchResults] = useState<SearchResult[] | null>(null);
   const [randomImage, setRandomImage] = useState<
-    IndexPageProps['jamesImages']['edges'][0]['node']['featuredImage'] | null
+    | IndexPageProps['jamesImages']['edges'][0]['node']['featuredImage']
+    | NonNullable<IndexPageProps['randomImageSet']['images']>[number]
+    | null
   >(null);
 
   useEffect(() => {
