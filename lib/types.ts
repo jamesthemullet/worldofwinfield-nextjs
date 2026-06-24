@@ -409,6 +409,7 @@ export type LayoutProps = {
   articleDate?: string;
   articleModified?: string;
   articleAuthor?: string;
+  jsonLd?: Record<string, unknown>;
 };
 
 export type HeroPostProps = {
