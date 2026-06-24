@@ -33,7 +33,7 @@ export default function Intro({ jamesImages }: IntroProps) {
       return jamesImage?.sourceUrl || '';
     });
     setImageUrls(urls);
-  }, [jamesImages]);
+  }, [jamesImages.edges]);
 
   const handleMouseEnter = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
     setHoveredIndex(Number(e.currentTarget.dataset.index));

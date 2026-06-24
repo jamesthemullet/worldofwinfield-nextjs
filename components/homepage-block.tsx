@@ -61,7 +61,7 @@ export default function HomepageBlock({
       title === PLACEHOLDER
         ? jamesImages.edges[randomJamesIndex].node.featuredImage
         : (image ?? null),
-    [title, image, jamesImages, randomJamesIndex],
+    [title, image, jamesImages.edges, randomJamesIndex],
   );
 
   const eagerOrLazy =
