@@ -113,7 +113,7 @@ export default function Meta({
         <meta property="article:author" content={articleAuthor} />
       )}
       {metaKeywords && <meta name="keywords" content={metaKeywords} />}
-      <link rel="alternate" type="application/rss+xml" href="/feed.xml" />
+      <link rel="alternate" type="application/rss+xml" title="World Of Winfield" href="/api/feed" />
       <meta
         name="description"
         content={
