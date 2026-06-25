@@ -59,16 +59,17 @@ export default function Nav() {
   };
 
   return (
-    <StyledNav>
+    <StyledNav aria-label="Main">
       <BurgerButton
         onClick={toggleDropdown}
         aria-label="Toggle navigation menu"
-        aria-expanded={isDropdownOpen}>
+        aria-expanded={isDropdownOpen}
+        aria-controls="main-nav-list">
         <span></span>
         <span></span>
         <span></span>
       </BurgerButton>
-      <NavList className={isDropdownOpen ? 'open' : ''}>
+      <NavList id="main-nav-list" className={isDropdownOpen ? 'open' : ''}>
         <li>
           <Link href="/" onClick={closeNavOnMobile}>
             Home

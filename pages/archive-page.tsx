@@ -29,12 +29,16 @@ const MonthNavBar = ({ month, year }: { month: number; year: number }) => {
   const nextIsFuture = isFuture(next.month, next.year);
 
   return (
-    <MonthNav>
-      <Link href={{ pathname: '/archive-page', query: prev }}>
+    <MonthNav aria-label="Archive navigation">
+      <Link
+        href={{ pathname: '/archive-page', query: prev }}
+        aria-label={`Previous month: ${getMonthName(prev.month)} ${prev.year}`}>
         ← {getMonthName(prev.month)} {prev.year}
       </Link>
       {!nextIsFuture && (
-        <Link href={{ pathname: '/archive-page', query: next }}>
+        <Link
+          href={{ pathname: '/archive-page', query: next }}
+          aria-label={`Next month: ${getMonthName(next.month)} ${next.year}`}>
           {getMonthName(next.month)} {next.year} →
         </Link>
       )}
