@@ -5,6 +5,10 @@ if (!process.env.WORDPRESS_API_URL) {
   `);
 }
 
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+  enabled: process.env.ANALYZE === 'true',
+});
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
@@ -14,7 +18,6 @@ const nextConfig = {
   },
   env: {
     WORDPRESS_API_URL: process.env.WORDPRESS_API_URL,
-    WORDPRESS_AUTH_REFRESH_TOKEN: process.env.WORDPRESS_AUTH_REFRESH_TOKEN,
   },
   async headers() {
     return [
@@ -74,4 +77,4 @@ const nextConfig = {
   },
 };
 
-module.exports = nextConfig;
+module.exports = withBundleAnalyzer(nextConfig);

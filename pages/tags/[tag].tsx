@@ -25,6 +25,8 @@ const blockColours = [
   colours.blueish,
 ];
 
+const lightBackgrounds = new Set([colours.purple, colours.green, colours.blueish, colours.azure]);
+
 const getColourFromTitle = (title: string) => {
   let hash = 0;
   for (let i = 0; i < title.length; i++) {
@@ -32,6 +34,8 @@ const getColourFromTitle = (title: string) => {
   }
   return blockColours[Math.abs(hash) % blockColours.length];
 };
+
+const getTextColour = (bg: string) => (lightBackgrounds.has(bg) ? colours.dark : colours.white);
 
 const stripReadMoreParagraph = (excerpt: string) => {
   return excerpt.replace(/\s*<a\b[^>]*>.*?<\/a>/gi, '').trim();
@@ -91,7 +95,8 @@ export default function Post({ posts, tag }: TagsPostProps) {
                       )}
                       <ContinueReadingLink
                         href={`/${post.slug}`}
-                        colour={getColourFromTitle(post.title)}>
+                        colour={getColourFromTitle(post.title)}
+                        textcolour={getTextColour(getColourFromTitle(post.title))}>
                         Continue reading
                       </ContinueReadingLink>
                     </TagPostContent>
@@ -182,13 +187,13 @@ const TagPostExcerpt = styled.div`
   }
 `;
 
-const ContinueReadingLink = styled(Link)<{ colour: string }>`
+const ContinueReadingLink = styled(Link)<{ colour: string; textcolour: string }>`
   display: inline-block;
   padding: 10px;
   font-size: 1rem;
   min-width: 100px;
   background-color: ${(props) => props.colour};
-  color: ${colours.white};
+  color: ${(props) => props.textcolour};
   font-weight: bold;
   text-decoration: none;
   text-align: center;

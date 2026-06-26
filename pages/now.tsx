@@ -2,6 +2,7 @@ import styled from '@emotion/styled';
 import Container from '../components/container';
 import Layout from '../components/layout';
 import PostHeader from '../components/post-header';
+import ShareBar from '../components/share-bar';
 import { NOW_LAST_UPDATED } from '../data/now-meta';
 import { colours } from './_app';
 
@@ -67,6 +68,11 @@ export default function NowPage() {
                 World Cup, but also FUCK TRUMP.
               </p>
             </Section>
+
+            <ShareBar
+              title="What I'm Up To Now — World Of Winfield"
+              url="https://worldofwinfield.co.uk/now"
+            />
 
             <Footer>
               <p>
