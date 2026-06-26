@@ -288,6 +288,11 @@ export default function Nav() {
           </Dropdown>
         </li>
         <li>
+          <Link href="/tags" onClick={closeNavOnMobile}>
+            Topics
+          </Link>
+        </li>
+        <li>
           <Link href="/music" onClick={closeNavOnMobile}>
             Music
           </Link>
