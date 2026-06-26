@@ -11,13 +11,11 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  poweredByHeader: false,
   images: {
     loader: 'custom',
     loaderFile: './lib/imageLoader.ts',
     minimumCacheTTL: 2592000,
-  },
-  env: {
-    WORDPRESS_API_URL: process.env.WORDPRESS_API_URL,
   },
   async headers() {
     return [
@@ -43,6 +41,10 @@ const nextConfig = {
           {
             key: 'Permissions-Policy',
             value: 'camera=(), microphone=(), geolocation=()',
+          },
+          {
+            key: 'Strict-Transport-Security',
+            value: 'max-age=63072000; includeSubDomains; preload',
           },
         ],
       },
