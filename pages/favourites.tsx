@@ -80,7 +80,7 @@ export default function FavouritesHubPage() {
   const [counts, setCounts] = useState<Record<string, number | null>>({});
 
   useEffect(() => {
-    const fetchCounts = async () => {
+    const fetchCounts = async (): Promise<void> => {
       const results = await Promise.all(
         categories.map(async ({ title, sheetId }) => {
           const data = await fetchDataFromGoogleSheets(sheetId);

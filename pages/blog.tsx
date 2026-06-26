@@ -22,7 +22,7 @@ export default function Index({ allPosts, preview }: IndexPageProps) {
     setSearchResults(results);
   };
 
-  const loadMorePosts = async () => {
+  const loadMorePosts = async (): Promise<void> => {
     setIsLoading(true);
     const res = await fetch(`/api/blog-posts?after=${endCursor}`);
     const data = await res.json();

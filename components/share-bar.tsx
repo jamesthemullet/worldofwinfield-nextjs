@@ -20,7 +20,7 @@ export default function ShareBar({ title, url }: ShareBarProps) {
   const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`;
   const whatsappUrl = `https://wa.me/?text=${encodedTitle}%20${encodedUrl}`;
 
-  const handleCopy = async () => {
+  const handleCopy = async (): Promise<void> => {
     await navigator.clipboard.writeText(url);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
