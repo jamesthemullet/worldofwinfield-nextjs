@@ -82,7 +82,27 @@ export default function Meta({
       {opengraphImage?.mediaDetails?.height && (
         <meta property="og:image:height" content={opengraphImage.mediaDetails.height} />
       )}
-      {opengraphImage?.altText && <meta property="og:image:alt" content={opengraphImage.altText} />}
+      <meta
+        property="og:image:alt"
+        content={opengraphImage?.altText ? opengraphImage.altText : 'World Of Winfield'}
+      />
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta
+        name="twitter:title"
+        content={opengraphTitle ? opengraphTitle : 'World Of Winfield - all about James Winfield'}
+      />
+      <meta
+        name="twitter:description"
+        content={
+          opengraphDescription
+            ? opengraphDescription
+            : 'World Of Winfield - all about James Winfield'
+        }
+      />
+      <meta
+        name="twitter:image"
+        content={opengraphImage?.mediaItemUrl ? opengraphImage.mediaItemUrl : defaultImageUrl}
+      />
       {ogType === 'article' && articleDate && (
         <meta property="article:published_time" content={articleDate} />
       )}
@@ -93,7 +113,7 @@ export default function Meta({
         <meta property="article:author" content={articleAuthor} />
       )}
       {metaKeywords && <meta name="keywords" content={metaKeywords} />}
-      <link rel="alternate" type="application/rss+xml" href="/feed.xml" />
+      <link rel="alternate" type="application/rss+xml" title="World Of Winfield" href="/api/feed" />
       <meta
         name="description"
         content={

@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import Link from 'next/link';
 import { colours } from '../pages/_app';
 import ArchiveDropdown from './archive';
 import Container from './container';
@@ -11,6 +12,7 @@ export default function Footer() {
           <FlexRow>
             <ArchiveDropdown />
             <p>World Of Winfield</p>
+            <BrowseTopicsLink href="/tags">Browse all topics</BrowseTopicsLink>
             <RssLink href="/api/feed">Subscribe via RSS</RssLink>
           </FlexRow>
           <IconAttribution>
@@ -67,6 +69,23 @@ const FlexRow = styled.div`
   }
 `;
 
+const BrowseTopicsLink = styled(Link)`
+  color: ${colours.white};
+  text-decoration: none;
+  font-size: 1rem;
+  letter-spacing: 1px;
+  align-self: center;
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  &:focus-visible {
+    outline: 2px solid ${colours.white};
+    outline-offset: 2px;
+  }
+`;
+
 const RssLink = styled.a`
   color: ${colours.white};
   text-decoration: none;
@@ -77,6 +96,11 @@ const RssLink = styled.a`
   &:hover {
     text-decoration: underline;
   }
+
+  &:focus-visible {
+    outline: 2px solid ${colours.white};
+    outline-offset: 2px;
+  }
 `;
 
 const IconAttribution = styled.div`
@@ -85,5 +109,10 @@ const IconAttribution = styled.div`
   a {
     text-decoration: none;
     color: ${colours.white};
+
+    &:focus-visible {
+      outline: 2px solid ${colours.white};
+      outline-offset: 2px;
+    }
   }
 `;

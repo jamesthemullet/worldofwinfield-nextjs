@@ -101,6 +101,11 @@ const buttonBase = `
   &:hover {
     opacity: 0.8;
   }
+
+  &:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
+  }
 `;
 
 const ShareButton = styled.a`

@@ -2,7 +2,7 @@ import type { AdjacentPost, RelatedPost } from './types';
 
 const API_URL = process.env.NEXT_PUBLIC_WORDPRESS_API_URL;
 
-async function fetchAPI(query = '', { variables }: Record<string, unknown> = {}) {
+async function fetchAPI(query = '', { variables }: { variables?: Record<string, unknown> } = {}) {
   const headers: Record<string, string> = { 'Content-Type': 'application/json' };
 
   if (process.env.WORDPRESS_AUTH_REFRESH_TOKEN) {
@@ -341,8 +341,14 @@ export async function searchBlogPosts(searchTerm: string) {
         nodes {
           slug
           title
-          content
           date
+          excerpt
+          featuredImage {
+            node {
+              sourceUrl
+              altText
+            }
+          }
         }
       }
     }`,
@@ -593,4 +599,32 @@ export async function getRandomImage(randomMonth: number, randomYear: number) {
     randomMonth,
     randomYear,
   };
+}
+
+export async function getAllTags(): Promise<{ name: string; count: number }[]> {
+  const data = await fetchAPI(`
+    {
+      tags(first: 100) {
+        nodes {
+          name
+          count
+        }
+      }
+    }
+  `);
+  return (data?.tags?.nodes ?? [])
+    .filter((tag: { name: string; count: number | null }) => tag.count && tag.count > 0)
+    .sort(
+      (a: { name: string; count: number }, b: { name: string; count: number }) => b.count - a.count,
+    );
+}
+
+export async function getTotalPostCount(): Promise<number> {
+  try {
+    const res = await fetch('https://blog.worldofwinfield.co.uk/wp-json/wp/v2/posts?per_page=1');
+    const total = res.headers.get('X-WP-Total');
+    return total ? parseInt(total, 10) : 0;
+  } catch {
+    return 0;
+  }
 }

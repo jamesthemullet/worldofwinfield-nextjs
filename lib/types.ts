@@ -248,16 +248,15 @@ export type IndexPageProps = {
     };
   }[];
   randomImageSet: {
-    images:
-      | {
-          edges: {
-            node: {
-              srcSet: string;
-              id: string;
-            };
-          };
-        }[]
-      | null;
+    images: Array<{
+      node: {
+        id: string;
+        srcSet: string;
+        sourceUrl: string;
+      };
+    }> | null;
+    randomMonth: number;
+    randomYear: number;
   };
   archivePost: {
     post: {
@@ -484,22 +483,33 @@ export type RelatedPostsProps = {
   posts: RelatedPost[];
 };
 
+export type SearchResult = {
+  slug: string;
+  title: string;
+  date: string;
+  excerpt?: string;
+  featuredImage?: {
+    node: {
+      sourceUrl: string;
+      altText?: string;
+    };
+  };
+};
+
 export type SearchBarProps = {
-  onSearch: (results: { slug: string; title: string; date: string }[]) => void;
+  onSearch: (results: SearchResult[]) => void;
 };
 
 export type SearchResultsProps = {
-  searchResults:
-    | {
-        slug: string;
-        title: string;
-        date: string;
-      }[]
-    | null;
+  searchResults: SearchResult[] | null;
 };
 
 export type ArchivePageProps = {
   posts: PostsProps;
   month: number;
   year: number;
+};
+
+export type TagIndexPageProps = {
+  tags: { name: string; count: number }[];
 };

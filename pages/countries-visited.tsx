@@ -212,7 +212,7 @@ const ContentContainer = styled.section`
   }
 `;
 
-export async function getServerSideProps() {
+export async function getStaticProps() {
   const rawData = await fetchDataFromGoogleSheets();
   const transformedData = rawData ? processData(rawData) : {};
 
@@ -220,5 +220,6 @@ export async function getServerSideProps() {
     props: {
       transformedData,
     },
+    revalidate: 86400,
   };
 }

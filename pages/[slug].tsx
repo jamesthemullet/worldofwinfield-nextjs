@@ -75,6 +75,10 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 
   const data = await getPost(slug);
 
+  if (!data) {
+    return { notFound: true };
+  }
+
   const firstTag = data?.tags?.edges?.[0]?.node?.name;
   const [relatedPosts, adjacentPosts] = await Promise.all([
     firstTag ? getRelatedPosts(firstTag, slug) : Promise.resolve([]),

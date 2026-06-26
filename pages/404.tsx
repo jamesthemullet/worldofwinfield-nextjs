@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 import Container from '../components/container';
 import Layout from '../components/layout';
 import { colours } from '../pages/_app';
@@ -8,27 +9,32 @@ interface BlockProps {
   backgroundColour: string;
 }
 
+const baseColours = [
+  colours.pink,
+  colours.green,
+  colours.purple,
+  colours.burgandy,
+  colours.dark,
+  colours.azure,
+  colours.blueish,
+];
+
+function shuffleArray(array: string[]): string[] {
+  const copy = [...array];
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
+}
+
 export default function Custom404() {
   const words = ['Why', 'are', 'you', 'here?'];
-  const blockColours = [
-    colours.pink,
-    colours.green,
-    colours.purple,
-    colours.burgandy,
-    colours.dark,
-    colours.azure,
-    colours.blueish,
-  ];
+  const [shuffledColours, setShuffledColours] = useState(baseColours);
 
-  const shuffleArray = (array: string[]): string[] => {
-    for (let i = array.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [array[i], array[j]] = [array[j], array[i]];
-    }
-    return array;
-  };
-
-  const shuffledColours = shuffleArray(blockColours);
+  useEffect(() => {
+    setShuffledColours(shuffleArray(baseColours));
+  }, []);
 
   const seo = {
     opengraphImage: null,

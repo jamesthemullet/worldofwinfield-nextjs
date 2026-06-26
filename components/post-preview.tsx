@@ -63,7 +63,9 @@ export default function PostPreview({
           <DateComponent dateString={date} />
         </PostedDate>
         <CardExcerpt dangerouslySetInnerHTML={{ __html: sanitizedExcerpt }} />
-        <ReadMoreLink href={`/${slug}`}>Read More</ReadMoreLink>
+        <ReadMoreLink href={`/${slug}`} aria-label={`Read more about ${title}`}>
+          Read More
+        </ReadMoreLink>
       </ContentSide>
     </CardContainer>
   );
@@ -95,6 +97,11 @@ const ImageLink = styled(Link)`
     width: 40%;
     aspect-ratio: 16 / 9;
   }
+
+  &:focus-visible {
+    outline: 2px solid #000;
+    outline-offset: 2px;
+  }
 `;
 
 const ColourFallback = styled.div<{ colour: string }>`
@@ -116,6 +123,11 @@ const ContentSide = styled.div`
 
 const TitleLink = styled(Link)`
   text-decoration: none;
+
+  &:focus-visible {
+    outline: 2px solid #000;
+    outline-offset: 2px;
+  }
 `;
 
 const CardTitle = styled.h2`
@@ -153,6 +165,11 @@ const ReadMoreLink = styled(Link)`
 
   &:hover {
     background-color: ${colours.dark};
+  }
+
+  &:focus-visible {
+    outline: 2px solid ${colours.pink};
+    outline-offset: 2px;
   }
 `;
 

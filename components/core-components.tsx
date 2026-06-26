@@ -16,6 +16,11 @@ export const StyledButton = styled.button`
     color: ${colours.dark};
   }
 
+  &:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
+  }
+
   @media (max-width: 768px) {
     flex: 1;
   }
@@ -26,6 +31,11 @@ export const StyledInput = styled.input`
   border: none;
   min-width: 100px;
   margin-bottom: 10px;
+
+  &:focus-visible {
+    outline: 2px solid ${colours.pink};
+    outline-offset: 2px;
+  }
 `;
 
 export const StyledSelect = styled.select`
@@ -33,4 +43,9 @@ export const StyledSelect = styled.select`
   border: none;
   min-width: 100px;
   margin-bottom: 10px;
+
+  &:focus-visible {
+    outline: 2px solid ${colours.pink};
+    outline-offset: 2px;
+  }
 `;
