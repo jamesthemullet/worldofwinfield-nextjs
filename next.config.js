@@ -55,6 +55,7 @@ const nextConfig = {
               "img-src 'self' data: https:",
               "font-src 'self'",
               "connect-src 'self' https://www.google-analytics.com",
+              "frame-src https:",
               "frame-ancestors 'none'",
             ].join('; '),
           },
