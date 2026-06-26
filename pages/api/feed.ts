@@ -1,14 +1,21 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getAllPostsForHome } from '../../lib/api';
 
+type FeedPost = {
+  title: string;
+  slug: string;
+  date: string;
+  excerpt: string;
+};
+
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const data = await getAllPostsForHome(false);
-  const posts = data.edges.map(({ node }: { node: Record<string, unknown> }) => node);
+  const posts = data.edges.map(({ node }: { node: FeedPost }) => node);
 
   const siteUrl = 'https://www.worldofwinfield.com';
 
   const items = posts
-    .map((post: { title: string; slug: string; date: string; excerpt: string }) => {
+    .map((post) => {
       const excerpt = post.excerpt ? post.excerpt.replace(/<[^>]*>/g, '').trim() : '';
       return `
     <item>
