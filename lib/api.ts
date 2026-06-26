@@ -614,9 +614,14 @@ export async function getAllTags(): Promise<{ name: string; slug: string; count:
     }
   `);
   return (data?.tags?.nodes ?? [])
-    .filter((tag: { name: string; slug: string; count: number | null }) => tag.count && tag.count > 0)
+    .filter(
+      (tag: { name: string; slug: string; count: number | null }) => tag.count && tag.count > 0,
+    )
     .sort(
-      (a: { name: string; slug: string; count: number }, b: { name: string; slug: string; count: number }) => b.count - a.count,
+      (
+        a: { name: string; slug: string; count: number },
+        b: { name: string; slug: string; count: number },
+      ) => b.count - a.count,
     );
 }
 
