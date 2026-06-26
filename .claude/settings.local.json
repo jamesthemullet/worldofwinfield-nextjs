@@ -23,7 +23,8 @@
       "Bash(gh label *)",
       "Bash(git pull *)",
       "Bash(git fetch *)",
-      "Bash(git rebase *)"
+      "Bash(git rebase *)",
+      "Bash(git merge *)"
     ]
   }
 }
