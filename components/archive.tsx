@@ -1,21 +1,24 @@
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { StyledSelect } from './core-components';
 import { getMonthNumber } from './utils';
 
 const ArchiveDropdown = () => {
   const router = useRouter();
-  const months = Array.from(
-    { length: (new Date().getFullYear() - 2010) * 12 + new Date().getMonth() + 1 },
-    (_, index) => {
-      const monthNumber = (index % 12) + 1; // Add 9 to start from January 2010
-      const year = Math.floor(index / 12) + 2010; // Calculate the year
-      return new Date(year, monthNumber - 1, 1).toLocaleString('en-US', {
-        month: 'long',
-        year: 'numeric',
-      });
-    },
-  );
+  const months = useMemo(() => {
+    const now = new Date();
+    return Array.from(
+      { length: (now.getFullYear() - 2010) * 12 + now.getMonth() + 1 },
+      (_, index) => {
+        const monthNumber = (index % 12) + 1;
+        const year = Math.floor(index / 12) + 2010;
+        return new Date(year, monthNumber - 1, 1).toLocaleString('en-US', {
+          month: 'long',
+          year: 'numeric',
+        });
+      },
+    );
+  }, []);
 
   const handleSelectMonth = async (event: React.ChangeEvent<HTMLSelectElement>): Promise<void> => {
     const selectedValue = event.target.value;
