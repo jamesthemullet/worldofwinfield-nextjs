@@ -5,7 +5,7 @@ import Layout from './layout';
 
 jest.mock('./alert', () => ({
   __esModule: true,
-  default: ({ preview }: { preview: string | null }) =>
+  default: ({ preview }: { preview: boolean | null }) =>
     preview ? <div data-testid="alert">Preview Mode</div> : null,
 }));
 
@@ -61,7 +61,7 @@ describe('Layout', () => {
 
   it('renders the alert banner when in preview mode', () => {
     render(
-      <Layout preview="true">
+      <Layout preview={true}>
         <p>Content</p>
       </Layout>,
     );

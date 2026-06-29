@@ -1,22 +1,9 @@
 import Head from 'next/head';
 import { useRouter } from 'next/router';
+import type { SeoProps } from '../lib/types';
 
-type seoProps = {
-  seo?: {
-    opengraphDescription: string;
-    opengraphImage?: {
-      uri: string;
-      altText: string;
-      mediaItemUrl: string;
-      mediaDetails: {
-        width: string;
-        height: string;
-      };
-    } | null;
-    opengraphTitle: string;
-    opengraphSiteName: string;
-    metaKeywords?: string;
-  };
+type MetaProps = {
+  seo?: SeoProps;
   title?: string;
   ogType?: string;
   articleDate?: string;
@@ -31,7 +18,7 @@ export default function Meta({
   articleDate,
   articleModified,
   articleAuthor,
-}: seoProps) {
+}: MetaProps) {
   const router = useRouter();
   const currentUrl = router.asPath;
   const siteAddress = 'https://www.worldofwinfield.co.uk';
