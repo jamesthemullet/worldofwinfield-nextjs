@@ -31,7 +31,7 @@ type SinglePostProps = {
       };
     }[];
   };
-  seo: seoProps;
+  seo: SeoProps;
 };
 
 export type AdjacentPost = {
@@ -69,7 +69,7 @@ export type PostProps = {
       };
     }[];
   };
-  preview: string;
+  preview: boolean | null;
   relatedPosts: RelatedPost[];
 };
 
@@ -122,7 +122,7 @@ export type PostsProps = {
         };
       }[];
     };
-    seo: seoProps;
+    seo: SeoProps;
     author: AuthorProps;
     categories: {
       edges: {
@@ -191,7 +191,7 @@ export type IndexPageProps = {
         content: string;
         author: AuthorProps;
         excerpt: string;
-        seo: seoProps;
+        seo: SeoProps;
       };
     }[];
     pageInfo: {
@@ -220,11 +220,11 @@ export type IndexPageProps = {
         content: string;
         author: AuthorProps;
         excerpt: string;
-        seo: seoProps;
+        seo: SeoProps;
       };
     }[];
   };
-  preview: string;
+  preview: boolean;
   jamesImages: JamesImagesProps;
   randomPosts: {
     slug: string;
@@ -402,8 +402,8 @@ export type MoreStoriesProps = {
 
 export type LayoutProps = {
   children: React.ReactNode;
-  preview: string | null;
-  seo?: seoProps | null;
+  preview: boolean | null;
+  seo?: SeoProps | null;
   title?: string;
   ogType?: string;
   articleDate?: string;
@@ -443,10 +443,10 @@ export type ContainerProps = {
 };
 
 export type AlertProps = {
-  preview: string | null;
+  preview: boolean | null;
 };
 
-export type seoProps = {
+export type SeoProps = {
   opengraphDescription: string;
   opengraphImage?: {
     uri: string;

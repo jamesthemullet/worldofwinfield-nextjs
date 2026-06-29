@@ -66,7 +66,7 @@ export default function Post({ post, preview, relatedPosts, adjacentPosts }: Pos
   );
 }
 
-export const getStaticProps: GetStaticProps = async ({ params }) => {
+export const getStaticProps: GetStaticProps = async ({ params, preview = false }) => {
   const slug = params?.slug as string;
 
   if (!slug || !/^[a-zA-Z0-9-]+$/.test(slug)) {
@@ -88,6 +88,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   return {
     props: {
       post: data,
+      preview,
       relatedPosts,
       adjacentPosts,
     },
