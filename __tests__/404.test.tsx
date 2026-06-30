@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import React from 'react';
 import '@testing-library/jest-dom';
-import Custom404 from './404';
+import Custom404 from '../pages/404';
 
 jest.mock('../pages/_app', () => ({
   colours: {
