@@ -11,6 +11,7 @@
     "format": "biome format --write .",
     "knip": "knip",
     "test": "jest",
+    "test:e2e": "playwright test",
     "postbuild": "next-sitemap"
   },
   "lint-staged": {
@@ -40,6 +41,7 @@
   "devDependencies": {
     "@biomejs/biome": "^2.4.14",
     "@next/bundle-analyzer": "^16.2.9",
+    "@playwright/test": "^1.61.1",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.3.0",
     "@testing-library/react": "^16.0.0",

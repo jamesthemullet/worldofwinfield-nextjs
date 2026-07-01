@@ -54,7 +54,7 @@ const nextConfig = {
               "style-src 'self' 'unsafe-inline'",
               "img-src 'self' data: https:",
               "font-src 'self'",
-              "connect-src 'self' https://www.google-analytics.com https://vercel.live https://sheets.googleapis.com",
+              "connect-src 'self' https://*.google-analytics.com https://vercel.live https://sheets.googleapis.com",
               'frame-src https:',
               "frame-ancestors 'none'",
             ].join('; '),
