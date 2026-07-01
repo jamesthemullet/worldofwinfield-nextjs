@@ -23,7 +23,9 @@ test.describe('Favourites', () => {
     await expect(rows.first()).toBeVisible({ timeout: 15000 });
     expect(await rows.count()).toBeGreaterThan(0);
 
-    const cspErrors = consoleErrors.filter((e) => /Content Security Policy|Refused to connect/i.test(e));
+    const cspErrors = consoleErrors.filter((e) =>
+      /Content Security Policy|Refused to connect/i.test(e),
+    );
     expect(cspErrors).toEqual([]);
   });
 });
