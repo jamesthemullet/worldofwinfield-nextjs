@@ -24,7 +24,9 @@
       "Bash(git pull *)",
       "Bash(git fetch *)",
       "Bash(git rebase *)",
-      "Bash(git merge *)"
+      "Bash(git merge *)",
+      "Bash(curl -s http://localhost:3000/favourite-books)",
+      "Bash(git log *)"
     ]
   }
 }
