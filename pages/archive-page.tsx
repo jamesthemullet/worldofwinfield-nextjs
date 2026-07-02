@@ -63,7 +63,11 @@ const ArchivePage = ({ posts: { posts }, month, year }: ArchivePageProps) => {
   };
 
   return (
-    <Layout preview={null} seo={archiveSeo} title={`Posts from ${wordyMonth} ${year} | World Of Winfield`} ogType="website">
+    <Layout
+      preview={null}
+      seo={archiveSeo}
+      title={`Posts from ${wordyMonth} ${year} | World Of Winfield`}
+      ogType="website">
       <Container>
         <PostHeader
           title={title}
