@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import type { GetServerSidePropsContext } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
@@ -11,6 +12,40 @@ import { getPostsByDate } from '../lib/api';
 import { ArchivePageProps } from '../lib/types';
 import { colours } from './_app';
 
+const getPrevMonth = (month: number, year: number) =>
+  month === 1 ? { month: 12, year: year - 1 } : { month: month - 1, year };
+
+const getNextMonth = (month: number, year: number) =>
+  month === 12 ? { month: 1, year: year + 1 } : { month: month + 1, year };
+
+const isFuture = (month: number, year: number) => {
+  const now = new Date();
+  return year > now.getFullYear() || (year === now.getFullYear() && month > now.getMonth() + 1);
+};
+
+const MonthNavBar = ({ month, year }: { month: number; year: number }) => {
+  const prev = getPrevMonth(month, year);
+  const next = getNextMonth(month, year);
+  const nextIsFuture = isFuture(next.month, next.year);
+
+  return (
+    <MonthNav aria-label="Archive navigation">
+      <Link
+        href={{ pathname: '/archive-page', query: prev }}
+        aria-label={`Previous month: ${getMonthName(prev.month)} ${prev.year}`}>
+        ← {getMonthName(prev.month)} {prev.year}
+      </Link>
+      {!nextIsFuture && (
+        <Link
+          href={{ pathname: '/archive-page', query: next }}
+          aria-label={`Next month: ${getMonthName(next.month)} ${next.year}`}>
+          {getMonthName(next.month)} {next.year} →
+        </Link>
+      )}
+    </MonthNav>
+  );
+};
+
 const ArchivePage = ({ posts: { posts }, month, year }: ArchivePageProps) => {
   const router = useRouter();
   const wordyMonth = getMonthName(month);
@@ -21,14 +56,25 @@ const ArchivePage = ({ posts: { posts }, month, year }: ArchivePageProps) => {
     return <PostTitle>Loading…</PostTitle>;
   }
 
+  const archiveSeo = {
+    opengraphTitle: `Posts from ${wordyMonth} ${year} | World Of Winfield`,
+    opengraphDescription: `Browse all blog posts from ${wordyMonth} ${year} on World Of Winfield.`,
+    opengraphSiteName: 'World Of Winfield',
+  };
+
   return (
-    <Layout preview={null} seo={hasPosts ? posts[0]?.seo : null}>
+    <Layout
+      preview={null}
+      seo={archiveSeo}
+      title={`Posts from ${wordyMonth} ${year} | World Of Winfield`}
+      ogType="website">
       <Container>
         <PostHeader
           title={title}
           coverImage={hasPosts ? posts[0].featuredImage : undefined}
           date={hasPosts ? posts[0].date : undefined}
         />
+        <MonthNavBar month={month} year={year} />
         {hasPosts ? (
           <SearchResultsContainer>
             <ul>
@@ -44,14 +90,15 @@ const ArchivePage = ({ posts: { posts }, month, year }: ArchivePageProps) => {
             No posts found for {wordyMonth} {year}
           </NoPostsMessage>
         )}
+        <MonthNavBar month={month} year={year} />
       </Container>
     </Layout>
   );
 };
 
-export async function getServerSideProps(context: { query: { month: string; year: string } }) {
-  const month = parseInt(context.query.month, 10);
-  const year = parseInt(context.query.year, 10);
+export async function getServerSideProps({ query }: GetServerSidePropsContext) {
+  const month = parseInt(query.month as string, 10);
+  const year = parseInt(query.year as string, 10);
 
   if (isNaN(month) || month < 1 || month > 12) {
     return { notFound: true };
@@ -67,6 +114,24 @@ export async function getServerSideProps(context: { query: { month: string; year
 }
 
 export default ArchivePage;
+
+const MonthNav = styled.nav`
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem 20px;
+  max-width: 400px;
+  margin: 0 auto;
+
+  a {
+    color: ${colours.dark};
+    font-weight: bold;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+`;
 
 const NoPostsMessage = styled.p`
   color: ${colours.dark};

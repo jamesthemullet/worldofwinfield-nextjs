@@ -87,7 +87,7 @@ describe('SearchResults', () => {
       { slug: 'post-two', title: 'Post Two', date: '2023-06-20' },
     ];
     render(<SearchResults searchResults={results} />);
-    expect(screen.getByText('Search results:')).toBeInTheDocument();
+    expect(screen.getByText('2 results')).toBeInTheDocument();
     expect(screen.getByText('Post One')).toBeInTheDocument();
     expect(screen.getByText('Post Two')).toBeInTheDocument();
   });

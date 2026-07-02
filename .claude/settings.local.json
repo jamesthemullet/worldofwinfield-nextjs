@@ -21,7 +21,15 @@
       "Bash(gh run *)",
       "Bash(yarn biome *)",
       "Bash(gh label *)",
-      "Bash(git pull *)"
+      "Bash(git pull *)",
+      "Bash(git fetch *)",
+      "Bash(git rebase *)",
+      "Bash(git merge *)",
+      "Bash(curl -s http://localhost:3000/favourite-books)",
+      "Bash(git log *)",
+      "Bash(npx playwright *)",
+      "Bash(yarn test:e2e)",
+      "Bash(yarn lint:fix)"
     ]
   }
 }

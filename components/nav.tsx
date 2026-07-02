@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import Link from 'next/link';
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 export default function Nav() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -59,16 +59,17 @@ export default function Nav() {
   };
 
   return (
-    <StyledNav>
+    <StyledNav aria-label="Main">
       <BurgerButton
         onClick={toggleDropdown}
         aria-label="Toggle navigation menu"
-        aria-expanded={isDropdownOpen}>
+        aria-expanded={isDropdownOpen}
+        aria-controls="main-nav-list">
         <span></span>
         <span></span>
         <span></span>
       </BurgerButton>
-      <NavList className={isDropdownOpen ? 'open' : ''}>
+      <NavList id="main-nav-list" className={isDropdownOpen ? 'open' : ''}>
         <li>
           <Link href="/" onClick={closeNavOnMobile}>
             Home
@@ -117,11 +118,13 @@ export default function Nav() {
                   toggleFavouritesDropdown();
                 }}
                 aria-label="Toggle Favourites submenu"
-                aria-expanded={isFavouritesDropdownOpen}>
+                aria-expanded={isFavouritesDropdownOpen}
+                aria-controls="favourites-menu">
                 ▼
               </DropdownArrow>
             </SplitButtonContainer>
             <DropdownMenu
+              id="favourites-menu"
               isDropdownOpen={isFavouritesDropdownOpen}
               aria-hidden={!isFavouritesDropdownOpen}>
               <li>
@@ -196,6 +199,7 @@ export default function Nav() {
               <DropdownButton
                 ref={wishListButtonRef}
                 aria-expanded={isWishListDropdownOpen}
+                aria-controls="wishlist-menu"
                 onClick={() => toggleWishListDropdown()}>
                 Wish Lists
               </DropdownButton>
@@ -212,11 +216,13 @@ export default function Nav() {
                   toggleWishListDropdown();
                 }}
                 aria-label="Toggle Wish Lists submenu"
-                aria-expanded={isWishListDropdownOpen}>
+                aria-expanded={isWishListDropdownOpen}
+                aria-controls="wishlist-menu">
                 ▼
               </DropdownArrow>
             </SplitButtonContainer>
             <DropdownMenu
+              id="wishlist-menu"
               isDropdownOpen={isWishListDropdownOpen}
               aria-hidden={!isWishListDropdownOpen}>
               <li>
@@ -265,11 +271,15 @@ export default function Nav() {
                   toggleTravelDropdown();
                 }}
                 aria-label="Toggle Travel submenu"
-                aria-expanded={isTravelDropdownOpen}>
+                aria-expanded={isTravelDropdownOpen}
+                aria-controls="travel-menu">
                 ▼
               </DropdownArrow>
             </SplitButtonContainer>
-            <DropdownMenu isDropdownOpen={isTravelDropdownOpen} aria-hidden={!isTravelDropdownOpen}>
+            <DropdownMenu
+              id="travel-menu"
+              isDropdownOpen={isTravelDropdownOpen}
+              aria-hidden={!isTravelDropdownOpen}>
               <li>
                 <Link href="/countries-visited" onClick={closeNavOnMobile}>
                   Countries Visited
@@ -277,6 +287,11 @@ export default function Nav() {
               </li>
             </DropdownMenu>
           </Dropdown>
+        </li>
+        <li>
+          <Link href="/tags" onClick={closeNavOnMobile}>
+            Topics
+          </Link>
         </li>
         <li>
           <Link href="/music" onClick={closeNavOnMobile}>
@@ -291,6 +306,11 @@ export default function Nav() {
         <li>
           <Link href="/stocks" onClick={closeNavOnMobile}>
             Stocks
+          </Link>
+        </li>
+        <li>
+          <Link href="/stats" onClick={closeNavOnMobile}>
+            James Stats
           </Link>
         </li>
       </NavList>
@@ -355,6 +375,11 @@ const NavList = styled.ul`
     color: #fff;
     text-decoration: none;
     font-size: 1.5rem;
+
+    &:focus-visible {
+      outline: 2px solid #fff;
+      outline-offset: 2px;
+    }
   }
 `;
 
@@ -395,6 +420,11 @@ const BurgerButton = styled.button`
     span:nth-of-type(3) {
       bottom: 0;
     }
+
+    &:focus-visible {
+      outline: 2px solid #fff;
+      outline-offset: 2px;
+    }
   }
 `;
 
@@ -411,6 +441,11 @@ const DropdownButton = styled.button`
   cursor: pointer;
   font-family: 'Oswald', sans-serif;
   letter-spacing: 2px;
+
+  &:focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: 2px;
+  }
 `;
 
 const DropdownMenu = styled.ul<{ isDropdownOpen: boolean }>`
@@ -480,6 +515,12 @@ const DropdownArrow = styled.button`
 
   &:hover {
     background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+  }
+
+  &:focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: 2px;
     border-radius: 2px;
   }
 `;

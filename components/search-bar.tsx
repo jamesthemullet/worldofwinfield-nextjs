@@ -14,7 +14,7 @@ const SearchBar = ({ onSearch }: SearchBarProps) => {
     setQuery(e.target.value);
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
     setLoading(true);
     const searchResults = await searchBlogPosts(query);

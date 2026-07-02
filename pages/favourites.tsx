@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
+import { GetStaticProps } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
 import Container from '../components/container';
 import Layout from '../components/layout';
 import PostHeader from '../components/post-header';
@@ -76,24 +76,11 @@ const seo = {
   opengraphSiteName: 'World Of Winfield',
 };
 
-export default function FavouritesHubPage() {
-  const [counts, setCounts] = useState<Record<string, number | null>>({});
+type Props = {
+  counts: Record<string, number | null>;
+};
 
-  useEffect(() => {
-    const fetchCounts = async () => {
-      const results = await Promise.all(
-        categories.map(async ({ title, sheetId }) => {
-          const data = await fetchDataFromGoogleSheets(sheetId);
-          const count = data && data.length > 1 ? data.length - 1 : null;
-          return [title, count] as [string, number | null];
-        }),
-      );
-      setCounts(Object.fromEntries(results));
-    };
-
-    fetchCounts();
-  }, []);
-
+export default function FavouritesHubPage({ counts }: Props) {
   return (
     <Layout preview={null} title="Favourites" seo={seo}>
       <Container>
@@ -117,6 +104,20 @@ export default function FavouritesHubPage() {
     </Layout>
   );
 }
+
+export const getStaticProps: GetStaticProps<Props> = async () => {
+  const results = await Promise.all(
+    categories.map(async ({ title, sheetId }) => {
+      const data = await fetchDataFromGoogleSheets(sheetId);
+      const count = data && data.length > 1 ? data.length - 1 : null;
+      return [title, count] as [string, number | null];
+    }),
+  );
+  return {
+    props: { counts: Object.fromEntries(results) },
+    revalidate: 3600,
+  };
+};
 
 const StyledPostHeader = styled.div`
   margin: 0 auto;
