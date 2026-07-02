@@ -1,6 +1,5 @@
 import styled from '@emotion/styled';
 import React, { useState } from 'react';
-import { searchBlogPosts } from '../lib/api';
 import { SearchBarProps } from '../lib/types';
 import { colours } from '../pages/_app';
 import { StyledButton, StyledInput } from './core-components';
@@ -17,7 +16,8 @@ const SearchBar = ({ onSearch }: SearchBarProps) => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
     setLoading(true);
-    const searchResults = await searchBlogPosts(query);
+    const res = await fetch(`/api/search?q=${encodeURIComponent(query)}`);
+    const searchResults = await res.json();
     setLoading(false);
     onSearch(searchResults);
   };
