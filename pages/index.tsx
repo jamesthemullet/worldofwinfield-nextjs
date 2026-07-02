@@ -335,7 +335,7 @@ export default function Index({
   };
 
   return (
-    <Layout preview={preview} seo={seo}>
+    <Layout preview={preview} seo={seo} ogType="website">
       <Intro jamesImages={jamesImages} />
       <HomepageBlocksContainer>
         {blocks.map((block) => (

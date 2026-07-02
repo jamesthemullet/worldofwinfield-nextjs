@@ -4,7 +4,7 @@ import PostPreview from './post-preview';
 
 export default function MoreStories({ posts }: MoreStoriesProps) {
   return (
-    <StyledSection>
+    <StyledSection aria-label="More posts">
       <div>
         {posts.map(({ node }) => (
           <PostPreview

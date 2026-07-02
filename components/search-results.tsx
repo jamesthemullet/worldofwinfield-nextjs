@@ -45,7 +45,7 @@ const SearchResults = ({ searchResults }: SearchResultsProps) => {
                 <SearchCardImageWrapper>
                   <Link href={`/${post.slug}`} aria-label={post.title}>
                     <Image
-                      alt={post.featuredImage.node.altText || `Cover image for ${post.title}`}
+                      alt=""
                       src={post.featuredImage.node.sourceUrl}
                       sizes="(max-width: 768px) 100vw, 240px"
                       quality={75}
@@ -66,7 +66,10 @@ const SearchResults = ({ searchResults }: SearchResultsProps) => {
                     }}
                   />
                 )}
-                <ContinueReadingLink href={`/${post.slug}`} colour={getColourFromTitle(post.title)}>
+                <ContinueReadingLink
+                  href={`/${post.slug}`}
+                  colour={getColourFromTitle(post.title)}
+                  aria-label={`Continue reading about ${post.title}`}>
                   Continue reading
                 </ContinueReadingLink>
               </SearchCardContent>
