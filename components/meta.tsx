@@ -90,6 +90,10 @@ export default function Meta({
         name="twitter:image"
         content={opengraphImage?.mediaItemUrl ? opengraphImage.mediaItemUrl : defaultImageUrl}
       />
+      <meta
+        name="twitter:image:alt"
+        content={opengraphImage?.altText ? opengraphImage.altText : 'World Of Winfield'}
+      />
       {ogType === 'article' && articleDate && (
         <meta property="article:published_time" content={articleDate} />
       )}

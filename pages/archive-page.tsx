@@ -56,8 +56,14 @@ const ArchivePage = ({ posts: { posts }, month, year }: ArchivePageProps) => {
     return <PostTitle>Loading…</PostTitle>;
   }
 
+  const archiveSeo = {
+    opengraphTitle: `Posts from ${wordyMonth} ${year} | World Of Winfield`,
+    opengraphDescription: `Browse all blog posts from ${wordyMonth} ${year} on World Of Winfield.`,
+    opengraphSiteName: 'World Of Winfield',
+  };
+
   return (
-    <Layout preview={null} seo={hasPosts ? posts[0]?.seo : null}>
+    <Layout preview={null} seo={archiveSeo} title={`Posts from ${wordyMonth} ${year} | World Of Winfield`} ogType="website">
       <Container>
         <PostHeader
           title={title}

@@ -199,6 +199,7 @@ export default function Nav() {
               <DropdownButton
                 ref={wishListButtonRef}
                 aria-expanded={isWishListDropdownOpen}
+                aria-controls="wishlist-menu"
                 onClick={() => toggleWishListDropdown()}>
                 Wish Lists
               </DropdownButton>
