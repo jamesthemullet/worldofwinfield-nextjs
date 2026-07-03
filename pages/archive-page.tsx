@@ -29,12 +29,16 @@ const MonthNavBar = ({ month, year }: { month: number; year: number }) => {
   const nextIsFuture = isFuture(next.month, next.year);
 
   return (
-    <MonthNav>
-      <Link href={{ pathname: '/archive-page', query: prev }}>
+    <MonthNav aria-label="Archive navigation">
+      <Link
+        href={{ pathname: '/archive-page', query: prev }}
+        aria-label={`Previous month: ${getMonthName(prev.month)} ${prev.year}`}>
         ← {getMonthName(prev.month)} {prev.year}
       </Link>
       {!nextIsFuture && (
-        <Link href={{ pathname: '/archive-page', query: next }}>
+        <Link
+          href={{ pathname: '/archive-page', query: next }}
+          aria-label={`Next month: ${getMonthName(next.month)} ${next.year}`}>
           {getMonthName(next.month)} {next.year} →
         </Link>
       )}
@@ -52,8 +56,18 @@ const ArchivePage = ({ posts: { posts }, month, year }: ArchivePageProps) => {
     return <PostTitle>Loading…</PostTitle>;
   }
 
+  const archiveSeo = {
+    opengraphTitle: `Posts from ${wordyMonth} ${year} | World Of Winfield`,
+    opengraphDescription: `Browse all blog posts from ${wordyMonth} ${year} on World Of Winfield.`,
+    opengraphSiteName: 'World Of Winfield',
+  };
+
   return (
-    <Layout preview={null} seo={hasPosts ? posts[0]?.seo : null}>
+    <Layout
+      preview={null}
+      seo={archiveSeo}
+      title={`Posts from ${wordyMonth} ${year} | World Of Winfield`}
+      ogType="website">
       <Container>
         <PostHeader
           title={title}
@@ -66,7 +80,7 @@ const ArchivePage = ({ posts: { posts }, month, year }: ArchivePageProps) => {
             <ul>
               {posts.map((post) => (
                 <li key={post.id}>
-                  <a href={`/${post.slug}`}>{post.title}</a>
+                  <Link href={`/${post.slug}`}>{post.title}</Link>
                 </li>
               ))}
             </ul>

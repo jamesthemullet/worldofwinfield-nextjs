@@ -22,7 +22,7 @@ export default function Index({ allPosts, preview }: IndexPageProps) {
     setSearchResults(results);
   };
 
-  const loadMorePosts = async () => {
+  const loadMorePosts = async (): Promise<void> => {
     setIsLoading(true);
     const res = await fetch(`/api/blog-posts?after=${endCursor}`);
     const data = await res.json();
@@ -66,6 +66,7 @@ export default function Index({ allPosts, preview }: IndexPageProps) {
       </Container>
       <BrowseTopicsBar>
         <Link href="/tags">Browse all topics →</Link>
+        <RssLink href="/api/feed">Subscribe via RSS</RssLink>
       </BrowseTopicsBar>
       <SearchBar onSearch={handleSearch} />
       <SearchResults searchResults={searchResults} />
@@ -95,6 +96,18 @@ const BrowseTopicsBar = styled.div`
     &:hover {
       text-decoration: underline;
     }
+  }
+`;
+
+const RssLink = styled.a`
+  display: block;
+  font-size: 0.875rem;
+  color: #000;
+  text-decoration: none;
+  margin-top: 0.5rem;
+
+  &:hover {
+    text-decoration: underline;
   }
 `;
 

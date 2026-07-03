@@ -15,7 +15,7 @@ export default function NowPage() {
   };
 
   return (
-    <Layout preview={null} title="Now" seo={seo}>
+    <Layout preview={null} title="Now" seo={seo} ogType="website">
       <Container>
         <PostContainer>
           <StyledPostHeader>

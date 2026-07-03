@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import { GetStaticProps } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import Container from '../components/container';
@@ -75,7 +76,11 @@ const seo = {
   opengraphSiteName: 'World Of Winfield',
 };
 
-export default function FavouritesHubPage({ counts }: { counts: Record<string, number | null> }) {
+type Props = {
+  counts: Record<string, number | null>;
+};
+
+export default function FavouritesHubPage({ counts }: Props) {
   return (
     <Layout preview={null} title="Favourites" seo={seo}>
       <Container>
@@ -99,6 +104,20 @@ export default function FavouritesHubPage({ counts }: { counts: Record<string, n
     </Layout>
   );
 }
+
+export const getStaticProps: GetStaticProps<Props> = async () => {
+  const results = await Promise.all(
+    categories.map(async ({ title, sheetId }) => {
+      const data = await fetchDataFromGoogleSheets(sheetId);
+      const count = data && data.length > 1 ? data.length - 1 : null;
+      return [title, count] as [string, number | null];
+    }),
+  );
+  return {
+    props: { counts: Object.fromEntries(results) },
+    revalidate: 3600,
+  };
+};
 
 const StyledPostHeader = styled.div`
   margin: 0 auto;

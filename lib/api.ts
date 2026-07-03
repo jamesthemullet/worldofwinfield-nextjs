@@ -601,21 +601,27 @@ export async function getRandomImage(randomMonth: number, randomYear: number) {
   };
 }
 
-export async function getAllTags(): Promise<{ name: string; count: number }[]> {
+export async function getAllTags(): Promise<{ name: string; slug: string; count: number }[]> {
   const data = await fetchAPI(`
     {
       tags(first: 100) {
         nodes {
           name
+          slug
           count
         }
       }
     }
   `);
   return (data?.tags?.nodes ?? [])
-    .filter((tag: { name: string; count: number | null }) => tag.count && tag.count > 0)
+    .filter(
+      (tag: { name: string; slug: string; count: number | null }) => tag.count && tag.count > 0,
+    )
     .sort(
-      (a: { name: string; count: number }, b: { name: string; count: number }) => b.count - a.count,
+      (
+        a: { name: string; slug: string; count: number },
+        b: { name: string; slug: string; count: number },
+      ) => b.count - a.count,
     );
 }
 

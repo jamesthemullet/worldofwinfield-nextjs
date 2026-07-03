@@ -54,12 +54,14 @@ describe('HeroPost', () => {
 
   it('renders a "Read More" link', () => {
     render(<HeroPost {...baseProps} />);
-    expect(screen.getByRole('link', { name: 'Read More' })).toBeInTheDocument();
+    expect(
+      screen.getByRole('link', { name: 'Read more about Hero Post Title' }),
+    ).toBeInTheDocument();
   });
 
   it('"Read More" link points to the post slug', () => {
     render(<HeroPost {...baseProps} />);
-    expect(screen.getByRole('link', { name: 'Read More' })).toHaveAttribute(
+    expect(screen.getByRole('link', { name: 'Read more about Hero Post Title' })).toHaveAttribute(
       'href',
       'hero-post-slug',
     );

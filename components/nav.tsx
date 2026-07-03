@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import Link from 'next/link';
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 export default function Nav() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -59,16 +59,17 @@ export default function Nav() {
   };
 
   return (
-    <StyledNav>
+    <StyledNav aria-label="Main">
       <BurgerButton
         onClick={toggleDropdown}
         aria-label="Toggle navigation menu"
-        aria-expanded={isDropdownOpen}>
+        aria-expanded={isDropdownOpen}
+        aria-controls="main-nav-list">
         <span></span>
         <span></span>
         <span></span>
       </BurgerButton>
-      <NavList className={isDropdownOpen ? 'open' : ''}>
+      <NavList id="main-nav-list" className={isDropdownOpen ? 'open' : ''}>
         <li>
           <Link href="/" onClick={closeNavOnMobile}>
             Home
@@ -198,6 +199,7 @@ export default function Nav() {
               <DropdownButton
                 ref={wishListButtonRef}
                 aria-expanded={isWishListDropdownOpen}
+                aria-controls="wishlist-menu"
                 onClick={() => toggleWishListDropdown()}>
                 Wish Lists
               </DropdownButton>
@@ -285,6 +287,11 @@ export default function Nav() {
               </li>
             </DropdownMenu>
           </Dropdown>
+        </li>
+        <li>
+          <Link href="/tags" onClick={closeNavOnMobile}>
+            Topics
+          </Link>
         </li>
         <li>
           <Link href="/music" onClick={closeNavOnMobile}>
