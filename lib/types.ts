@@ -1,4 +1,4 @@
-type SinglePostProps = {
+export type SinglePostProps = {
   slug: string;
   title: string;
   featuredImage: {
@@ -31,7 +31,7 @@ type SinglePostProps = {
       };
     }[];
   };
-  seo: seoProps;
+  seo: SeoProps;
 };
 
 export type AdjacentPost = {
@@ -69,7 +69,7 @@ export type PostProps = {
       };
     }[];
   };
-  preview: string;
+  preview: boolean | null;
   relatedPosts: RelatedPost[];
 };
 
@@ -122,7 +122,7 @@ export type PostsProps = {
         };
       }[];
     };
-    seo: seoProps;
+    seo: SeoProps;
     author: AuthorProps;
     categories: {
       edges: {
@@ -191,7 +191,7 @@ export type IndexPageProps = {
         content: string;
         author: AuthorProps;
         excerpt: string;
-        seo: seoProps;
+        seo: SeoProps;
       };
     }[];
     pageInfo: {
@@ -220,11 +220,11 @@ export type IndexPageProps = {
         content: string;
         author: AuthorProps;
         excerpt: string;
-        seo: seoProps;
+        seo: SeoProps;
       };
     }[];
   };
-  preview: string;
+  preview: boolean;
   jamesImages: JamesImagesProps;
   randomPosts: {
     slug: string;
@@ -248,16 +248,15 @@ export type IndexPageProps = {
     };
   }[];
   randomImageSet: {
-    images:
-      | {
-          edges: {
-            node: {
-              srcSet: string;
-              id: string;
-            };
-          };
-        }[]
-      | null;
+    images: Array<{
+      node: {
+        id: string;
+        srcSet: string;
+        sourceUrl: string;
+      };
+    }> | null;
+    randomMonth: number;
+    randomYear: number;
   };
   archivePost: {
     post: {
@@ -403,8 +402,8 @@ export type MoreStoriesProps = {
 
 export type LayoutProps = {
   children: React.ReactNode;
-  preview: string | null;
-  seo?: seoProps | null;
+  preview: boolean | null;
+  seo?: SeoProps | null;
   title?: string;
   ogType?: string;
   articleDate?: string;
@@ -445,10 +444,10 @@ export type ContainerProps = {
 };
 
 export type AlertProps = {
-  preview: string | null;
+  preview: boolean | null;
 };
 
-export type seoProps = {
+export type SeoProps = {
   opengraphDescription: string;
   opengraphImage?: {
     uri: string;
@@ -485,22 +484,33 @@ export type RelatedPostsProps = {
   posts: RelatedPost[];
 };
 
+export type SearchResult = {
+  slug: string;
+  title: string;
+  date: string;
+  excerpt?: string;
+  featuredImage?: {
+    node: {
+      sourceUrl: string;
+      altText?: string;
+    };
+  };
+};
+
 export type SearchBarProps = {
-  onSearch: (results: { slug: string; title: string; date: string }[]) => void;
+  onSearch: (results: SearchResult[]) => void;
 };
 
 export type SearchResultsProps = {
-  searchResults:
-    | {
-        slug: string;
-        title: string;
-        date: string;
-      }[]
-    | null;
+  searchResults: SearchResult[] | null;
 };
 
 export type ArchivePageProps = {
   posts: PostsProps;
   month: number;
   year: number;
+};
+
+export type TagIndexPageProps = {
+  tags: { name: string; count: number }[];
 };

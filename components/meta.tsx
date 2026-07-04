@@ -1,22 +1,9 @@
 import Head from 'next/head';
 import { useRouter } from 'next/router';
+import type { SeoProps } from '../lib/types';
 
-type seoProps = {
-  seo?: {
-    opengraphDescription: string;
-    opengraphImage?: {
-      uri: string;
-      altText: string;
-      mediaItemUrl: string;
-      mediaDetails: {
-        width: string;
-        height: string;
-      };
-    } | null;
-    opengraphTitle: string;
-    opengraphSiteName: string;
-    metaKeywords?: string;
-  };
+type MetaProps = {
+  seo?: SeoProps;
   title?: string;
   ogType?: string;
   articleDate?: string;
@@ -33,7 +20,7 @@ export default function Meta({
   articleModified,
   articleAuthor,
   jsonLd,
-}: seoProps) {
+}: MetaProps) {
   const router = useRouter();
   const currentUrl = router.asPath;
   const siteAddress = 'https://www.worldofwinfield.co.uk';
@@ -105,6 +92,10 @@ export default function Meta({
         name="twitter:image"
         content={opengraphImage?.mediaItemUrl ? opengraphImage.mediaItemUrl : defaultImageUrl}
       />
+      <meta
+        name="twitter:image:alt"
+        content={opengraphImage?.altText ? opengraphImage.altText : 'World Of Winfield'}
+      />
       {ogType === 'article' && articleDate && (
         <meta property="article:published_time" content={articleDate} />
       )}
@@ -115,7 +106,7 @@ export default function Meta({
         <meta property="article:author" content={articleAuthor} />
       )}
       {metaKeywords && <meta name="keywords" content={metaKeywords} />}
-      <link rel="alternate" type="application/rss+xml" href="/feed.xml" />
+      <link rel="alternate" type="application/rss+xml" title="World Of Winfield" href="/api/feed" />
       <meta
         name="description"
         content={

@@ -12,7 +12,7 @@ import SectionSeparator from '../components/section-separator';
 import ShareBar from '../components/share-bar';
 import Tags from '../components/tags';
 import { getAdjacentPosts, getAllPostsWithSlug, getPost, getRelatedPosts } from '../lib/api';
-import { PostProps } from '../lib/types';
+import type { PostProps } from '../lib/types';
 import Custom404 from './404';
 
 const SITE_URL = 'https://www.worldofwinfield.co.uk';
@@ -101,7 +101,7 @@ export default function Post({ post, preview, relatedPosts, adjacentPosts }: Pos
   );
 }
 
-export const getStaticProps: GetStaticProps = async ({ params }) => {
+export const getStaticProps: GetStaticProps = async ({ params, preview = false }) => {
   const slug = params?.slug as string;
 
   if (!slug || !/^[a-zA-Z0-9-]+$/.test(slug)) {
@@ -123,6 +123,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   return {
     props: {
       post: data,
+      preview,
       relatedPosts,
       adjacentPosts,
     },

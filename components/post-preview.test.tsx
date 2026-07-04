@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import React from 'react';
 import '@testing-library/jest-dom';
-import { PostPreviewProps } from '../lib/types';
+import type { PostPreviewProps } from '../lib/types';
 import PostPreview from './post-preview';
 
 jest.mock('dompurify', () => ({
@@ -65,12 +65,17 @@ describe('PostPreview', () => {
 
   it('renders a "Read More" link', () => {
     render(<PostPreview {...baseProps} />);
-    expect(screen.getByRole('link', { name: 'Read More' })).toBeInTheDocument();
+    expect(
+      screen.getByRole('link', { name: 'Read more about Test Post Title' }),
+    ).toBeInTheDocument();
   });
 
   it('"Read More" link href matches the post slug', () => {
     render(<PostPreview {...baseProps} />);
-    expect(screen.getByRole('link', { name: 'Read More' })).toHaveAttribute('href', '/test-post');
+    expect(screen.getByRole('link', { name: 'Read more about Test Post Title' })).toHaveAttribute(
+      'href',
+      '/test-post',
+    );
   });
 
   it('renders the excerpt text content', () => {
