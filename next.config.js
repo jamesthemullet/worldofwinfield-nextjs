@@ -12,6 +12,7 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   poweredByHeader: false,
+  transpilePackages: ['d3-color', 'd3-interpolate', 'd3-zoom'],
   images: {
     loader: 'custom',
     loaderFile: './lib/imageLoader.ts',
