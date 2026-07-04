@@ -12,7 +12,7 @@ import PostHeader from '../../components/post-header';
 import PostTitle from '../../components/post-title';
 import { getAllTags, getPostsByTag } from '../../lib/api';
 import { sanitize } from '../../lib/sanitize';
-import { TagsPostProps } from '../../lib/types';
+import type { TagsPostProps } from '../../lib/types';
 import { colours } from '../_app';
 
 const blockColours = [

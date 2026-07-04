@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import Link from 'next/link';
-import { TagsProps } from '../lib/types';
+import type { TagsProps } from '../lib/types';
 
 export default function Tags({ tags }: TagsProps) {
   // remove tags with a space because I cannot retrieve them from the API

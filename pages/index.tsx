@@ -14,7 +14,7 @@ import {
   getPostDisplayInfo,
   getRandomImage,
 } from '../lib/api';
-import { IndexPageProps, SearchResult } from '../lib/types';
+import type { IndexPageProps, SearchResult } from '../lib/types';
 
 export default function Index({
   preview,

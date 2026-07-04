@@ -9,7 +9,7 @@ import PostHeader from '../components/post-header';
 import PostTitle from '../components/post-title';
 import { getMonthName } from '../components/utils';
 import { getPostsByDate } from '../lib/api';
-import { ArchivePageProps } from '../lib/types';
+import type { ArchivePageProps } from '../lib/types';
 import { colours } from './_app';
 
 const getPrevMonth = (month: number, year: number) =>

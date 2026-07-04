@@ -10,7 +10,7 @@ import PostTitle from '../components/post-title';
 import RelatedSections from '../components/related-sections';
 import { filterPostsByTag } from '../lib/api';
 import { sanitize } from '../lib/sanitize';
-import { PostsProps } from '../lib/types';
+import type { PostsProps } from '../lib/types';
 import { colours } from './_app';
 
 const stripReadMoreParagraph = (excerpt: string) => {

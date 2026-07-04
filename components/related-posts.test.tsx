@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import React from 'react';
 import '@testing-library/jest-dom';
-import { RelatedPost } from '../lib/types';
+import type { RelatedPost } from '../lib/types';
 import RelatedPosts from './related-posts';
 
 jest.mock('../pages/_app', () => ({

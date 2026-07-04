@@ -9,7 +9,7 @@ import MoreStories from '../components/more-stories';
 import SearchBar from '../components/search-bar';
 import SearchResults from '../components/search-results';
 import { getAllPostsForHome } from '../lib/api';
-import { IndexPageProps, SearchResult } from '../lib/types';
+import type { IndexPageProps, SearchResult } from '../lib/types';
 
 export default function Index({ allPosts, preview }: IndexPageProps) {
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);

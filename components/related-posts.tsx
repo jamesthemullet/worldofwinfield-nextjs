@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import Image from 'next/image';
 import Link from 'next/link';
-import { RelatedPostsProps } from '../lib/types';
+import type { RelatedPostsProps } from '../lib/types';
 import { colours } from '../pages/_app';
 import DateFormatter from './date';
 
