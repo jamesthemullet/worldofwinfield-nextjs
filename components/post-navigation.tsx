@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import Link from 'next/link';
-import { AdjacentPost } from '../lib/types';
+import type { AdjacentPost } from '../lib/types';
 import { colours } from '../pages/_app';
 
 type PostNavigationProps = {

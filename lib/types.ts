@@ -1,4 +1,4 @@
-type SinglePostProps = {
+export type SinglePostProps = {
   slug: string;
   title: string;
   featuredImage: {

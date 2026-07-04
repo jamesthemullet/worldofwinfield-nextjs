@@ -3,7 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 import { sanitize } from '../lib/sanitize';
-import { SearchResultsProps } from '../lib/types';
+import type { SearchResultsProps } from '../lib/types';
 import { colours } from '../pages/_app';
 
 const blockColours = [

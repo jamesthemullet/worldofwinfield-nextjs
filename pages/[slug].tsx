@@ -12,7 +12,7 @@ import SectionSeparator from '../components/section-separator';
 import ShareBar from '../components/share-bar';
 import Tags from '../components/tags';
 import { getAdjacentPosts, getAllPostsWithSlug, getPost, getRelatedPosts } from '../lib/api';
-import { PostProps } from '../lib/types';
+import type { PostProps } from '../lib/types';
 import Custom404 from './404';
 
 export default function Post({ post, preview, relatedPosts, adjacentPosts }: PostProps) {

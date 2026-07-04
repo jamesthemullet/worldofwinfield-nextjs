@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import React from 'react';
 import '@testing-library/jest-dom';
-import { JamesImagesProps } from '../lib/types';
+import type { JamesImagesProps } from '../lib/types';
 import HomepageBlock from './homepage-block';
 
 jest.mock('../pages/_app', () => ({

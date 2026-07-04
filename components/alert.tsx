@@ -1,4 +1,4 @@
-import { AlertProps } from '../lib/types';
+import type { AlertProps } from '../lib/types';
 import Container from './container';
 
 export default function Alert({ preview }: AlertProps) {

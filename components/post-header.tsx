@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import Link from 'next/link';
 import { useMemo } from 'react';
 import { sanitize } from '../lib/sanitize';
-import { PostHeaderProps } from '../lib/types';
+import type { PostHeaderProps } from '../lib/types';
 import { colours } from '../pages/_app';
 import CoverImage from './cover-image';
 import Date from './date';

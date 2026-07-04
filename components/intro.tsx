@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import Image from 'next/image';
 import React, { useCallback, useEffect, useState } from 'react';
-import { IntroProps, JamesImagesProps } from '../lib/types';
+import type { IntroProps, JamesImagesProps } from '../lib/types';
 import { colours } from '../pages/_app';
 
 type FlipperProps = {

@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
-import { JamesImagesProps } from '../lib/types';
+import type { JamesImagesProps } from '../lib/types';
 import { colours } from '../pages/_app';
 import { formatDate } from './search-results';
 

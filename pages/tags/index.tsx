@@ -5,7 +5,7 @@ import Container from '../../components/container';
 import Layout from '../../components/layout';
 import PostHeader from '../../components/post-header';
 import { getAllTags } from '../../lib/api';
-import { TagIndexPageProps } from '../../lib/types';
+import type { TagIndexPageProps } from '../../lib/types';
 import { colours } from '../_app';
 
 const blockColours = [

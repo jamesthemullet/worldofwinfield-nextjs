@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import React from 'react';
 import '@testing-library/jest-dom';
-import { PostPreviewProps } from '../lib/types';
+import type { PostPreviewProps } from '../lib/types';
 import PostPreview from './post-preview';
 
 jest.mock('dompurify', () => ({
