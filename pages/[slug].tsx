@@ -15,12 +15,46 @@ import { getAdjacentPosts, getAllPostsWithSlug, getPost, getRelatedPosts } from 
 import type { PostProps } from '../lib/types';
 import Custom404 from './404';
 
+const SITE_URL = 'https://www.worldofwinfield.co.uk';
+
 export default function Post({ post, preview, relatedPosts, adjacentPosts }: PostProps) {
   const router = useRouter();
 
   if (!router.isFallback && !post?.slug) {
     return <Custom404 />;
   }
+
+  const jsonLd: Record<string, unknown> | undefined =
+    !router.isFallback && post
+      ? {
+          '@context': 'https://schema.org',
+          '@type': 'BlogPosting',
+          headline: post.title,
+          datePublished: post.date,
+          dateModified: post.modified ?? post.date,
+          author: {
+            '@type': 'Person',
+            name: post.author?.node?.name ?? 'James Winfield',
+            url: SITE_URL,
+          },
+          publisher: {
+            '@type': 'Person',
+            name: 'James Winfield',
+            url: SITE_URL,
+          },
+          ...(post.seo?.opengraphImage?.mediaItemUrl
+            ? { image: post.seo.opengraphImage.mediaItemUrl }
+            : post.featuredImage?.node?.sourceUrl
+              ? { image: post.featuredImage.node.sourceUrl }
+              : {}),
+          description: post.seo?.opengraphDescription,
+          url: `${SITE_URL}/${post.slug}`,
+          mainEntityOfPage: {
+            '@type': 'WebPage',
+            '@id': `${SITE_URL}/${post.slug}`,
+          },
+        }
+      : undefined;
 
   return (
     <Layout
@@ -29,7 +63,8 @@ export default function Post({ post, preview, relatedPosts, adjacentPosts }: Pos
       ogType="article"
       articleDate={post?.date}
       articleModified={post?.modified}
-      articleAuthor={post?.author?.node?.name}>
+      articleAuthor={post?.author?.node?.name}
+      jsonLd={jsonLd}>
       <Container>
         {router.isFallback ? (
           <PostTitle>Loading…</PostTitle>

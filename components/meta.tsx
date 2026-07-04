@@ -9,6 +9,7 @@ type MetaProps = {
   articleDate?: string;
   articleModified?: string;
   articleAuthor?: string;
+  jsonLd?: Record<string, unknown>;
 };
 
 export default function Meta({
@@ -18,6 +19,7 @@ export default function Meta({
   articleDate,
   articleModified,
   articleAuthor,
+  jsonLd,
 }: MetaProps) {
   const router = useRouter();
   const currentUrl = router.asPath;
@@ -113,6 +115,12 @@ export default function Meta({
             : 'World Of Winfield - all about James Winfield'
         }
       />
+      {jsonLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      )}
     </Head>
   );
 }
