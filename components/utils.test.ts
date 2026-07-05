@@ -52,7 +52,9 @@ describe('getMonthName', () => {
 
   it('getMonthNumber and getMonthName are inverse operations', () => {
     for (let i = 1; i <= 12; i++) {
-      expect(getMonthNumber(getMonthName(i))).toBe(i);
+      const name = getMonthName(i);
+      expect(name).toBeDefined();
+      expect(getMonthNumber(name!)).toBe(i);
     }
   });
 });

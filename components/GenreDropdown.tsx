@@ -1,5 +1,4 @@
 import styled from '@emotion/styled';
-import React from 'react';
 
 type GenreDropdownProps = {
   genres: string[];
@@ -10,14 +9,14 @@ type GenreDropdownProps = {
   selectId?: string;
 };
 
-const GenreDropdown: React.FC<GenreDropdownProps> = ({
+function GenreDropdown({
   genres,
   selectedGenre,
   onChange,
   filterLabel = 'Filter by genre:',
   allOptionText = 'All Genres',
   selectId = 'genre-select',
-}) => {
+}: GenreDropdownProps) {
   return (
     <Wrapper>
       <Label htmlFor={selectId}>{filterLabel}</Label>
@@ -31,7 +30,7 @@ const GenreDropdown: React.FC<GenreDropdownProps> = ({
       </StyledSelect>
     </Wrapper>
   );
-};
+}
 
 const Wrapper = styled.div`
   margin-bottom: 1rem;
