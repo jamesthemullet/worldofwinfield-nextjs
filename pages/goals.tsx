@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { GetStaticProps } from 'next';
+import type { GetStaticProps } from 'next';
 import ErrorPage from 'next/error';
 import Link from 'next/link';
 import { useRouter } from 'next/router';

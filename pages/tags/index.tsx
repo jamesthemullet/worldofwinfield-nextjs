@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { GetStaticProps } from 'next';
+import type { GetStaticProps } from 'next';
 import Link from 'next/link';
 import Container from '../../components/container';
 import Layout from '../../components/layout';

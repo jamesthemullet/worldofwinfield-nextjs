@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { GetStaticProps } from 'next';
+import type { GetStaticProps } from 'next';
 import { useEffect, useState } from 'react';
 import HomepageBlock from '../components/homepage-block';
 import Intro from '../components/intro';

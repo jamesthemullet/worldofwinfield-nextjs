@@ -1,5 +1,4 @@
 import styled from '@emotion/styled';
-import React from 'react';
 
 type SortDropdownProps = {
   options: string[];
@@ -7,7 +6,7 @@ type SortDropdownProps = {
   onChange: (value: string) => void;
 };
 
-const SortDropdown: React.FC<SortDropdownProps> = ({ options, selected, onChange }) => {
+function SortDropdown({ options, selected, onChange }: SortDropdownProps) {
   return (
     <Wrapper>
       <Label htmlFor="sort-select">Sort by:</Label>
@@ -21,7 +20,7 @@ const SortDropdown: React.FC<SortDropdownProps> = ({ options, selected, onChange
       </Select>
     </Wrapper>
   );
-};
+}
 
 const Wrapper = styled.div`
   margin: 1rem 0;

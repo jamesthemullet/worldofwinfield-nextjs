@@ -15,7 +15,12 @@ export default async function preview(req: NextApiRequest, res: NextApiResponse)
   }
 
   // Fetch WordPress to check if the provided `id` or `slug` exists
-  const post = await getPreviewPost((id || slug) as string, id ? 'DATABASE_ID' : 'SLUG');
+  const rawParam = id || slug;
+  const postParam = Array.isArray(rawParam) ? rawParam[0] : rawParam;
+  if (!postParam) {
+    return res.status(401).json({ message: 'Invalid token' });
+  }
+  const post = await getPreviewPost(postParam, id ? 'DATABASE_ID' : 'SLUG');
 
   // If the post doesn't exist prevent preview mode from being enabled
   if (!post) {
