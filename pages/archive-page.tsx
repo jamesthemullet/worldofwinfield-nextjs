@@ -97,8 +97,11 @@ const ArchivePage = ({ posts: { posts }, month, year }: ArchivePageProps) => {
 };
 
 export async function getServerSideProps({ query }: GetServerSidePropsContext) {
-  const month = parseInt(Array.isArray(query.month) ? query.month[0] ?? '' : (query.month ?? ''), 10);
-  const year = parseInt(Array.isArray(query.year) ? query.year[0] ?? '' : (query.year ?? ''), 10);
+  const month = parseInt(
+    Array.isArray(query.month) ? (query.month[0] ?? '') : (query.month ?? ''),
+    10,
+  );
+  const year = parseInt(Array.isArray(query.year) ? (query.year[0] ?? '') : (query.year ?? ''), 10);
 
   if (isNaN(month) || month < 1 || month > 12) {
     return { notFound: true };
