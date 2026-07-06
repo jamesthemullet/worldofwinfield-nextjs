@@ -9,7 +9,7 @@ type ShareBarProps = {
   url: string;
 };
 
-export default function ShareBar({ title, url }: ShareBarProps) {
+export default function ShareBar({ title, url }: ShareBarProps): JSX.Element {
   const [copied, setCopied] = useState(false);
 
   const encodedUrl = encodeURIComponent(url);

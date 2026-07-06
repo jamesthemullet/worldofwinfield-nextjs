@@ -17,7 +17,7 @@ const blockColours = [
   colours.blueish,
 ];
 
-const stripExternalLinks = (excerpt: string) => {
+const stripExternalLinks = (excerpt: string): string => {
   const regex = /<a\s+(?:[^>]*?\s+)?href="https?:\/\/[^"]*"[^>]*>.*?<\/a>/g;
   return excerpt.replace(regex, '');
 };
@@ -28,7 +28,7 @@ export default function PostPreview({
   excerpt,
   slug,
   featuredImage,
-}: PostPreviewProps) {
+}: PostPreviewProps): JSX.Element {
   const sanitizedExcerpt = useMemo(() => sanitize(stripExternalLinks(excerpt)), [excerpt]);
 
   const fallbackColour = useMemo(() => {

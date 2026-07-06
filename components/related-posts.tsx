@@ -5,7 +5,7 @@ import type { RelatedPostsProps } from '../lib/types';
 import { colours } from '../pages/_app';
 import DateFormatter from './date';
 
-export default function RelatedPosts({ posts }: RelatedPostsProps) {
+export default function RelatedPosts({ posts }: RelatedPostsProps): JSX.Element | null {
   if (posts.length === 0) return null;
 
   return (

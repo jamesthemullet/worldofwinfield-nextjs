@@ -14,7 +14,7 @@ export default function Layout({
   articleModified,
   articleAuthor,
   jsonLd,
-}: LayoutProps) {
+}: LayoutProps): JSX.Element {
   return (
     <>
       <header>

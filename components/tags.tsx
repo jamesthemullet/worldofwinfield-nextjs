@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import Link from 'next/link';
 import type { TagsProps } from '../lib/types';
 
-export default function Tags({ tags }: TagsProps) {
+export default function Tags({ tags }: TagsProps): JSX.Element {
   // remove tags with a space because I cannot retrieve them from the API
   const filteredEdges = tags.edges.filter((tag) => tag.node.name.indexOf(' ') === -1);
   return (

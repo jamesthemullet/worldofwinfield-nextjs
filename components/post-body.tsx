@@ -16,7 +16,7 @@ const resolveDataSrc = (html: string): string =>
     .replace(/\bdata-lazy-srcset=/gi, 'srcset=')
     .replace(/\bdata-srcset=/gi, 'srcset=');
 
-export default function PostBody({ content }: PostBodyProps) {
+export default function PostBody({ content }: PostBodyProps): JSX.Element {
   const sanitizedContent = useMemo(() => {
     const resolved = resolveDataSrc(content);
     if (typeof window === 'undefined') return resolved;

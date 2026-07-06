@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import Link from 'next/link';
 
-const FavouritesHubLink = () => (
+const FavouritesHubLink = (): JSX.Element => (
   <Wrapper>
     <Link href="/favourites">← Back to all favourites</Link>
   </Wrapper>

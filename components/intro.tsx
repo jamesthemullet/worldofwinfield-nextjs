@@ -19,7 +19,7 @@ const blockColours = [
   colours.blueish,
 ];
 
-export default function Intro({ jamesImages }: IntroProps) {
+export default function Intro({ jamesImages }: IntroProps): JSX.Element {
   const [hoveredIndex, setHoveredIndex] = useState(-1);
   const [shuffledImages, setShuffledImages] = useState<JamesImagesProps['edges']>([]);
   const [imageUrls, setImageUrls] = useState<string[]>([]);

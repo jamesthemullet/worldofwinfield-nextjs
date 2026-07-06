@@ -16,7 +16,7 @@ function GenreDropdown({
   filterLabel = 'Filter by genre:',
   allOptionText = 'All Genres',
   selectId = 'genre-select',
-}: GenreDropdownProps) {
+}: GenreDropdownProps): JSX.Element {
   return (
     <Wrapper>
       <Label htmlFor={selectId}>{filterLabel}</Label>

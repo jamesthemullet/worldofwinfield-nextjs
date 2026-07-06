@@ -16,7 +16,7 @@ export default function PostHeader({
   slug,
   heroPost,
   caption,
-}: PostHeaderProps) {
+}: PostHeaderProps): JSX.Element {
   const aspectRatio =
     (coverImage?.node.mediaDetails.width ?? 0) / (coverImage?.node.mediaDetails.height ?? 1);
 

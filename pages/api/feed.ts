@@ -8,7 +8,7 @@ type FeedPost = {
   excerpt: string;
 };
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse): Promise<void> {
   if (req.method !== 'GET') return res.status(405).json({ message: 'Method Not Allowed' });
   const data = await getAllPostsForHome(false);
   const posts: FeedPost[] = data.edges.map(({ node }: { node: FeedPost }) => node as FeedPost);

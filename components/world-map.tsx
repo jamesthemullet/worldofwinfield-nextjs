@@ -54,7 +54,7 @@ const dropFrenchGuiana = (features: Feature[]): Feature[] =>
     } as Feature;
   });
 
-export default function WorldMap({ visitedCountries }: WorldMapProps) {
+export default function WorldMap({ visitedCountries }: WorldMapProps): JSX.Element {
   const [hovered, setHovered] = useState<string | null>(null);
   const [zoom, setZoom] = useState(MIN_ZOOM);
   const [center, setCenter] = useState<[number, number]>(DEFAULT_CENTER);

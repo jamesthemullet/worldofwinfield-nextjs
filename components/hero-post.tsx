@@ -18,7 +18,7 @@ export default function HeroPost({
   author,
   slug,
   featuredImage,
-}: HeroPostProps) {
+}: HeroPostProps): JSX.Element {
   const sanitizedExcerpt = useMemo(() => sanitize(stripExternalLinks(excerpt)), [excerpt]);
 
   return (

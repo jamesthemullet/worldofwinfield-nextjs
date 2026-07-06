@@ -12,7 +12,7 @@ type RelatedSectionsProps = {
   sections: RelatedSection[];
 };
 
-export default function RelatedSections({ sections }: RelatedSectionsProps) {
+export default function RelatedSections({ sections }: RelatedSectionsProps): JSX.Element {
   return (
     <Wrapper>
       <Heading>Explore more</Heading>

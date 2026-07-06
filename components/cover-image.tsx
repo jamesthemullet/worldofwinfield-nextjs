@@ -20,7 +20,7 @@ type Props = {
   heroPost?: boolean;
 };
 
-export default function CoverImage({ title, coverImage, imageSize, slug, heroPost }: Props) {
+export default function CoverImage({ title, coverImage, imageSize, slug, heroPost }: Props): JSX.Element {
   return (
     <>
       {slug ? (

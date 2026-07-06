@@ -47,7 +47,7 @@ export default function HomepageBlock({
   jamesImages,
   icon,
   label,
-}: HomePageBlockTypes) {
+}: HomePageBlockTypes): JSX.Element {
   const [randomColour, setRandomColour] = useState(blockColours[0]);
   const [randomJamesIndex, setRandomJamesIndex] = useState(0);
 

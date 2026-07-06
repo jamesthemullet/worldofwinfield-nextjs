@@ -8,7 +8,7 @@ type PostNavigationProps = {
   nextPost: AdjacentPost | null;
 };
 
-export default function PostNavigation({ previousPost, nextPost }: PostNavigationProps) {
+export default function PostNavigation({ previousPost, nextPost }: PostNavigationProps): JSX.Element | null {
   if (!previousPost && !nextPost) return null;
 
   return (

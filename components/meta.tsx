@@ -20,7 +20,7 @@ export default function Meta({
   articleModified,
   articleAuthor,
   jsonLd,
-}: MetaProps) {
+}: MetaProps): JSX.Element {
   const router = useRouter();
   const currentUrl = router.asPath;
   const siteAddress = 'https://www.worldofwinfield.co.uk';

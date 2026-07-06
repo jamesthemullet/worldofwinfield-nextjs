@@ -12,18 +12,18 @@ import { getPostsByDate } from '../lib/api';
 import type { ArchivePageProps } from '../lib/types';
 import { colours } from './_app';
 
-const getPrevMonth = (month: number, year: number) =>
+const getPrevMonth = (month: number, year: number): { month: number; year: number } =>
   month === 1 ? { month: 12, year: year - 1 } : { month: month - 1, year };
 
-const getNextMonth = (month: number, year: number) =>
+const getNextMonth = (month: number, year: number): { month: number; year: number } =>
   month === 12 ? { month: 1, year: year + 1 } : { month: month + 1, year };
 
-const isFuture = (month: number, year: number) => {
+const isFuture = (month: number, year: number): boolean => {
   const now = new Date();
   return year > now.getFullYear() || (year === now.getFullYear() && month > now.getMonth() + 1);
 };
 
-const MonthNavBar = ({ month, year }: { month: number; year: number }) => {
+const MonthNavBar = ({ month, year }: { month: number; year: number }): JSX.Element => {
   const prev = getPrevMonth(month, year);
   const next = getNextMonth(month, year);
   const nextIsFuture = isFuture(next.month, next.year);

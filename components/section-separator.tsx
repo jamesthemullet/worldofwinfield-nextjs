@@ -12,7 +12,7 @@ const blockColours = [
   colours.blueish,
 ];
 
-export default function SectionSeparator() {
+export default function SectionSeparator(): JSX.Element {
   const [backgroundColour, setBackgroundColour] = useState(blockColours[0]);
 
   useEffect(() => {
