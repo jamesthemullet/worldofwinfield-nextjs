@@ -37,6 +37,9 @@ const FavouriteResults = ({
   const effectiveSortBy = sortBy !== undefined ? sortBy : internalSortBy;
   const showInternalDropdown = sortBy === undefined;
 
+  // Stable primitive key so the effect dependency compares by value, not array identity.
+  const columnsToHideKey = columnsToHide.join('\x00');
+
   // Fetch and apply column-hiding once per sheetId/columnsToHide change.
   // Filter and sort are derived in-memory below — no re-fetch on filter/sort changes.
   useEffect(() => {
@@ -78,7 +81,7 @@ const FavouriteResults = ({
     };
 
     fetchFavouriteData();
-  }, [sheetId, JSON.stringify(columnsToHide)]);
+  }, [sheetId, columnsToHideKey]);
 
   const data = useMemo(() => {
     if (!rawData || rawData.length === 0) return [];

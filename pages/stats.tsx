@@ -207,7 +207,7 @@ export default function Stats({
   );
 }
 
-export async function getServerSideProps() {
+export async function getStaticProps() {
   const [
     countriesData,
     booksData,
@@ -255,6 +255,7 @@ export async function getServerSideProps() {
       favouriteCountries: countRows(favouriteCountriesData),
       totalPosts,
     },
+    revalidate: 86400,
   };
 }
 

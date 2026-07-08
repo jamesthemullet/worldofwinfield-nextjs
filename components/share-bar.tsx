@@ -1,5 +1,3 @@
-'use client';
-
 import styled from '@emotion/styled';
 import { useState } from 'react';
 import { colours } from '../pages/_app';
