@@ -16,7 +16,7 @@ describe('Alert', () => {
 
   it('renders an exit-preview link when in preview mode', () => {
     render(<Alert preview={true} />);
-    const link = screen.getByRole('link', { name: /Click here/i });
+    const link = screen.getByRole('link', { name: /Exit preview mode/i });
     expect(link).toHaveAttribute('href', '/api/exit-preview');
   });
 
