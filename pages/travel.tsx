@@ -49,6 +49,7 @@ export default function Post({ posts }: PostsProps) {
                     categories={post.categories}
                     slug={post.slug}
                     heroPost={index === 0 || index === 1 ? true : false}
+                    headingLevel="h2"
                   />
                 </StyledPostHeader>
                 <ExcerptArea>
@@ -58,7 +59,7 @@ export default function Post({ posts }: PostsProps) {
                     }}
                     backgroundColour={colours.dark}
                   />
-                  <ReadMoreLink href={`/${post.slug}`}>Read this post →</ReadMoreLink>
+                  <ReadMoreLink href={`/${post.slug}`} aria-label={`Read more about ${post.title}`}>Read this post →</ReadMoreLink>
                 </ExcerptArea>
               </PostContainer>
             ))}

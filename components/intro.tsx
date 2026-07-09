@@ -66,7 +66,7 @@ export default function Intro({ jamesImages }: IntroProps) {
                     <Back>
                       <Image
                         src={imageUrl}
-                        alt={jamesAltTag}
+                        alt={jamesAltTag ?? ''}
                         width={300}
                         height={300}
                         sizes="(max-width: 768px) 12vw, 12vw"

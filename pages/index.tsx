@@ -330,7 +330,7 @@ export default function Index({
   const seo = {
     opengraphImage: firstPost.edges[0].node.seo.opengraphImage,
     opengraphTitle: `Home - World Of Winfield`,
-    opengraphDescription: `Home - World Of Winfield`,
+    opengraphDescription: `James Winfield's personal site — travel writing, music, culture, politics, stocks, and favourites lists.`,
     opengraphSiteName: `World Of Winfield`,
   };
 

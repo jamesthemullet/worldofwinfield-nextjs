@@ -69,7 +69,7 @@ export default function Nav() {
         <span></span>
         <span></span>
       </BurgerButton>
-      <NavList id="main-nav-list" className={isDropdownOpen ? 'open' : ''}>
+      <NavList id="main-nav-list" className={isDropdownOpen ? 'open' : ''} aria-hidden={isMobile && !isDropdownOpen}>
         <li>
           <Link href="/" onClick={closeNavOnMobile}>
             Home
