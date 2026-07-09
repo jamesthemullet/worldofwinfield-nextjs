@@ -1,4 +1,4 @@
-import { NextApiRequest, NextApiResponse } from 'next';
+import type { NextApiRequest, NextApiResponse } from 'next';
 import { getAllPostsForHome } from '../../lib/api';
 
 type FeedPostNode = {
@@ -9,6 +9,7 @@ type FeedPostNode = {
 };
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  if (req.method !== 'GET') return res.status(405).json({ message: 'Method Not Allowed' });
   const data = await getAllPostsForHome(false);
   const posts = data.edges.map(({ node }: { node: FeedPostNode }) => node);
 

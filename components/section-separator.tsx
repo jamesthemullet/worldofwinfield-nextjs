@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import { useEffect, useState } from 'react';
 import { colours } from '../pages/_app';
 
 const blockColours = [
@@ -10,11 +11,15 @@ const blockColours = [
   colours.azure,
   colours.blueish,
 ];
-const randomIndex1 = Math.floor(Math.random() * blockColours.length);
-const randomColour1 = blockColours[randomIndex1];
 
 export default function SectionSeparator() {
-  return <StyledHr backgroundColour={randomColour1} colour={colours.white} />;
+  const [backgroundColour, setBackgroundColour] = useState(blockColours[0]);
+
+  useEffect(() => {
+    setBackgroundColour(blockColours[Math.floor(Math.random() * blockColours.length)]);
+  }, []);
+
+  return <StyledHr backgroundColour={backgroundColour} colour={colours.white} />;
 }
 
 const StyledHr = styled.hr<{ backgroundColour: string; colour: string }>`

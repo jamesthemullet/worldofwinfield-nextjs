@@ -44,7 +44,7 @@ export default function Custom404() {
   };
 
   return (
-    <Layout preview="" seo={seo} title="404 - Page Not Found">
+    <Layout preview={null} seo={seo} title="404 - Page Not Found">
       <Container>
         <article>
           <Grid>

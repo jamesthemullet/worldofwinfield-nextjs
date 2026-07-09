@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import React from 'react';
 import '@testing-library/jest-dom';
-import { ArchivePageProps } from '../lib/types';
+import type { ArchivePageProps } from '../lib/types';
 import ArchivePage from '../pages/archive-page';
 
 const mockRouter = { isFallback: false };

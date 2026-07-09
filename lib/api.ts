@@ -303,7 +303,7 @@ export async function getPost(id: string, idType = 'SLUG') {
 
 export async function getPostDisplayInfo(ids: string[]) {
   const posts = await Promise.all(
-    ids.map((id: string) =>
+    ids.map((id) =>
       fetchAPI(
         `
       query Post($id: ID!, $idType: PostIdType!) {
@@ -345,8 +345,14 @@ export async function searchBlogPosts(searchTerm: string) {
         nodes {
           slug
           title
-          content
           date
+          excerpt
+          featuredImage {
+            node {
+              sourceUrl
+              altText
+            }
+          }
         }
       }
     }`,
@@ -561,8 +567,8 @@ export async function getAdjacentPosts(date: string): Promise<{
   );
 
   return {
-    previousPost: (data.previousPost?.nodes?.[0] as { title: string; slug: string }) ?? null,
-    nextPost: (data.nextPost?.nodes?.[0] as { title: string; slug: string }) ?? null,
+    previousPost: (data.previousPost?.nodes?.[0] as AdjacentPost) ?? null,
+    nextPost: (data.nextPost?.nodes?.[0] as AdjacentPost) ?? null,
   };
 }
 
@@ -597,4 +603,33 @@ export async function getRandomImage(randomMonth: number, randomYear: number) {
     randomMonth,
     randomYear,
   };
+}
+
+type TagNode = { name: string; slug: string; count: number | null };
+
+export async function getAllTags(): Promise<{ name: string; slug: string; count: number }[]> {
+  const data = await fetchAPI(`
+    {
+      tags(first: 100) {
+        nodes {
+          name
+          slug
+          count
+        }
+      }
+    }
+  `);
+  return (data?.tags?.nodes ?? [])
+    .filter((tag: TagNode) => tag.count && tag.count > 0)
+    .sort((a: TagNode, b: TagNode) => (b.count ?? 0) - (a.count ?? 0));
+}
+
+export async function getTotalPostCount(): Promise<number> {
+  try {
+    const res = await fetch('https://blog.worldofwinfield.co.uk/wp-json/wp/v2/posts?per_page=1');
+    const total = res.headers.get('X-WP-Total');
+    return total ? parseInt(total, 10) : 0;
+  } catch {
+    return 0;
+  }
 }

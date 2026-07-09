@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import SortDropdown from '../components/SortDropdown';
 import { fetchDataFromGoogleSheets } from '../lib/sheets';
 
@@ -12,6 +12,15 @@ type TypeProps = {
   labelFilter?: string;
 };
 
+const normalize = (s: string) =>
+  (s || '')
+    .toString()
+    .normalize('NFKD')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9 ]/g, '');
+
 const FavouriteResults = ({
   sheetId,
   columnsToHide = [],
@@ -20,7 +29,7 @@ const FavouriteResults = ({
   genreFilter,
   labelFilter,
 }: TypeProps) => {
-  const [data, setData] = useState<string[][]>([]);
+  const [rawData, setRawData] = useState<string[][] | null>(null);
   const [loading, setLoading] = useState(false);
   const [internalSortBy, setInternalSortBy] = useState('');
   const [sortColumns, setSortColumns] = useState<string[]>([]);
@@ -28,20 +37,25 @@ const FavouriteResults = ({
   const effectiveSortBy = sortBy !== undefined ? sortBy : internalSortBy;
   const showInternalDropdown = sortBy === undefined;
 
+  // Stable primitive key so the effect dependency compares by value, not array identity.
+  const columnsToHideKey = columnsToHide.join('\x00');
+
+  // Fetch and apply column-hiding once per sheetId/columnsToHide change.
+  // Filter and sort are derived in-memory below — no re-fetch on filter/sort changes.
   useEffect(() => {
-    const fetchFavouriteData = async () => {
+    const fetchFavouriteData = async (): Promise<void> => {
       if (sheetId && !loading) {
         setLoading(true);
         try {
-          const rawData = await fetchDataFromGoogleSheets(sheetId);
+          const response = await fetchDataFromGoogleSheets(sheetId);
 
-          if (!rawData || !rawData.length) {
+          if (!response || !response.length) {
             console.error('No data received from Google Sheets');
             return;
           }
 
-          const headerRow = rawData[0];
-          const dataRows = rawData.slice(1);
+          const headerRow = [...response[0]];
+          const dataRows = response.slice(1).map((row) => [...row]);
 
           columnsToHide.forEach((columnName) => {
             const columnIndex = headerRow.indexOf(columnName);
@@ -57,81 +71,7 @@ const FavouriteResults = ({
             setSortColumns([...headerRow]);
           }
 
-          let filteredRows = dataRows;
-          if (genreFilter && headerRow.includes('Genre')) {
-            const genreIndex = headerRow.indexOf('Genre');
-            filteredRows = filteredRows.filter((row: string[]) => row[genreIndex] === genreFilter);
-          }
-          if (labelFilter && headerRow.includes('Label')) {
-            const labelIndex = headerRow.indexOf('Label');
-            filteredRows = filteredRows.filter((row: string[]) => row[labelIndex] === labelFilter);
-          }
-
-          const normalize = (s: string) =>
-            (s || '')
-              .toString()
-              .normalize('NFKD')
-              .replace(/\s+/g, ' ')
-              .trim()
-              .toLowerCase()
-              .replace(/[^a-z0-9 ]/g, '');
-
-          const normalizedHeaders = headerRow.map((h: string) => normalize(h));
-
-          const chooseSortColumnIndex = () => {
-            // If no explicit sort selected (Default), don't apply any sorting and preserve sheet order
-            if (!effectiveSortBy) return -1;
-
-            const normSort = normalize(effectiveSortBy);
-            const exact = normalizedHeaders.indexOf(normSort);
-            if (exact !== -1) return exact;
-
-            const fuzzy = normalizedHeaders.findIndex((h: string) => h && h.includes(normSort));
-            if (fuzzy !== -1) return fuzzy;
-
-            const starts = normalizedHeaders.findIndex((h: string) => h && h.startsWith(normSort));
-            if (starts !== -1) return starts;
-
-            // If no match, fall back to -1
-            return -1;
-          };
-
-          const sortColumnIndex = chooseSortColumnIndex();
-          if (sortColumnIndex !== -1) {
-            const headerName = headerRow[sortColumnIndex] || '';
-            const normalizedHeaderName = normalizedHeaders[sortColumnIndex] || '';
-            const combinedHeader = `${headerName} ${normalizedHeaderName}`;
-            const isNumeric = /\b(score|year|abv|order|amount|quantity|price|count)\b/i.test(
-              combinedHeader,
-            );
-            const sortIsAscending = !isNumeric;
-
-            if (isNumeric) {
-              filteredRows.sort((a: string[], b: string[]) => {
-                const rawA = (a[sortColumnIndex] ?? '').toString().replace(/,/g, '');
-                const rawB = (b[sortColumnIndex] ?? '').toString().replace(/,/g, '');
-                const av = parseFloat(rawA);
-                const bv = parseFloat(rawB);
-                // Handle missing/invalid data: sort them after valid numbers (ascending), before (descending)
-                const aIsValid = !isNaN(av);
-                const bIsValid = !isNaN(bv);
-                if (!aIsValid && !bIsValid) return 0;
-                if (!aIsValid) return sortIsAscending ? 1 : -1;
-                if (!bIsValid) return sortIsAscending ? -1 : 1;
-                return sortIsAscending ? av - bv : bv - av;
-              });
-            } else {
-              filteredRows.sort((a: string[], b: string[]) => {
-                const av = (a[sortColumnIndex] ?? '').toString().trim().toLowerCase();
-                const bv = (b[sortColumnIndex] ?? '').toString().trim().toLowerCase();
-                const cmp = av.localeCompare(bv);
-                return sortIsAscending ? cmp : -cmp;
-              });
-            }
-          }
-
-          const updatedData = [headerRow, ...filteredRows];
-          setData(updatedData);
+          setRawData([headerRow, ...dataRows]);
         } catch (error) {
           console.error('Error processing sheet data:', error);
         } finally {
@@ -141,7 +81,74 @@ const FavouriteResults = ({
     };
 
     fetchFavouriteData();
-  }, [sheetId, JSON.stringify(columnsToHide), genreFilter, labelFilter, sortBy, internalSortBy]);
+  }, [sheetId, columnsToHideKey]);
+
+  const data = useMemo(() => {
+    if (!rawData || rawData.length === 0) return [];
+
+    const headerRow = rawData[0];
+    let filteredRows = rawData.slice(1);
+
+    if (genreFilter && headerRow.includes('Genre')) {
+      const genreIndex = headerRow.indexOf('Genre');
+      filteredRows = filteredRows.filter((row: string[]) => row[genreIndex] === genreFilter);
+    }
+    if (labelFilter && headerRow.includes('Label')) {
+      const labelIndex = headerRow.indexOf('Label');
+      filteredRows = filteredRows.filter((row: string[]) => row[labelIndex] === labelFilter);
+    }
+
+    const normalizedHeaders = headerRow.map((h: string) => normalize(h));
+
+    const chooseSortColumnIndex = () => {
+      if (!effectiveSortBy) return -1;
+
+      const normSort = normalize(effectiveSortBy);
+      const exact = normalizedHeaders.indexOf(normSort);
+      if (exact !== -1) return exact;
+
+      const fuzzy = normalizedHeaders.findIndex((h: string) => h && h.includes(normSort));
+      if (fuzzy !== -1) return fuzzy;
+
+      const starts = normalizedHeaders.findIndex((h: string) => h && h.startsWith(normSort));
+      if (starts !== -1) return starts;
+
+      return -1;
+    };
+
+    const sortColumnIndex = chooseSortColumnIndex();
+    if (sortColumnIndex !== -1) {
+      const headerName = headerRow[sortColumnIndex] || '';
+      const normalizedHeaderName = normalizedHeaders[sortColumnIndex] || '';
+      const combinedHeader = `${headerName} ${normalizedHeaderName}`;
+      const isNumeric = /\b(score|year|abv|order|amount|quantity|price|count)\b/i.test(
+        combinedHeader,
+      );
+      const sortIsAscending = !isNumeric;
+
+      filteredRows = [...filteredRows].sort((a: string[], b: string[]) => {
+        if (isNumeric) {
+          const rawA = (a[sortColumnIndex] ?? '').toString().replace(/,/g, '');
+          const rawB = (b[sortColumnIndex] ?? '').toString().replace(/,/g, '');
+          const av = parseFloat(rawA);
+          const bv = parseFloat(rawB);
+          const aIsValid = !isNaN(av);
+          const bIsValid = !isNaN(bv);
+          if (!aIsValid && !bIsValid) return 0;
+          if (!aIsValid) return sortIsAscending ? 1 : -1;
+          if (!bIsValid) return sortIsAscending ? -1 : 1;
+          return sortIsAscending ? av - bv : bv - av;
+        } else {
+          const av = (a[sortColumnIndex] ?? '').toString().trim().toLowerCase();
+          const bv = (b[sortColumnIndex] ?? '').toString().trim().toLowerCase();
+          const cmp = av.localeCompare(bv);
+          return sortIsAscending ? cmp : -cmp;
+        }
+      });
+    }
+
+    return [headerRow, ...filteredRows];
+  }, [rawData, genreFilter, labelFilter, effectiveSortBy]);
 
   return (
     <FavouritesContainer>
