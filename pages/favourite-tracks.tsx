@@ -7,6 +7,7 @@ import GenreDropdown from '../components/GenreDropdown';
 import Layout from '../components/layout';
 import PostHeader from '../components/post-header';
 import PostTitle from '../components/post-title';
+import ShareBar from '../components/share-bar';
 import FavouriteResults from './favourites-results';
 
 export default function FavouritesPage() {
@@ -115,6 +116,7 @@ export default function FavouritesPage() {
                 genreFilter={selectedGenre}
                 labelFilter={selectedLabel}
               />
+              <ShareBar title={title} url={`https://worldofwinfield.co.uk${router.asPath}`} />
               <FavouritesHubLink />
             </PostContainer>
           </>

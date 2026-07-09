@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import React from 'react';
 import '@testing-library/jest-dom';
-import { MoreStoriesProps } from '../lib/types';
+import type { MoreStoriesProps } from '../lib/types';
 import MoreStories from './more-stories';
 
 jest.mock('./post-preview', () => ({

@@ -1,12 +1,7 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import React from 'react';
 import '@testing-library/jest-dom';
-import { searchBlogPosts } from '../lib/api';
 import SearchBar from './search-bar';
-
-jest.mock('../lib/api', () => ({
-  searchBlogPosts: jest.fn(),
-}));
 
 jest.mock('../pages/_app', () => ({
   colours: {
@@ -21,11 +16,12 @@ jest.mock('../pages/_app', () => ({
   },
 }));
 
-const mockSearchBlogPosts = searchBlogPosts as jest.MockedFunction<typeof searchBlogPosts>;
+const mockFetch = jest.fn();
 
 describe('SearchBar', () => {
   beforeEach(() => {
-    mockSearchBlogPosts.mockReset();
+    mockFetch.mockReset();
+    global.fetch = mockFetch;
   });
 
   it('renders the search input with placeholder text', () => {
@@ -46,8 +42,8 @@ describe('SearchBar', () => {
   });
 
   it('shows "Searching..." on the button while the search is in progress', async () => {
-    let resolveSearch: (value: never[]) => void;
-    mockSearchBlogPosts.mockImplementation(
+    let resolveSearch: (value: unknown) => void;
+    mockFetch.mockImplementation(
       () =>
         new Promise((resolve) => {
           resolveSearch = resolve;
@@ -60,7 +56,7 @@ describe('SearchBar', () => {
 
     expect(await screen.findByText('Searching...')).toBeInTheDocument();
 
-    resolveSearch!([]);
+    resolveSearch!({ json: async () => [] });
   });
 
   it('calls onSearch with the API results after form submission', async () => {
@@ -68,7 +64,7 @@ describe('SearchBar', () => {
       { slug: 'post-one', title: 'Post One', date: '2023-01-15' },
       { slug: 'post-two', title: 'Post Two', date: '2023-06-20' },
     ];
-    mockSearchBlogPosts.mockResolvedValue(mockResults);
+    mockFetch.mockResolvedValue({ json: async () => mockResults });
 
     const onSearch = jest.fn();
     render(<SearchBar onSearch={onSearch} />);
@@ -84,8 +80,8 @@ describe('SearchBar', () => {
     });
   });
 
-  it('passes the current query value to searchBlogPosts', async () => {
-    mockSearchBlogPosts.mockResolvedValue([]);
+  it('passes the current query value to the search API', async () => {
+    mockFetch.mockResolvedValue({ json: async () => [] });
     render(<SearchBar onSearch={() => {}} />);
 
     const input = screen.getByPlaceholderText('Search blog...');
@@ -95,12 +91,12 @@ describe('SearchBar', () => {
     fireEvent.submit(form);
 
     await waitFor(() => {
-      expect(mockSearchBlogPosts).toHaveBeenCalledWith('hello world');
+      expect(mockFetch).toHaveBeenCalledWith('/api/search?q=hello%20world');
     });
   });
 
   it('restores the "Search" button label after the search completes', async () => {
-    mockSearchBlogPosts.mockResolvedValue([]);
+    mockFetch.mockResolvedValue({ json: async () => [] });
     render(<SearchBar onSearch={() => {}} />);
 
     const form = screen.getByRole('button', { name: 'Search' }).closest('form')!;

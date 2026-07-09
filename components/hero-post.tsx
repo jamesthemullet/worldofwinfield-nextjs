@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import Link from 'next/link';
 import { useMemo } from 'react';
 import { sanitize } from '../lib/sanitize';
-import { HeroPostProps } from '../lib/types';
+import type { HeroPostProps } from '../lib/types';
 import { StyledButton } from './core-components';
 import PostHeader from './post-header';
 
@@ -22,7 +22,7 @@ export default function HeroPost({
   const sanitizedExcerpt = useMemo(() => sanitize(stripExternalLinks(excerpt)), [excerpt]);
 
   return (
-    <StyledSection>
+    <StyledSection aria-label="Featured post">
       <div>
         <div>
           <PostHeader
@@ -38,7 +38,9 @@ export default function HeroPost({
         <StyledExcerptContainer>
           <StyledExcerpt dangerouslySetInnerHTML={{ __html: sanitizedExcerpt }} />
           <StyledButton>
-            <Link href={slug} aria-label={`Read more about ${title}`}>Read More</Link>
+            <Link href={slug} aria-label={`Read more about ${title}`}>
+              Read More
+            </Link>
           </StyledButton>
         </StyledExcerptContainer>
       </div>
