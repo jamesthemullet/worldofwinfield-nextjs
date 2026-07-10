@@ -86,11 +86,6 @@ export default function Nav() {
           </Link>
         </li>
         <li>
-          <Link href="/year-in-review" onClick={closeNavOnMobile}>
-            Year in Review
-          </Link>
-        </li>
-        <li>
           <Dropdown
             onMouseEnter={() => {
               if (!isMobile) {

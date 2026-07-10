@@ -66,6 +66,7 @@ export default function Index({ allPosts, preview }: IndexPageProps) {
       </Container>
       <BrowseTopicsBar>
         <Link href="/tags">Browse all topics →</Link>
+        <Link href="/year-in-review">Year in Review →</Link>
         <RssLink href="/api/feed">Subscribe via RSS</RssLink>
       </BrowseTopicsBar>
       <SearchBar onSearch={handleSearch} />
