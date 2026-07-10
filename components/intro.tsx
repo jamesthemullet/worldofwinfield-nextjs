@@ -22,18 +22,12 @@ const blockColours = [
 export default function Intro({ jamesImages }: IntroProps) {
   const [hoveredIndex, setHoveredIndex] = useState(-1);
   const [shuffledImages, setShuffledImages] = useState<JamesImagesProps['edges']>([]);
-  const [imageUrls, setImageUrls] = useState<string[]>([]);
 
   useEffect(() => {
-    const shuffledArray = [...jamesImages.edges].sort(() => Math.random() - 0.5);
-    setShuffledImages(shuffledArray);
-
-    const urls = shuffledArray.map((image) => {
-      const jamesImage = image?.node.featuredImage?.node;
-      return jamesImage?.sourceUrl || '';
-    });
-    setImageUrls(urls);
+    setShuffledImages([...jamesImages.edges].sort(() => Math.random() - 0.5));
   }, [jamesImages]);
+
+  const imageUrls = shuffledImages.map((image) => image?.node.featuredImage?.node?.sourceUrl ?? '');
 
   const handleMouseEnter = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
     setHoveredIndex(Number(e.currentTarget.dataset.index));

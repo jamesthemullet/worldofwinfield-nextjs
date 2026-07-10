@@ -8,6 +8,16 @@ import CoverImage from './cover-image';
 import Date from './date';
 import PostTitle from './post-title';
 
+const blockColours = [
+  colours.pink,
+  colours.green,
+  colours.purple,
+  colours.burgandy,
+  colours.dark,
+  colours.azure,
+  colours.blueish,
+];
+
 export default function PostHeader({
   title,
   imageSize,
@@ -19,16 +29,6 @@ export default function PostHeader({
 }: PostHeaderProps) {
   const aspectRatio =
     (coverImage?.node.mediaDetails.width ?? 0) / (coverImage?.node.mediaDetails.height ?? 1);
-
-  const blockColours = [
-    colours.pink,
-    colours.green,
-    colours.purple,
-    colours.burgandy,
-    colours.dark,
-    colours.azure,
-    colours.blueish,
-  ];
 
   const { randomColour1, randomColour2 } = useMemo(() => {
     let hash = 0;
