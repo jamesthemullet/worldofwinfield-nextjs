@@ -492,6 +492,37 @@ export async function getPostsByTag(tag: string) {
   return data.posts.nodes;
 }
 
+export async function getPostsByYear(year: number) {
+  const data = await fetchAPI(
+    `
+    query getPostsByYear($year: Int!) {
+      posts(where: { dateQuery: { year: $year } }, first: 100) {
+        nodes {
+          title
+          slug
+          date
+          id
+          excerpt
+          featuredImage {
+            node {
+              sourceUrl
+              mediaDetails {
+                height
+                width
+              }
+              caption
+            }
+          }
+        }
+      }
+    }`,
+    {
+      variables: { year },
+    },
+  );
+  return data.posts.nodes;
+}
+
 export async function getRelatedPosts(tag: string, excludeSlug: string): Promise<RelatedPost[]> {
   const data = await fetchAPI(
     `
