@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import Link from 'next/link';
 import Container from '../components/container';
 import Layout from '../components/layout';
 import PostHeader from '../components/post-header';
@@ -81,6 +82,10 @@ export default function NowPage() {
                   /now page
                 </a>
                 . If you have one too, I'd love to know.
+              </p>
+              <p>
+                Prefer the bigger picture? Check out the{' '}
+                <Link href="/year-in-review">Year in Review</Link>.
               </p>
             </Footer>
           </NowContent>
