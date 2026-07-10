@@ -26,7 +26,7 @@ export const calculateReadingTime = (htmlContent: string): number => {
   return Math.max(1, Math.ceil(wordCount / 200));
 };
 
-export const getMonthName = (monthNumber: number): string => {
+export const getMonthName = (monthNumber: number): string | undefined => {
   const monthNames = [
     'January',
     'February',

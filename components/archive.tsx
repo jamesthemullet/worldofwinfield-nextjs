@@ -1,3 +1,4 @@
+import styled from '@emotion/styled';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { StyledSelect } from './core-components';
@@ -17,7 +18,7 @@ const ArchiveDropdown = () => {
     },
   );
 
-  const handleSelectMonth = async (event: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleSelectMonth = async (event: React.ChangeEvent<HTMLSelectElement>): Promise<void> => {
     const selectedValue = event.target.value;
 
     if (selectedValue) {
@@ -36,8 +37,7 @@ const ArchiveDropdown = () => {
   return (
     <div>
       <p>Posts from the archives</p>
-      <div
-        style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', justifyContent: 'center' }}>
+      <ArchiveSelectRow>
         <label htmlFor="archive-month-select">Select month</label>
         <StyledSelect id="archive-month-select" onChange={handleSelectMonth}>
           <option value="">Select Month</option>
@@ -47,9 +47,16 @@ const ArchiveDropdown = () => {
             </option>
           ))}
         </StyledSelect>
-      </div>
+      </ArchiveSelectRow>
     </div>
   );
 };
+
+const ArchiveSelectRow = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  justify-content: center;
+`;
 
 export default ArchiveDropdown;

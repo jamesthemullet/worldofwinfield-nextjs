@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { GetStaticProps } from 'next';
+import type { GetStaticProps } from 'next';
 import { useEffect, useState } from 'react';
 import HomepageBlock from '../components/homepage-block';
 import Intro from '../components/intro';
@@ -14,7 +14,7 @@ import {
   getPostDisplayInfo,
   getRandomImage,
 } from '../lib/api';
-import { IndexPageProps, SearchResult } from '../lib/types';
+import type { IndexPageProps, SearchResult } from '../lib/types';
 
 export default function Index({
   preview,
@@ -26,7 +26,9 @@ export default function Index({
 }: IndexPageProps) {
   const [searchResults, setSearchResults] = useState<SearchResult[] | null>(null);
   const [randomImage, setRandomImage] = useState<
-    IndexPageProps['jamesImages']['edges'][0]['node']['featuredImage'] | null
+    | IndexPageProps['jamesImages']['edges'][0]['node']['featuredImage']
+    | NonNullable<IndexPageProps['randomImageSet']['images']>[number]
+    | null
   >(null);
 
   useEffect(() => {
@@ -34,11 +36,7 @@ export default function Index({
       setRandomImage(jamesImages.edges[0].node.featuredImage);
     } else {
       const randomIndex = Math.floor(Math.random() * randomImageSet.images?.length);
-      setRandomImage(
-        randomImageSet.images[
-          randomIndex
-        ] as unknown as IndexPageProps['jamesImages']['edges'][0]['node']['featuredImage'],
-      );
+      setRandomImage(randomImageSet.images[randomIndex]);
     }
   }, [randomImageSet]);
 
@@ -336,8 +334,21 @@ export default function Index({
     opengraphSiteName: `World Of Winfield`,
   };
 
+  const jsonLd: Record<string, unknown> = {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: 'World Of Winfield',
+    url: 'https://www.worldofwinfield.co.uk',
+    description: 'World Of Winfield - all about James Winfield',
+    author: {
+      '@type': 'Person',
+      name: 'James Winfield',
+      url: 'https://www.worldofwinfield.co.uk',
+    },
+  };
+
   return (
-    <Layout preview={preview} seo={seo}>
+    <Layout preview={preview} seo={seo} ogType="website" jsonLd={jsonLd}>
       <Intro jamesImages={jamesImages} />
       <HomepageBlocksContainer>
         {blocks.map((block) => (

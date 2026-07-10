@@ -1,4 +1,4 @@
-import { AlertProps } from '../lib/types';
+import type { AlertProps } from '../lib/types';
 import Container from './container';
 
 export default function Alert({ preview }: AlertProps) {
@@ -8,8 +8,7 @@ export default function Alert({ preview }: AlertProps) {
         <div>
           {preview ? (
             <>
-              This is a page preview. <a href="/api/exit-preview">Click here</a> to exit preview
-              mode.
+              This is a page preview. <a href="/api/exit-preview">Exit preview mode</a>.
             </>
           ) : (
             <></>

@@ -21,24 +21,34 @@ type Props = {
 };
 
 export default function CoverImage({ title, coverImage, imageSize, slug, heroPost }: Props) {
-  const image = coverImage?.node.sourceUrl && (
-    <Image
-      alt={`Cover Image for ${title}`}
-      src={coverImage?.node.sourceUrl}
-      sizes={imageSize || '(max-width: 768px) 100vw, 50vw'}
-      quality={75}
-      fill
-      priority={!!heroPost}
-    />
-  );
   return (
     <>
       {slug ? (
         <Link href={`/${slug}`} aria-label={title}>
-          {image}
+          {coverImage?.node.sourceUrl && (
+            <Image
+              alt=""
+              src={coverImage.node.sourceUrl}
+              sizes={imageSize || '(max-width: 768px) 100vw, 50vw'}
+              quality={75}
+              fill
+              priority={!!heroPost}
+            />
+          )}
         </Link>
       ) : (
-        <StyledCoverImage>{image}</StyledCoverImage>
+        <StyledCoverImage>
+          {coverImage?.node.sourceUrl && (
+            <Image
+              alt={`Cover Image for ${title}`}
+              src={coverImage.node.sourceUrl}
+              sizes={imageSize || '(max-width: 768px) 100vw, 50vw'}
+              quality={75}
+              fill
+              priority={!!heroPost}
+            />
+          )}
+        </StyledCoverImage>
       )}
     </>
   );

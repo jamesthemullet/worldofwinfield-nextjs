@@ -10,13 +10,13 @@ describe('Alert', () => {
   });
 
   it('renders the preview message when preview is truthy', () => {
-    render(<Alert preview="true" />);
+    render(<Alert preview={true} />);
     expect(screen.getByText(/This is a page preview/)).toBeInTheDocument();
   });
 
   it('renders an exit-preview link when in preview mode', () => {
-    render(<Alert preview="true" />);
-    const link = screen.getByRole('link', { name: /Click here/i });
+    render(<Alert preview={true} />);
+    const link = screen.getByRole('link', { name: /Exit preview mode/i });
     expect(link).toHaveAttribute('href', '/api/exit-preview');
   });
 
@@ -25,8 +25,8 @@ describe('Alert', () => {
     expect(screen.queryByRole('link')).not.toBeInTheDocument();
   });
 
-  it('renders without error when preview is an empty string', () => {
-    const { container } = render(<Alert preview="" />);
+  it('renders without error when preview is false', () => {
+    const { container } = render(<Alert preview={false} />);
     expect(container).toBeInTheDocument();
     expect(screen.queryByText(/This is a page preview/)).not.toBeInTheDocument();
   });

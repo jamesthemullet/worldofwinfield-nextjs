@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
-import { GetStaticProps } from 'next';
+import type { GetStaticProps } from 'next';
+import Link from 'next/link';
 import { useState } from 'react';
 import Container from '../components/container';
 import HeroPost from '../components/hero-post';
@@ -8,7 +9,7 @@ import MoreStories from '../components/more-stories';
 import SearchBar from '../components/search-bar';
 import SearchResults from '../components/search-results';
 import { getAllPostsForHome } from '../lib/api';
-import { IndexPageProps, SearchResult } from '../lib/types';
+import type { IndexPageProps, SearchResult } from '../lib/types';
 
 export default function Index({ allPosts, preview }: IndexPageProps) {
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
@@ -21,7 +22,7 @@ export default function Index({ allPosts, preview }: IndexPageProps) {
     setSearchResults(results);
   };
 
-  const loadMorePosts = async () => {
+  const loadMorePosts = async (): Promise<void> => {
     setIsLoading(true);
     const res = await fetch(`/api/blog-posts?after=${endCursor}`);
     const data = await res.json();
@@ -63,6 +64,11 @@ export default function Index({ allPosts, preview }: IndexPageProps) {
           </LoadMoreContainer>
         )}
       </Container>
+      <BrowseTopicsBar>
+        <Link href="/tags">Browse all topics →</Link>
+        <Link href="/year-in-review">Year in Review →</Link>
+        <RssLink href="/api/feed">Subscribe via RSS</RssLink>
+      </BrowseTopicsBar>
       <SearchBar onSearch={handleSearch} />
       <SearchResults searchResults={searchResults} />
     </Layout>
@@ -77,6 +83,34 @@ export const getStaticProps: GetStaticProps = async ({ preview = false }) => {
     revalidate: 3600,
   };
 };
+
+const BrowseTopicsBar = styled.div`
+  text-align: center;
+  padding: 1rem 0;
+
+  a {
+    font-size: 1rem;
+    color: #000;
+    text-decoration: none;
+    font-weight: 600;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+`;
+
+const RssLink = styled.a`
+  display: block;
+  font-size: 0.875rem;
+  color: #000;
+  text-decoration: none;
+  margin-top: 0.5rem;
+
+  &:hover {
+    text-decoration: underline;
+  }
+`;
 
 const LoadMoreContainer = styled.div`
   display: flex;

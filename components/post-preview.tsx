@@ -3,7 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useMemo } from 'react';
 import { sanitize } from '../lib/sanitize';
-import { PostPreviewProps } from '../lib/types';
+import type { PostPreviewProps } from '../lib/types';
 import { colours } from '../pages/_app';
 import DateComponent from './date';
 
