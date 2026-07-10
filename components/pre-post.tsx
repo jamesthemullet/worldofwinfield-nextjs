@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { PrePostProps } from '../lib/types';
+import type { PrePostProps } from '../lib/types';
 import { calculateReadingTime } from './utils';
 
 export default function PrePost({ tags, date, content }: PrePostProps) {

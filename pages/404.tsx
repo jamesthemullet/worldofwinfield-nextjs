@@ -5,9 +5,9 @@ import Container from '../components/container';
 import Layout from '../components/layout';
 import { colours } from '../pages/_app';
 
-interface BlockProps {
+type BlockProps = {
   backgroundColour: string;
-}
+};
 
 const baseColours = [
   colours.pink,
@@ -44,7 +44,7 @@ export default function Custom404() {
   };
 
   return (
-    <Layout preview="" seo={seo} title="404 - Page Not Found">
+    <Layout preview={null} seo={seo} title="404 - Page Not Found">
       <Container>
         <article>
           <Grid>

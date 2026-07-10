@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import DOMPurify from 'dompurify';
 import { useMemo } from 'react';
-import { PostBodyProps } from '../lib/types';
+import type { PostBodyProps } from '../lib/types';
 import { colours } from '../pages/_app';
 
 const resolveDataSrc = (html: string): string =>

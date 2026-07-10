@@ -1,7 +1,7 @@
 import createCache, { EmotionCache } from '@emotion/cache';
 import { CacheProvider, css, Global } from '@emotion/react';
 import { GoogleAnalytics } from '@next/third-parties/google';
-import { AppProps } from 'next/app';
+import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import Nav from '../components/nav';
 

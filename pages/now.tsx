@@ -1,7 +1,9 @@
 import styled from '@emotion/styled';
+import Link from 'next/link';
 import Container from '../components/container';
 import Layout from '../components/layout';
 import PostHeader from '../components/post-header';
+import ShareBar from '../components/share-bar';
 import { NOW_LAST_UPDATED } from '../data/now-meta';
 import { colours } from './_app';
 
@@ -14,7 +16,7 @@ export default function NowPage() {
   };
 
   return (
-    <Layout preview={null} title="Now" seo={seo}>
+    <Layout preview={null} title="Now" seo={seo} ogType="website">
       <Container>
         <PostContainer>
           <StyledPostHeader>
@@ -68,6 +70,11 @@ export default function NowPage() {
               </p>
             </Section>
 
+            <ShareBar
+              title="What I'm Up To Now — World Of Winfield"
+              url="https://worldofwinfield.co.uk/now"
+            />
+
             <Footer>
               <p>
                 This is a{' '}
@@ -75,6 +82,10 @@ export default function NowPage() {
                   /now page
                 </a>
                 . If you have one too, I'd love to know.
+              </p>
+              <p>
+                Prefer the bigger picture? Check out the{' '}
+                <Link href="/year-in-review">Year in Review</Link>.
               </p>
             </Footer>
           </NowContent>
