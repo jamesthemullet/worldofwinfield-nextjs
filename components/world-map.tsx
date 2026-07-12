@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import type { Feature, Geometry } from 'geojson';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { ComposableMap, Geographies, Geography, ZoomableGroup } from 'react-simple-maps';
 import countries110m from 'world-atlas/countries-110m.json';
 import { colours } from '../pages/_app';
@@ -59,7 +59,7 @@ export default function WorldMap({ visitedCountries }: WorldMapProps) {
   const [zoom, setZoom] = useState(MIN_ZOOM);
   const [center, setCenter] = useState<[number, number]>(DEFAULT_CENTER);
 
-  const visitedSet = new Set(visitedCountries.map(normalise));
+  const visitedSet = useMemo(() => new Set(visitedCountries.map(normalise)), [visitedCountries]);
 
   const zoomIn = () => setZoom((current) => Math.min(current * 1.5, MAX_ZOOM));
   const zoomOut = () => setZoom((current) => Math.max(current / 1.5, MIN_ZOOM));
