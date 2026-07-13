@@ -195,7 +195,8 @@ const YearPostExcerpt = styled.div`
 `;
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const year = parseInt(params?.year as string, 10);
+  const yearParam = Array.isArray(params?.year) ? params.year[0] : params?.year;
+  const year = parseInt(yearParam ?? '', 10);
   const posts = await getPostsByYear(year);
 
   return {

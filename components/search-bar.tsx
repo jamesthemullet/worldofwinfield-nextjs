@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import React, { useState } from 'react';
-import type { SearchBarProps } from '../lib/types';
+import type { SearchBarProps, SearchResult } from '../lib/types';
 import { colours } from '../pages/_app';
 import { StyledButton, StyledInput } from './core-components';
 
@@ -17,7 +17,7 @@ const SearchBar = ({ onSearch }: SearchBarProps) => {
     e.preventDefault();
     setLoading(true);
     const res = await fetch(`/api/search?q=${encodeURIComponent(query)}`);
-    const searchResults = await res.json();
+    const searchResults = (await res.json()) as SearchResult[];
     setLoading(false);
     onSearch(searchResults);
   };

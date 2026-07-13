@@ -204,7 +204,7 @@ const ContinueReadingLink = styled(Link)<{ colour: string; textcolour: string }>
 `;
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const tag = params?.tag as string;
+  const tag = (Array.isArray(params?.tag) ? params.tag[0] : params?.tag) ?? '';
   const data = await getPostsByTag(tag);
 
   return {

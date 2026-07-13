@@ -25,7 +25,7 @@ export default function Index({ allPosts, preview }: IndexPageProps) {
   const loadMorePosts = async (): Promise<void> => {
     setIsLoading(true);
     const res = await fetch(`/api/blog-posts?after=${endCursor}`);
-    const data = await res.json();
+    const data = (await res.json()) as IndexPageProps['allPosts'];
     setPosts((prev) => [...prev, ...data.edges]);
     setHasNextPage(data.pageInfo.hasNextPage);
     setEndCursor(data.pageInfo.endCursor);
