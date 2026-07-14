@@ -1,4 +1,4 @@
-type SinglePostProps = {
+export type SinglePostProps = {
   slug: string;
   title: string;
   featuredImage: {
@@ -409,6 +409,7 @@ export type LayoutProps = {
   articleDate?: string;
   articleModified?: string;
   articleAuthor?: string;
+  jsonLd?: Record<string, unknown>;
 };
 
 export type HeroPostProps = {
@@ -512,4 +513,13 @@ export type ArchivePageProps = {
 
 export type TagIndexPageProps = {
   tags: { name: string; count: number }[];
+};
+
+export type YearInReviewProps = {
+  posts: TagsPostProps['posts'];
+  year: number;
+};
+
+export type YearInReviewIndexPageProps = {
+  years: number[];
 };

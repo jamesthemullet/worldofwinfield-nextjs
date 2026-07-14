@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { GetStaticProps } from 'next';
+import type { GetStaticProps } from 'next';
 import Link from 'next/link';
 import { useState } from 'react';
 import Container from '../components/container';
@@ -9,7 +9,7 @@ import MoreStories from '../components/more-stories';
 import SearchBar from '../components/search-bar';
 import SearchResults from '../components/search-results';
 import { getAllPostsForHome } from '../lib/api';
-import { IndexPageProps, SearchResult } from '../lib/types';
+import type { IndexPageProps, SearchResult } from '../lib/types';
 
 export default function Index({ allPosts, preview }: IndexPageProps) {
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
@@ -66,6 +66,7 @@ export default function Index({ allPosts, preview }: IndexPageProps) {
       </Container>
       <BrowseTopicsBar>
         <Link href="/tags">Browse all topics →</Link>
+        <Link href="/year-in-review">Year in Review →</Link>
         <RssLink href="/api/feed">Subscribe via RSS</RssLink>
       </BrowseTopicsBar>
       <SearchBar onSearch={handleSearch} />

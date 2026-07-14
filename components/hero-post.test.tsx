@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import React from 'react';
 import '@testing-library/jest-dom';
-import { HeroPostProps } from '../lib/types';
+import type { HeroPostProps } from '../lib/types';
 import HeroPost from './hero-post';
 
 jest.mock('dompurify', () => ({

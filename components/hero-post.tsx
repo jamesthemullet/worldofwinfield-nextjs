@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import Link from 'next/link';
 import { useMemo } from 'react';
 import { sanitize } from '../lib/sanitize';
-import { HeroPostProps } from '../lib/types';
+import type { HeroPostProps } from '../lib/types';
 import { StyledButton } from './core-components';
 import PostHeader from './post-header';
 

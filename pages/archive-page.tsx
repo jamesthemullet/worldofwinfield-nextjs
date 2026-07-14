@@ -9,16 +9,16 @@ import PostHeader from '../components/post-header';
 import PostTitle from '../components/post-title';
 import { getMonthName } from '../components/utils';
 import { getPostsByDate } from '../lib/api';
-import { ArchivePageProps } from '../lib/types';
+import type { ArchivePageProps } from '../lib/types';
 import { colours } from './_app';
 
-const getPrevMonth = (month: number, year: number) =>
+const getPrevMonth = (month: number, year: number): { month: number; year: number } =>
   month === 1 ? { month: 12, year: year - 1 } : { month: month - 1, year };
 
-const getNextMonth = (month: number, year: number) =>
+const getNextMonth = (month: number, year: number): { month: number; year: number } =>
   month === 12 ? { month: 1, year: year + 1 } : { month: month + 1, year };
 
-const isFuture = (month: number, year: number) => {
+const isFuture = (month: number, year: number): boolean => {
   const now = new Date();
   return year > now.getFullYear() || (year === now.getFullYear() && month > now.getMonth() + 1);
 };
@@ -97,8 +97,11 @@ const ArchivePage = ({ posts: { posts }, month, year }: ArchivePageProps) => {
 };
 
 export async function getServerSideProps({ query }: GetServerSidePropsContext) {
-  const month = parseInt(query.month as string, 10);
-  const year = parseInt(query.year as string, 10);
+  const month = parseInt(
+    Array.isArray(query.month) ? (query.month[0] ?? '') : (query.month ?? ''),
+    10,
+  );
+  const year = parseInt(Array.isArray(query.year) ? (query.year[0] ?? '') : (query.year ?? ''), 10);
 
   if (isNaN(month) || month < 1 || month > 12) {
     return { notFound: true };

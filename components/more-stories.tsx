@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { MoreStoriesProps } from '../lib/types';
+import type { MoreStoriesProps } from '../lib/types';
 import PostPreview from './post-preview';
 
 export default function MoreStories({ posts }: MoreStoriesProps) {

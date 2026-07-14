@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { GetStaticProps } from 'next';
+import type { GetStaticProps } from 'next';
 import ErrorPage from 'next/error';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -10,7 +10,7 @@ import PostTitle from '../components/post-title';
 import RelatedSections from '../components/related-sections';
 import { filterPostsByTag } from '../lib/api';
 import { sanitize } from '../lib/sanitize';
-import { PostsProps } from '../lib/types';
+import type { PostsProps } from '../lib/types';
 import { colours } from './_app';
 
 const stripReadMoreParagraph = (excerpt: string) => {

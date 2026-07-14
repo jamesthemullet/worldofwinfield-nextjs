@@ -5,6 +5,7 @@ import Layout from '../components/layout';
 import PostHeader from '../components/post-header';
 import PostTitle from '../components/post-title';
 import ShareBar from '../components/share-bar';
+import WorldMap from '../components/world-map';
 
 const processData = (
   rawData: string[][],
@@ -107,6 +108,7 @@ export default function CountriesVisited({
     countries.some((item) => item.visited),
   ).length;
   const totalContinents = Object.keys(transformedData).length;
+  const visitedCountries = allCountries.filter((item) => item.visited).map((item) => item.country);
 
   const seo = {
     opengraphTitle: 'Countries Visited | World Of Winfield',
@@ -139,6 +141,7 @@ export default function CountriesVisited({
                   <StatLabel>continents explored</StatLabel>
                 </StatItem>
               </StatBlock>
+              <WorldMap visitedCountries={visitedCountries} />
               <ShareBar
                 title={`I've visited ${totalVisited} of ${totalCountries} countries across ${continentsExplored} continents! 🌍`}
                 url="https://worldofwinfield.co.uk/countries-visited"

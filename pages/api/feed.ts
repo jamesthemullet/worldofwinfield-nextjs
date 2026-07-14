@@ -1,15 +1,22 @@
-import { NextApiRequest, NextApiResponse } from 'next';
+import type { NextApiRequest, NextApiResponse } from 'next';
 import { getAllPostsForHome } from '../../lib/api';
+
+type FeedPostNode = {
+  title: string;
+  slug: string;
+  date: string;
+  excerpt: string;
+};
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'GET') return res.status(405).json({ message: 'Method Not Allowed' });
   const data = await getAllPostsForHome(false);
-  const posts = data.edges.map(({ node }: { node: Record<string, unknown> }) => node);
+  const posts = data.edges.map(({ node }: { node: FeedPostNode }) => node);
 
   const siteUrl = 'https://www.worldofwinfield.com';
 
   const items = posts
-    .map((post: { title: string; slug: string; date: string; excerpt: string }) => {
+    .map((post: FeedPostNode) => {
       const excerpt = post.excerpt ? post.excerpt.replace(/<[^>]*>/g, '').trim() : '';
       return `
     <item>

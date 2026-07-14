@@ -2,7 +2,11 @@ import type { AdjacentPost, RelatedPost } from './types';
 
 const API_URL = process.env.NEXT_PUBLIC_WORDPRESS_API_URL;
 
-async function fetchAPI(query = '', { variables }: { variables?: Record<string, unknown> } = {}) {
+type FetchAPIOptions = {
+  variables?: Record<string, unknown>;
+};
+
+async function fetchAPI(query = '', { variables }: FetchAPIOptions = {}) {
   const headers: Record<string, string> = { 'Content-Type': 'application/json' };
 
   if (process.env.WORDPRESS_AUTH_REFRESH_TOKEN) {
@@ -299,7 +303,7 @@ export async function getPost(id: string, idType = 'SLUG') {
 
 export async function getPostDisplayInfo(ids: string[]) {
   const posts = await Promise.all(
-    ids.map((id: string) =>
+    ids.map((id) =>
       fetchAPI(
         `
       query Post($id: ID!, $idType: PostIdType!) {
@@ -488,6 +492,37 @@ export async function getPostsByTag(tag: string) {
   return data.posts.nodes;
 }
 
+export async function getPostsByYear(year: number) {
+  const data = await fetchAPI(
+    `
+    query getPostsByYear($year: Int!) {
+      posts(where: { dateQuery: { year: $year } }, first: 100) {
+        nodes {
+          title
+          slug
+          date
+          id
+          excerpt
+          featuredImage {
+            node {
+              sourceUrl
+              mediaDetails {
+                height
+                width
+              }
+              caption
+            }
+          }
+        }
+      }
+    }`,
+    {
+      variables: { year },
+    },
+  );
+  return data.posts.nodes;
+}
+
 export async function getRelatedPosts(tag: string, excludeSlug: string): Promise<RelatedPost[]> {
   const data = await fetchAPI(
     `
@@ -563,8 +598,8 @@ export async function getAdjacentPosts(date: string): Promise<{
   );
 
   return {
-    previousPost: (data.previousPost?.nodes?.[0] as { title: string; slug: string }) ?? null,
-    nextPost: (data.nextPost?.nodes?.[0] as { title: string; slug: string }) ?? null,
+    previousPost: (data.previousPost?.nodes?.[0] as AdjacentPost) ?? null,
+    nextPost: (data.nextPost?.nodes?.[0] as AdjacentPost) ?? null,
   };
 }
 
@@ -601,6 +636,8 @@ export async function getRandomImage(randomMonth: number, randomYear: number) {
   };
 }
 
+type TagNode = { name: string; slug: string; count: number | null };
+
 export async function getAllTags(): Promise<{ name: string; slug: string; count: number }[]> {
   const data = await fetchAPI(`
     {
@@ -614,15 +651,8 @@ export async function getAllTags(): Promise<{ name: string; slug: string; count:
     }
   `);
   return (data?.tags?.nodes ?? [])
-    .filter(
-      (tag: { name: string; slug: string; count: number | null }) => tag.count && tag.count > 0,
-    )
-    .sort(
-      (
-        a: { name: string; slug: string; count: number },
-        b: { name: string; slug: string; count: number },
-      ) => b.count - a.count,
-    );
+    .filter((tag: TagNode) => tag.count && tag.count > 0)
+    .sort((a: TagNode, b: TagNode) => (b.count ?? 0) - (a.count ?? 0));
 }
 
 export async function getTotalPostCount(): Promise<number> {

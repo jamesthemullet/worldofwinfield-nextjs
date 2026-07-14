@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { LayoutProps } from '../lib/types';
+import type { LayoutProps } from '../lib/types';
 import Alert from './alert';
 import Footer from './footer';
 import Meta from './meta';
@@ -13,6 +13,7 @@ export default function Layout({
   articleDate,
   articleModified,
   articleAuthor,
+  jsonLd,
 }: LayoutProps) {
   return (
     <>
@@ -26,6 +27,7 @@ export default function Layout({
         articleDate={articleDate}
         articleModified={articleModified}
         articleAuthor={articleAuthor}
+        jsonLd={jsonLd}
       />
       <PageWrapper>
         <StyledDiv>

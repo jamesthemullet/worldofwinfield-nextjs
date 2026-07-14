@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import { sanitize } from '../lib/sanitize';
-import { PostTitleProps } from '../lib/types';
+import type { PostTitleProps } from '../lib/types';
 import { colours } from '../pages/_app';
 
 export default function PostTitle({ backgroundColour, children }: PostTitleProps) {

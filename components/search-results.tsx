@@ -3,7 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 import { sanitize } from '../lib/sanitize';
-import { SearchResultsProps } from '../lib/types';
+import type { SearchResultsProps } from '../lib/types';
 import { colours } from '../pages/_app';
 
 const blockColours = [
@@ -16,7 +16,7 @@ const blockColours = [
   colours.blueish,
 ];
 
-const getColourFromTitle = (title: string) => {
+const getColourFromTitle = (title: string): string => {
   let hash = 0;
   for (let i = 0; i < title.length; i++) {
     hash = (hash * 31 + title.charCodeAt(i)) & 0xffffffff;
@@ -24,7 +24,7 @@ const getColourFromTitle = (title: string) => {
   return blockColours[Math.abs(hash) % blockColours.length];
 };
 
-const stripReadMoreParagraph = (excerpt: string) => {
+const stripReadMoreParagraph = (excerpt: string): string => {
   return excerpt.replace(/\s*<a\b[^>]*>.*?<\/a>/gi, '').trim();
 };
 
