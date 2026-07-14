@@ -191,20 +191,3 @@ const StyledIcon = styled.div`
   align-items: center;
   justify-content: center;
 `;
-
-export async function getStaticProps() {
-  const results = await Promise.all(
-    categories.map(async ({ title, sheetId }) => {
-      const data = await fetchDataFromGoogleSheets(sheetId);
-      const count = data && data.length > 1 ? data.length - 1 : null;
-      return [title, count] as [string, number | null];
-    }),
-  );
-
-  return {
-    props: {
-      counts: Object.fromEntries(results),
-    },
-    revalidate: 86400,
-  };
-}
