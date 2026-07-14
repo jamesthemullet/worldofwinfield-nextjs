@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import Image from 'next/image';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import type { IntroProps, JamesImagesProps } from '../lib/types';
 import { colours } from '../pages/_app';
 
@@ -27,7 +27,10 @@ export default function Intro({ jamesImages }: IntroProps) {
     setShuffledImages([...jamesImages.edges].sort(() => Math.random() - 0.5));
   }, [jamesImages.edges]);
 
-  const imageUrls = shuffledImages.map((image) => image?.node.featuredImage?.node?.sourceUrl ?? '');
+  const imageUrls = useMemo(
+    () => shuffledImages.map((image) => image?.node.featuredImage?.node?.sourceUrl ?? ''),
+    [shuffledImages],
+  );
 
   const handleMouseEnter = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
     setHoveredIndex(Number(e.currentTarget.dataset.index));
