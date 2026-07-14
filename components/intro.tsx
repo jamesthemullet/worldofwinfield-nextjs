@@ -25,7 +25,7 @@ export default function Intro({ jamesImages }: IntroProps) {
 
   useEffect(() => {
     setShuffledImages([...jamesImages.edges].sort(() => Math.random() - 0.5));
-  }, [jamesImages]);
+  }, [jamesImages.edges]);
 
   const imageUrls = shuffledImages.map((image) => image?.node.featuredImage?.node?.sourceUrl ?? '');
 
