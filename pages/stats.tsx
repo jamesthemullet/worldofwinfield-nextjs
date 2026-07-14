@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import type { GetStaticProps } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import Container from '../components/container';
@@ -207,7 +208,7 @@ export default function Stats({
   );
 }
 
-export async function getStaticProps() {
+export const getStaticProps: GetStaticProps<StatsProps> = async () => {
   const [
     countriesData,
     booksData,

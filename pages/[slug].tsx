@@ -102,7 +102,7 @@ export default function Post({ post, preview, relatedPosts, adjacentPosts }: Pos
 }
 
 export const getStaticProps: GetStaticProps = async ({ params, preview = false }) => {
-  const slug = params?.slug as string;
+  const slug = Array.isArray(params?.slug) ? params.slug[0] : params?.slug;
 
   if (!slug || !/^[a-zA-Z0-9-]+$/.test(slug)) {
     return { notFound: true };
