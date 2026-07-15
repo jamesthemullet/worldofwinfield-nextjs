@@ -38,7 +38,7 @@ const getColourFromTitle = (title: string): string => {
 const getTextColour = (bg: string): string =>
   lightBackgrounds.has(bg) ? colours.dark : colours.white;
 
-const stripReadMoreParagraph = (excerpt: string): string => {
+export const stripReadMoreParagraph = (excerpt: string): string => {
   return excerpt.replace(/\s*<a\b[^>]*>.*?<\/a>/gi, '').trim();
 };
 
