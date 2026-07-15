@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import type { Feature, Geometry } from 'geojson';
-import { useState } from 'react';
+import { type JSX, useState } from 'react';
 import { ComposableMap, Geographies, Geography, ZoomableGroup } from 'react-simple-maps';
 import countries110m from 'world-atlas/countries-110m.json';
 import { colours } from '../pages/_app';
@@ -54,7 +54,7 @@ const dropFrenchGuiana = (features: Feature[]): Feature[] =>
     } as Feature;
   });
 
-export default function WorldMap({ visitedCountries }: WorldMapProps) {
+export default function WorldMap({ visitedCountries }: WorldMapProps): JSX.Element {
   const [hovered, setHovered] = useState<string | null>(null);
   const [zoom, setZoom] = useState(MIN_ZOOM);
   const [center, setCenter] = useState<[number, number]>(DEFAULT_CENTER);

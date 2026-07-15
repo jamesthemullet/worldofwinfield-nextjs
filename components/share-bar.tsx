@@ -1,7 +1,5 @@
-'use client';
-
 import styled from '@emotion/styled';
-import { useState } from 'react';
+import { type JSX, useState } from 'react';
 import { colours } from '../pages/_app';
 
 type ShareBarProps = {
@@ -9,7 +7,7 @@ type ShareBarProps = {
   url: string;
 };
 
-export default function ShareBar({ title, url }: ShareBarProps) {
+export default function ShareBar({ title, url }: ShareBarProps): JSX.Element {
   const [copied, setCopied] = useState(false);
 
   const encodedUrl = encodeURIComponent(url);

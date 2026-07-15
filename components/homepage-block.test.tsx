@@ -60,6 +60,20 @@ describe('HomepageBlock', () => {
     expect(container.querySelector('img')).toHaveAttribute('src', '/icons/004-record.png');
   });
 
+  it('renders a link with the correct aria-label and href when icon prop is provided', () => {
+    render(
+      <HomepageBlock
+        title="Test Post"
+        url="/test-post"
+        size={1}
+        jamesImages={mockJamesImages}
+        icon="004-record"
+      />,
+    );
+    expect(screen.getByRole('link', { name: 'Test Post' })).toHaveAttribute('href', '/test-post');
+    expect(screen.getByText('Test Post')).toBeInTheDocument();
+  });
+
   it('renders a link with the correct aria-label and href when url is provided', () => {
     render(
       <HomepageBlock
@@ -114,5 +128,20 @@ describe('HomepageBlock', () => {
     );
     expect(screen.getByText('My Blog Post')).toBeInTheDocument();
     expect(screen.getByText('2023-01-15')).toBeInTheDocument();
+  });
+
+  it('hides title text but shows date when title is "random photo"', () => {
+    render(
+      <HomepageBlock
+        title="random photo"
+        url="/random-photo"
+        size={1}
+        date="2024-01-15"
+        jamesImages={mockJamesImages}
+        image={{ node: { sourceUrl: 'https://example.com/post.jpg' } }}
+      />,
+    );
+    expect(screen.queryByText('random photo')).not.toBeInTheDocument();
+    expect(screen.getByText('2024-01-15')).toBeInTheDocument();
   });
 });

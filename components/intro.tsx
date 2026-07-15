@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import Image from 'next/image';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { type JSX, useCallback, useEffect, useState } from 'react';
 import type { IntroProps, JamesImagesProps } from '../lib/types';
 import { colours } from '../pages/_app';
 
@@ -19,27 +19,29 @@ const blockColours = [
   colours.blueish,
 ];
 
-export default function Intro({ jamesImages }: IntroProps) {
+export default function Intro({ jamesImages }: IntroProps): JSX.Element {
   const [hoveredIndex, setHoveredIndex] = useState(-1);
   const [shuffledImages, setShuffledImages] = useState<JamesImagesProps['edges']>([]);
-  const [imageUrls, setImageUrls] = useState<string[]>([]);
 
   useEffect(() => {
-    const shuffledArray = [...jamesImages.edges].sort(() => Math.random() - 0.5);
-    setShuffledImages(shuffledArray);
+    setShuffledImages([...jamesImages.edges].sort(() => Math.random() - 0.5));
+  }, [jamesImages.edges]);
 
-    const urls = shuffledArray.map((image) => {
-      const jamesImage = image?.node.featuredImage?.node;
-      return jamesImage?.sourceUrl || '';
-    });
-    setImageUrls(urls);
-  }, [jamesImages]);
+  const imageUrls = shuffledImages.map((image) => image?.node.featuredImage?.node?.sourceUrl ?? '');
 
   const handleMouseEnter = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
     setHoveredIndex(Number(e.currentTarget.dataset.index));
   }, []);
 
   const handleMouseLeave = useCallback(() => {
+    setHoveredIndex(-1);
+  }, []);
+
+  const handleFocus = useCallback((e: React.FocusEvent<HTMLDivElement>) => {
+    setHoveredIndex(Number(e.currentTarget.dataset.index));
+  }, []);
+
+  const handleBlur = useCallback(() => {
     setHoveredIndex(-1);
   }, []);
 
@@ -57,8 +59,11 @@ export default function Intro({ jamesImages }: IntroProps) {
               key={index}
               color={blockColours[getColour(index)]}
               data-index={index}
+              tabIndex={0}
               onMouseEnter={handleMouseEnter}
-              onMouseLeave={handleMouseLeave}>
+              onMouseLeave={handleMouseLeave}
+              onFocus={handleFocus}
+              onBlur={handleBlur}>
               <FlipContainer>
                 <Flipper flipped={hoveredIndex === index}>
                   <Front>{letter}</Front>
@@ -120,6 +125,11 @@ const Block = styled.div`
   @media (min-width: 769px) {
     background-color: ${(props) => props.color};
     border: 5px solid ${colours.white};
+  }
+
+  &:focus-visible {
+    outline: 3px solid ${colours.white};
+    outline-offset: -3px;
   }
 `;
 

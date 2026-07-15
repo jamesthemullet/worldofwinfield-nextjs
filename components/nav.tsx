@@ -1,8 +1,8 @@
 import styled from '@emotion/styled';
 import Link from 'next/link';
-import { useEffect, useRef, useState } from 'react';
+import { type JSX, useEffect, useRef, useState } from 'react';
 
-export default function Nav() {
+export default function Nav(): JSX.Element {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isTravelDropdownOpen, setIsTravelDropdownOpen] = useState(false);
   const [isFavouritesDropdownOpen, setIsFavouritesDropdownOpen] = useState(false);
@@ -22,7 +22,7 @@ export default function Nav() {
   const travelArrowRef = useRef<HTMLButtonElement>(null);
 
   const toggleDropdown = () => {
-    setIsDropdownOpen(!isDropdownOpen);
+    setIsDropdownOpen((prev) => !prev);
   };
 
   const toggleFavouritesDropdown = (open?: boolean) => {

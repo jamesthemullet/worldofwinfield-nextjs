@@ -1,8 +1,9 @@
 import styled from '@emotion/styled';
+import type { JSX } from 'react';
 import type { MoreStoriesProps } from '../lib/types';
 import PostPreview from './post-preview';
 
-export default function MoreStories({ posts }: MoreStoriesProps) {
+export default function MoreStories({ posts }: MoreStoriesProps): JSX.Element {
   return (
     <StyledSection aria-label="More posts">
       <div>

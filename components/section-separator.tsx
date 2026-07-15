@@ -1,18 +1,9 @@
 import styled from '@emotion/styled';
-import { useEffect, useState } from 'react';
+import { type JSX, useEffect, useState } from 'react';
+import { blockColours } from '../lib/block-colours';
 import { colours } from '../pages/_app';
 
-const blockColours = [
-  colours.pink,
-  colours.green,
-  colours.purple,
-  colours.burgandy,
-  colours.dark,
-  colours.azure,
-  colours.blueish,
-];
-
-export default function SectionSeparator() {
+export default function SectionSeparator(): JSX.Element {
   const [backgroundColour, setBackgroundColour] = useState(blockColours[0]);
 
   useEffect(() => {
