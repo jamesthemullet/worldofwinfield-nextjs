@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import Link from 'next/link';
+import type { JSX } from 'react';
 
 const FavouritesHubLink = (): JSX.Element => (
   <Wrapper>

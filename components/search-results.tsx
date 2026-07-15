@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import Image from 'next/image';
 import Link from 'next/link';
-import React from 'react';
+import React, { type JSX } from 'react';
 import { sanitize } from '../lib/sanitize';
 import type { SearchResultsProps } from '../lib/types';
 import { colours } from '../pages/_app';

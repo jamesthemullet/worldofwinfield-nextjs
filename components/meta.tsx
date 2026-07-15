@@ -1,5 +1,6 @@
 import Head from 'next/head';
 import { useRouter } from 'next/router';
+import type { JSX } from 'react';
 import type { SeoProps } from '../lib/types';
 
 type MetaProps = {

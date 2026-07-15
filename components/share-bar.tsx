@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { useState } from 'react';
+import { type JSX, useState } from 'react';
 import { colours } from '../pages/_app';
 
 type ShareBarProps = {

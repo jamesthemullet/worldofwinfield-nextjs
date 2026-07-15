@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { useEffect, useState } from 'react';
+import { type JSX, useEffect, useState } from 'react';
 import { blockColours } from '../lib/block-colours';
 import { colours } from '../pages/_app';
 

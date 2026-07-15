@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import type { JSX } from 'react';
 import type { MoreStoriesProps } from '../lib/types';
 import PostPreview from './post-preview';
 

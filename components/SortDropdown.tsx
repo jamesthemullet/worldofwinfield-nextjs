@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import type { JSX } from 'react';
 
 type SortDropdownProps = {
   options: string[];

@@ -1,3 +1,4 @@
+import type { JSX } from 'react';
 import type { AlertProps } from '../lib/types';
 import Container from './container';
 

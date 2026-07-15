@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useMemo } from 'react';
+import { type JSX, useMemo } from 'react';
 import { getColourFromTitle } from '../lib/block-colours';
 import { sanitize, stripExternalLinks } from '../lib/sanitize';
 import type { PostPreviewProps } from '../lib/types';

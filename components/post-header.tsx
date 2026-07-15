@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import Link from 'next/link';
-import { useMemo } from 'react';
+import { type JSX, useMemo } from 'react';
 import { getColoursFromTitle } from '../lib/block-colours';
 import { sanitize } from '../lib/sanitize';
 import type { PostHeaderProps } from '../lib/types';

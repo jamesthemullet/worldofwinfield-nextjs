@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useEffect, useMemo, useState } from 'react';
+import { type JSX, useEffect, useMemo, useState } from 'react';
 import { blockColours } from '../lib/block-colours';
 import type { JamesImagesProps } from '../lib/types';
 import { colours } from '../pages/_app';

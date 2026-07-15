@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import type { JSX } from 'react';
 import type { PrePostProps } from '../lib/types';
 import { calculateReadingTime } from './utils';
 

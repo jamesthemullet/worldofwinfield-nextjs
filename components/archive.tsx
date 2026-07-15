@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { type JSX } from 'react';
 import { StyledSelect } from './core-components';
 import { getMonthNumber } from './utils';
 

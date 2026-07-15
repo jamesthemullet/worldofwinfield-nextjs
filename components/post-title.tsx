@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import type { JSX } from 'react';
 import { sanitize } from '../lib/sanitize';
 import type { PostTitleProps } from '../lib/types';
 import { colours } from '../pages/_app';

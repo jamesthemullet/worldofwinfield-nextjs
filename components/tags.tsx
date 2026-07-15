@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import Link from 'next/link';
+import type { JSX } from 'react';
 import type { TagsProps } from '../lib/types';
 
 export default function Tags({ tags }: TagsProps): JSX.Element {

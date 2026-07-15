@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import type { Feature, Geometry } from 'geojson';
-import { useState } from 'react';
+import { type JSX, useState } from 'react';
 import { ComposableMap, Geographies, Geography, ZoomableGroup } from 'react-simple-maps';
 import countries110m from 'world-atlas/countries-110m.json';
 import { colours } from '../pages/_app';
