@@ -2,6 +2,7 @@ import styled from '@emotion/styled';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
+import { blockColours } from '../lib/block-colours';
 import type { JamesImagesProps } from '../lib/types';
 import { colours } from '../pages/_app';
 import { formatDate } from './search-results';
@@ -26,16 +27,6 @@ type HomePageBlockTypes = {
 
 const PLACEHOLDER = 'placeholder';
 const RANDOM_PHOTO = 'random photo';
-
-const blockColours = [
-  colours.pink,
-  colours.green,
-  colours.purple,
-  colours.burgandy,
-  colours.dark,
-  colours.azure,
-  colours.blueish,
-];
 
 export default function HomepageBlock({
   className,

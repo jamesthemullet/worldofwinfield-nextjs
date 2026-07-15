@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
-import DOMPurify from 'dompurify';
 import { useMemo } from 'react';
+import { sanitize } from '../lib/sanitize';
 import type { PostBodyProps } from '../lib/types';
 import { colours } from '../pages/_app';
 
@@ -17,13 +17,11 @@ const resolveDataSrc = (html: string): string =>
     .replace(/\bdata-srcset=/gi, 'srcset=');
 
 export default function PostBody({ content }: PostBodyProps) {
-  const sanitizedContent = useMemo(() => {
-    const resolved = resolveDataSrc(content);
-    if (typeof window === 'undefined') return resolved;
-    return DOMPurify.sanitize(resolved, {
-      ADD_ATTR: ['srcset', 'sizes', 'loading', 'decoding'],
-    }) as string;
-  }, [content]);
+  const sanitizedContent = useMemo(
+    () =>
+      sanitize(resolveDataSrc(content), { ADD_ATTR: ['srcset', 'sizes', 'loading', 'decoding'] }),
+    [content],
+  );
   return (
     <ContentContainer>
       <div dangerouslySetInnerHTML={{ __html: sanitizedContent }} />
