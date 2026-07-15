@@ -18,7 +18,8 @@ const resolveDataSrc = (html: string): string =>
 
 export default function PostBody({ content }: PostBodyProps) {
   const sanitizedContent = useMemo(
-    () => sanitize(resolveDataSrc(content), { ADD_ATTR: ['srcset', 'sizes', 'loading', 'decoding'] }),
+    () =>
+      sanitize(resolveDataSrc(content), { ADD_ATTR: ['srcset', 'sizes', 'loading', 'decoding'] }),
     [content],
   );
   return (

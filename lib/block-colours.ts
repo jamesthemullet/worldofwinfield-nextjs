@@ -25,6 +25,7 @@ export function getColourFromTitle(title: string): string {
 export function getColoursFromTitle(title: string): { colour1: string; colour2: string } {
   const hash = hashString(title);
   const index1 = Math.abs(hash) % blockColours.length;
-  const index2 = (index1 + 1 + (Math.abs(hash >> 4) % (blockColours.length - 1))) % blockColours.length;
+  const index2 =
+    (index1 + 1 + (Math.abs(hash >> 4) % (blockColours.length - 1))) % blockColours.length;
   return { colour1: blockColours[index1], colour2: blockColours[index2] };
 }
