@@ -2,10 +2,7 @@ import { processData } from '../pages/countries-visited';
 
 // Builds minimal raw data: a header row followed by the given data rows.
 // Each row has 14 columns (7 continents × 2 columns each: country + visited).
-const makeRawData = (rows: string[][]): string[][] => [
-  Array(14).fill('header'),
-  ...rows,
-];
+const makeRawData = (rows: string[][]): string[][] => [Array(14).fill('header'), ...rows];
 
 describe('processData', () => {
   it("maps 'Yes' to '✔' and any other value to an empty string", () => {
