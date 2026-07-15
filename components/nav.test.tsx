@@ -258,7 +258,7 @@ describe('Nav', () => {
     it('does not open dropdown on mouse enter when on mobile', () => {
       mockMatchMedia(true);
       render(<Nav />);
-      const arrow = screen.getByRole('button', { name: 'Toggle Travel submenu' });
+      const arrow = screen.getByRole('button', { name: 'Toggle Travel submenu', hidden: true });
       const dropdown = arrow.closest('[role="group"]')!.parentElement!;
       fireEvent.mouseEnter(dropdown);
       expect(arrow).toHaveAttribute('aria-expanded', 'false');
@@ -267,7 +267,7 @@ describe('Nav', () => {
     it('does not close dropdown on mouse leave when on mobile', () => {
       mockMatchMedia(true);
       render(<Nav />);
-      const arrow = screen.getByRole('button', { name: 'Toggle Travel submenu' });
+      const arrow = screen.getByRole('button', { name: 'Toggle Travel submenu', hidden: true });
       fireEvent.click(arrow);
       const dropdown = arrow.closest('[role="group"]')!.parentElement!;
       fireEvent.mouseLeave(dropdown);
