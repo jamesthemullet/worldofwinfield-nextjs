@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import Image from 'next/image';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { type JSX, useCallback, useEffect, useState } from 'react';
 import type { IntroProps, JamesImagesProps } from '../lib/types';
 import { colours } from '../pages/_app';
 
@@ -19,7 +19,7 @@ const blockColours = [
   colours.blueish,
 ];
 
-export default function Intro({ jamesImages }: IntroProps) {
+export default function Intro({ jamesImages }: IntroProps): JSX.Element {
   const [hoveredIndex, setHoveredIndex] = useState(-1);
   const [shuffledImages, setShuffledImages] = useState<JamesImagesProps['edges']>([]);
 

@@ -1,6 +1,7 @@
 import styled from '@emotion/styled';
 import Image from 'next/image';
 import Link from 'next/link';
+import type { JSX } from 'react';
 
 type Props = {
   title: string;
@@ -20,7 +21,13 @@ type Props = {
   heroPost?: boolean;
 };
 
-export default function CoverImage({ title, coverImage, imageSize, slug, heroPost }: Props) {
+export default function CoverImage({
+  title,
+  coverImage,
+  imageSize,
+  slug,
+  heroPost,
+}: Props): JSX.Element {
   return (
     <>
       {slug ? (

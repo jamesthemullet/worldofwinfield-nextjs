@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { useMemo } from 'react';
+import { type JSX, useMemo } from 'react';
 import { sanitize } from '../lib/sanitize';
 import type { PostBodyProps } from '../lib/types';
 import { colours } from '../pages/_app';
@@ -16,7 +16,7 @@ const resolveDataSrc = (html: string): string =>
     .replace(/\bdata-lazy-srcset=/gi, 'srcset=')
     .replace(/\bdata-srcset=/gi, 'srcset=');
 
-export default function PostBody({ content }: PostBodyProps) {
+export default function PostBody({ content }: PostBodyProps): JSX.Element {
   const sanitizedContent = useMemo(
     () =>
       sanitize(resolveDataSrc(content), { ADD_ATTR: ['srcset', 'sizes', 'loading', 'decoding'] }),

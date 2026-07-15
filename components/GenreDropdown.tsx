@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import type { JSX } from 'react';
 
 type GenreDropdownProps = {
   genres: string[];
@@ -16,7 +17,7 @@ function GenreDropdown({
   filterLabel = 'Filter by genre:',
   allOptionText = 'All Genres',
   selectId = 'genre-select',
-}: GenreDropdownProps) {
+}: GenreDropdownProps): JSX.Element {
   return (
     <Wrapper>
       <Label htmlFor={selectId}>{filterLabel}</Label>

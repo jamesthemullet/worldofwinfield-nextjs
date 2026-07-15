@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useMemo } from 'react';
+import { type JSX, useMemo } from 'react';
 import { getColourFromTitle } from '../lib/block-colours';
 import { sanitize, stripExternalLinks } from '../lib/sanitize';
 import type { PostPreviewProps } from '../lib/types';
@@ -14,7 +14,7 @@ export default function PostPreview({
   excerpt,
   slug,
   featuredImage,
-}: PostPreviewProps) {
+}: PostPreviewProps): JSX.Element {
   const sanitizedExcerpt = useMemo(() => sanitize(stripExternalLinks(excerpt)), [excerpt]);
 
   const fallbackColour = useMemo(() => getColourFromTitle(title), [title]);

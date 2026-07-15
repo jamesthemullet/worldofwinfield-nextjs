@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import Link from 'next/link';
-import { useMemo } from 'react';
+import { type JSX, useMemo } from 'react';
 import { sanitize, stripExternalLinks } from '../lib/sanitize';
 import type { HeroPostProps } from '../lib/types';
 import { StyledButton } from './core-components';
@@ -13,7 +13,7 @@ export default function HeroPost({
   author,
   slug,
   featuredImage,
-}: HeroPostProps) {
+}: HeroPostProps): JSX.Element {
   const sanitizedExcerpt = useMemo(() => sanitize(stripExternalLinks(excerpt)), [excerpt]);
 
   return (

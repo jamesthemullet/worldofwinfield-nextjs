@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import Link from 'next/link';
-import { useMemo } from 'react';
+import { type JSX, useMemo } from 'react';
 import { getColoursFromTitle } from '../lib/block-colours';
 import { sanitize } from '../lib/sanitize';
 import type { PostHeaderProps } from '../lib/types';
@@ -17,7 +17,7 @@ export default function PostHeader({
   slug,
   heroPost,
   caption,
-}: PostHeaderProps) {
+}: PostHeaderProps): JSX.Element {
   const aspectRatio =
     (coverImage?.node.mediaDetails.width ?? 0) / (coverImage?.node.mediaDetails.height ?? 1);
 
