@@ -16,7 +16,7 @@ type MetaProps = {
 export default function Meta({
   seo,
   title,
-  ogType = 'article',
+  ogType = 'website',
   articleDate,
   articleModified,
   articleAuthor,

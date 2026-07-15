@@ -17,6 +17,7 @@ export default function PostHeader({
   slug,
   heroPost,
   caption,
+  headingLevel,
 }: PostHeaderProps): JSX.Element {
   const aspectRatio =
     (coverImage?.node.mediaDetails.width ?? 0) / (coverImage?.node.mediaDetails.height ?? 1);
@@ -44,10 +45,14 @@ export default function PostHeader({
       )}
       {slug ? (
         <StyledLink href={`/${slug}`} aria-label={title}>
-          <PostTitle backgroundColour={randomColour1}>{title}</PostTitle>
+          <PostTitle backgroundColour={randomColour1} headingLevel={headingLevel}>
+            {title}
+          </PostTitle>
         </StyledLink>
       ) : (
-        <PostTitle backgroundColour={randomColour1}>{title}</PostTitle>
+        <PostTitle backgroundColour={randomColour1} headingLevel={headingLevel}>
+          {title}
+        </PostTitle>
       )}
       <div>
         <PostedContainer backgroundColour={randomColour2} colour={colours.white}>
