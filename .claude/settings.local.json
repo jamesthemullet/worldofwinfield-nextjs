@@ -30,7 +30,8 @@
       "Bash(npx playwright *)",
       "Bash(yarn test:e2e)",
       "Bash(yarn lint:fix)",
-      "Bash(yarn install *)"
+      "Bash(yarn install *)",
+      "Bash(gh api *)"
     ]
   }
 }
