@@ -2,25 +2,11 @@ import styled from '@emotion/styled';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useMemo } from 'react';
-import { sanitize } from '../lib/sanitize';
+import { getColourFromTitle } from '../lib/block-colours';
+import { sanitize, stripExternalLinks } from '../lib/sanitize';
 import type { PostPreviewProps } from '../lib/types';
 import { colours } from '../pages/_app';
 import DateComponent from './date';
-
-const blockColours = [
-  colours.pink,
-  colours.green,
-  colours.purple,
-  colours.burgandy,
-  colours.dark,
-  colours.azure,
-  colours.blueish,
-];
-
-const stripExternalLinks = (excerpt: string): string => {
-  const regex = /<a\s+(?:[^>]*?\s+)?href="https?:\/\/[^"]*"[^>]*>.*?<\/a>/g;
-  return excerpt.replace(regex, '');
-};
 
 export default function PostPreview({
   title,
@@ -31,13 +17,7 @@ export default function PostPreview({
 }: PostPreviewProps): JSX.Element {
   const sanitizedExcerpt = useMemo(() => sanitize(stripExternalLinks(excerpt)), [excerpt]);
 
-  const fallbackColour = useMemo(() => {
-    let hash = 0;
-    for (let i = 0; i < title.length; i++) {
-      hash = (hash * 31 + title.charCodeAt(i)) & 0xffffffff;
-    }
-    return blockColours[Math.abs(hash) % blockColours.length];
-  }, [title]);
+  const fallbackColour = useMemo(() => getColourFromTitle(title), [title]);
 
   return (
     <CardContainer>

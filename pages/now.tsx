@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import Link from 'next/link';
 import Container from '../components/container';
 import Layout from '../components/layout';
 import PostHeader from '../components/post-header';
@@ -37,6 +38,14 @@ export default function NowPage() {
                 just for a laugh — to celebrate the best chicken shops in the country. There's a
                 serious amount of talent out there and someone has to document it.
               </p>
+              <p>
+                Also have created my first ever API -{' '}
+                <a href="https://www.thepubdb.com/" target="_blank" rel="noopener noreferrer">
+                  The Pub DB
+                </a>
+                . It still needs a lot of work but it's a start. The idea is to create a database of
+                pubs in the UK.
+              </p>
             </Section>
 
             <Section>
@@ -58,14 +67,18 @@ export default function NowPage() {
                 </a>
                 .
               </p>
+              <p>
+                And I've just started the second volume of the official Margaret Thatcher biography
+                by Charles Moore.
+              </p>
             </Section>
 
             <Section>
               <SectionHeading>✈️ What's next</SectionHeading>
               <p>
                 Well I've just got back from Japan so there's a need to book another holiday. Maybe
-                Montenegro (new country) and then Athens? Also guess I should watch some of the
-                World Cup, but also FUCK TRUMP.
+                Montenegro (new country) and then Athens? Loving all the hot sunshine this year in
+                London but also could do with some cooler nights.
               </p>
             </Section>
 
@@ -81,6 +94,10 @@ export default function NowPage() {
                   /now page
                 </a>
                 . If you have one too, I'd love to know.
+              </p>
+              <p>
+                Prefer the bigger picture? Check out the{' '}
+                <Link href="/year-in-review">Year in Review</Link>.
               </p>
             </Footer>
           </NowContent>

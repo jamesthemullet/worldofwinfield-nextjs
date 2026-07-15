@@ -8,8 +8,7 @@ export default function Alert({ preview }: AlertProps): JSX.Element {
         <div>
           {preview ? (
             <>
-              This is a page preview. <a href="/api/exit-preview">Click here</a> to exit preview
-              mode.
+              This is a page preview. <a href="/api/exit-preview">Exit preview mode</a>.
             </>
           ) : (
             <></>

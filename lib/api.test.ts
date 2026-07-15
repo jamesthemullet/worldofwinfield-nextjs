@@ -10,7 +10,13 @@ const mockFetch = jest.fn();
 global.fetch = mockFetch as typeof fetch;
 
 function gqlSuccess(data: Record<string, unknown>) {
-  return { json: () => Promise.resolve({ data }) };
+  return {
+    ok: true,
+    status: 200,
+    statusText: 'OK',
+    headers: { get: () => 'application/json' },
+    json: () => Promise.resolve({ data }),
+  };
 }
 
 beforeAll(() => {
@@ -30,10 +36,46 @@ describe('fetchAPI (via exported functions)', () => {
   it('throws "Failed to fetch API" when the response contains GraphQL errors', async () => {
     jest.spyOn(console, 'error').mockImplementation(() => {});
     mockFetch.mockResolvedValue({
+      ok: true,
+      status: 200,
+      statusText: 'OK',
+      headers: { get: () => 'application/json' },
       json: () => Promise.resolve({ errors: [{ message: 'Not found' }] }),
     });
     await expect(searchBlogPosts('x')).rejects.toThrow('Failed to fetch API');
+    expect(mockFetch).toHaveBeenCalledTimes(1);
     jest.restoreAllMocks();
+  });
+
+  it('retries when the API returns a non-JSON (e.g. HTML error) response, then succeeds', async () => {
+    const nodes = [{ slug: 'a', title: 'A', date: '2024-01-01', excerpt: '' }];
+    mockFetch
+      .mockResolvedValueOnce({
+        ok: false,
+        status: 502,
+        statusText: 'Bad Gateway',
+        headers: { get: () => 'text/html' },
+        json: () => Promise.reject(new Error('should not be called')),
+      })
+      .mockResolvedValueOnce(gqlSuccess({ posts: { nodes } }));
+
+    const result = await searchBlogPosts('query');
+
+    expect(result).toEqual(nodes);
+    expect(mockFetch).toHaveBeenCalledTimes(2);
+  });
+
+  it('throws after exhausting retries when the API keeps returning non-JSON responses', async () => {
+    mockFetch.mockResolvedValue({
+      ok: false,
+      status: 502,
+      statusText: 'Bad Gateway',
+      headers: { get: () => 'text/html' },
+      json: () => Promise.reject(new Error('should not be called')),
+    });
+
+    await expect(searchBlogPosts('x')).rejects.toThrow(/502/);
+    expect(mockFetch).toHaveBeenCalledTimes(3);
   });
 
   it('includes Authorization header when WORDPRESS_AUTH_REFRESH_TOKEN is set', async () => {

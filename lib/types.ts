@@ -514,3 +514,12 @@ export type ArchivePageProps = {
 export type TagIndexPageProps = {
   tags: { name: string; count: number }[];
 };
+
+export type YearInReviewProps = {
+  posts: TagsPostProps['posts'];
+  year: number;
+};
+
+export type YearInReviewIndexPageProps = {
+  years: number[];
+};
