@@ -12,7 +12,7 @@ type TypeProps = {
   labelFilter?: string;
 };
 
-const normalize = (s: string) =>
+const normalize = (s: string): string =>
   (s || '')
     .toString()
     .normalize('NFKD')

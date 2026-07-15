@@ -7,7 +7,7 @@ import PostTitle from '../components/post-title';
 import ShareBar from '../components/share-bar';
 import WorldMap from '../components/world-map';
 
-const processData = (
+export const processData = (
   rawData: string[][],
 ): Record<string, { country: string; visited: string }[]> => {
   const continents = [

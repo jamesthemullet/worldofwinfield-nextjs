@@ -1,15 +1,15 @@
+import type { JSX } from 'react';
 import type { AlertProps } from '../lib/types';
 import Container from './container';
 
-export default function Alert({ preview }: AlertProps) {
+export default function Alert({ preview }: AlertProps): JSX.Element {
   return (
     <div>
       <Container>
         <div>
           {preview ? (
             <>
-              This is a page preview.{' '}
-              <a href="/api/exit-preview">Exit preview mode</a>.
+              This is a page preview. <a href="/api/exit-preview">Exit preview mode</a>.
             </>
           ) : (
             <></>

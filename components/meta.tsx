@@ -1,5 +1,6 @@
 import Head from 'next/head';
 import { useRouter } from 'next/router';
+import type { JSX } from 'react';
 import type { SeoProps } from '../lib/types';
 
 type MetaProps = {
@@ -20,7 +21,7 @@ export default function Meta({
   articleModified,
   articleAuthor,
   jsonLd,
-}: MetaProps) {
+}: MetaProps): JSX.Element {
   const router = useRouter();
   const currentUrl = router.asPath;
   const siteAddress = 'https://www.worldofwinfield.co.uk';

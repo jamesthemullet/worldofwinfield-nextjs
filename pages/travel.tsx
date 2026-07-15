@@ -59,7 +59,9 @@ export default function Post({ posts }: PostsProps) {
                     }}
                     backgroundColour={colours.dark}
                   />
-                  <ReadMoreLink href={`/${post.slug}`} aria-label={`Read more about ${post.title}`}>Read this post →</ReadMoreLink>
+                  <ReadMoreLink href={`/${post.slug}`} aria-label={`Read more about ${post.title}`}>
+                    Read this post →
+                  </ReadMoreLink>
                 </ExcerptArea>
               </PostContainer>
             ))}

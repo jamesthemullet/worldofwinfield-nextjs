@@ -1,11 +1,12 @@
 import styled from '@emotion/styled';
 import Image from 'next/image';
 import Link from 'next/link';
+import type { JSX } from 'react';
 import type { RelatedPostsProps } from '../lib/types';
 import { colours } from '../pages/_app';
 import DateFormatter from './date';
 
-export default function RelatedPosts({ posts }: RelatedPostsProps) {
+export default function RelatedPosts({ posts }: RelatedPostsProps): JSX.Element | null {
   if (posts.length === 0) return null;
 
   return (
