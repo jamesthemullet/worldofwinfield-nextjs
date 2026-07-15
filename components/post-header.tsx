@@ -1,22 +1,13 @@
 import styled from '@emotion/styled';
 import Link from 'next/link';
 import { useMemo } from 'react';
+import { getColoursFromTitle } from '../lib/block-colours';
 import { sanitize } from '../lib/sanitize';
 import type { PostHeaderProps } from '../lib/types';
 import { colours } from '../pages/_app';
 import CoverImage from './cover-image';
 import Date from './date';
 import PostTitle from './post-title';
-
-const blockColours = [
-  colours.pink,
-  colours.green,
-  colours.purple,
-  colours.burgandy,
-  colours.dark,
-  colours.azure,
-  colours.blueish,
-];
 
 export default function PostHeader({
   title,
@@ -30,17 +21,10 @@ export default function PostHeader({
   const aspectRatio =
     (coverImage?.node.mediaDetails.width ?? 0) / (coverImage?.node.mediaDetails.height ?? 1);
 
-  const { randomColour1, randomColour2 } = useMemo(() => {
-    let hash = 0;
-    const seed = title ?? '';
-    for (let i = 0; i < seed.length; i++) {
-      hash = (hash * 31 + seed.charCodeAt(i)) & 0xffffffff;
-    }
-    const index1 = Math.abs(hash) % blockColours.length;
-    const index2 =
-      (index1 + 1 + (Math.abs(hash >> 4) % (blockColours.length - 1))) % blockColours.length;
-    return { randomColour1: blockColours[index1], randomColour2: blockColours[index2] };
-  }, [title]);
+  const { colour1: randomColour1, colour2: randomColour2 } = useMemo(
+    () => getColoursFromTitle(title ?? ''),
+    [title],
+  );
 
   return (
     <>

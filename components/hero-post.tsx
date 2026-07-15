@@ -1,15 +1,10 @@
 import styled from '@emotion/styled';
 import Link from 'next/link';
 import { useMemo } from 'react';
-import { sanitize } from '../lib/sanitize';
+import { sanitize, stripExternalLinks } from '../lib/sanitize';
 import type { HeroPostProps } from '../lib/types';
 import { StyledButton } from './core-components';
 import PostHeader from './post-header';
-
-const stripExternalLinks = (excerpt: string): string => {
-  const regex = /<a\s+(?:[^>]*?\s+)?href="https?:\/\/[^"]*"[^>]*>.*?<\/a>/g;
-  return excerpt.replace(regex, '');
-};
 
 export default function HeroPost({
   title,
