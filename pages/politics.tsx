@@ -37,6 +37,7 @@ export default function Post({ posts }: PostsProps) {
           <PostTitle>Loading…</PostTitle>
         ) : (
           <>
+            <PageHeading>Posts About Politics</PageHeading>
             {posts.map((post, index) => (
               <PostContainer key={post.id} isEven={index % 2 === 0}>
                 <StyledPostHeader>
@@ -87,6 +88,18 @@ export const getStaticProps: GetStaticProps = async () => {
     revalidate: 3600,
   };
 };
+
+const PageHeading = styled.h1`
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+`;
 
 const ExcerptArea = styled.div`
   width: calc(50% - 4rem);
