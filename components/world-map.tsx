@@ -7,6 +7,7 @@ import { colours } from '../pages/_app';
 
 type WorldMapProps = {
   visitedCountries: string[];
+  wishListCountries?: string[];
 };
 
 const MIN_ZOOM = 1;
@@ -54,12 +55,19 @@ const dropFrenchGuiana = (features: Feature[]): Feature[] =>
     } as Feature;
   });
 
-export default function WorldMap({ visitedCountries }: WorldMapProps): JSX.Element {
+export default function WorldMap({
+  visitedCountries,
+  wishListCountries = [],
+}: WorldMapProps): JSX.Element {
   const [hovered, setHovered] = useState<string | null>(null);
   const [zoom, setZoom] = useState(MIN_ZOOM);
   const [center, setCenter] = useState<[number, number]>(DEFAULT_CENTER);
 
   const visitedSet = new Set(visitedCountries.map(normalise));
+  // A country already visited is shown as visited, not as a wish-list entry.
+  const wishListSet = new Set(
+    wishListCountries.map(normalise).filter((name) => !visitedSet.has(name)),
+  );
 
   const zoomIn = () => setZoom((current) => Math.min(current * 1.5, MAX_ZOOM));
   const zoomOut = () => setZoom((current) => Math.max(current / 1.5, MIN_ZOOM));
@@ -69,7 +77,7 @@ export default function WorldMap({ visitedCountries }: WorldMapProps): JSX.Eleme
   };
 
   return (
-    <MapWrapper aria-label="World map with countries James has visited highlighted in purple">
+    <MapWrapper aria-label="World map with countries James has visited highlighted in purple and holiday wish list countries highlighted in blue">
       <Controls>
         <ZoomButton type="button" onClick={zoomIn} aria-label="Zoom in">
           +
@@ -81,6 +89,14 @@ export default function WorldMap({ visitedCountries }: WorldMapProps): JSX.Eleme
           Reset
         </ZoomButton>
       </Controls>
+      <Legend>
+        <LegendItem>
+          <LegendSwatch colour={colours.purple} /> Visited
+        </LegendItem>
+        <LegendItem>
+          <LegendSwatch colour={colours.azure} /> Wish list
+        </LegendItem>
+      </Legend>
       <ComposableMap projectionConfig={{ scale: 147 }} style={{ width: '100%', height: 'auto' }}>
         <title>Map of countries visited</title>
         <ZoomableGroup
@@ -101,32 +117,42 @@ export default function WorldMap({ visitedCountries }: WorldMapProps): JSX.Eleme
               geographies.map((geo) => {
                 const name = geo.properties.name as string;
                 const visited = visitedSet.has(name.toLowerCase());
+                const wishListed = !visited && wishListSet.has(name.toLowerCase());
+                const highlighted = visited || wishListed;
+                const label = wishListed ? `${name} (wish list)` : name;
+
+                const defaultFill = visited
+                  ? colours.purple
+                  : wishListed
+                    ? colours.azure
+                    : '#e0e0e0';
+                const hoverFill = visited ? colours.pink : wishListed ? colours.blueish : '#cccccc';
 
                 return (
                   <Geography
                     key={geo.rsmKey}
                     geography={geo}
-                    tabIndex={visited ? 0 : -1}
-                    aria-label={visited ? name : undefined}
-                    onMouseEnter={() => setHovered(name)}
+                    tabIndex={highlighted ? 0 : -1}
+                    aria-label={highlighted ? label : undefined}
+                    onMouseEnter={() => setHovered(label)}
                     onMouseLeave={() => setHovered(null)}
-                    onFocus={() => setHovered(name)}
+                    onFocus={() => setHovered(label)}
                     onBlur={() => setHovered(null)}
                     style={{
                       default: {
-                        fill: visited ? colours.purple : '#e0e0e0',
+                        fill: defaultFill,
                         stroke: '#ffffff',
                         strokeWidth: 0.5,
                         outline: 'none',
                       },
                       hover: {
-                        fill: visited ? colours.pink : '#cccccc',
+                        fill: hoverFill,
                         stroke: '#ffffff',
                         strokeWidth: 0.5,
                         outline: 'none',
                       },
                       pressed: {
-                        fill: visited ? colours.pink : '#cccccc',
+                        fill: hoverFill,
                         stroke: '#ffffff',
                         strokeWidth: 0.5,
                         outline: 'none',
@@ -179,6 +205,31 @@ const ZoomButton = styled.button`
     outline: 2px solid currentColor;
     outline-offset: 2px;
   }
+`;
+
+const Legend = styled.div`
+  position: absolute;
+  bottom: 0.5rem;
+  left: 0.5rem;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.8rem;
+`;
+
+const LegendItem = styled.span`
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+`;
+
+const LegendSwatch = styled.span<{ colour: string }>`
+  display: inline-block;
+  width: 0.7rem;
+  height: 0.7rem;
+  border-radius: 2px;
+  background: ${(props) => props.colour};
 `;
 
 const Tooltip = styled.div`
