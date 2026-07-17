@@ -54,6 +54,7 @@ const nextConfig = {
               "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://vercel.live",
               "style-src 'self' 'unsafe-inline'",
               "img-src 'self' data: https:",
+              "media-src 'self' https:",
               "font-src 'self'",
               "connect-src 'self' https://*.google-analytics.com https://vercel.live https://sheets.googleapis.com",
               'frame-src https:',
