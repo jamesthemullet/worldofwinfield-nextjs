@@ -90,7 +90,7 @@ describe('GoalsPage', () => {
 
   it('renders posts with a read-more link to the post slug', () => {
     render(<GoalsPage posts={[mockPost]} />);
-    const link = screen.getByRole('link', { name: 'Read this post →' });
+    const link = screen.getByRole('link', { name: 'Read more about My Goals Post' });
     expect(link).toHaveAttribute('href', '/my-goals-post');
   });
 
