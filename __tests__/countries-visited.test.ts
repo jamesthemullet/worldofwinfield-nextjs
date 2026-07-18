@@ -1,4 +1,4 @@
-import { processData } from '../pages/countries-visited';
+import { extractWishListCountries, processData } from '../pages/countries-visited';
 
 // Builds minimal raw data: a header row followed by the given data rows.
 // Each row has 14 columns (7 continents × 2 columns each: country + visited).
@@ -26,5 +26,43 @@ describe('processData', () => {
     expect(result['Europe'][0].country).toBe('France');
     expect(result['North America']).toHaveLength(1);
     expect(result['North America'][0].country).toBe('Canada');
+  });
+});
+
+describe('extractWishListCountries', () => {
+  it('returns the values of the Country column', () => {
+    const rawData = [
+      ['Name', 'Country'],
+      ['Kyoto', 'Japan'],
+      ['Machu Picchu', 'Peru'],
+    ];
+    expect(extractWishListCountries(rawData)).toEqual(['Japan', 'Peru']);
+  });
+
+  it('finds the Country column regardless of position or casing', () => {
+    const rawData = [
+      ['country', 'Name'],
+      ['Japan', 'Kyoto'],
+    ];
+    expect(extractWishListCountries(rawData)).toEqual(['Japan']);
+  });
+
+  it('skips rows with an empty country value', () => {
+    const rawData = [
+      ['Name', 'Country'],
+      ['Kyoto', 'Japan'],
+      ['Somewhere unplaced', ''],
+    ];
+    expect(extractWishListCountries(rawData)).toEqual(['Japan']);
+  });
+
+  it('returns an empty array when there is no Country column', () => {
+    const rawData = [['Name'], ['Kyoto']];
+    expect(extractWishListCountries(rawData)).toEqual([]);
+  });
+
+  it('returns an empty array for null or header-only data', () => {
+    expect(extractWishListCountries(null)).toEqual([]);
+    expect(extractWishListCountries([['Name', 'Country']])).toEqual([]);
   });
 });
