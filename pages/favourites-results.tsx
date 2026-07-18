@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import { useEffect, useMemo, useState } from 'react';
+import { StyledInput } from '../components/core-components';
 import SortDropdown from '../components/SortDropdown';
 import { fetchDataFromGoogleSheets } from '../lib/sheets';
 
@@ -33,6 +34,7 @@ const FavouriteResults = ({
   const [loading, setLoading] = useState(false);
   const [internalSortBy, setInternalSortBy] = useState('');
   const [sortColumns, setSortColumns] = useState<string[]>([]);
+  const [searchQuery, setSearchQuery] = useState('');
 
   const effectiveSortBy = sortBy !== undefined ? sortBy : internalSortBy;
   const showInternalDropdown = sortBy === undefined;
@@ -83,11 +85,19 @@ const FavouriteResults = ({
     fetchFavouriteData();
   }, [sheetId, columnsToHideKey]);
 
+  const trimmedQuery = searchQuery.trim().toLowerCase();
+
   const data = useMemo(() => {
     if (!rawData || rawData.length === 0) return [];
 
     const headerRow = rawData[0];
     let filteredRows = rawData.slice(1);
+
+    if (trimmedQuery) {
+      filteredRows = filteredRows.filter((row: string[]) =>
+        row.some((cell) => (cell ?? '').toString().toLowerCase().includes(trimmedQuery)),
+      );
+    }
 
     if (genreFilter && headerRow.includes('Genre')) {
       const genreIndex = headerRow.indexOf('Genre');
@@ -148,16 +158,33 @@ const FavouriteResults = ({
     }
 
     return [headerRow, ...filteredRows];
-  }, [rawData, genreFilter, labelFilter, effectiveSortBy]);
+  }, [rawData, trimmedQuery, genreFilter, labelFilter, effectiveSortBy]);
+
+  const hasRows = rawData !== null && rawData.length > 1;
 
   return (
     <FavouritesContainer>
+      {hasRows && (
+        <SearchContainer>
+          <label htmlFor="favourites-search-input">Search</label>
+          <StyledInput
+            id="favourites-search-input"
+            type="text"
+            placeholder="Search..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+        </SearchContainer>
+      )}
       {showInternalDropdown && sortColumns.length > 0 && (
         <SortDropdown
           options={sortColumns}
           selected={internalSortBy}
           onChange={setInternalSortBy}
         />
+      )}
+      {hasRows && data.length === 1 && trimmedQuery && (
+        <NoResults>No results for &ldquo;{searchQuery.trim()}&rdquo;</NoResults>
       )}
       <StyledTable>
         {data.length > 0 && (
@@ -230,6 +257,21 @@ export default FavouriteResults;
 const FavouritesContainer = styled.div`
   margin: 20px;
   overflow-x: auto;
+`;
+
+const SearchContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-bottom: 10px;
+
+  label {
+    margin-bottom: 4px;
+  }
+`;
+
+const NoResults = styled.p`
+  margin: 20px 0;
 `;
 
 const StyledTable = styled.table`
