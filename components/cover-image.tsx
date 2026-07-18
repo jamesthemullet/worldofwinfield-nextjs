@@ -47,7 +47,7 @@ export default function CoverImage({
         <StyledCoverImage>
           {coverImage?.node.sourceUrl && (
             <Image
-              alt={`Cover Image for ${title}`}
+              alt={title}
               src={coverImage.node.sourceUrl}
               sizes={imageSize || '(max-width: 768px) 100vw, 50vw'}
               quality={75}

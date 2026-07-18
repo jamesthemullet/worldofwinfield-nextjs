@@ -18,9 +18,6 @@ export default function Layout({
 }: LayoutProps): JSX.Element {
   return (
     <>
-      <header>
-        <SkipLink href="#main-content">Skip to main content</SkipLink>
-      </header>
       <Meta
         seo={seo ?? undefined}
         title={title}
@@ -49,19 +46,4 @@ const PageWrapper = styled.div`
 
 const StyledDiv = styled.div`
   flex: 1;
-`;
-
-const SkipLink = styled.a`
-  position: absolute;
-  top: -100%;
-  left: 0;
-  background: #000;
-  color: #fff;
-  padding: 0.5rem 1rem;
-  z-index: 9999;
-  font-family: sans-serif;
-
-  &:focus {
-    top: 0;
-  }
 `;

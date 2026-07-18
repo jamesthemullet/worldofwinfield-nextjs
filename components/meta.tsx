@@ -23,13 +23,12 @@ export default function Meta({
   jsonLd,
 }: MetaProps): JSX.Element {
   const router = useRouter();
-  const currentUrl = router.asPath;
   const siteAddress = 'https://www.worldofwinfield.co.uk';
   const defaultImageUrl = '/images/jameswinfieldcover.png';
 
   const { opengraphImage, opengraphTitle, opengraphDescription, opengraphSiteName, metaKeywords } =
     seo || {};
-  const canonicalUrl = `${siteAddress}${currentUrl}`;
+  const canonicalUrl = `${siteAddress}${router.pathname}`;
 
   return (
     <Head>

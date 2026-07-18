@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import Image from 'next/image';
-import React, { type JSX, useCallback, useEffect, useState } from 'react';
+import { type JSX, useCallback, useEffect, useState } from 'react';
 import type { IntroProps, JamesImagesProps } from '../lib/types';
 import { colours } from '../pages/_app';
 
@@ -37,18 +37,10 @@ export default function Intro({ jamesImages }: IntroProps): JSX.Element {
     setHoveredIndex(-1);
   }, []);
 
-  const handleFocus = useCallback((e: React.FocusEvent<HTMLDivElement>) => {
-    setHoveredIndex(Number(e.currentTarget.dataset.index));
-  }, []);
-
-  const handleBlur = useCallback(() => {
-    setHoveredIndex(-1);
-  }, []);
-
   return (
     <section>
       <HiddenHeading>World Of Winfield</HiddenHeading>
-      <GridContainer>
+      <GridContainer aria-hidden="true">
         {Array.from('WORLD OFWINFIELD').map((letter, index) => {
           const jamesImage = shuffledImages[index]?.node.featuredImage?.node;
           const jamesAltTag = shuffledImages[index]?.node.title;
@@ -59,11 +51,8 @@ export default function Intro({ jamesImages }: IntroProps): JSX.Element {
               key={index}
               color={blockColours[getColour(index)]}
               data-index={index}
-              tabIndex={0}
               onMouseEnter={handleMouseEnter}
-              onMouseLeave={handleMouseLeave}
-              onFocus={handleFocus}
-              onBlur={handleBlur}>
+              onMouseLeave={handleMouseLeave}>
               <FlipContainer>
                 <Flipper flipped={hoveredIndex === index}>
                   <Front>{letter}</Front>
