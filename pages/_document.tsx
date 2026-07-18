@@ -15,6 +15,7 @@ export default function MyDocument({ emotionStyleTags }: { emotionStyleTags: Rea
   return (
     <Html lang="en">
       <Head>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link
           rel="preload"
           href="/fonts/Oswald-VariableFont_rght.ttf"

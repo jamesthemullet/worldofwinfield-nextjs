@@ -12,9 +12,7 @@ export default function Tags({ tags }: TagsProps): JSX.Element {
         Tagged:
         {filteredEdges.map((tag, index) => (
           <span key={index}>
-            <Link href={`/tags/${encodeURIComponent(tag.node.name)}`} aria-label={tag.node.name}>
-              {tag.node.name}
-            </Link>
+            <Link href={`/tags/${encodeURIComponent(tag.node.name)}`}>{tag.node.name}</Link>
             {index !== filteredEdges.length - 1 && ',\u00A0'}
           </span>
         ))}
