@@ -25,7 +25,7 @@ export default function Meta({
   const router = useRouter();
   const currentUrl = router.asPath;
   const siteAddress = 'https://www.worldofwinfield.co.uk';
-  const defaultImageUrl = '/images/jameswinfieldcover.png';
+  const defaultImageUrl = `${siteAddress}/images/jameswinfieldcover.png`;
 
   const { opengraphImage, opengraphTitle, opengraphDescription, opengraphSiteName, metaKeywords } =
     seo || {};

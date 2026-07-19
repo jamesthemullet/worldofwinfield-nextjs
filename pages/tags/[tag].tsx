@@ -97,7 +97,8 @@ export default function Post({ posts, tag }: TagsPostProps) {
                       <ContinueReadingLink
                         href={`/${post.slug}`}
                         colour={getColourFromTitle(post.title)}
-                        textcolour={getTextColour(getColourFromTitle(post.title))}>
+                        textcolour={getTextColour(getColourFromTitle(post.title))}
+                        aria-label={`Continue reading ${post.title}`}>
                         Continue reading
                       </ContinueReadingLink>
                     </TagPostContent>
