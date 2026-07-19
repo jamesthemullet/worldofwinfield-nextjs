@@ -59,7 +59,9 @@ export default function Intro({ jamesImages }: IntroProps): JSX.Element {
               key={index}
               color={blockColours[getColour(index)]}
               data-index={index}
+              role="button"
               tabIndex={0}
+              aria-label={`Reveal photo for letter ${letter === ' ' ? 'space' : letter}`}
               onMouseEnter={handleMouseEnter}
               onMouseLeave={handleMouseLeave}
               onFocus={handleFocus}
