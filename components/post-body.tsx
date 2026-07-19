@@ -1,8 +1,9 @@
 import styled from '@emotion/styled';
-import { type JSX, useMemo } from 'react';
+import { type JSX, type MouseEvent, useMemo, useState } from 'react';
 import { sanitize } from '../lib/sanitize';
 import type { PostBodyProps } from '../lib/types';
 import { colours } from '../pages/_app';
+import ImageLightbox from './image-lightbox';
 
 const resolveDataSrc = (html: string): string =>
   html
@@ -17,14 +18,32 @@ const resolveDataSrc = (html: string): string =>
     .replace(/\bdata-srcset=/gi, 'srcset=');
 
 export default function PostBody({ content }: PostBodyProps): JSX.Element {
+  const [zoomedImage, setZoomedImage] = useState<{ src: string; alt: string } | null>(null);
   const sanitizedContent = useMemo(
     () =>
       sanitize(resolveDataSrc(content), { ADD_ATTR: ['srcset', 'sizes', 'loading', 'decoding'] }),
     [content],
   );
+
+  const handleContentClick = (event: MouseEvent<HTMLDivElement>) => {
+    const target = event.target as HTMLElement;
+    if (target.tagName !== 'IMG') return;
+
+    event.preventDefault();
+    const img = target as HTMLImageElement;
+    setZoomedImage({ src: img.currentSrc || img.src, alt: img.alt });
+  };
+
   return (
     <ContentContainer>
-      <div dangerouslySetInnerHTML={{ __html: sanitizedContent }} />
+      <div onClick={handleContentClick} dangerouslySetInnerHTML={{ __html: sanitizedContent }} />
+      {zoomedImage && (
+        <ImageLightbox
+          src={zoomedImage.src}
+          alt={zoomedImage.alt}
+          onClose={() => setZoomedImage(null)}
+        />
+      )}
     </ContentContainer>
   );
 }
@@ -44,6 +63,7 @@ export const ContentContainer = styled.div`
 
   img {
     height: auto;
+    cursor: zoom-in;
   }
 
   @media (min-width: 1281px) {

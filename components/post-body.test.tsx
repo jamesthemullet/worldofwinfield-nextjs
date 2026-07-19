@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import React from 'react';
 import '@testing-library/jest-dom';
 import DOMPurify from 'dompurify';
@@ -67,5 +67,31 @@ describe('PostBody', () => {
       expect.stringContaining('data:image/gif'),
       expect.anything(),
     );
+  });
+
+  it('opens a lightbox with the clicked image when an image in the content is clicked', () => {
+    render(<PostBody content='<img src="/photo.jpg" alt="A photo" />' />);
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+
+    fireEvent.click(screen.getByAltText('A photo'));
+
+    const dialog = screen.getByRole('dialog');
+    expect(dialog).toBeInTheDocument();
+    expect(screen.getAllByAltText('A photo')).toHaveLength(2);
+  });
+
+  it('closes the lightbox when its close button is clicked', () => {
+    render(<PostBody content='<img src="/photo.jpg" alt="A photo" />' />);
+    fireEvent.click(screen.getByAltText('A photo'));
+    expect(screen.getByRole('dialog')).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole('button', { name: 'Close' }));
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+  });
+
+  it('does not open a lightbox when a non-image element is clicked', () => {
+    render(<PostBody content="<p>Hello world</p>" />);
+    fireEvent.click(screen.getByText('Hello world'));
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
   });
 });
