@@ -13,7 +13,9 @@ function wait(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-async function fetchAPI(query = '', { variables }: FetchAPIOptions = {}) {
+// T defaults to `any` so existing call sites without a type argument are unaffected;
+// typed callers can pass fetchAPI<ExpectedShape>(...) to get a checked return.
+async function fetchAPI<T = any>(query = '', { variables }: FetchAPIOptions = {}): Promise<T> {
   const headers: Record<string, string> = { 'Content-Type': 'application/json' };
 
   if (process.env.WORDPRESS_AUTH_REFRESH_TOKEN) {
@@ -50,7 +52,7 @@ async function fetchAPI(query = '', { variables }: FetchAPIOptions = {}) {
       continue;
     }
 
-    const json = await res.json();
+    const json = (await res.json()) as { data: T; errors?: { message: string }[] };
     if (json.errors) {
       console.error(json.errors);
       throw new Error('Failed to fetch API');

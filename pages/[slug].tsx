@@ -133,7 +133,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
   const allPosts = await getAllPostsWithSlug();
 
   return {
-    paths: allPosts.edges.map(({ node }: { node: { slug: string } }) => `/${node.slug}`) || [],
+    paths: allPosts.edges.map(({ node }: { node: { slug: string } }) => `/${node.slug}`),
     fallback: true,
   };
 };

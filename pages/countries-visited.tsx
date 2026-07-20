@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import type { GetStaticProps } from 'next';
 import { useRouter } from 'next/router';
 import Container from '../components/container';
 import Layout from '../components/layout';
@@ -7,6 +8,11 @@ import PostTitle from '../components/post-title';
 import ShareBar from '../components/share-bar';
 import WorldMap from '../components/world-map';
 import { fetchDataFromGoogleSheets as fetchSheetById } from '../lib/sheets';
+
+type CountriesVisitedProps = {
+  transformedData: Record<string, { country: string; visited: string }[]>;
+  wishListCountries: string[];
+};
 
 const WISH_LIST_SHEET_ID = '1GX6KF20f3Nrb3m8T9th7UIV_uuePj4Ivlc_yLgo-4Bo';
 
@@ -78,13 +84,7 @@ const fetchDataFromGoogleSheets = async (): Promise<string[][] | null> => {
   }
 };
 
-const CountryList = ({
-  transformedData,
-}: {
-  transformedData: {
-    [key: string]: { country: string; visited: string }[];
-  };
-}) => {
+const CountryList = ({ transformedData }: Pick<CountriesVisitedProps, 'transformedData'>) => {
   return (
     <ContentContainer>
       {Object.keys(transformedData).map((continent) => (
@@ -111,12 +111,7 @@ const CountryList = ({
 export default function CountriesVisited({
   transformedData,
   wishListCountries,
-}: {
-  transformedData: {
-    [key: string]: { country: string; visited: string }[];
-  };
-  wishListCountries: string[];
-}) {
+}: CountriesVisitedProps) {
   const router = useRouter();
 
   const allCountries = Object.values(transformedData).flat();
@@ -233,7 +228,7 @@ const ContentContainer = styled.section`
   }
 `;
 
-export async function getStaticProps() {
+export const getStaticProps: GetStaticProps<CountriesVisitedProps> = async () => {
   const [rawData, wishListRawData] = await Promise.all([
     fetchDataFromGoogleSheets(),
     fetchSheetById(WISH_LIST_SHEET_ID),
@@ -248,4 +243,4 @@ export async function getStaticProps() {
     },
     revalidate: 86400,
   };
-}
+};
