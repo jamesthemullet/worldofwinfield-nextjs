@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import type { GetServerSidePropsContext } from 'next';
+import type { GetServerSideProps } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { type JSX } from 'react';
@@ -96,7 +96,7 @@ const ArchivePage = ({ posts: { posts }, month, year }: ArchivePageProps) => {
   );
 };
 
-export async function getServerSideProps({ query }: GetServerSidePropsContext) {
+export const getServerSideProps: GetServerSideProps<ArchivePageProps> = async ({ query }) => {
   const month = parseInt(
     Array.isArray(query.month) ? (query.month[0] ?? '') : (query.month ?? ''),
     10,
@@ -114,7 +114,7 @@ export async function getServerSideProps({ query }: GetServerSidePropsContext) {
   return {
     props: { posts, month, year },
   };
-}
+};
 
 export default ArchivePage;
 
