@@ -1,8 +1,8 @@
 import styled from '@emotion/styled';
 import Image from 'next/image';
 import Link from 'next/link';
-import { type JSX, useEffect, useMemo, useState } from 'react';
-import { blockColours } from '../lib/block-colours';
+import { type JSX, useMemo } from 'react';
+import { getColourFromTitle, hashString } from '../lib/block-colours';
 import type { JamesImagesProps } from '../lib/types';
 import { colours } from '../pages/_app';
 import { formatDate } from './search-results';
@@ -39,13 +39,11 @@ export default function HomepageBlock({
   icon,
   label,
 }: HomePageBlockTypes): JSX.Element {
-  const [randomColour, setRandomColour] = useState(blockColours[0]);
-  const [randomJamesIndex, setRandomJamesIndex] = useState(0);
-
-  useEffect(() => {
-    setRandomColour(blockColours[Math.floor(Math.random() * blockColours.length)]);
-    setRandomJamesIndex(Math.floor(Math.random() * jamesImages.edges.length));
-  }, [jamesImages.edges.length]);
+  const randomColour = getColourFromTitle(className ?? title);
+  const randomJamesIndex =
+    jamesImages.edges.length > 0
+      ? Math.abs(hashString(className ?? title)) % jamesImages.edges.length
+      : 0;
 
   const imageSrc = useMemo(
     () =>

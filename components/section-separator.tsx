@@ -1,16 +1,13 @@
 import styled from '@emotion/styled';
-import { type JSX, useEffect, useState } from 'react';
+import type { JSX } from 'react';
 import { blockColours } from '../lib/block-colours';
 import { colours } from '../pages/_app';
 
 export default function SectionSeparator(): JSX.Element {
-  const [backgroundColour, setBackgroundColour] = useState(blockColours[0]);
-
-  useEffect(() => {
-    setBackgroundColour(blockColours[Math.floor(Math.random() * blockColours.length)]);
-  }, []);
-
-  return <StyledHr backgroundColour={backgroundColour} colour={colours.white} />;
+  const backgroundColour = blockColours[Math.floor(Math.random() * blockColours.length)];
+  return (
+    <StyledHr backgroundColour={backgroundColour} colour={colours.white} suppressHydrationWarning />
+  );
 }
 
 const StyledHr = styled.hr<{ backgroundColour: string; colour: string }>`
