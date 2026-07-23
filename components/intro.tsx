@@ -45,6 +45,13 @@ export default function Intro({ jamesImages }: IntroProps): JSX.Element {
     setHoveredIndex(-1);
   }, []);
 
+  const handleKeyDown = useCallback((e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      setHoveredIndex(Number(e.currentTarget.dataset.index));
+    }
+  }, []);
+
   return (
     <section>
       <HiddenHeading>World Of Winfield</HiddenHeading>
@@ -57,13 +64,16 @@ export default function Intro({ jamesImages }: IntroProps): JSX.Element {
           return (
             <Block
               key={index}
+              role="button"
+              aria-label={`Letter ${letter}${jamesAltTag ? ` — photo: ${jamesAltTag}` : ''}`}
               color={blockColours[getColour(index)]}
               data-index={index}
               tabIndex={0}
               onMouseEnter={handleMouseEnter}
               onMouseLeave={handleMouseLeave}
               onFocus={handleFocus}
-              onBlur={handleBlur}>
+              onBlur={handleBlur}
+              onKeyDown={handleKeyDown}>
               <FlipContainer>
                 <Flipper flipped={hoveredIndex === index}>
                   <Front>{letter}</Front>

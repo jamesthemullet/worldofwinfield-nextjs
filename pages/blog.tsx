@@ -64,9 +64,13 @@ export default function Index({ allPosts, preview }: IndexPageProps) {
           </LoadMoreContainer>
         )}
       </Container>
-      <BrowseTopicsBar>
-        <Link href="/tags">Browse all topics →</Link>
-        <Link href="/year-in-review">Year in Review →</Link>
+      <BrowseTopicsBar aria-label="Blog navigation">
+        <Link href="/tags">
+          Browse all topics <span aria-hidden="true">→</span>
+        </Link>
+        <Link href="/year-in-review">
+          Year in Review <span aria-hidden="true">→</span>
+        </Link>
         <RssLink href="/api/feed">Subscribe via RSS</RssLink>
       </BrowseTopicsBar>
       <SearchBar onSearch={handleSearch} />
@@ -84,7 +88,7 @@ export const getStaticProps: GetStaticProps = async ({ preview = false }) => {
   };
 };
 
-const BrowseTopicsBar = styled.div`
+const BrowseTopicsBar = styled.nav`
   text-align: center;
   padding: 1rem 0;
 
