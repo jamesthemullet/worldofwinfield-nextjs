@@ -20,7 +20,9 @@ export default function PostNavigation({
       <NavItem>
         {previousPost && (
           <NavLink href={`/${previousPost.slug}`}>
-            <NavDirection>← Older</NavDirection>
+            <NavDirection>
+              <span aria-hidden="true">← </span>Older
+            </NavDirection>
             <NavTitle>{previousPost.title}</NavTitle>
           </NavLink>
         )}
@@ -28,7 +30,9 @@ export default function PostNavigation({
       <NavItem $align="right">
         {nextPost && (
           <NavLink href={`/${nextPost.slug}`} $align="right">
-            <NavDirection>Newer →</NavDirection>
+            <NavDirection>
+              Newer <span aria-hidden="true">→</span>
+            </NavDirection>
             <NavTitle>{nextPost.title}</NavTitle>
           </NavLink>
         )}
@@ -63,6 +67,11 @@ const NavLink = styled(Link)<{ $align?: string }>`
 
   &:hover span:last-child {
     color: ${colours.pink};
+  }
+
+  &:focus-visible {
+    outline: 2px solid ${colours.dark};
+    outline-offset: 2px;
   }
 `;
 

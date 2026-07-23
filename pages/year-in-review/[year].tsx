@@ -45,11 +45,19 @@ export default function YearInReview({ posts, year }: YearInReviewProps) {
             <ContentContainer>
               <YearNav aria-label="Year in Review navigation">
                 {year > FIRST_YEAR && (
-                  <Link href={`/year-in-review/${year - 1}`}>← {year - 1}</Link>
+                  <Link
+                    href={`/year-in-review/${year - 1}`}
+                    aria-label={`Previous year: ${year - 1}`}>
+                    <span aria-hidden="true">← </span>
+                    {year - 1}
+                  </Link>
                 )}
                 <Link href="/year-in-review">All years</Link>
                 {year < new Date().getFullYear() && (
-                  <Link href={`/year-in-review/${year + 1}`}>{year + 1} →</Link>
+                  <Link href={`/year-in-review/${year + 1}`} aria-label={`Next year: ${year + 1}`}>
+                    {year + 1}
+                    <span aria-hidden="true"> →</span>
+                  </Link>
                 )}
               </YearNav>
               <PostCount>
