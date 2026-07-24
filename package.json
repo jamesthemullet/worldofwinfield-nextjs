@@ -46,7 +46,7 @@
     "@next/bundle-analyzer": "^16.2.9",
     "@playwright/test": "^1.61.1",
     "@testing-library/dom": "^10.4.0",
-    "@testing-library/jest-dom": "^6.3.0",
+    "@testing-library/jest-dom": "^7.0.0",
     "@testing-library/react": "^16.0.0",
     "@types/geojson": "^7946.0.16",
     "@types/react-simple-maps": "^3.0.6",
