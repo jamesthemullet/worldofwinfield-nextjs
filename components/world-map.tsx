@@ -67,6 +67,7 @@ export default function WorldMap({
     // A country already visited is shown as visited, not as a wish-list entry.
   const wishListSet = new Set(
     wishListCountries.map(normalise).filter((name) => !visitedSet.has(name)),
+  );
 
   const zoomIn = () => setZoom((current) => Math.min(current * 1.5, MAX_ZOOM));
   const zoomOut = () => setZoom((current) => Math.max(current / 1.5, MIN_ZOOM));
