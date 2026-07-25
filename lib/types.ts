@@ -308,6 +308,7 @@ export type TagsProps = {
 export type PostTitleProps = {
   backgroundColour?: string;
   children: string;
+  headingLevel?: 'h1' | 'h2';
 };
 
 export type PostPreviewProps = {
@@ -369,6 +370,7 @@ export type PostHeaderProps = {
   slug?: string;
   heroPost?: boolean;
   caption?: string;
+  headingLevel?: 'h1' | 'h2';
 };
 
 export type PostBodyProps = {

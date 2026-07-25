@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { getPreviewPost } from '../../lib/api';
 
-export default async function preview(req: NextApiRequest, res: NextApiResponse) {
+export default async function preview(req: NextApiRequest, res: NextApiResponse): Promise<void> {
   const { secret, id, slug } = req.query;
 
   // Check the secret and next parameters

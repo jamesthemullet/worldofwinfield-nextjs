@@ -42,9 +42,19 @@ If the chosen category has no clear issues, briefly note this and move to the ne
 
 Make the fix. Keep scope tight — one issue, one or two files maximum. Do not refactor beyond what is needed to address the specific finding. Confirm the fix is correct before proceeding (re-read the edited file or the relevant lines).
 
-### Step 4 — Create a branch and PR
+### Step 4 — Verify tests pass
 
-After applying the fix:
+Run the full unit test suite before creating a PR:
+
+```bash
+yarn test 2>&1 | tail -60
+```
+
+If any test fails — including ones unrelated to your change — fix it before proceeding. Do not open a PR with a red test suite. If the fix genuinely requires updating a test's expectations (e.g. an accessible name changed on purpose), update that test as part of this change and note it in the PR body.
+
+### Step 5 — Create a branch and PR
+
+After applying the fix and confirming tests pass:
 
 1. Create a new branch from `main` named `a11y/<short-slug>` (e.g. `a11y/nav-landmark`, `a11y/hero-alt-text`):
 
@@ -97,7 +107,7 @@ EOF
 gh label create accessibility --color "0075ca" --description "Accessibility improvement" 2>/dev/null || true
 ```
 
-### Step 5 — Report
+### Step 6 — Report
 
 Output exactly this structure:
 

@@ -1,10 +1,10 @@
 import styled from '@emotion/styled';
-import React, { useState } from 'react';
+import React, { type JSX, useState } from 'react';
 import type { SearchBarProps } from '../lib/types';
 import { colours } from '../pages/_app';
 import { StyledButton, StyledInput } from './core-components';
 
-const SearchBar = ({ onSearch }: SearchBarProps) => {
+const SearchBar = ({ onSearch }: SearchBarProps): JSX.Element => {
   const [query, setQuery] = useState('');
   const [loading, setLoading] = useState(false);
 

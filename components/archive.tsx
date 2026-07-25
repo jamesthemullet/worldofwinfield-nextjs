@@ -1,10 +1,10 @@
 import styled from '@emotion/styled';
 import { useRouter } from 'next/router';
-import React, { useMemo } from 'react';
+import React, { useMemo }, { type JSX } from 'react';
 import { StyledSelect } from './core-components';
 import { getMonthNumber } from './utils';
 
-const ArchiveDropdown = () => {
+const ArchiveDropdown = (): JSX.Element => {
   const router = useRouter();
   const months = useMemo(() => {
     const now = new Date();

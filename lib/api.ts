@@ -6,6 +6,13 @@ type FetchAPIOptions = {
   variables?: Record<string, unknown>;
 };
 
+const MAX_FETCH_ATTEMPTS = 3;
+const RETRY_DELAY_MS = 500;
+
+function wait(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 async function fetchAPI(query = '', { variables }: FetchAPIOptions = {}) {
   const headers: Record<string, string> = { 'Content-Type': 'application/json' };
 
@@ -14,21 +21,44 @@ async function fetchAPI(query = '', { variables }: FetchAPIOptions = {}) {
   }
 
   const apiUrl = (process.env.WORDPRESS_API_URL ?? API_URL) as string;
-  const res = await fetch(apiUrl, {
-    headers,
-    method: 'POST',
-    body: JSON.stringify({
-      query,
-      variables,
-    }),
-  });
 
-  const json = await res.json();
-  if (json.errors) {
-    console.error(json.errors);
-    throw new Error('Failed to fetch API');
+  let lastError: Error = new Error('Failed to fetch API');
+
+  for (let attempt = 1; attempt <= MAX_FETCH_ATTEMPTS; attempt++) {
+    let res: Response;
+    try {
+      res = await fetch(apiUrl, {
+        headers,
+        method: 'POST',
+        body: JSON.stringify({
+          query,
+          variables,
+        }),
+      });
+    } catch (error) {
+      lastError = error instanceof Error ? error : new Error(String(error));
+      if (attempt < MAX_FETCH_ATTEMPTS) await wait(attempt * RETRY_DELAY_MS);
+      continue;
+    }
+
+    const contentType = res.headers.get('content-type') ?? '';
+    if (!res.ok || !contentType.includes('application/json')) {
+      lastError = new Error(
+        `WordPress API request failed: ${res.status} ${res.statusText} (content-type: ${contentType || 'unknown'})`,
+      );
+      if (attempt < MAX_FETCH_ATTEMPTS) await wait(attempt * RETRY_DELAY_MS);
+      continue;
+    }
+
+    const json = await res.json();
+    if (json.errors) {
+      console.error(json.errors);
+      throw new Error('Failed to fetch API');
+    }
+    return json.data;
   }
-  return json.data;
+
+  throw lastError;
 }
 
 export async function getPreviewPost(id: string, idType = 'DATABASE_ID') {

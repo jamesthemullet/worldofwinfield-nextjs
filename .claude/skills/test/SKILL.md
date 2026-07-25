@@ -78,7 +78,13 @@ After writing tests, run them to confirm they pass:
 yarn test <new-file-name> 2>&1 | tail -30
 ```
 
-Fix any failures before reporting back.
+Then run the full suite to make sure nothing else broke:
+
+```bash
+yarn test 2>&1 | tail -60
+```
+
+Fix any failures — including pre-existing ones unrelated to your change — before proceeding to Step 5. Do not open a PR with a red test suite.
 
 ### Step 5: Branch and PR
 

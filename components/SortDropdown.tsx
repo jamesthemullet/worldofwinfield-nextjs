@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import type { JSX } from 'react';
 
 type SortDropdownProps = {
   options: string[];
@@ -6,7 +7,7 @@ type SortDropdownProps = {
   onChange: (value: string) => void;
 };
 
-function SortDropdown({ options, selected, onChange }: SortDropdownProps) {
+function SortDropdown({ options, selected, onChange }: SortDropdownProps): JSX.Element {
   return (
     <Wrapper>
       <Label htmlFor="sort-select">Sort by:</Label>

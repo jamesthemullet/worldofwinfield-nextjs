@@ -1,8 +1,9 @@
 import styled from '@emotion/styled';
+import type { JSX } from 'react';
 import type { PrePostProps } from '../lib/types';
 import { calculateReadingTime } from './utils';
 
-export default function PrePost({ tags, date, content }: PrePostProps) {
+export default function PrePost({ tags, date, content }: PrePostProps): JSX.Element {
   const years = new Date().getFullYear() - new Date(date).getFullYear();
   const readingTime = content ? calculateReadingTime(content) : null;
   return (
