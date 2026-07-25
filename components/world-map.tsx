@@ -64,7 +64,7 @@ export default function WorldMap({
   const [center, setCenter] = useState<[number, number]>(DEFAULT_CENTER);
 
   const visitedSet = useMemo(() => new Set(visitedCountries.map(normalise)), [visitedCountries]);
-    // A country already visited is shown as visited, not as a wish-list entry.
+  // A country already visited is shown as visited, not as a wish-list entry.
   const wishListSet = new Set(
     wishListCountries.map(normalise).filter((name) => !visitedSet.has(name)),
   );
