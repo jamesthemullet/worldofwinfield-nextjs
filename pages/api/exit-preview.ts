@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 
-export default async function exit(_: NextApiRequest, res: NextApiResponse) {
+export default async function exit(_: NextApiRequest, res: NextApiResponse): Promise<void> {
   // Exit Draft Mode by removing the cookie
   res.setDraftMode({ enable: false });
 

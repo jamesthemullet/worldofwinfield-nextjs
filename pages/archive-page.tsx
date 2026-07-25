@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import type { GetServerSidePropsContext } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { type JSX } from 'react';
 import Container from '../components/container';
 import Layout from '../components/layout';
 import PostHeader from '../components/post-header';
@@ -23,7 +23,7 @@ const isFuture = (month: number, year: number): boolean => {
   return year > now.getFullYear() || (year === now.getFullYear() && month > now.getMonth() + 1);
 };
 
-const MonthNavBar = ({ month, year }: { month: number; year: number }) => {
+const MonthNavBar = ({ month, year }: { month: number; year: number }): JSX.Element => {
   const prev = getPrevMonth(month, year);
   const next = getNextMonth(month, year);
   const nextIsFuture = isFuture(next.month, next.year);

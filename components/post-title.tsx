@@ -1,12 +1,21 @@
 import styled from '@emotion/styled';
+import type { JSX } from 'react';
 import { sanitize } from '../lib/sanitize';
 import type { PostTitleProps } from '../lib/types';
 import { colours } from '../pages/_app';
 
-export default function PostTitle({ backgroundColour, children }: PostTitleProps) {
+export default function PostTitle({
+  backgroundColour,
+  children,
+  headingLevel,
+}: PostTitleProps): JSX.Element {
   return (
     <StyledTitleContainer backgroundColour={backgroundColour ?? ''}>
-      <Title colour={colours.white} dangerouslySetInnerHTML={{ __html: sanitize(children) }} />
+      <Title
+        as={headingLevel ?? 'h1'}
+        colour={colours.white}
+        dangerouslySetInnerHTML={{ __html: sanitize(children) }}
+      />
     </StyledTitleContainer>
   );
 }

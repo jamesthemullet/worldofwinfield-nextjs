@@ -20,7 +20,7 @@ const blockColours = [
 
 const lightBackgrounds = new Set([colours.purple, colours.green, colours.blueish, colours.azure]);
 
-const getColourFromName = (name: string) => {
+const getColourFromName = (name: string): string => {
   let hash = 0;
   for (let i = 0; i < name.length; i++) {
     hash = (hash * 31 + name.charCodeAt(i)) & 0xffffffff;
@@ -28,7 +28,8 @@ const getColourFromName = (name: string) => {
   return blockColours[Math.abs(hash) % blockColours.length];
 };
 
-const getTextColour = (bg: string) => (lightBackgrounds.has(bg) ? colours.dark : colours.white);
+const getTextColour = (bg: string): string =>
+  lightBackgrounds.has(bg) ? colours.dark : colours.white;
 
 export default function TagsIndex({ tags }: TagIndexPageProps) {
   const seo = {

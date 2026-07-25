@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import Link from 'next/link';
+import type { JSX } from 'react';
 import { colours } from '../pages/_app';
 
 type RelatedSection = {
@@ -12,7 +13,7 @@ type RelatedSectionsProps = {
   sections: RelatedSection[];
 };
 
-export default function RelatedSections({ sections }: RelatedSectionsProps) {
+export default function RelatedSections({ sections }: RelatedSectionsProps): JSX.Element {
   return (
     <Wrapper>
       <Heading>Explore more</Heading>

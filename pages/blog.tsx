@@ -38,7 +38,7 @@ export default function Index({ allPosts, preview }: IndexPageProps) {
   const seo = {
     opengraphImage: allPosts.edges[0].node.seo.opengraphImage,
     opengraphTitle: `The Blog - World Of Winfield`,
-    opengraphDescription: `The Blog - World Of Winfield`,
+    opengraphDescription: `Read the latest posts from James Winfield covering travel, music, culture, politics, and more.`,
     opengraphSiteName: `World Of Winfield`,
   };
 

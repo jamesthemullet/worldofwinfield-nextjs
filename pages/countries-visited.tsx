@@ -7,8 +7,24 @@ import PostHeader from '../components/post-header';
 import PostTitle from '../components/post-title';
 import ShareBar from '../components/share-bar';
 import WorldMap from '../components/world-map';
+import { fetchDataFromGoogleSheets as fetchSheetById } from '../lib/sheets';
 
-const processData = (
+const WISH_LIST_SHEET_ID = '1GX6KF20f3Nrb3m8T9th7UIV_uuePj4Ivlc_yLgo-4Bo';
+
+// Pulls the "Country" column out of the holiday wish list sheet, which is
+// shaped differently to the continents sheet (one row per place, not
+// paired continent columns).
+export const extractWishListCountries = (rawData: string[][] | null): string[] => {
+  if (!rawData || rawData.length < 2) return [];
+
+  const [headerRow, ...rows] = rawData;
+  const countryIndex = headerRow.findIndex((header) => header?.trim().toLowerCase() === 'country');
+  if (countryIndex === -1) return [];
+
+  return rows.map((row) => row[countryIndex]).filter((country): country is string => !!country);
+};
+
+export const processData = (
   rawData: string[][],
 ): Record<string, { country: string; visited: string }[]> => {
   const continents = [
@@ -63,11 +79,15 @@ const fetchDataFromGoogleSheets = async (): Promise<string[][] | null> => {
   }
 };
 
-type CountriesVisitedProps = {
+type CountryListProps = {
   transformedData: Record<string, { country: string; visited: string }[]>;
 };
 
-const CountryList = ({ transformedData }: CountriesVisitedProps) => {
+type CountriesVisitedProps = CountryListProps & {
+  wishListCountries: string[];
+};
+
+const CountryList = ({ transformedData }: CountryListProps) => {
   return (
     <ContentContainer>
       {Object.keys(transformedData).map((continent) => (
@@ -91,7 +111,10 @@ const CountryList = ({ transformedData }: CountriesVisitedProps) => {
   );
 };
 
-export default function CountriesVisited({ transformedData }: CountriesVisitedProps) {
+export default function CountriesVisited({
+  transformedData,
+  wishListCountries,
+}: CountriesVisitedProps) {
   const router = useRouter();
 
   const allCountries = Object.values(transformedData).flat();
@@ -134,7 +157,7 @@ export default function CountriesVisited({ transformedData }: CountriesVisitedPr
                   <StatLabel>continents explored</StatLabel>
                 </StatItem>
               </StatBlock>
-              <WorldMap visitedCountries={visitedCountries} />
+              <WorldMap visitedCountries={visitedCountries} wishListCountries={wishListCountries} />
               <ShareBar
                 title={`I've visited ${totalVisited} of ${totalCountries} countries across ${continentsExplored} continents! 🌍`}
                 url="https://worldofwinfield.co.uk/countries-visited"
@@ -209,13 +232,18 @@ const ContentContainer = styled.section`
 `;
 
 export const getStaticProps: GetStaticProps<CountriesVisitedProps> = async () => {
-  const rawData = await fetchDataFromGoogleSheets();
+  const [rawData, wishListRawData] = await Promise.all([
+    fetchDataFromGoogleSheets(),
+    fetchSheetById(WISH_LIST_SHEET_ID),
+  ]);
   const transformedData = rawData ? processData(rawData) : {};
+  const wishListCountries = extractWishListCountries(wishListRawData);
 
   return {
     props: {
       transformedData,
+      wishListCountries,
     },
     revalidate: 86400,
   };
-}
+};

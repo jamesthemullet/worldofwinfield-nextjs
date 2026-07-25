@@ -41,7 +41,17 @@ Read the relevant source files in `components/`, `lib/`, and `pages/`. Identify 
 
 Make the fix. Keep scope tight — one issue, one or two files. Do not refactor beyond what is needed to address the specific finding.
 
-### Step 4 — Open a PR
+### Step 4 — Verify tests pass
+
+Run the full unit test suite before creating a PR:
+
+```bash
+yarn test 2>&1 | tail -60
+```
+
+If any test fails — including ones unrelated to your change — fix it before proceeding. Do not open a PR with a red test suite.
+
+### Step 5 — Open a PR
 
 Create a git branch, commit the fix, push, and open a pull request:
 
