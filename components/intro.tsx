@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import Image from 'next/image';
-import React, { type JSX, useCallback, useEffect, useMemo, useCallback, useState } from 'react';
+import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 import type { IntroProps, JamesImagesProps } from '../lib/types';
 import { colours } from '../pages/_app';
 
