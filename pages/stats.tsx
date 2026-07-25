@@ -258,7 +258,7 @@ export const getStaticProps: GetStaticProps<StatsProps> = async () => {
     },
     revalidate: 86400,
   };
-}
+};
 
 const PostContainer = styled.article`
   max-width: 900px;

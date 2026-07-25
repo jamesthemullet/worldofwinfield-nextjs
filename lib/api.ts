@@ -22,7 +22,9 @@ async function fetchAPI(query = '', { variables }: FetchAPIOptions = {}) {
 
   const apiUrl = process.env.WORDPRESS_API_URL ?? API_URL;
   if (!apiUrl) {
-    throw new Error('WordPress API URL is not configured. Set WORDPRESS_API_URL or NEXT_PUBLIC_WORDPRESS_API_URL.');
+    throw new Error(
+      'WordPress API URL is not configured. Set WORDPRESS_API_URL or NEXT_PUBLIC_WORDPRESS_API_URL.',
+    );
   }
 
   let lastError: Error = new Error('Failed to fetch API');
