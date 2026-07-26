@@ -13,7 +13,7 @@ import { sanitize } from '../lib/sanitize';
 import type { PostsProps } from '../lib/types';
 import { colours } from './_app';
 
-const stripReadMoreParagraph = (excerpt: string) => {
+const stripReadMoreParagraph = (excerpt: string): string => {
   return excerpt.replace(/\s*<a\b[^>]*>.*?<\/a>/gi, '').trim();
 };
 

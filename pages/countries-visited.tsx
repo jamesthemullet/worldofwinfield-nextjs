@@ -9,6 +9,11 @@ import ShareBar from '../components/share-bar';
 import WorldMap from '../components/world-map';
 import { fetchDataFromGoogleSheets as fetchSheetById } from '../lib/sheets';
 
+type CountriesVisitedProps = {
+  transformedData: Record<string, { country: string; visited: string }[]>;
+  wishListCountries: string[];
+};
+
 const WISH_LIST_SHEET_ID = '1GX6KF20f3Nrb3m8T9th7UIV_uuePj4Ivlc_yLgo-4Bo';
 
 // Pulls the "Country" column out of the holiday wish list sheet, which is
@@ -81,10 +86,6 @@ const fetchDataFromGoogleSheets = async (): Promise<string[][] | null> => {
 
 type CountryListProps = {
   transformedData: Record<string, { country: string; visited: string }[]>;
-};
-
-type CountriesVisitedProps = CountryListProps & {
-  wishListCountries: string[];
 };
 
 const CountryList = ({ transformedData }: CountryListProps) => {

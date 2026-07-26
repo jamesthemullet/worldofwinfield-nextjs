@@ -16,7 +16,7 @@ import type { YearInReviewProps } from '../../lib/types';
 
 const FIRST_YEAR = 2018;
 
-const stripReadMoreParagraph = (excerpt: string) => {
+const stripReadMoreParagraph = (excerpt: string): string => {
   return excerpt.replace(/\s*<a\b[^>]*>.*?<\/a>/gi, '').trim();
 };
 
