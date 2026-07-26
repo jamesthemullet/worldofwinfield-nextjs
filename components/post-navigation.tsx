@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import Link from 'next/link';
+import type { JSX } from 'react';
 import type { AdjacentPost } from '../lib/types';
 import { colours } from '../pages/_app';
 
@@ -8,7 +9,10 @@ type PostNavigationProps = {
   nextPost: AdjacentPost | null;
 };
 
-export default function PostNavigation({ previousPost, nextPost }: PostNavigationProps) {
+export default function PostNavigation({
+  previousPost,
+  nextPost,
+}: PostNavigationProps): JSX.Element | null {
   if (!previousPost && !nextPost) return null;
 
   return (

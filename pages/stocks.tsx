@@ -180,7 +180,7 @@ const normaliseSymbolAlias = (symbol: string): string => {
 
 const getCompanyName = (symbol: string): string => COMPANY_NAMES[symbol] || symbol;
 
-const resolveDefaultWsUrl = () => {
+const resolveDefaultWsUrl = (): string => {
   if (typeof window === 'undefined') {
     return '';
   }

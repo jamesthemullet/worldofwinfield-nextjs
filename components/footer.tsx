@@ -1,10 +1,11 @@
 import styled from '@emotion/styled';
 import Link from 'next/link';
+import type { JSX } from 'react';
 import { colours } from '../pages/_app';
 import ArchiveDropdown from './archive';
 import Container from './container';
 
-export default function Footer() {
+export default function Footer(): JSX.Element {
   return (
     <footer>
       <Container>

@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import type { JSX } from 'react';
 import type { LayoutProps } from '../lib/types';
 import Alert from './alert';
 import Footer from './footer';
@@ -14,7 +15,7 @@ export default function Layout({
   articleModified,
   articleAuthor,
   jsonLd,
-}: LayoutProps) {
+}: LayoutProps): JSX.Element {
   return (
     <>
       <header>

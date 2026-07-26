@@ -72,17 +72,15 @@ export default function Post({ post, preview, relatedPosts, adjacentPosts }: Pos
           <>
             {' '}
             <article>
-              {post.featuredImage && (
-                <PostHeader
-                  title={post.title}
-                  coverImage={post.featuredImage}
-                  date={post.date}
-                  author={post.author}
-                  categories={post.categories}
-                  heroPost={true}
-                  caption={post.featuredImage.node.caption}
-                />
-              )}
+              <PostHeader
+                title={post.title}
+                coverImage={post.featuredImage}
+                date={post.date}
+                author={post.author}
+                categories={post.categories}
+                heroPost={true}
+                caption={post.featuredImage?.node.caption}
+              />
               <PrePost tags={post.tags} date={post.date} content={post.content} />
               <PostBody content={post.content} />
               {post.tags.edges.length > 0 && <Tags tags={post.tags} />}
@@ -102,7 +100,7 @@ export default function Post({ post, preview, relatedPosts, adjacentPosts }: Pos
 }
 
 export const getStaticProps: GetStaticProps = async ({ params, preview = false }) => {
-  const slug = params?.slug as string;
+  const slug = Array.isArray(params?.slug) ? params.slug[0] : params?.slug;
 
   if (!slug || !/^[a-zA-Z0-9-]+$/.test(slug)) {
     return { notFound: true };

@@ -27,7 +27,7 @@ const blockColours = [
 
 const lightBackgrounds = new Set([colours.purple, colours.green, colours.blueish, colours.azure]);
 
-const getColourFromTitle = (title: string) => {
+const getColourFromTitle = (title: string): string => {
   let hash = 0;
   for (let i = 0; i < title.length; i++) {
     hash = (hash * 31 + title.charCodeAt(i)) & 0xffffffff;
@@ -35,9 +35,10 @@ const getColourFromTitle = (title: string) => {
   return blockColours[Math.abs(hash) % blockColours.length];
 };
 
-const getTextColour = (bg: string) => (lightBackgrounds.has(bg) ? colours.dark : colours.white);
+const getTextColour = (bg: string): string =>
+  lightBackgrounds.has(bg) ? colours.dark : colours.white;
 
-const stripReadMoreParagraph = (excerpt: string) => {
+export const stripReadMoreParagraph = (excerpt: string): string => {
   return excerpt.replace(/\s*<a\b[^>]*>.*?<\/a>/gi, '').trim();
 };
 
@@ -204,7 +205,7 @@ const ContinueReadingLink = styled(Link)<{ colour: string; textcolour: string }>
 `;
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const tag = params?.tag as string;
+  const tag = (Array.isArray(params?.tag) ? params.tag[0] : params?.tag) ?? '';
   const data = await getPostsByTag(tag);
 
   return {

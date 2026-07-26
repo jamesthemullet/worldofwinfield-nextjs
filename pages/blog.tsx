@@ -25,7 +25,7 @@ export default function Index({ allPosts, preview }: IndexPageProps) {
   const loadMorePosts = async (): Promise<void> => {
     setIsLoading(true);
     const res = await fetch(`/api/blog-posts?after=${endCursor}`);
-    const data = await res.json();
+    const data = (await res.json()) as IndexPageProps['allPosts'];
     setPosts((prev) => [...prev, ...data.edges]);
     setHasNextPage(data.pageInfo.hasNextPage);
     setEndCursor(data.pageInfo.endCursor);
@@ -38,7 +38,7 @@ export default function Index({ allPosts, preview }: IndexPageProps) {
   const seo = {
     opengraphImage: allPosts.edges[0].node.seo.opengraphImage,
     opengraphTitle: `The Blog - World Of Winfield`,
-    opengraphDescription: `The Blog - World Of Winfield`,
+    opengraphDescription: `Read the latest posts from James Winfield covering travel, music, culture, politics, and more.`,
     opengraphSiteName: `World Of Winfield`,
   };
 
