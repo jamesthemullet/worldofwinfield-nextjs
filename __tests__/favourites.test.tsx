@@ -81,7 +81,10 @@ describe('FavouritesHubPage', () => {
 
   it('renders a link to each category page', () => {
     render(<FavouritesHubPage counts={allCounts} />);
-    expect(screen.getByRole('link', { name: /books/i })).toHaveAttribute('href', '/favourite-books');
+    expect(screen.getByRole('link', { name: /books/i })).toHaveAttribute(
+      'href',
+      '/favourite-books',
+    );
     expect(screen.getByRole('link', { name: /movies/i })).toHaveAttribute(
       'href',
       '/favourite-movies',
