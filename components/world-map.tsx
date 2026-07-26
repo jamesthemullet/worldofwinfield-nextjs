@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import type { Feature, Geometry } from 'geojson';
-import { type JSX, useState } from 'react';
+import { type JSX, useMemo, useState } from 'react';
 import { ComposableMap, Geographies, Geography, ZoomableGroup } from 'react-simple-maps';
 import countries110m from 'world-atlas/countries-110m.json';
 import { colours } from '../pages/_app';
@@ -63,7 +63,7 @@ export default function WorldMap({
   const [zoom, setZoom] = useState(MIN_ZOOM);
   const [center, setCenter] = useState<[number, number]>(DEFAULT_CENTER);
 
-  const visitedSet = new Set(visitedCountries.map(normalise));
+  const visitedSet = useMemo(() => new Set(visitedCountries.map(normalise)), [visitedCountries]);
   // A country already visited is shown as visited, not as a wish-list entry.
   const wishListSet = new Set(
     wishListCountries.map(normalise).filter((name) => !visitedSet.has(name)),

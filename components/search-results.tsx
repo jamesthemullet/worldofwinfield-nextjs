@@ -89,9 +89,9 @@ export const formatDate = (date: string): string => {
     month: 'long',
     day: 'numeric',
   };
-  const formattedDate = new Date(date).toLocaleString(undefined, options);
-
-  const day = new Date(date).getDate();
+  const d = new Date(date);
+  const formattedDate = d.toLocaleString(undefined, options);
+  const day = d.getDate();
   const dayWithOrdinal = addOrdinalIndicator(day);
 
   return formattedDate.replace(day.toString(), dayWithOrdinal);

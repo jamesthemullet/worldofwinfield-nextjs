@@ -84,7 +84,15 @@ const fetchDataFromGoogleSheets = async (): Promise<string[][] | null> => {
   }
 };
 
-const CountryList = ({ transformedData }: Pick<CountriesVisitedProps, 'transformedData'>) => {
+type CountryListProps = {
+  transformedData: Record<string, { country: string; visited: string }[]>;
+};
+
+type CountriesVisitedProps = CountryListProps & {
+  wishListCountries: string[];
+};
+
+const CountryList = ({ transformedData }: CountryListProps) => {
   return (
     <ContentContainer>
       {Object.keys(transformedData).map((continent) => (

@@ -22,7 +22,12 @@ async function fetchAPI<T = any>(query = '', { variables }: FetchAPIOptions = {}
     headers['Authorization'] = `Bearer ${process.env.WORDPRESS_AUTH_REFRESH_TOKEN}`;
   }
 
-  const apiUrl = (process.env.WORDPRESS_API_URL ?? API_URL) as string;
+  const apiUrl = process.env.WORDPRESS_API_URL ?? API_URL;
+  if (!apiUrl) {
+    throw new Error(
+      'WordPress API URL is not configured. Set WORDPRESS_API_URL or NEXT_PUBLIC_WORDPRESS_API_URL.',
+    );
+  }
 
   let lastError: Error = new Error('Failed to fetch API');
 
