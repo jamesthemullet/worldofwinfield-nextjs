@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import type { GetStaticProps } from 'next';
 import { useRouter } from 'next/router';
 import Container from '../components/container';
 import Layout from '../components/layout';
@@ -78,13 +79,15 @@ const fetchDataFromGoogleSheets = async (): Promise<string[][] | null> => {
   }
 };
 
-const CountryList = ({
-  transformedData,
-}: {
-  transformedData: {
-    [key: string]: { country: string; visited: string }[];
-  };
-}) => {
+type CountryListProps = {
+  transformedData: Record<string, { country: string; visited: string }[]>;
+};
+
+type CountriesVisitedProps = CountryListProps & {
+  wishListCountries: string[];
+};
+
+const CountryList = ({ transformedData }: CountryListProps) => {
   return (
     <ContentContainer>
       {Object.keys(transformedData).map((continent) => (
@@ -111,12 +114,7 @@ const CountryList = ({
 export default function CountriesVisited({
   transformedData,
   wishListCountries,
-}: {
-  transformedData: {
-    [key: string]: { country: string; visited: string }[];
-  };
-  wishListCountries: string[];
-}) {
+}: CountriesVisitedProps) {
   const router = useRouter();
 
   const allCountries = Object.values(transformedData).flat();
@@ -233,7 +231,7 @@ const ContentContainer = styled.section`
   }
 `;
 
-export async function getStaticProps() {
+export const getStaticProps: GetStaticProps<CountriesVisitedProps> = async () => {
   const [rawData, wishListRawData] = await Promise.all([
     fetchDataFromGoogleSheets(),
     fetchSheetById(WISH_LIST_SHEET_ID),
@@ -248,4 +246,4 @@ export async function getStaticProps() {
     },
     revalidate: 86400,
   };
-}
+};
