@@ -88,10 +88,6 @@ type CountryListProps = {
   transformedData: Record<string, { country: string; visited: string }[]>;
 };
 
-type CountriesVisitedProps = CountryListProps & {
-  wishListCountries: string[];
-};
-
 const CountryList = ({ transformedData }: CountryListProps) => {
   return (
     <ContentContainer>
