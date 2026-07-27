@@ -76,8 +76,8 @@ const fetchDataFromGoogleSheets = async (): Promise<string[][] | null> => {
     const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetID}/values/${SHEET_NAME}?alt=json&key=${API_KEY}`;
 
     const response = await fetch(url);
-    const data = await response.json();
-    return data.values;
+    const data = (await response.json()) as { values?: string[][] };
+    return data.values ?? null;
   } catch (error) {
     console.error('Error fetching data from Google Sheets:', error);
     return null;

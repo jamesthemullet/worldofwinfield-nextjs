@@ -4,6 +4,10 @@ import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'reac
 import type { IntroProps, JamesImagesProps } from '../lib/types';
 import { colours } from '../pages/_app';
 
+type BlockProps = {
+  color: string;
+};
+
 type FlipperProps = {
   flipped: boolean;
   children: React.ReactNode;
@@ -117,7 +121,7 @@ const GridContainer = styled.div`
   }
 `;
 
-const Block = styled.div`
+const Block = styled.div<BlockProps>`
   display: flex;
   align-items: center;
   justify-content: center;

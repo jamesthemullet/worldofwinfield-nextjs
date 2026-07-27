@@ -12,7 +12,7 @@ import { getAllPostsForHome } from '../lib/api';
 import type { IndexPageProps, SearchResult } from '../lib/types';
 
 export default function Index({ allPosts, preview }: IndexPageProps) {
-  const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
+  const [searchResults, setSearchResults] = useState<SearchResult[] | null>(null);
   const [posts, setPosts] = useState(allPosts.edges);
   const [hasNextPage, setHasNextPage] = useState(allPosts.pageInfo.hasNextPage);
   const [endCursor, setEndCursor] = useState(allPosts.pageInfo.endCursor);
