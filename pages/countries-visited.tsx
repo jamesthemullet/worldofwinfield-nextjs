@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import type { GetStaticProps } from 'next';
 import { useRouter } from 'next/router';
 import Container from '../components/container';
 import Layout from '../components/layout';
@@ -6,6 +7,27 @@ import PostHeader from '../components/post-header';
 import PostTitle from '../components/post-title';
 import ShareBar from '../components/share-bar';
 import WorldMap from '../components/world-map';
+import { fetchDataFromGoogleSheets as fetchSheetById } from '../lib/sheets';
+
+type CountriesVisitedProps = {
+  transformedData: Record<string, { country: string; visited: string }[]>;
+  wishListCountries: string[];
+};
+
+const WISH_LIST_SHEET_ID = '1GX6KF20f3Nrb3m8T9th7UIV_uuePj4Ivlc_yLgo-4Bo';
+
+// Pulls the "Country" column out of the holiday wish list sheet, which is
+// shaped differently to the continents sheet (one row per place, not
+// paired continent columns).
+export const extractWishListCountries = (rawData: string[][] | null): string[] => {
+  if (!rawData || rawData.length < 2) return [];
+
+  const [headerRow, ...rows] = rawData;
+  const countryIndex = headerRow.findIndex((header) => header?.trim().toLowerCase() === 'country');
+  if (countryIndex === -1) return [];
+
+  return rows.map((row) => row[countryIndex]).filter((country): country is string => !!country);
+};
 
 export const processData = (
   rawData: string[][],
@@ -62,13 +84,11 @@ const fetchDataFromGoogleSheets = async (): Promise<string[][] | null> => {
   }
 };
 
-const CountryList = ({
-  transformedData,
-}: {
-  transformedData: {
-    [key: string]: { country: string; visited: string }[];
-  };
-}) => {
+type CountryListProps = {
+  transformedData: Record<string, { country: string; visited: string }[]>;
+};
+
+const CountryList = ({ transformedData }: CountryListProps) => {
   return (
     <ContentContainer>
       {Object.keys(transformedData).map((continent) => (
@@ -94,11 +114,8 @@ const CountryList = ({
 
 export default function CountriesVisited({
   transformedData,
-}: {
-  transformedData: {
-    [key: string]: { country: string; visited: string }[];
-  };
-}) {
+  wishListCountries,
+}: CountriesVisitedProps) {
   const router = useRouter();
 
   const allCountries = Object.values(transformedData).flat();
@@ -141,7 +158,7 @@ export default function CountriesVisited({
                   <StatLabel>continents explored</StatLabel>
                 </StatItem>
               </StatBlock>
-              <WorldMap visitedCountries={visitedCountries} />
+              <WorldMap visitedCountries={visitedCountries} wishListCountries={wishListCountries} />
               <ShareBar
                 title={`I've visited ${totalVisited} of ${totalCountries} countries across ${continentsExplored} continents! 🌍`}
                 url="https://worldofwinfield.co.uk/countries-visited"
@@ -215,14 +232,19 @@ const ContentContainer = styled.section`
   }
 `;
 
-export async function getStaticProps() {
-  const rawData = await fetchDataFromGoogleSheets();
+export const getStaticProps: GetStaticProps<CountriesVisitedProps> = async () => {
+  const [rawData, wishListRawData] = await Promise.all([
+    fetchDataFromGoogleSheets(),
+    fetchSheetById(WISH_LIST_SHEET_ID),
+  ]);
   const transformedData = rawData ? processData(rawData) : {};
+  const wishListCountries = extractWishListCountries(wishListRawData);
 
   return {
     props: {
       transformedData,
+      wishListCountries,
     },
     revalidate: 86400,
   };
-}
+};

@@ -13,14 +13,21 @@ function wait(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-async function fetchAPI(query = '', { variables }: FetchAPIOptions = {}) {
+// T defaults to `any` so existing call sites without a type argument are unaffected;
+// typed callers can pass fetchAPI<ExpectedShape>(...) to get a checked return.
+async function fetchAPI<T = any>(query = '', { variables }: FetchAPIOptions = {}): Promise<T> {
   const headers: Record<string, string> = { 'Content-Type': 'application/json' };
 
   if (process.env.WORDPRESS_AUTH_REFRESH_TOKEN) {
     headers['Authorization'] = `Bearer ${process.env.WORDPRESS_AUTH_REFRESH_TOKEN}`;
   }
 
-  const apiUrl = (process.env.WORDPRESS_API_URL ?? API_URL) as string;
+  const apiUrl = process.env.WORDPRESS_API_URL ?? API_URL;
+  if (!apiUrl) {
+    throw new Error(
+      'WordPress API URL is not configured. Set WORDPRESS_API_URL or NEXT_PUBLIC_WORDPRESS_API_URL.',
+    );
+  }
 
   let lastError: Error = new Error('Failed to fetch API');
 
@@ -50,7 +57,7 @@ async function fetchAPI(query = '', { variables }: FetchAPIOptions = {}) {
       continue;
     }
 
-    const json = await res.json();
+    const json = (await res.json()) as { data: T; errors?: { message: string }[] };
     if (json.errors) {
       console.error(json.errors);
       throw new Error('Failed to fetch API');
