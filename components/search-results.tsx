@@ -30,7 +30,7 @@ const stripReadMoreParagraph = (excerpt: string): string => {
 
 const SearchResults = ({ searchResults }: SearchResultsProps): JSX.Element => {
   return (
-    <SearchResultsContainer>
+    <SearchResultsContainer aria-live="polite" aria-atomic="false">
       {searchResults !== null && searchResults.length === 0 && (
         <p className="center">No results found.</p>
       )}

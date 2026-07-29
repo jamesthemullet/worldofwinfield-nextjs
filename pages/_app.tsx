@@ -1,5 +1,6 @@
 import createCache, { EmotionCache } from '@emotion/cache';
 import { CacheProvider, css, Global } from '@emotion/react';
+import styled from '@emotion/styled';
 import { GoogleAnalytics } from '@next/third-parties/google';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
@@ -62,18 +63,12 @@ function MyApp({
     <CacheProvider value={emotionCache}>
       <Head>
         <title>World Of Winfield</title>
-        <link
-          rel="preload"
-          href="/fonts/Oswald-VariableFont_rght.ttf"
-          as="font"
-          type="font/truetype"
-          crossOrigin="anonymous"
-        />
         <link rel="preconnect" href="https://i0.wp.com" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://www.googletagmanager.com" />
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
       </Head>
       <Global styles={globalStyles} />
+      <SkipLink href="#main-content">Skip to main content</SkipLink>
       <Nav />
       <Component {...pageProps} />
       <GoogleAnalytics gaId="G-R4Y79GZQT0" />
@@ -82,3 +77,18 @@ function MyApp({
 }
 
 export default MyApp;
+
+const SkipLink = styled.a`
+  position: absolute;
+  top: -100%;
+  left: 0;
+  background: #000;
+  color: #fff;
+  padding: 0.5rem 1rem;
+  z-index: 9999;
+  font-family: sans-serif;
+
+  &:focus {
+    top: 0;
+  }
+`;

@@ -26,12 +26,16 @@ export default function NowPage() {
             <LastUpdated>Last updated: {NOW_LAST_UPDATED}</LastUpdated>
 
             <Section>
-              <SectionHeading>📍 Where I am</SectionHeading>
+              <SectionHeading>
+                <span aria-hidden="true">📍 </span>Where I am
+              </SectionHeading>
               <p>London. Croydon, to be exact.</p>
             </Section>
 
             <Section>
-              <SectionHeading>💼 What I'm working on</SectionHeading>
+              <SectionHeading>
+                <span aria-hidden="true">💼 </span>What I'm working on
+              </SectionHeading>
               <p>At work, an internal merchandising app at M&S.</p>
               <p>
                 On the side I've started making a site called <strong>Croydon Chicken Mile</strong>{' '}
@@ -49,7 +53,9 @@ export default function NowPage() {
             </Section>
 
             <Section>
-              <SectionHeading>🤖 What I'm learning</SectionHeading>
+              <SectionHeading>
+                <span aria-hidden="true">🤖 </span>What I'm learning
+              </SectionHeading>
               <p>
                 Kind of obsessed with Claude Code at the moment and trying to actually integrate
                 myself into the AI ecosystem rather than just messing about with it. Also still
@@ -58,7 +64,9 @@ export default function NowPage() {
             </Section>
 
             <Section>
-              <SectionHeading>📖 What I'm reading</SectionHeading>
+              <SectionHeading>
+                <span aria-hidden="true">📖 </span>What I'm reading
+              </SectionHeading>
               <p>
                 Just finished reading Hitler, Stalin, Mum & Dad by Daniel Finkelstein - amazingly
                 written but haunting too. My favourite blog at the moment is{' '}
@@ -74,7 +82,9 @@ export default function NowPage() {
             </Section>
 
             <Section>
-              <SectionHeading>✈️ What's next</SectionHeading>
+              <SectionHeading>
+                <span aria-hidden="true">✈️ </span>What's next
+              </SectionHeading>
               <p>
                 Well I've just got back from Japan so there's a need to book another holiday. Maybe
                 Montenegro (new country) and then Athens? Loving all the hot sunshine this year in

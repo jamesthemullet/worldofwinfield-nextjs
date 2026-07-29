@@ -26,9 +26,9 @@ describe('CoverImage', () => {
     expect(screen.getByRole('img')).toBeInTheDocument();
   });
 
-  it('sets the alt text to include the post title', () => {
+  it('sets the alt text to the post title', () => {
     render(<CoverImage title="My Post Title" coverImage={coverImageData} />);
-    expect(screen.getByAltText('Cover Image for My Post Title')).toBeInTheDocument();
+    expect(screen.getByAltText('My Post Title')).toBeInTheDocument();
   });
 
   it('wraps the image in a link to the post when slug is provided', () => {
