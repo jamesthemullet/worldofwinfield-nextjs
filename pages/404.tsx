@@ -47,6 +47,7 @@ export default function Custom404() {
     <Layout preview={null} seo={seo} title="404 - Page Not Found">
       <Container>
         <article>
+          <VisuallyHidden>Page Not Found</VisuallyHidden>
           <Grid>
             {words.map((word, index) => (
               <Block backgroundColour={shuffledColours[index]} key={index}>
@@ -63,6 +64,18 @@ export default function Custom404() {
     </Layout>
   );
 }
+
+const VisuallyHidden = styled.h1`
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+`;
 
 const Grid = styled.div`
   display: grid;

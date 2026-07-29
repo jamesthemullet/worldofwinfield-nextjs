@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { type JSX, useMemo } from 'react';
 import { sanitize, stripExternalLinks } from '../lib/sanitize';
 import type { HeroPostProps } from '../lib/types';
-import { StyledButton } from './core-components';
+import { colours } from '../pages/_app';
 import PostHeader from './post-header';
 
 export default function HeroPost({
@@ -32,11 +32,9 @@ export default function HeroPost({
         </div>
         <StyledExcerptContainer>
           <StyledExcerpt dangerouslySetInnerHTML={{ __html: sanitizedExcerpt }} />
-          <StyledButton>
-            <Link href={slug} aria-label={`Read more about ${title}`}>
-              Read More
-            </Link>
-          </StyledButton>
+          <ReadMoreLink href={slug} aria-label={`Read more about ${title}`}>
+            Read More
+          </ReadMoreLink>
         </StyledExcerptContainer>
       </div>
     </StyledSection>
@@ -63,6 +61,31 @@ const StyledExcerpt = styled.div`
 
   p {
     word-wrap: break-word;
+  }
+`;
+
+const ReadMoreLink = styled(Link)`
+  display: inline-block;
+  padding: 10px;
+  font-size: 1rem;
+  min-width: 100px;
+  background-color: ${colours.pink};
+  color: ${colours.white};
+  font-weight: bold;
+  text-decoration: none;
+  text-align: center;
+
+  &:hover {
+    color: ${colours.dark};
+  }
+
+  &:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
+  }
+
+  @media (max-width: 768px) {
+    flex: 1;
   }
 `;
 
