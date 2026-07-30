@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { type JSX, useMemo } from 'react';
+import { type JSX, useEffect, useMemo, useRef } from 'react';
 import { sanitize } from '../lib/sanitize';
 import type { PostBodyProps } from '../lib/types';
 import { colours } from '../pages/_app';
@@ -17,13 +17,33 @@ const resolveDataSrc = (html: string): string =>
     .replace(/\bdata-srcset=/gi, 'srcset=');
 
 export default function PostBody({ content }: PostBodyProps): JSX.Element {
+  const containerRef = useRef<HTMLDivElement>(null);
   const sanitizedContent = useMemo(
     () =>
-      sanitize(resolveDataSrc(content), { ADD_ATTR: ['srcset', 'sizes', 'loading', 'decoding'] }),
+      sanitize(resolveDataSrc(content), {
+        ADD_TAGS: ['script'],
+        ADD_ATTR: ['srcset', 'sizes', 'loading', 'decoding', 'async', 'charset'],
+      }),
     [content],
   );
+
+  // Browsers don't execute <script> tags inserted via innerHTML, so any script
+  // that survived sanitizing (e.g. Getty's embed widget) has to be re-created here.
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+    for (const oldScript of Array.from(container.querySelectorAll('script'))) {
+      const newScript = document.createElement('script');
+      for (const { name, value } of Array.from(oldScript.attributes)) {
+        newScript.setAttribute(name, value);
+      }
+      newScript.textContent = oldScript.textContent;
+      oldScript.replaceWith(newScript);
+    }
+  }, [sanitizedContent]);
+
   return (
-    <ContentContainer>
+    <ContentContainer ref={containerRef}>
       <div dangerouslySetInnerHTML={{ __html: sanitizedContent }} />
     </ContentContainer>
   );
