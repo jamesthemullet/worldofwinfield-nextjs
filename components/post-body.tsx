@@ -29,14 +29,20 @@ export default function PostBody({ content }: PostBodyProps): JSX.Element {
 
   // Browsers don't execute <script> tags inserted via innerHTML, so any script
   // that survived sanitizing (e.g. Getty's embed widget) has to be re-created here.
+  // The `data-recreated` marker stops React 18 Strict Mode's double effect
+  // invocation (dev only) from re-running already-recreated scripts and
+  // triggering duplicate loads.
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
-    for (const oldScript of Array.from(container.querySelectorAll('script'))) {
+    for (const oldScript of Array.from(
+      container.querySelectorAll('script:not([data-recreated])'),
+    )) {
       const newScript = document.createElement('script');
       for (const { name, value } of Array.from(oldScript.attributes)) {
         newScript.setAttribute(name, value);
       }
+      newScript.dataset.recreated = 'true';
       newScript.textContent = oldScript.textContent;
       oldScript.replaceWith(newScript);
     }
