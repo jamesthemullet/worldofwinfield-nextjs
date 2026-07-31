@@ -16,7 +16,7 @@ import type { YearInReviewProps } from '../../lib/types';
 
 const FIRST_YEAR = 2018;
 
-const stripReadMoreParagraph = (excerpt: string) => {
+const stripReadMoreParagraph = (excerpt: string): string => {
   return excerpt.replace(/\s*<a\b[^>]*>.*?<\/a>/gi, '').trim();
 };
 
@@ -195,7 +195,8 @@ const YearPostExcerpt = styled.div`
 `;
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const year = parseInt(params?.year as string, 10);
+  const yearParam = Array.isArray(params?.year) ? params.year[0] : params?.year;
+  const year = parseInt(yearParam ?? '', 10);
   const posts = await getPostsByYear(year);
 
   return {

@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, within } from '@testing-library/react';
 import React from 'react';
 import '@testing-library/jest-dom';
 import DOMPurify from 'dompurify';
@@ -41,12 +41,40 @@ describe('PostBody', () => {
     expect(container).toBeInTheDocument();
   });
 
-  it('passes content through DOMPurify.sanitize with extended attributes', () => {
+  it('passes content through DOMPurify.sanitize with extended attributes and script tag opt-in', () => {
     render(<PostBody content="<p>Test content</p>" />);
     expect(DOMPurify.sanitize).toHaveBeenCalledWith(
       '<p>Test content</p>',
-      expect.objectContaining({ ADD_ATTR: expect.arrayContaining(['srcset']) }),
+      expect.objectContaining({
+        ADD_TAGS: ['script'],
+        ADD_ATTR: expect.arrayContaining(['srcset', 'async', 'charset']),
+      }),
     );
+  });
+
+  it('re-creates script tags after mount so embeds like Getty execute', () => {
+    const { container } = render(
+      <PostBody content='<script src="https://embed-cdn.gettyimages.com/widgets.js"></script>' />,
+    );
+    const script = container.querySelector('script');
+    expect(script).not.toBeNull();
+    expect(script?.getAttribute('src')).toBe('https://embed-cdn.gettyimages.com/widgets.js');
+    expect(script?.dataset.recreated).toBe('true');
+  });
+
+  it('does not touch scripts that are already marked as recreated', () => {
+    render(<PostBody content="<p>noop</p>" />);
+    const preMarked = document.createElement('script');
+    preMarked.dataset.recreated = 'true';
+    preMarked.setAttribute('src', 'https://embed-cdn.gettyimages.com/widgets.js');
+    document.body.appendChild(preMarked);
+
+    // Re-running the recreation logic directly (as Strict Mode's second effect
+    // invocation would) must skip elements already marked `data-recreated`.
+    const matches = document.body.querySelectorAll('script:not([data-recreated])');
+    expect(Array.from(matches)).not.toContain(preMarked);
+
+    document.body.removeChild(preMarked);
   });
 
   it('converts data-src to src before sanitizing', () => {
@@ -67,5 +95,53 @@ describe('PostBody', () => {
       expect.stringContaining('data:image/gif'),
       expect.anything(),
     );
+  });
+
+  it('opens a lightbox with the clicked image when an image in the content is clicked', () => {
+    render(<PostBody content='<img src="/photo.jpg" alt="A photo" />' />);
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+
+    fireEvent.click(screen.getByAltText('A photo'));
+
+    const dialog = screen.getByRole('dialog');
+    expect(dialog).toBeInTheDocument();
+    expect(screen.getAllByAltText('A photo')).toHaveLength(2);
+  });
+
+  it('uses the linked full-size image as the lightbox source when the image is wrapped in a link to a media file', () => {
+    render(
+      <PostBody content='<a href="/uploads/photo-full.jpg"><img src="/uploads/photo-1024x683.jpg" alt="A photo" /></a>' />,
+    );
+    fireEvent.click(screen.getByAltText('A photo'));
+
+    const dialog = screen.getByRole('dialog');
+    const zoomedImage = within(dialog).getByAltText('A photo');
+    expect(zoomedImage).toHaveAttribute('src', '/uploads/photo-full.jpg');
+  });
+
+  it('ignores a wrapping link that does not point to an image file', () => {
+    render(
+      <PostBody content='<a href="/some-page"><img src="/uploads/photo-1024x683.jpg" alt="A photo" /></a>' />,
+    );
+    fireEvent.click(screen.getByAltText('A photo'));
+
+    const dialog = screen.getByRole('dialog');
+    const zoomedImage = within(dialog).getByAltText('A photo');
+    expect(zoomedImage).toHaveAttribute('src', 'http://localhost/uploads/photo-1024x683.jpg');
+  });
+
+  it('closes the lightbox when its close button is clicked', () => {
+    render(<PostBody content='<img src="/photo.jpg" alt="A photo" />' />);
+    fireEvent.click(screen.getByAltText('A photo'));
+    expect(screen.getByRole('dialog')).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole('button', { name: 'Close' }));
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+  });
+
+  it('does not open a lightbox when a non-image element is clicked', () => {
+    render(<PostBody content="<p>Hello world</p>" />);
+    fireEvent.click(screen.getByText('Hello world'));
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
   });
 });

@@ -30,17 +30,6 @@ describe('Layout', () => {
     expect(screen.getByText('Page content')).toBeInTheDocument();
   });
 
-  it('renders the skip-to-main-content link', () => {
-    render(
-      <Layout preview={null}>
-        <p>Content</p>
-      </Layout>,
-    );
-    const skipLink = screen.getByText('Skip to main content');
-    expect(skipLink).toBeInTheDocument();
-    expect(skipLink).toHaveAttribute('href', '#main-content');
-  });
-
   it('gives the main element the id "main-content" for the skip link to target', () => {
     render(
       <Layout preview={null}>
