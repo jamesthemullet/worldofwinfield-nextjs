@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { type JSX, useEffect, useRef } from 'react';
+import { type JSX, useEffect, useRef, useState } from 'react';
 
 type ImageLightboxProps = {
   src: string;
@@ -9,6 +9,7 @@ type ImageLightboxProps = {
 
 export default function ImageLightbox({ src, alt, onClose }: ImageLightboxProps): JSX.Element {
   const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const [isZoomedIn, setIsZoomedIn] = useState(false);
 
   useEffect(() => {
     closeButtonRef.current?.focus();
@@ -32,7 +33,17 @@ export default function ImageLightbox({ src, alt, onClose }: ImageLightboxProps)
         }}>
         &times;
       </CloseButton>
-      <ZoomedImage src={src} alt={alt} onClick={(event) => event.stopPropagation()} />
+      <ImageScroll $isZoomedIn={isZoomedIn}>
+        <ZoomedImage
+          src={src}
+          alt={alt}
+          $isZoomedIn={isZoomedIn}
+          onClick={(event) => {
+            event.stopPropagation();
+            setIsZoomedIn((current) => !current);
+          }}
+        />
+      </ImageScroll>
     </Overlay>
   );
 }
@@ -50,11 +61,31 @@ const Overlay = styled.div`
   cursor: zoom-out;
 `;
 
-const ZoomedImage = styled.img`
+const ImageScroll = styled.div<{ $isZoomedIn: boolean }>`
   max-width: 100%;
   max-height: 100%;
-  object-fit: contain;
-  cursor: default;
+  overflow: ${({ $isZoomedIn }) => ($isZoomedIn ? 'auto' : 'hidden')};
+  display: flex;
+  align-items: ${({ $isZoomedIn }) => ($isZoomedIn ? 'flex-start' : 'center')};
+  justify-content: ${({ $isZoomedIn }) => ($isZoomedIn ? 'flex-start' : 'center')};
+`;
+
+const ZoomedImage = styled.img<{ $isZoomedIn: boolean }>`
+  cursor: ${({ $isZoomedIn }) => ($isZoomedIn ? 'zoom-out' : 'zoom-in')};
+
+  ${({ $isZoomedIn }) =>
+    $isZoomedIn
+      ? `
+    max-width: none;
+    max-height: none;
+    width: auto;
+    height: auto;
+  `
+      : `
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+  `}
 `;
 
 const CloseButton = styled.button`

@@ -37,6 +37,18 @@ describe('ImageLightbox', () => {
     expect(onClose).not.toHaveBeenCalled();
   });
 
+  it('toggles zoom in and out when the image is clicked', () => {
+    render(<ImageLightbox src="/photo.jpg" alt="A photo" onClose={jest.fn()} />);
+    const image = screen.getByAltText('A photo');
+    expect(image).toHaveStyle('cursor: zoom-in');
+
+    fireEvent.click(image);
+    expect(image).toHaveStyle('cursor: zoom-out');
+
+    fireEvent.click(image);
+    expect(image).toHaveStyle('cursor: zoom-in');
+  });
+
   it('calls onClose when the Escape key is pressed', () => {
     const onClose = jest.fn();
     render(<ImageLightbox src="/photo.jpg" alt="A photo" onClose={onClose} />);

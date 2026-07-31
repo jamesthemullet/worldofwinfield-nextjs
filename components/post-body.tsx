@@ -5,6 +5,23 @@ import type { PostBodyProps } from '../lib/types';
 import { colours } from '../pages/_app';
 import ImageLightbox from './image-lightbox';
 
+const getHighestResSrc = (img: HTMLImageElement): string => {
+  const srcset = img.getAttribute('srcset');
+  if (!srcset) return img.currentSrc || img.src;
+
+  const candidates = srcset
+    .split(',')
+    .map((entry) => entry.trim().split(/\s+/))
+    .filter((parts) => parts.length === 2 && parts[1].endsWith('w'))
+    .map(([url, width]) => ({ url, width: parseInt(width, 10) }))
+    .filter((candidate) => !Number.isNaN(candidate.width));
+
+  if (candidates.length === 0) return img.currentSrc || img.src;
+
+  return candidates.reduce((best, candidate) => (candidate.width > best.width ? candidate : best))
+    .url;
+};
+
 const resolveDataSrc = (html: string): string =>
   html
     // Remove placeholder src/srcset that precede the real data-src/data-lazy-src
@@ -31,7 +48,7 @@ export default function PostBody({ content }: PostBodyProps): JSX.Element {
 
     event.preventDefault();
     const img = target as HTMLImageElement;
-    setZoomedImage({ src: img.currentSrc || img.src, alt: img.alt });
+    setZoomedImage({ src: getHighestResSrc(img), alt: img.alt });
   };
 
   return (
