@@ -37,16 +37,19 @@ describe('ImageLightbox', () => {
     expect(onClose).not.toHaveBeenCalled();
   });
 
-  it('toggles zoom in and out when the image is clicked', () => {
+  it('scales the image up when clicked, and back down when clicked again', () => {
     render(<ImageLightbox src="/photo.jpg" alt="A photo" onClose={jest.fn()} />);
     const image = screen.getByAltText('A photo');
     expect(image).toHaveStyle('cursor: zoom-in');
+    expect(image).toHaveStyle('transform: none');
 
     fireEvent.click(image);
     expect(image).toHaveStyle('cursor: zoom-out');
+    expect(image).toHaveStyle('transform: scale(2.2)');
 
     fireEvent.click(image);
     expect(image).toHaveStyle('cursor: zoom-in');
+    expect(image).toHaveStyle('transform: none');
   });
 
   it('calls onClose when the Escape key is pressed', () => {

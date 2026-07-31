@@ -5,7 +5,18 @@ import type { PostBodyProps } from '../lib/types';
 import { colours } from '../pages/_app';
 import ImageLightbox from './image-lightbox';
 
+const IMAGE_FILE_PATTERN = /\.(jpe?g|png|gif|webp|avif)$/i;
+
+const getLinkedFullSizeSrc = (img: HTMLImageElement): string | null => {
+  const link = img.closest('a');
+  const href = link?.getAttribute('href');
+  return href && IMAGE_FILE_PATTERN.test(href) ? href : null;
+};
+
 const getHighestResSrc = (img: HTMLImageElement): string => {
+  const linkedFullSize = getLinkedFullSizeSrc(img);
+  if (linkedFullSize) return linkedFullSize;
+
   const srcset = img.getAttribute('srcset');
   if (!srcset) return img.currentSrc || img.src;
 

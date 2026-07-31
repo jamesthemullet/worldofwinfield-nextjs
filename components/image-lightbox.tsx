@@ -10,6 +10,7 @@ type ImageLightboxProps = {
 export default function ImageLightbox({ src, alt, onClose }: ImageLightboxProps): JSX.Element {
   const closeButtonRef = useRef<HTMLButtonElement>(null);
   const [isZoomedIn, setIsZoomedIn] = useState(false);
+  const [zoomOrigin, setZoomOrigin] = useState('center');
 
   useEffect(() => {
     closeButtonRef.current?.focus();
@@ -38,9 +39,15 @@ export default function ImageLightbox({ src, alt, onClose }: ImageLightboxProps)
           src={src}
           alt={alt}
           $isZoomedIn={isZoomedIn}
+          $zoomOrigin={zoomOrigin}
           onClick={(event) => {
             event.stopPropagation();
             setIsZoomedIn((current) => !current);
+
+            const bounds = event.currentTarget.getBoundingClientRect();
+            const originX = ((event.clientX - bounds.left) / bounds.width) * 100;
+            const originY = ((event.clientY - bounds.top) / bounds.height) * 100;
+            setZoomOrigin(`${originX}% ${originY}%`);
           }}
         />
       </ImageScroll>
@@ -70,22 +77,15 @@ const ImageScroll = styled.div<{ $isZoomedIn: boolean }>`
   justify-content: ${({ $isZoomedIn }) => ($isZoomedIn ? 'flex-start' : 'center')};
 `;
 
-const ZoomedImage = styled.img<{ $isZoomedIn: boolean }>`
-  cursor: ${({ $isZoomedIn }) => ($isZoomedIn ? 'zoom-out' : 'zoom-in')};
+const ZOOM_SCALE = 2.2;
 
-  ${({ $isZoomedIn }) =>
-    $isZoomedIn
-      ? `
-    max-width: none;
-    max-height: none;
-    width: auto;
-    height: auto;
-  `
-      : `
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain;
-  `}
+const ZoomedImage = styled.img<{ $isZoomedIn: boolean; $zoomOrigin: string }>`
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  cursor: ${({ $isZoomedIn }) => ($isZoomedIn ? 'zoom-out' : 'zoom-in')};
+  transform-origin: ${({ $zoomOrigin }) => $zoomOrigin};
+  transform: ${({ $isZoomedIn }) => ($isZoomedIn ? `scale(${ZOOM_SCALE})` : 'none')};
 `;
 
 const CloseButton = styled.button`

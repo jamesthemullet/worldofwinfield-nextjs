@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, within } from '@testing-library/react';
 import React from 'react';
 import '@testing-library/jest-dom';
 import DOMPurify from 'dompurify';
@@ -78,6 +78,28 @@ describe('PostBody', () => {
     const dialog = screen.getByRole('dialog');
     expect(dialog).toBeInTheDocument();
     expect(screen.getAllByAltText('A photo')).toHaveLength(2);
+  });
+
+  it('uses the linked full-size image as the lightbox source when the image is wrapped in a link to a media file', () => {
+    render(
+      <PostBody content='<a href="/uploads/photo-full.jpg"><img src="/uploads/photo-1024x683.jpg" alt="A photo" /></a>' />,
+    );
+    fireEvent.click(screen.getByAltText('A photo'));
+
+    const dialog = screen.getByRole('dialog');
+    const zoomedImage = within(dialog).getByAltText('A photo');
+    expect(zoomedImage).toHaveAttribute('src', '/uploads/photo-full.jpg');
+  });
+
+  it('ignores a wrapping link that does not point to an image file', () => {
+    render(
+      <PostBody content='<a href="/some-page"><img src="/uploads/photo-1024x683.jpg" alt="A photo" /></a>' />,
+    );
+    fireEvent.click(screen.getByAltText('A photo'));
+
+    const dialog = screen.getByRole('dialog');
+    const zoomedImage = within(dialog).getByAltText('A photo');
+    expect(zoomedImage).toHaveAttribute('src', 'http://localhost/uploads/photo-1024x683.jpg');
   });
 
   it('closes the lightbox when its close button is clicked', () => {
