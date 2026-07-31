@@ -30,7 +30,7 @@ const stripReadMoreParagraph = (excerpt: string): string => {
 
 const SearchResults = ({ searchResults }: SearchResultsProps): JSX.Element => {
   return (
-    <SearchResultsContainer>
+    <SearchResultsContainer aria-live="polite" aria-atomic="false">
       {searchResults !== null && searchResults.length === 0 && (
         <p className="center">No results found.</p>
       )}
@@ -89,9 +89,9 @@ export const formatDate = (date: string): string => {
     month: 'long',
     day: 'numeric',
   };
-  const formattedDate = new Date(date).toLocaleString(undefined, options);
-
-  const day = new Date(date).getDate();
+  const d = new Date(date);
+  const formattedDate = d.toLocaleString(undefined, options);
+  const day = d.getDate();
   const dayWithOrdinal = addOrdinalIndicator(day);
 
   return formattedDate.replace(day.toString(), dayWithOrdinal);

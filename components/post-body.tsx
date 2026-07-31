@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { type JSX, type MouseEvent, useMemo, useState } from 'react';
+import { type JSX, type MouseEvent, useEffect, useMemo, useRef, useState } from 'react';
 import { sanitize } from '../lib/sanitize';
 import type { PostBodyProps } from '../lib/types';
 import { colours } from '../pages/_app';
@@ -47,9 +47,13 @@ const resolveDataSrc = (html: string): string =>
 
 export default function PostBody({ content }: PostBodyProps): JSX.Element {
   const [zoomedImage, setZoomedImage] = useState<{ src: string; alt: string } | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const sanitizedContent = useMemo(
     () =>
-      sanitize(resolveDataSrc(content), { ADD_ATTR: ['srcset', 'sizes', 'loading', 'decoding'] }),
+      sanitize(resolveDataSrc(content), {
+        ADD_TAGS: ['script'],
+        ADD_ATTR: ['srcset', 'sizes', 'loading', 'decoding', 'async', 'charset'],
+      }),
     [content],
   );
 
@@ -62,8 +66,29 @@ export default function PostBody({ content }: PostBodyProps): JSX.Element {
     setZoomedImage({ src: getHighestResSrc(img), alt: img.alt });
   };
 
+  // Browsers don't execute <script> tags inserted via innerHTML, so any script
+  // that survived sanitizing (e.g. Getty's embed widget) has to be re-created here.
+  // The `data-recreated` marker stops React 18 Strict Mode's double effect
+  // invocation (dev only) from re-running already-recreated scripts and
+  // triggering duplicate loads.
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+    for (const oldScript of Array.from(
+      container.querySelectorAll('script:not([data-recreated])'),
+    )) {
+      const newScript = document.createElement('script');
+      for (const { name, value } of Array.from(oldScript.attributes)) {
+        newScript.setAttribute(name, value);
+      }
+      newScript.dataset.recreated = 'true';
+      newScript.textContent = oldScript.textContent;
+      oldScript.replaceWith(newScript);
+    }
+  }, [sanitizedContent]);
+
   return (
-    <ContentContainer>
+    <ContentContainer ref={containerRef}>
       <div onClick={handleContentClick} dangerouslySetInnerHTML={{ __html: sanitizedContent }} />
       {zoomedImage && (
         <ImageLightbox

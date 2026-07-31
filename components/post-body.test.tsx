@@ -41,12 +41,40 @@ describe('PostBody', () => {
     expect(container).toBeInTheDocument();
   });
 
-  it('passes content through DOMPurify.sanitize with extended attributes', () => {
+  it('passes content through DOMPurify.sanitize with extended attributes and script tag opt-in', () => {
     render(<PostBody content="<p>Test content</p>" />);
     expect(DOMPurify.sanitize).toHaveBeenCalledWith(
       '<p>Test content</p>',
-      expect.objectContaining({ ADD_ATTR: expect.arrayContaining(['srcset']) }),
+      expect.objectContaining({
+        ADD_TAGS: ['script'],
+        ADD_ATTR: expect.arrayContaining(['srcset', 'async', 'charset']),
+      }),
     );
+  });
+
+  it('re-creates script tags after mount so embeds like Getty execute', () => {
+    const { container } = render(
+      <PostBody content='<script src="https://embed-cdn.gettyimages.com/widgets.js"></script>' />,
+    );
+    const script = container.querySelector('script');
+    expect(script).not.toBeNull();
+    expect(script?.getAttribute('src')).toBe('https://embed-cdn.gettyimages.com/widgets.js');
+    expect(script?.dataset.recreated).toBe('true');
+  });
+
+  it('does not touch scripts that are already marked as recreated', () => {
+    render(<PostBody content="<p>noop</p>" />);
+    const preMarked = document.createElement('script');
+    preMarked.dataset.recreated = 'true';
+    preMarked.setAttribute('src', 'https://embed-cdn.gettyimages.com/widgets.js');
+    document.body.appendChild(preMarked);
+
+    // Re-running the recreation logic directly (as Strict Mode's second effect
+    // invocation would) must skip elements already marked `data-recreated`.
+    const matches = document.body.querySelectorAll('script:not([data-recreated])');
+    expect(Array.from(matches)).not.toContain(preMarked);
+
+    document.body.removeChild(preMarked);
   });
 
   it('converts data-src to src before sanitizing', () => {

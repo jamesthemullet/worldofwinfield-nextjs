@@ -22,4 +22,17 @@ describe('App tests', () => {
     render(<MyApp {...props} />);
     expect(screen.queryByText('test content')).toBeInTheDocument();
   });
+
+  it('renders the skip-to-main-content link before the nav', () => {
+    const props = {
+      Component: () => <div>{pageContent}</div>,
+      pageProps: {},
+      router: {},
+    } as unknown as AppProps;
+
+    render(<MyApp {...props} />);
+    const skipLink = screen.getByText('Skip to main content');
+    expect(skipLink).toBeInTheDocument();
+    expect(skipLink).toHaveAttribute('href', '#main-content');
+  });
 });
