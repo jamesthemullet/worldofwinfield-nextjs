@@ -556,8 +556,10 @@ export default function StocksPage() {
             ) : null}
           </StatusRow>
 
-          {errorMessage ? <ErrorText>{errorMessage}</ErrorText> : null}
-          {serverMessage && !errorMessage ? <InfoText>{serverMessage}</InfoText> : null}
+          {errorMessage ? <ErrorText role="alert">{errorMessage}</ErrorText> : null}
+          {serverMessage && !errorMessage ? (
+            <InfoText aria-live="polite">{serverMessage}</InfoText>
+          ) : null}
 
           <SortRow>
             <label htmlFor="stocks-sort-select">Re-order:</label>
@@ -603,8 +605,8 @@ export default function StocksPage() {
             <table>
               <thead>
                 <tr>
-                  <th>Company</th>
-                  <th>Price</th>
+                  <th scope="col">Company</th>
+                  <th scope="col">Price</th>
                 </tr>
               </thead>
               <tbody>
@@ -662,8 +664,8 @@ export default function StocksPage() {
             <table>
               <thead>
                 <tr>
-                  <th>Company</th>
-                  <th>Price</th>
+                  <th scope="col">Company</th>
+                  <th scope="col">Price</th>
                 </tr>
               </thead>
               <tbody>

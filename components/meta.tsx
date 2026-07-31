@@ -24,7 +24,7 @@ export default function Meta({
 }: MetaProps): JSX.Element {
   const router = useRouter();
   const siteAddress = 'https://www.worldofwinfield.co.uk';
-  const defaultImageUrl = '/images/jameswinfieldcover.png';
+  const defaultImageUrl = `${siteAddress}/images/jameswinfieldcover.png`;
 
   const { opengraphImage, opengraphTitle, opengraphDescription, opengraphSiteName, metaKeywords } =
     seo || {};
