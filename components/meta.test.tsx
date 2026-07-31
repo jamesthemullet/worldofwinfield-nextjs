@@ -4,7 +4,7 @@ import '@testing-library/jest-dom';
 import Meta from './meta';
 
 jest.mock('next/router', () => ({
-  useRouter: () => ({ pathname: '/test-path' }),
+  useRouter: () => ({ asPath: '/test-path' }),
 }));
 
 // Capture the React elements passed to Head so we can inspect them directly.

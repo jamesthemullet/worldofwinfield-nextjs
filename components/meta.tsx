@@ -28,7 +28,7 @@ export default function Meta({
 
   const { opengraphImage, opengraphTitle, opengraphDescription, opengraphSiteName, metaKeywords } =
     seo || {};
-  const canonicalUrl = `${siteAddress}${router.pathname}`;
+  const canonicalUrl = `${siteAddress}${router.asPath}`;
 
   return (
     <Head>
