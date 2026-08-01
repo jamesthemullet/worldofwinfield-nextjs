@@ -56,7 +56,7 @@ const nextConfig = {
               "img-src 'self' data: https:",
               "media-src 'self' https:",
               "font-src 'self'",
-              "connect-src 'self' https://*.google-analytics.com https://vercel.live https://sheets.googleapis.com",
+              "connect-src 'self' https://*.google-analytics.com https://vercel.live https://sheets.googleapis.com wss://worldofwinfield-nextjs-production.up.railway.app",
               'frame-src https:',
               "frame-ancestors 'none'",
             ].join('; '),
