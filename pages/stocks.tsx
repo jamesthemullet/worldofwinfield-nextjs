@@ -148,7 +148,7 @@ const COMPANY_NAMES: Record<string, string> = {
   'XLON:BRFI': 'BlackRock Frontiers Investment Trust PLC',
 };
 
-const normaliseSymbolAlias = (symbol: string): string => {
+export const normaliseSymbolAlias = (symbol: string): string => {
   const trimmed = symbol.trim().toUpperCase();
   const match = trimmed.match(/^([A-Z]+):(.+)$/);
 
@@ -196,7 +196,7 @@ const resolveDefaultWsUrl = (): string => {
   return `${protocol}://${window.location.hostname}:8081`;
 };
 
-const normalisePrices = (input: unknown): StockRow[] => {
+export const normalisePrices = (input: unknown): StockRow[] => {
   if (!input || typeof input !== 'object') {
     return [];
   }
@@ -288,7 +288,7 @@ const buildConfiguredRows = (symbols: Set<string>, liveRows: StockRow[]): StockR
   });
 };
 
-const getChange = (
+export const getChange = (
   currentPrice: number | null,
   baseline: number | null,
 ): { change: number | null; percent: number | null } => {
@@ -357,7 +357,7 @@ const getSortConfig = (
   return { window, direction };
 };
 
-const sortByPercentChange = (
+export const sortByPercentChange = (
   rows: StockRow[],
   mode: SortMode,
   window: ChangeWindow,
