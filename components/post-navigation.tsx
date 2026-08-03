@@ -57,7 +57,9 @@ const NavItem = styled.div<{ $align?: string }>`
   justify-content: ${({ $align }) => ($align === 'right' ? 'flex-end' : 'flex-start')};
 `;
 
-const NavLink = styled(Link)<{ $align?: string }>`
+const NavLink = styled(Link, {
+  shouldForwardProp: (prop) => prop !== '$align',
+})<{ $align?: string }>`
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
