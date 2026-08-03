@@ -4,7 +4,7 @@ import Container from './container';
 
 export default function Alert({ preview }: AlertProps): JSX.Element {
   return (
-    <div>
+    <div role="alert" aria-live="assertive">
       <Container>
         <div>
           {preview ? (

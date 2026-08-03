@@ -17,10 +17,10 @@ export default function RelatedPosts({ posts }: RelatedPostsProps): JSX.Element 
           <StyledCard key={post.slug}>
             {post.featuredImage?.node && (
               <StyledImageWrapper>
-                <Link href={`/${post.slug}`}>
+                <Link href={`/${post.slug}`} aria-hidden="true" tabIndex={-1}>
                   <Image
                     src={post.featuredImage.node.sourceUrl}
-                    alt={post.title}
+                    alt=""
                     width={400}
                     height={250}
                     sizes="(max-width: 768px) 100vw, (max-width: 960px) 33vw, 320px"
