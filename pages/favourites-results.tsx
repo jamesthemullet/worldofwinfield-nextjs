@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import { useEffect, useMemo, useState } from 'react';
+import { StyledInput } from '../components/core-components';
 import SortDropdown from '../components/SortDropdown';
 import { fetchDataFromGoogleSheets } from '../lib/sheets';
 
@@ -33,6 +34,7 @@ const FavouriteResults = ({
   const [loading, setLoading] = useState(false);
   const [internalSortBy, setInternalSortBy] = useState('');
   const [sortColumns, setSortColumns] = useState<string[]>([]);
+  const [searchQuery, setSearchQuery] = useState('');
 
   const effectiveSortBy = sortBy !== undefined ? sortBy : internalSortBy;
   const showInternalDropdown = sortBy === undefined;
@@ -98,6 +100,13 @@ const FavouriteResults = ({
       filteredRows = filteredRows.filter((row: string[]) => row[labelIndex] === labelFilter);
     }
 
+    if (searchQuery.trim()) {
+      const lowerQuery = searchQuery.trim().toLowerCase();
+      filteredRows = filteredRows.filter((row: string[]) =>
+        row.some((cell) => (cell ?? '').toString().toLowerCase().includes(lowerQuery)),
+      );
+    }
+
     const normalizedHeaders = headerRow.map((h: string) => normalize(h));
 
     const chooseSortColumnIndex = () => {
@@ -148,16 +157,32 @@ const FavouriteResults = ({
     }
 
     return [headerRow, ...filteredRows];
-  }, [rawData, genreFilter, labelFilter, effectiveSortBy]);
+  }, [rawData, genreFilter, labelFilter, searchQuery, effectiveSortBy]);
+
+  const hasRows = rawData !== null && rawData.length > 1;
+  const noSearchResults = hasRows && searchQuery.trim() !== '' && data.length <= 1;
 
   return (
     <FavouritesContainer>
+      <SearchWrapper>
+        <SearchLabel htmlFor="favourites-search">Search:</SearchLabel>
+        <StyledInput
+          id="favourites-search"
+          type="text"
+          placeholder="Search…"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
+      </SearchWrapper>
       {showInternalDropdown && sortColumns.length > 0 && (
         <SortDropdown
           options={sortColumns}
           selected={internalSortBy}
           onChange={setInternalSortBy}
         />
+      )}
+      {noSearchResults && (
+        <EmptyState>No results for &ldquo;{searchQuery.trim()}&rdquo;</EmptyState>
       )}
       <StyledTable>
         {data.length > 0 && (
@@ -230,6 +255,19 @@ export default FavouriteResults;
 const FavouritesContainer = styled.div`
   margin: 20px;
   overflow-x: auto;
+`;
+
+const SearchWrapper = styled.div`
+  margin: 1rem 0;
+  text-align: center;
+`;
+
+const SearchLabel = styled.label`
+  margin-right: 0.5rem;
+`;
+
+const EmptyState = styled.p`
+  text-align: center;
 `;
 
 const StyledTable = styled.table`

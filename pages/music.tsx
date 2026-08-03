@@ -13,7 +13,7 @@ import { sanitize } from '../lib/sanitize';
 import type { PostsProps } from '../lib/types';
 import { colours } from './_app';
 
-const stripReadMoreParagraph = (excerpt: string) => {
+const stripReadMoreParagraph = (excerpt: string): string => {
   return excerpt.replace(/\s*<a\b[^>]*>.*?<\/a>/gi, '').trim();
 };
 
@@ -37,6 +37,7 @@ export default function Post({ posts }: PostsProps) {
           <PostTitle>Loading…</PostTitle>
         ) : (
           <>
+            <VisuallyHiddenH1>Posts About Music</VisuallyHiddenH1>
             {posts.map((post, index) => (
               <PostContainer key={post.id} isEven={index % 2 === 0}>
                 <StyledPostHeader>
@@ -152,4 +153,16 @@ const StyledPostHeader = styled.div`
   @media screen and (max-width: 768px) {
     width: 100%;
   }
+`;
+
+const VisuallyHiddenH1 = styled.h1`
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
 `;

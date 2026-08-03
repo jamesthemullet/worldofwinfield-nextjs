@@ -148,7 +148,7 @@ const COMPANY_NAMES: Record<string, string> = {
   'XLON:BRFI': 'BlackRock Frontiers Investment Trust PLC',
 };
 
-const normaliseSymbolAlias = (symbol: string): string => {
+export const normaliseSymbolAlias = (symbol: string): string => {
   const trimmed = symbol.trim().toUpperCase();
   const match = trimmed.match(/^([A-Z]+):(.+)$/);
 
@@ -196,7 +196,7 @@ const resolveDefaultWsUrl = (): string => {
   return `${protocol}://${window.location.hostname}:8081`;
 };
 
-const normalisePrices = (input: unknown): StockRow[] => {
+export const normalisePrices = (input: unknown): StockRow[] => {
   if (!input || typeof input !== 'object') {
     return [];
   }
@@ -288,7 +288,7 @@ const buildConfiguredRows = (symbols: Set<string>, liveRows: StockRow[]): StockR
   });
 };
 
-const getChange = (
+export const getChange = (
   currentPrice: number | null,
   baseline: number | null,
 ): { change: number | null; percent: number | null } => {
@@ -357,7 +357,7 @@ const getSortConfig = (
   return { window, direction };
 };
 
-const sortByPercentChange = (
+export const sortByPercentChange = (
   rows: StockRow[],
   mode: SortMode,
   window: ChangeWindow,
@@ -556,8 +556,10 @@ export default function StocksPage() {
             ) : null}
           </StatusRow>
 
-          {errorMessage ? <ErrorText>{errorMessage}</ErrorText> : null}
-          {serverMessage && !errorMessage ? <InfoText>{serverMessage}</InfoText> : null}
+          {errorMessage ? <ErrorText role="alert">{errorMessage}</ErrorText> : null}
+          {serverMessage && !errorMessage ? (
+            <InfoText aria-live="polite">{serverMessage}</InfoText>
+          ) : null}
 
           <SortRow>
             <label htmlFor="stocks-sort-select">Re-order:</label>
@@ -603,8 +605,8 @@ export default function StocksPage() {
             <table>
               <thead>
                 <tr>
-                  <th>Company</th>
-                  <th>Price</th>
+                  <th scope="col">Company</th>
+                  <th scope="col">Price</th>
                 </tr>
               </thead>
               <tbody>
@@ -662,8 +664,8 @@ export default function StocksPage() {
             <table>
               <thead>
                 <tr>
-                  <th>Company</th>
-                  <th>Price</th>
+                  <th scope="col">Company</th>
+                  <th scope="col">Price</th>
                 </tr>
               </thead>
               <tbody>

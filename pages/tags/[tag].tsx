@@ -97,7 +97,8 @@ export default function Post({ posts, tag }: TagsPostProps) {
                       <ContinueReadingLink
                         href={`/${post.slug}`}
                         colour={getColourFromTitle(post.title)}
-                        textcolour={getTextColour(getColourFromTitle(post.title))}>
+                        textcolour={getTextColour(getColourFromTitle(post.title))}
+                        aria-label={`Continue reading ${post.title}`}>
                         Continue reading
                       </ContinueReadingLink>
                     </TagPostContent>
@@ -205,7 +206,7 @@ const ContinueReadingLink = styled(Link)<{ colour: string; textcolour: string }>
 `;
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const tag = params?.tag as string;
+  const tag = (Array.isArray(params?.tag) ? params.tag[0] : params?.tag) ?? '';
   const data = await getPostsByTag(tag);
 
   return {
