@@ -499,12 +499,39 @@ export type SearchResult = {
   };
 };
 
-export type SearchBarProps = {
-  onSearch: (results: SearchResult[]) => void;
+export type GlobalSearchItem = {
+  title: string;
+  subtitle?: string;
+  url: string;
+};
+
+export type GlobalSearchCategoryKey =
+  | 'books'
+  | 'movies'
+  | 'restaurants'
+  | 'cities'
+  | 'countries'
+  | 'tracks'
+  | 'djs'
+  | 'holidayWishList'
+  | 'restaurantWishList'
+  | 'articles'
+  | 'beers'
+  | 'cheese';
+
+export type GlobalSearchResults = {
+  posts: SearchResult[];
+} & Partial<Record<GlobalSearchCategoryKey, GlobalSearchItem[]>>;
+
+export type SearchBarProps<T = SearchResult[]> = {
+  onSearch: (results: T) => void;
+  endpoint?: string;
+  label?: string;
+  placeholder?: string;
 };
 
 export type SearchResultsProps = {
-  searchResults: SearchResult[] | null;
+  searchResults: GlobalSearchResults | null;
 };
 
 export type ArchivePageProps = {
