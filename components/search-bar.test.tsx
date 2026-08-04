@@ -106,4 +106,25 @@ describe('SearchBar', () => {
       expect(screen.getByRole('button', { name: 'Search' })).toBeInTheDocument();
     });
   });
+
+  it('queries a custom endpoint when one is provided', async () => {
+    mockFetch.mockResolvedValue({ json: async () => ({ posts: [] }) });
+    render(<SearchBar onSearch={() => {}} endpoint="/api/global-search" />);
+
+    const input = screen.getByPlaceholderText('Search blog...');
+    fireEvent.change(input, { target: { value: 'barcelona' } });
+
+    const form = input.closest('form')!;
+    fireEvent.submit(form);
+
+    await waitFor(() => {
+      expect(mockFetch).toHaveBeenCalledWith('/api/global-search?q=barcelona');
+    });
+  });
+
+  it('renders a custom label and placeholder when provided', () => {
+    render(<SearchBar onSearch={() => {}} label="Search everything" placeholder="Search all..." />);
+    expect(screen.getByText('Search everything')).toBeInTheDocument();
+    expect(screen.getByPlaceholderText('Search all...')).toBeInTheDocument();
+  });
 });

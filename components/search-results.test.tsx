@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import React from 'react';
 import '@testing-library/jest-dom';
+import type { GlobalSearchResults } from '../lib/types';
 import SearchResults, { formatDate } from './search-results';
 
 jest.mock('../pages/_app', () => ({
@@ -15,6 +16,8 @@ jest.mock('../pages/_app', () => ({
     azure: '#3185FC',
   },
 }));
+
+const emptyResults: GlobalSearchResults = { posts: [] };
 
 describe('formatDate', () => {
   it('adds "st" suffix for the 1st', () => {
@@ -76,32 +79,64 @@ describe('SearchResults', () => {
     expect(container.firstChild).toBeEmptyDOMElement();
   });
 
-  it('renders "No results found." when searchResults is an empty array', () => {
-    render(<SearchResults searchResults={[]} />);
+  it('renders "No results found." when searchResults has no items in any category', () => {
+    render(<SearchResults searchResults={emptyResults} />);
     expect(screen.getByText('No results found.')).toBeInTheDocument();
   });
 
-  it('renders a list of results when searchResults has items', () => {
-    const results = [
-      { slug: 'post-one', title: 'Post One', date: '2023-01-15' },
-      { slug: 'post-two', title: 'Post Two', date: '2023-06-20' },
-    ];
+  it('renders a list of blog post results when posts are present', () => {
+    const results: GlobalSearchResults = {
+      posts: [
+        { slug: 'post-one', title: 'Post One', date: '2023-01-15' },
+        { slug: 'post-two', title: 'Post Two', date: '2023-06-20' },
+      ],
+    };
     render(<SearchResults searchResults={results} />);
     expect(screen.getByText('2 results')).toBeInTheDocument();
+    expect(screen.getByText('Blog posts')).toBeInTheDocument();
     expect(screen.getByText('Post One')).toBeInTheDocument();
     expect(screen.getByText('Post Two')).toBeInTheDocument();
   });
 
-  it('renders a link to each result using its slug', () => {
-    const results = [{ slug: 'my-post', title: 'My Post', date: '2023-01-15' }];
+  it('renders a link to each blog post result using its slug', () => {
+    const results: GlobalSearchResults = {
+      posts: [{ slug: 'my-post', title: 'My Post', date: '2023-01-15' }],
+    };
     render(<SearchResults searchResults={results} />);
     const link = screen.getByText('My Post').closest('a');
     expect(link).toHaveAttribute('href', '/my-post');
   });
 
   it('does not render "No results found." when results exist', () => {
-    const results = [{ slug: 'post-one', title: 'Post One', date: '2023-01-15' }];
+    const results: GlobalSearchResults = {
+      posts: [{ slug: 'post-one', title: 'Post One', date: '2023-01-15' }],
+    };
     render(<SearchResults searchResults={results} />);
     expect(screen.queryByText('No results found.')).not.toBeInTheDocument();
+  });
+
+  it('renders grouped results from favourites and wish list categories', () => {
+    const results: GlobalSearchResults = {
+      posts: [],
+      books: [{ title: 'Norwegian Wood', subtitle: 'Haruki Murakami', url: '/favourite-books' }],
+      cities: [{ title: 'Barcelona', url: '/favourite-cities' }],
+    };
+    render(<SearchResults searchResults={results} />);
+    expect(screen.getByText('2 results')).toBeInTheDocument();
+    expect(screen.getByText('Favourite books')).toBeInTheDocument();
+    expect(screen.getByText('Norwegian Wood')).toBeInTheDocument();
+    expect(screen.getByText('— Haruki Murakami')).toBeInTheDocument();
+    expect(screen.getByText('Favourite cities visited')).toBeInTheDocument();
+    const link = screen.getByText('Barcelona').closest('a');
+    expect(link).toHaveAttribute('href', '/favourite-cities');
+  });
+
+  it('does not render a section for a category with no matching items', () => {
+    const results: GlobalSearchResults = {
+      posts: [],
+      books: [{ title: 'Norwegian Wood', url: '/favourite-books' }],
+    };
+    render(<SearchResults searchResults={results} />);
+    expect(screen.queryByText('Favourite movies')).not.toBeInTheDocument();
   });
 });
