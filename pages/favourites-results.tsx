@@ -1,11 +1,10 @@
 import styled from '@emotion/styled';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { StyledInput } from '../components/core-components';
 import SortDropdown from '../components/SortDropdown';
-import { fetchDataFromGoogleSheets } from '../lib/sheets';
 
 type TypeProps = {
-  sheetId: string;
+  data: string[][] | null;
   columnsToHide?: string[];
   indexRequired?: boolean;
   sortBy?: string;
@@ -23,67 +22,48 @@ const normalize = (s: string): string =>
     .replace(/[^a-z0-9 ]/g, '');
 
 const FavouriteResults = ({
-  sheetId,
+  data: sheetData,
   columnsToHide = [],
   indexRequired = true,
   sortBy,
   genreFilter,
   labelFilter,
 }: TypeProps) => {
-  const [rawData, setRawData] = useState<string[][] | null>(null);
-  const [loading, setLoading] = useState(false);
   const [internalSortBy, setInternalSortBy] = useState('');
-  const [sortColumns, setSortColumns] = useState<string[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
 
   const effectiveSortBy = sortBy !== undefined ? sortBy : internalSortBy;
   const showInternalDropdown = sortBy === undefined;
 
-  // Stable primitive key so the effect dependency compares by value, not array identity.
+  // Stable primitive key so the memo dependency compares by value, not array identity.
   const columnsToHideKey = columnsToHide.join('\x00');
 
-  // Fetch and apply column-hiding once per sheetId/columnsToHide change.
-  // Filter and sort are derived in-memory below — no re-fetch on filter/sort changes.
-  useEffect(() => {
-    const fetchFavouriteData = async (): Promise<void> => {
-      if (sheetId && !loading) {
-        setLoading(true);
-        try {
-          const response = await fetchDataFromGoogleSheets(sheetId);
+  // Apply column-hiding to the server-fetched data once per data/columnsToHide change.
+  // Filter and sort are derived in-memory below.
+  const rawData = useMemo(() => {
+    if (!sheetData || !sheetData.length) return null;
 
-          if (!response || !response.length) {
-            console.error('No data received from Google Sheets');
-            return;
-          }
+    const headerRow = [...sheetData[0]];
+    const dataRows = sheetData.slice(1).map((row) => [...row]);
 
-          const headerRow = [...response[0]];
-          const dataRows = response.slice(1).map((row) => [...row]);
-
-          columnsToHide.forEach((columnName) => {
-            const columnIndex = headerRow.indexOf(columnName);
-            if (columnIndex !== -1) {
-              for (const row of dataRows) {
-                row.splice(columnIndex, 1);
-              }
-              headerRow.splice(columnIndex, 1);
-            }
-          });
-
-          if (sortBy === undefined) {
-            setSortColumns([...headerRow]);
-          }
-
-          setRawData([headerRow, ...dataRows]);
-        } catch (error) {
-          console.error('Error processing sheet data:', error);
-        } finally {
-          setLoading(false);
+    columnsToHide.forEach((columnName) => {
+      const columnIndex = headerRow.indexOf(columnName);
+      if (columnIndex !== -1) {
+        for (const row of dataRows) {
+          row.splice(columnIndex, 1);
         }
+        headerRow.splice(columnIndex, 1);
       }
-    };
+    });
 
-    fetchFavouriteData();
-  }, [sheetId, columnsToHideKey]);
+    return [headerRow, ...dataRows];
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sheetData, columnsToHideKey]);
+
+  const sortColumns = useMemo(
+    () => (rawData && sortBy === undefined ? rawData[0] : []),
+    [rawData, sortBy],
+  );
 
   const data = useMemo(() => {
     if (!rawData || rawData.length === 0) return [];

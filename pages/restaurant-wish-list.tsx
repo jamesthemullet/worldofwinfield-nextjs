@@ -1,14 +1,17 @@
 import styled from '@emotion/styled';
+import type { GetStaticProps } from 'next';
 import { useRouter } from 'next/router';
 import Container from '../components/container';
 import Layout from '../components/layout';
 import PostHeader from '../components/post-header';
 import PostTitle from '../components/post-title';
+import { fetchDataFromGoogleSheets } from '../lib/sheets';
 import FavouriteResults from './favourites-results';
 
-export default function WishListPage() {
+const sheetId = '13gz7lPQ61f_WKQ_xio_QBlUcFB9Dl0yVBynwEadVO_4';
+
+export default function WishListPage({ data }: { data: string[][] | null }) {
   const title = 'Restaurant Wish List';
-  const sheetId = '13gz7lPQ61f_WKQ_xio_QBlUcFB9Dl0yVBynwEadVO_4';
   const seo = {
     opengraphTitle: 'Restaurant Wish List | World Of Winfield',
     opengraphDescription:
@@ -36,7 +39,7 @@ export default function WishListPage() {
                 />
               </StyledPostHeader>
 
-              <FavouriteResults sheetId={sheetId} />
+              <FavouriteResults data={data} />
             </PostContainer>
           </>
         )}
@@ -55,3 +58,12 @@ const PostContainer = styled.article`
 const StyledPostHeader = styled.div`
   margin: 0 auto;
 `;
+
+export const getStaticProps: GetStaticProps = async () => {
+  const data = await fetchDataFromGoogleSheets(sheetId);
+
+  return {
+    props: { data },
+    revalidate: 3600,
+  };
+};

@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import type { GetStaticProps } from 'next';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import Container from '../components/container';
@@ -6,12 +7,21 @@ import { StyledButton } from '../components/core-components';
 import Layout from '../components/layout';
 import PostHeader from '../components/post-header';
 import PostTitle from '../components/post-title';
+import { fetchDataFromGoogleSheets } from '../lib/sheets';
 import FavouriteResults from './favourites-results';
 
-export default function WantsPage() {
-  const [selectedType, setSelectedType] = useState<string | null>(null);
+const holidayWishListSheetId = '1GX6KF20f3Nrb3m8T9th7UIV_uuePj4Ivlc_yLgo-4Bo';
+const restaurantWishListSheetId = '13gz7lPQ61f_WKQ_xio_QBlUcFB9Dl0yVBynwEadVO_4';
 
-  const handleTypeClick = (type: string) => {
+type WantsPageProps = {
+  wantToVisitData: string[][] | null;
+  wantToEatData: string[][] | null;
+};
+
+export default function WantsPage({ wantToVisitData, wantToEatData }: WantsPageProps) {
+  const [selectedType, setSelectedType] = useState<'visit' | 'eat' | null>(null);
+
+  const handleTypeClick = (type: 'visit' | 'eat') => {
     setSelectedType(type);
   };
 
@@ -41,14 +51,11 @@ export default function WantsPage() {
                 />
               </StyledPostHeader>
               <RowOfButtons>
-                <StyledButton onClick={() => handleTypeClick('wantToVisitSheetID')}>
-                  Want To Visit
-                </StyledButton>
-                <StyledButton onClick={() => handleTypeClick('wantToEatHereSheetID')}>
-                  Want To Eat Here
-                </StyledButton>
+                <StyledButton onClick={() => handleTypeClick('visit')}>Want To Visit</StyledButton>
+                <StyledButton onClick={() => handleTypeClick('eat')}>Want To Eat Here</StyledButton>
               </RowOfButtons>
-              {selectedType && <FavouriteResults sheetId={selectedType} />}
+              {selectedType === 'visit' && <FavouriteResults data={wantToVisitData} />}
+              {selectedType === 'eat' && <FavouriteResults data={wantToEatData} />}
             </PostContainer>
           </>
         )}
@@ -81,3 +88,15 @@ const RowOfButtons = styled.div`
     margin: 0.5rem;
   }
 `;
+
+export const getStaticProps: GetStaticProps = async () => {
+  const [wantToVisitData, wantToEatData] = await Promise.all([
+    fetchDataFromGoogleSheets(holidayWishListSheetId),
+    fetchDataFromGoogleSheets(restaurantWishListSheetId),
+  ]);
+
+  return {
+    props: { wantToVisitData, wantToEatData },
+    revalidate: 3600,
+  };
+};
