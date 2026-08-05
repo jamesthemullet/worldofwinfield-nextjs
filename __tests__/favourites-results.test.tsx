@@ -69,3 +69,28 @@ describe('FavouriteResults search', () => {
     expect(screen.queryByText('Dune')).not.toBeInTheDocument();
   });
 });
+
+describe('FavouriteResults cover art grid', () => {
+  const coverArtByTitle = {
+    Dune: 'https://covers.openlibrary.org/b/id/1-M.jpg',
+    Neuromancer: null,
+    Foundation: null,
+  };
+
+  it('renders a cover grid instead of a table when coverArtByTitle is provided', () => {
+    render(<FavouriteResults data={sampleData} coverArtByTitle={coverArtByTitle} />);
+
+    expect(screen.getByAltText('Cover of Dune')).toBeInTheDocument();
+    expect(screen.queryByRole('table')).not.toBeInTheDocument();
+  });
+
+  it('keeps search working in grid mode', () => {
+    render(<FavouriteResults data={sampleData} coverArtByTitle={coverArtByTitle} />);
+
+    const searchInput = screen.getByLabelText('Search:');
+    fireEvent.change(searchInput, { target: { value: 'gibson' } });
+
+    expect(screen.getByText('Neuromancer')).toBeInTheDocument();
+    expect(screen.queryByText('Dune')).not.toBeInTheDocument();
+  });
+});

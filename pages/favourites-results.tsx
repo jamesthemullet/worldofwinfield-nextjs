@@ -1,6 +1,7 @@
 import styled from '@emotion/styled';
 import { useMemo, useState } from 'react';
 import { StyledInput } from '../components/core-components';
+import FavouriteCoverGrid from '../components/FavouriteCoverGrid';
 import SortDropdown from '../components/SortDropdown';
 
 type TypeProps = {
@@ -10,6 +11,7 @@ type TypeProps = {
   sortBy?: string;
   genreFilter?: string;
   labelFilter?: string;
+  coverArtByTitle?: Record<string, string | null>;
 };
 
 const normalize = (s: string): string =>
@@ -28,6 +30,7 @@ const FavouriteResults = ({
   sortBy,
   genreFilter,
   labelFilter,
+  coverArtByTitle,
 }: TypeProps) => {
   const [internalSortBy, setInternalSortBy] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
@@ -164,68 +167,79 @@ const FavouriteResults = ({
       {noSearchResults && (
         <EmptyState>No results for &ldquo;{searchQuery.trim()}&rdquo;</EmptyState>
       )}
-      <StyledTable>
-        {data.length > 0 && (
-          <>
-            <thead>
-              <tr>
-                {indexRequired && <th className="index" scope="col"></th>}
-                {data[0].map((header, cellIndex) => {
-                  const className = `heading-${header.toString().toLowerCase().replace(/\s+/g, '-').replace(/\//g, '-')}`;
-                  return (
-                    <th key={cellIndex} className={className} scope="col">
-                      {header}
-                    </th>
-                  );
-                })}
-              </tr>
-            </thead>
-            <tbody>
-              {data.slice(1).map((row, rowIndex) => (
-                <tr key={rowIndex}>
-                  {indexRequired && <td className="index">{rowIndex + 1}.</td>}
-                  {row.map((cellData, cellIndex) => {
-                    const rawHeader = data[0][cellIndex] || '';
-                    const className = `data-${rawHeader.toString().toLowerCase().replace(/\s+/g, '-').replace(/\//g, '-')}`;
+      {coverArtByTitle ? (
+        data.length > 0 && (
+          <FavouriteCoverGrid
+            headerRow={data[0]}
+            rows={data.slice(1)}
+            coverArtByTitle={coverArtByTitle}
+            indexRequired={indexRequired}
+          />
+        )
+      ) : (
+        <StyledTable>
+          {data.length > 0 && (
+            <>
+              <thead>
+                <tr>
+                  {indexRequired && <th className="index" scope="col"></th>}
+                  {data[0].map((header, cellIndex) => {
+                    const className = `heading-${header.toString().toLowerCase().replace(/\s+/g, '-').replace(/\//g, '-')}`;
+                    return (
+                      <th key={cellIndex} className={className} scope="col">
+                        {header}
+                      </th>
+                    );
+                  })}
+                </tr>
+              </thead>
+              <tbody>
+                {data.slice(1).map((row, rowIndex) => (
+                  <tr key={rowIndex}>
+                    {indexRequired && <td className="index">{rowIndex + 1}.</td>}
+                    {row.map((cellData, cellIndex) => {
+                      const rawHeader = data[0][cellIndex] || '';
+                      const className = `data-${rawHeader.toString().toLowerCase().replace(/\s+/g, '-').replace(/\//g, '-')}`;
 
-                    if (/link/.test(rawHeader.toString().toLowerCase())) {
-                      const text = (cellData ?? '').toString();
-                      const urlMatch =
-                        text.match(/(https?:\/\/[^")\s]+)/i) || text.match(/(www\.[^\s]+)/i);
-                      const mailtoMatch = text.match(/mailto:[^\s]+/i);
-                      let href = '';
-                      if (urlMatch) {
-                        href = urlMatch[0];
-                        if (!/^https?:\/\//i.test(href)) href = `http://${href}`;
-                      } else if (mailtoMatch) {
-                        href = mailtoMatch[0];
+                      if (/link/.test(rawHeader.toString().toLowerCase())) {
+                        const text = (cellData ?? '').toString();
+                        const urlMatch =
+                          text.match(/(https?:\/\/[^")\s]+)/i) || text.match(/(www\.[^\s]+)/i);
+                        const mailtoMatch = text.match(/mailto:[^\s]+/i);
+                        let href = '';
+                        if (urlMatch) {
+                          href = urlMatch[0];
+                          if (!/^https?:\/\//i.test(href)) href = `http://${href}`;
+                        } else if (mailtoMatch) {
+                          href = mailtoMatch[0];
+                        }
+
+                        return (
+                          <td key={cellIndex} className={className}>
+                            {href ? (
+                              <a href={href} target="_blank" rel="noopener noreferrer">
+                                {text}
+                              </a>
+                            ) : (
+                              text
+                            )}
+                          </td>
+                        );
                       }
 
                       return (
                         <td key={cellIndex} className={className}>
-                          {href ? (
-                            <a href={href} target="_blank" rel="noopener noreferrer">
-                              {text}
-                            </a>
-                          ) : (
-                            text
-                          )}
+                          {cellData}
                         </td>
                       );
-                    }
-
-                    return (
-                      <td key={cellIndex} className={className}>
-                        {cellData}
-                      </td>
-                    );
-                  })}
-                </tr>
-              ))}
-            </tbody>
-          </>
-        )}
-      </StyledTable>
+                    })}
+                  </tr>
+                ))}
+              </tbody>
+            </>
+          )}
+        </StyledTable>
+      )}
     </FavouritesContainer>
   );
 };
