@@ -1,6 +1,7 @@
 import styled from '@emotion/styled';
+import type { GetStaticProps } from 'next';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useMemo, useState } from 'react';
 import Container from '../components/container';
 import FavouritesHubLink from '../components/favourites-hub-link';
 import GenreDropdown from '../components/GenreDropdown';
@@ -8,11 +9,27 @@ import Layout from '../components/layout';
 import PostHeader from '../components/post-header';
 import PostTitle from '../components/post-title';
 import ShareBar from '../components/share-bar';
+import { fetchDataFromGoogleSheets } from '../lib/sheets';
 import FavouriteResults from './favourites-results';
 
-export default function FavouritesPage() {
+const sheetId = '1ifEAiSgIMKrtTJ6fSHNGmQ-kMzR_MyAa-PjvBWOsBRA';
+
+const uniqueSortedColumn = (data: string[][] | null, columnName: string): string[] => {
+  if (!data || data.length === 0) return [];
+  const headerRow = data[0];
+  const columnIndex = headerRow.indexOf(columnName);
+  if (columnIndex === -1) return [];
+
+  const values = new Set<string>();
+  for (const row of data.slice(1)) {
+    const value = row[columnIndex];
+    if (value) values.add(value);
+  }
+  return Array.from(values).sort();
+};
+
+export default function FavouritesPage({ data }: { data: string[][] | null }) {
   const title = 'Favourite Tracks';
-  const sheetId = '1ifEAiSgIMKrtTJ6fSHNGmQ-kMzR_MyAa-PjvBWOsBRA';
   const columnsToHide = ['Date Added'];
   const indexRequired = false;
   const seo = {
@@ -23,48 +40,11 @@ export default function FavouritesPage() {
 
   const router = useRouter();
   const [selectedGenre, setSelectedGenre] = useState('');
-  const [genres, setGenres] = useState<string[]>([]);
   const [selectedLabel, setSelectedLabel] = useState('');
-  const [labels, setLabels] = useState<string[]>([]);
   const [selectedSort, setSelectedSort] = useState('Artist/Track Name');
 
-  useEffect(() => {
-    async function fetchFilterOptions() {
-      const API_KEY = process.env.NEXT_PUBLIC_GOOGLE_SHEETS_API_KEY;
-      const SHEET_NAME = 'Sheet1';
-      const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${SHEET_NAME}?alt=json&key=${API_KEY}`;
-      try {
-        const response = await fetch(url);
-        const json = await response.json();
-        const values: string[][] = json.values;
-        if (!values || values.length === 0) return;
-        const headerRow = values[0];
-
-        const genreIndex = headerRow.indexOf('Genre');
-        if (genreIndex !== -1) {
-          const genreSet = new Set<string>();
-          for (let i = 1; i < values.length; i++) {
-            const genre = values[i][genreIndex];
-            if (genre) genreSet.add(genre);
-          }
-          setGenres(Array.from(genreSet).sort());
-        }
-
-        const labelIndex = headerRow.indexOf('Label');
-        if (labelIndex !== -1) {
-          const labelSet = new Set<string>();
-          for (let i = 1; i < values.length; i++) {
-            const label = values[i][labelIndex];
-            if (label) labelSet.add(label);
-          }
-          setLabels(Array.from(labelSet).sort());
-        }
-      } catch (err) {
-        console.error('Failed to fetch filter options', err);
-      }
-    }
-    fetchFilterOptions();
-  }, [sheetId]);
+  const genres = useMemo(() => uniqueSortedColumn(data, 'Genre'), [data]);
+  const labels = useMemo(() => uniqueSortedColumn(data, 'Label'), [data]);
 
   return (
     <Layout preview={null} title={title} seo={seo}>
@@ -109,7 +89,7 @@ export default function FavouritesPage() {
               </DropdownContainer>
 
               <FavouriteResults
-                sheetId={sheetId}
+                data={data}
                 columnsToHide={columnsToHide}
                 indexRequired={indexRequired}
                 sortBy={selectedSort}
@@ -144,3 +124,12 @@ const DropdownContainer = styled.div`
   justify-content: center;
   gap: 1rem 2rem;
 `;
+
+export const getStaticProps: GetStaticProps = async () => {
+  const data = await fetchDataFromGoogleSheets(sheetId);
+
+  return {
+    props: { data },
+    revalidate: 3600,
+  };
+};

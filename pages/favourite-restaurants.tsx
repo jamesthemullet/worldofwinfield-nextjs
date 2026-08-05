@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import type { GetStaticProps } from 'next';
 import { useRouter } from 'next/router';
 import Container from '../components/container';
 import FavouritesHubLink from '../components/favourites-hub-link';
@@ -6,10 +7,13 @@ import Layout from '../components/layout';
 import PostHeader from '../components/post-header';
 import PostTitle from '../components/post-title';
 import ShareBar from '../components/share-bar';
+import { fetchDataFromGoogleSheets } from '../lib/sheets';
 import FavouriteResults from './favourites-results';
-export default function FavouritesPage() {
+
+const sheetId = '1J1znKQxeNR3Y6Q1mEPzZyMfCAGK4FQyxasoCQx35NVQ';
+
+export default function FavouritesPage({ data }: { data: string[][] | null }) {
   const title = 'Favourite Restaurants';
-  const sheetId = '1J1znKQxeNR3Y6Q1mEPzZyMfCAGK4FQyxasoCQx35NVQ';
   const seo = {
     opengraphTitle: 'Favourite Restaurants | World Of Winfield',
     opengraphDescription: "A ranked list of James Winfield's favourite restaurants.",
@@ -36,7 +40,7 @@ export default function FavouritesPage() {
                 />
               </StyledPostHeader>
 
-              <FavouriteResults sheetId={sheetId} />
+              <FavouriteResults data={data} />
               <ShareBar title={title} url={`https://worldofwinfield.co.uk${router.asPath}`} />
               <FavouritesHubLink />
             </PostContainer>
@@ -57,3 +61,12 @@ const PostContainer = styled.article`
 const StyledPostHeader = styled.div`
   margin: 0 auto;
 `;
+
+export const getStaticProps: GetStaticProps = async () => {
+  const data = await fetchDataFromGoogleSheets(sheetId);
+
+  return {
+    props: { data },
+    revalidate: 3600,
+  };
+};
