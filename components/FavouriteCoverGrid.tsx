@@ -41,7 +41,8 @@ function FavouriteCoverGrid({
   coverArtByTitle,
   indexRequired,
 }: Props): JSX.Element {
-  const titleIndex = headerRow.indexOf('Title');
+  const titleIndex =
+    headerRow.indexOf('Title') !== -1 ? headerRow.indexOf('Title') : headerRow.indexOf('Name');
   const authorIndex = headerRow.indexOf('Author');
   const scoreIndex = headerRow.indexOf('Score');
 
