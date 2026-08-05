@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import React from 'react';
 import '@testing-library/jest-dom';
 import FavouriteCoverGrid from '../components/FavouriteCoverGrid';
@@ -36,6 +36,23 @@ describe('FavouriteCoverGrid', () => {
 
     expect(screen.queryByAltText('Cover of Neuromancer')).not.toBeInTheDocument();
     expect(screen.getByText('N')).toBeInTheDocument();
+  });
+
+  it('falls back to the placeholder when the cover image fails to load', () => {
+    render(
+      <FavouriteCoverGrid
+        headerRow={headerRow}
+        rows={rows}
+        coverArtByTitle={{ Dune: 'https://covers.openlibrary.org/b/id/1-M.jpg', Neuromancer: null }}
+        indexRequired
+      />,
+    );
+
+    const img = screen.getByAltText('Cover of Dune');
+    fireEvent.error(img);
+
+    expect(screen.queryByAltText('Cover of Dune')).not.toBeInTheDocument();
+    expect(screen.getByText('D')).toBeInTheDocument();
   });
 
   it('renders rank badges when indexRequired is true', () => {
