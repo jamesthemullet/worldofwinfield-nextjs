@@ -76,12 +76,14 @@ export const getStaticProps: GetStaticProps = async () => {
     const headerRow = data[0];
     const titleIndex = headerRow.indexOf('Title');
     const authorIndex = headerRow.indexOf('Author');
+    const isbnIndex = headerRow.indexOf('ISBN');
 
     if (titleIndex !== -1) {
       coverArtByTitle = await resolveBookCovers(
         data.slice(1).map((row) => ({
           title: row[titleIndex],
           author: authorIndex !== -1 ? row[authorIndex] : undefined,
+          isbn: isbnIndex !== -1 ? row[isbnIndex] || undefined : undefined,
         })),
       );
     }

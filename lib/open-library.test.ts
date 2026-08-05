@@ -1,6 +1,6 @@
-import { resolveBookCovers, resolveBookCoverUrl } from './open-library';
+import { resolveBookCovers, resolveBookCoverUrlByTitle } from './open-library';
 
-describe('resolveBookCoverUrl', () => {
+describe('resolveBookCoverUrlByTitle', () => {
   const originalFetch = global.fetch;
 
   afterEach(() => {
@@ -14,7 +14,7 @@ describe('resolveBookCoverUrl', () => {
       json: async () => ({ docs: [{ cover_i: 12345 }] }),
     }) as unknown as typeof fetch;
 
-    const url = await resolveBookCoverUrl({ title: 'Dune', author: 'Frank Herbert' });
+    const url = await resolveBookCoverUrlByTitle({ title: 'Dune', author: 'Frank Herbert' });
 
     expect(url).toBe('https://covers.openlibrary.org/b/id/12345-M.jpg');
   });
@@ -26,7 +26,7 @@ describe('resolveBookCoverUrl', () => {
     });
     global.fetch = fetchMock as unknown as typeof fetch;
 
-    await resolveBookCoverUrl({ title: 'Dune', author: 'Frank Herbert' });
+    await resolveBookCoverUrlByTitle({ title: 'Dune', author: 'Frank Herbert' });
 
     const requestedUrl = fetchMock.mock.calls[0][0] as string;
     expect(requestedUrl).toContain('title=Dune');
@@ -39,7 +39,7 @@ describe('resolveBookCoverUrl', () => {
       json: async () => ({ docs: [] }),
     }) as unknown as typeof fetch;
 
-    const url = await resolveBookCoverUrl({ title: 'Some Unknown Book' });
+    const url = await resolveBookCoverUrlByTitle({ title: 'Some Unknown Book' });
 
     expect(url).toBeNull();
   });
@@ -47,7 +47,7 @@ describe('resolveBookCoverUrl', () => {
   it('returns null when the response is not ok', async () => {
     global.fetch = jest.fn().mockResolvedValue({ ok: false }) as unknown as typeof fetch;
 
-    const url = await resolveBookCoverUrl({ title: 'Dune' });
+    const url = await resolveBookCoverUrlByTitle({ title: 'Dune' });
 
     expect(url).toBeNull();
   });
@@ -57,7 +57,7 @@ describe('resolveBookCoverUrl', () => {
       .fn()
       .mockRejectedValue(new Error('network error')) as unknown as typeof fetch;
 
-    const url = await resolveBookCoverUrl({ title: 'Dune' });
+    const url = await resolveBookCoverUrlByTitle({ title: 'Dune' });
 
     expect(url).toBeNull();
   });
@@ -66,7 +66,7 @@ describe('resolveBookCoverUrl', () => {
     const fetchMock = jest.fn();
     global.fetch = fetchMock as unknown as typeof fetch;
 
-    const url = await resolveBookCoverUrl({ title: '' });
+    const url = await resolveBookCoverUrlByTitle({ title: '' });
 
     expect(url).toBeNull();
     expect(fetchMock).not.toHaveBeenCalled();
@@ -78,19 +78,51 @@ describe('resolveBookCovers', () => {
     jest.restoreAllMocks();
   });
 
-  it('resolves a map of title to cover URL', async () => {
+  it('resolves covers for multiple books via a single batched ISBN request', async () => {
+    const fetchMock = jest.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        'ISBN:9781841154336': { cover: { medium: 'https://covers.openlibrary.org/b/id/1-M.jpg' } },
+        'ISBN:9780552771894': { cover: { medium: 'https://covers.openlibrary.org/b/id/2-M.jpg' } },
+      }),
+    });
+    global.fetch = fetchMock as unknown as typeof fetch;
+
+    const covers = await resolveBookCovers([
+      { title: 'Dune', isbn: '978-1-84115-433-6' },
+      { title: 'Neuromancer', isbn: '978-0-552-77189-4' },
+    ]);
+
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+    const requestedUrl = fetchMock.mock.calls[0][0] as string;
+    expect(requestedUrl).toContain('bibkeys=ISBN%3A9781841154336%2CISBN%3A9780552771894');
+    expect(covers.Dune).toBe('https://covers.openlibrary.org/b/id/1-M.jpg');
+    expect(covers.Neuromancer).toBe('https://covers.openlibrary.org/b/id/2-M.jpg');
+  });
+
+  it('falls back to title/author search when the ISBN has no cover', async () => {
     global.fetch = jest.fn().mockImplementation(async (url: string) => {
-      if (url.includes('Dune')) {
-        return { ok: true, json: async () => ({ docs: [{ cover_i: 1 }] }) };
+      if (url.includes('api/books')) {
+        return { ok: true, json: async () => ({ 'ISBN:123': {} }) };
+      }
+      return { ok: true, json: async () => ({ docs: [{ cover_i: 42 }] }) };
+    }) as unknown as typeof fetch;
+
+    const covers = await resolveBookCovers([{ title: 'Neuromancer', isbn: '123' }]);
+
+    expect(covers.Neuromancer).toBe('https://covers.openlibrary.org/b/id/42-M.jpg');
+  });
+
+  it('falls back to title/author search when there is no ISBN', async () => {
+    global.fetch = jest.fn().mockImplementation(async (url: string) => {
+      if (url.includes('api/books')) {
+        throw new Error('should not be called with no ISBNs');
       }
       return { ok: true, json: async () => ({ docs: [] }) };
     }) as unknown as typeof fetch;
 
-    const covers = await resolveBookCovers([{ title: 'Dune' }, { title: 'Unknown Book' }]);
+    const covers = await resolveBookCovers([{ title: 'Unknown Book' }]);
 
-    expect(covers).toEqual({
-      Dune: 'https://covers.openlibrary.org/b/id/1-M.jpg',
-      'Unknown Book': null,
-    });
+    expect(covers['Unknown Book']).toBeNull();
   });
 });
