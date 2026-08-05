@@ -7,12 +7,18 @@ import Layout from '../components/layout';
 import PostHeader from '../components/post-header';
 import PostTitle from '../components/post-title';
 import ShareBar from '../components/share-bar';
+import { resolveBookCovers } from '../lib/open-library';
 import { fetchDataFromGoogleSheets } from '../lib/sheets';
 import FavouriteResults from './favourites-results';
 
 const sheetId = '1G-QrN1NDpKAr12VyIi50Nod8_g-YOSGP3bovCXxDHlY';
 
-export default function FavouritesPage({ data }: { data: string[][] | null }) {
+type FavouritesPageProps = {
+  data: string[][] | null;
+  coverArtByTitle: Record<string, string | null>;
+};
+
+export default function FavouritesPage({ data, coverArtByTitle }: FavouritesPageProps) {
   const title = 'Favourite Books';
   const seo = {
     opengraphTitle: 'Favourite Books | World Of Winfield',
@@ -40,7 +46,7 @@ export default function FavouritesPage({ data }: { data: string[][] | null }) {
                 />
               </StyledPostHeader>
 
-              <FavouriteResults data={data} />
+              <FavouriteResults data={data} coverArtByTitle={coverArtByTitle} />
               <ShareBar title={title} url={`https://worldofwinfield.co.uk${router.asPath}`} />
               <FavouritesHubLink />
             </PostContainer>
@@ -65,8 +71,26 @@ const StyledPostHeader = styled.div`
 export const getStaticProps: GetStaticProps = async () => {
   const data = await fetchDataFromGoogleSheets(sheetId);
 
+  let coverArtByTitle: Record<string, string | null> = {};
+  if (data && data.length > 1) {
+    const headerRow = data[0];
+    const titleIndex = headerRow.indexOf('Title');
+    const authorIndex = headerRow.indexOf('Author');
+    const isbnIndex = headerRow.indexOf('ISBN');
+
+    if (titleIndex !== -1) {
+      coverArtByTitle = await resolveBookCovers(
+        data.slice(1).map((row) => ({
+          title: row[titleIndex],
+          author: authorIndex !== -1 ? row[authorIndex] : undefined,
+          isbn: isbnIndex !== -1 ? row[isbnIndex] || undefined : undefined,
+        })),
+      );
+    }
+  }
+
   return {
-    props: { data },
+    props: { data, coverArtByTitle },
     revalidate: 3600,
   };
 };
