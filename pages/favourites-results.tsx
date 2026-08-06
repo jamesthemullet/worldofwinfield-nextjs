@@ -394,5 +394,46 @@ const StyledTable = styled.table`
         display: none;
       }
     }
+
+    @media (max-width: 767px) {
+      display: none;
+    }
+  }
+
+  /* Below 768px, drop table semantics in favour of a stacked "card" per row:
+     title on its own line, then genre/year/etc. flowing together on the next
+     line, then label on its own line - instead of one wide row that scrolls. */
+  @media (max-width: 767px) {
+    tbody tr {
+      display: block;
+      padding: 0.75rem 0.25rem;
+      border-bottom: 1px solid rgba(128, 128, 128, 0.25);
+    }
+
+    tbody td {
+      display: block;
+      max-width: 100%;
+    }
+
+    tbody td.data-genre,
+    tbody td.data-year-released,
+    tbody td.data-year-read,
+    tbody td.data-score,
+    tbody td.data-abv,
+    tbody td.data-style,
+    tbody td.data-country,
+    tbody td.data-date-read,
+    tbody td.data-date,
+    tbody td.data-language,
+    tbody td.data-bought-from,
+    tbody td.data-order-added {
+      display: inline-block;
+      margin-right: 0.6rem;
+      font-size: 0.8rem;
+    }
+
+    tbody td.data-label {
+      font-size: 0.8rem;
+    }
   }
 `;
