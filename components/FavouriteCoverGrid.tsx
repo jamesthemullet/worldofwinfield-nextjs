@@ -75,7 +75,7 @@ function FavouriteCoverGrid({
       .map((header) => headerRow.indexOf(header))
       .find((index) => index !== -1) ?? -1;
   const subtitleIndex =
-    ['Author', 'Brewery', 'Country']
+    ['Author', 'Brewery', 'Country', 'Bought From']
       .map((header) => headerRow.indexOf(header))
       .find((index) => index !== -1) ?? -1;
   const scoreIndex = headerRow.indexOf('Score');
