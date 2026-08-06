@@ -20,20 +20,32 @@
 // Some DJs can't be found (or can't be found correctly) by an exact name
 // search alone — a stage name that collides with an unrelated, better
 // documented Discogs entry, or one that's only catalogued under a fuller
-// name. For those, add an entry to dj-cover-overrides.json keyed by the
-// exact name as it appears in the sheet:
-//   { "Vera": { "searchAlias": "Vera Heindel" } }   — search under a different name
-//   { "RAHA": { "discogsArtistId": 5224234 } }      — skip search, use this artist directly
-// Overridden DJs are always re-resolved on the next run, even without --force.
+// name. For those, add a "Discogs Override" column to the sheet and paste
+// in either the DJ's Discogs artist page URL (e.g.
+// https://www.discogs.com/artist/5224234-RAHA-5) or just the numeric ID
+// (5224234) — search is skipped entirely and that artist is used directly.
+// A DJ with a non-blank override is always re-resolved on the next run,
+// even without --force, so editing the sheet is enough to fix a bad match.
 
 const fs = require('fs');
 const path = require('path');
 
 const SHEET_ID = '1_zpDBFlpW2ZWTVsXQHoW6Y4FbGw8Vi53nMYpZiOypbg';
 const OUTPUT_FILE = path.join(__dirname, '..', 'lib', 'data', 'dj-covers.json');
-const OVERRIDES_FILE = path.join(__dirname, 'dj-cover-overrides.json');
 const USER_AGENT = 'WorldOfWinfieldCoverResolver/1.0 (jamesthemonkeh@hotmail.com)';
 const FORCE = process.argv.includes('--force');
+
+// Accepts a full Discogs artist URL or a bare numeric ID; returns null for
+// anything else (including a blank cell).
+function parseDiscogsOverride(value) {
+  const trimmed = (value || '').trim();
+  if (!trimmed) return null;
+
+  const urlMatch = trimmed.match(/\/artist\/(\d+)/);
+  if (urlMatch) return Number(urlMatch[1]);
+
+  return /^\d+$/.test(trimmed) ? Number(trimmed) : null;
+}
 
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -145,6 +157,16 @@ async function main() {
     console.error('Error: Could not find "Name" column in sheet');
     process.exit(1);
   }
+  const overrideIndex = header.indexOf('Discogs Override');
+
+  const overridesByName = {};
+  if (overrideIndex !== -1) {
+    for (const row of dataRows) {
+      const name = (row[nameIndex] || '').trim();
+      const artistId = parseDiscogsOverride(row[overrideIndex]);
+      if (name && artistId) overridesByName[name] = artistId;
+    }
+  }
 
   let covers = {};
   if (!FORCE && fs.existsSync(OUTPUT_FILE)) {
@@ -154,10 +176,7 @@ async function main() {
     console.log(`Starting fresh — ${dataRows.length} DJs to resolve.\n`);
   }
 
-  const overrides = fs.existsSync(OVERRIDES_FILE)
-    ? JSON.parse(fs.readFileSync(OVERRIDES_FILE, 'utf8'))
-    : {};
-  const overriddenNames = Object.keys(overrides).filter((name) => covers[name] !== undefined);
+  const overriddenNames = Object.keys(overridesByName).filter((name) => covers[name] !== undefined);
   if (overriddenNames.length > 0) {
     console.log(
       `Re-resolving ${overriddenNames.length} overridden DJ(s): ${overriddenNames.join(', ')}\n`,
@@ -179,14 +198,14 @@ async function main() {
       continue;
     }
 
-    const override = overrides[name];
+    const overrideArtistId = overridesByName[name];
 
     try {
       let artistId;
-      if (override?.discogsArtistId) {
-        artistId = override.discogsArtistId;
+      if (overrideArtistId) {
+        artistId = overrideArtistId;
       } else {
-        artistId = await findArtistId(override?.searchAlias || name, token);
+        artistId = await findArtistId(name, token);
         await sleep(rateLimitMs);
       }
 
@@ -225,7 +244,10 @@ async function main() {
   console.log(`  Skipped:   ${skipped} (already in cache)`);
   console.log(`  Failed:    ${failed}`);
   console.log(`\nOutput: ${OUTPUT_FILE}`);
-  console.log('\nReview any wrong matches, delete that key from the JSON, and re-run to retry it.');
+  console.log(
+    '\nReview any wrong matches — either delete that key from the JSON and re-run, or add\n' +
+      'a Discogs artist URL/ID to the "Discogs Override" column in the sheet and re-run.',
+  );
 }
 
 main().catch((err) => {
