@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import Image from 'next/image';
-import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
+import { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 import type { IntroProps, JamesImagesProps } from '../lib/types';
 import { colours } from '../pages/_app';
 
@@ -40,21 +40,6 @@ export default function Intro({ jamesImages }: IntroProps): JSX.Element {
     setHoveredIndex(-1);
   }, []);
 
-  const handleFocus = useCallback((e: React.FocusEvent<HTMLDivElement>) => {
-    setHoveredIndex(Number(e.currentTarget.dataset.index));
-  }, []);
-
-  const handleBlur = useCallback(() => {
-    setHoveredIndex(-1);
-  }, []);
-
-  const handleKeyDown = useCallback((e: React.KeyboardEvent<HTMLDivElement>) => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
-      setHoveredIndex(Number(e.currentTarget.dataset.index));
-    }
-  }, []);
-
   return (
     <section>
       <HiddenHeading>World Of Winfield</HiddenHeading>
@@ -67,15 +52,10 @@ export default function Intro({ jamesImages }: IntroProps): JSX.Element {
           return (
             <Block
               key={index}
-              role="button"
-              aria-label={`Letter ${letter}${jamesAltTag ? ` — photo: ${jamesAltTag}` : ''}`}
               color={blockColours[getColour(index)]}
               data-index={index}
               onMouseEnter={handleMouseEnter}
-              onMouseLeave={handleMouseLeave}
-              onFocus={handleFocus}
-              onBlur={handleBlur}
-              onKeyDown={handleKeyDown}>
+              onMouseLeave={handleMouseLeave}>
               <FlipContainer>
                 <Flipper flipped={hoveredIndex === index}>
                   <Front>{letter}</Front>
