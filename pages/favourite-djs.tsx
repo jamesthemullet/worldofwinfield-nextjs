@@ -7,12 +7,18 @@ import Layout from '../components/layout';
 import PostHeader from '../components/post-header';
 import PostTitle from '../components/post-title';
 import ShareBar from '../components/share-bar';
+import { resolveArtistCovers } from '../lib/deezer';
 import { fetchDataFromGoogleSheets } from '../lib/sheets';
 import FavouriteResults from './favourites-results';
 
 const sheetId = '1_zpDBFlpW2ZWTVsXQHoW6Y4FbGw8Vi53nMYpZiOypbg';
 
-export default function FavouritesPage({ data }: { data: string[][] | null }) {
+type FavouritesPageProps = {
+  data: string[][] | null;
+  coverArtByTitle: Record<string, string | null>;
+};
+
+export default function FavouritesPage({ data, coverArtByTitle }: FavouritesPageProps) {
   const title = 'Favourite DJs';
   const seo = {
     opengraphTitle: 'Favourite DJs | World Of Winfield',
@@ -40,7 +46,7 @@ export default function FavouritesPage({ data }: { data: string[][] | null }) {
                 />
               </StyledPostHeader>
 
-              <FavouriteResults data={data} />
+              <FavouriteResults data={data} coverArtByTitle={coverArtByTitle} />
               <ShareBar title={title} url={`https://worldofwinfield.co.uk${router.asPath}`} />
               <FavouritesHubLink />
             </PostContainer>
@@ -65,8 +71,20 @@ const StyledPostHeader = styled.div`
 export const getStaticProps: GetStaticProps = async () => {
   const data = await fetchDataFromGoogleSheets(sheetId);
 
+  let coverArtByTitle: Record<string, string | null> = {};
+  if (data && data.length > 1) {
+    const headerRow = data[0];
+    const titleIndex = headerRow.indexOf('Name');
+
+    if (titleIndex !== -1) {
+      coverArtByTitle = await resolveArtistCovers(
+        data.slice(1).map((row) => ({ title: row[titleIndex] })),
+      );
+    }
+  }
+
   return {
-    props: { data },
+    props: { data, coverArtByTitle },
     revalidate: 3600,
   };
 };
