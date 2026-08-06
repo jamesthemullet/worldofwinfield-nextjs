@@ -1,11 +1,8 @@
 {
   "Barac": "https://i.discogs.com/38H2NTG-m3Kw8Xb1GRavhSR_Ae4uUCQiqbGsvperpzU/rs:fit/g:sm/q:90/h:670/w:502/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9BLTMyODMw/MTQtMTUwNDU0NzQ5/OC00MjAyLmpwZWc.jpeg",
-  "Vera": "https://i.discogs.com/Z8gr5fxoWXAtc8-Nw46fegLfYzYYkFmhV4kSOLCrn30/rs:fit/g:sm/q:90/h:545/w:402/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9BLTE0MTg4/NS0xMzM0OTQ2NTQ4/LmpwZWc.jpeg",
   "Dana Ruh": "https://i.discogs.com/qrnkJtcCchY1xa_oR90mcF-WhQdheJoulLJcG_BFGds/rs:fit/g:sm/q:90/h:400/w:600/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9BLTkyNTMw/My0xNDcyMzI2MDkz/LTI2MDAuanBlZw.jpeg",
   "Rhadoo": "https://i.discogs.com/2pIzGSnfF-1sflqF8B7jorkFEwyNPHMkqcPN_jYXKJo/rs:fit/g:sm/q:90/h:683/w:499/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9BLTI2MzI4/Mi0xMzQ1NjY2MDQ1/LTMwODcuanBlZw.jpeg",
-  "Julietta": "https://i.discogs.com/RMfUtmvtG0VBP5HMtyerwwFCR_4JDUlfCx5cO64bvOw/rs:fit/g:sm/q:90/h:461/w:600/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9BLTUwNDU4/MjMtMTUwNTMzNDY5/Mi0xMTQ0LmpwZWc.jpeg",
   "Mr G": "https://i.discogs.com/QGohwyK8JMMyXeUEKTAKPE-80lVgM2D3ibJBbi-32WA/rs:fit/g:sm/q:90/h:540/w:528/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9BLTEzNzYt/MTQzODc3ODI4MS05/MTI1LmpwZWc.jpeg",
-  "RAHA": null,
   "Adam Shelton": null,
   "Jay Bliss": "https://i.discogs.com/_m1WLq-rJAKlYrFKCi2DA-ItgABrvPl3qx3lJZzPiPA/rs:fit/g:sm/q:90/h:400/w:600/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9BLTY2MTAw/MC0xMzM3NzI4MDk1/LTYwMDAuanBlZw.jpeg",
   "Raresh": "https://i.discogs.com/saVElxSyK6Z0BH3RMUxk-FwmxnpdA4CWQMT9Bp0aMfU/rs:fit/g:sm/q:90/h:397/w:600/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9BLTc3NzQz/MS0xNDI0ODg2Mjcy/LTg2NDguanBlZw.jpeg",
@@ -198,5 +195,8 @@
   "Luna City Express": "https://i.discogs.com/QK3TSCvMS3G2s57U0GRu-rot86KmAn4nfnuca2xdPSs/rs:fit/g:sm/q:90/h:500/w:500/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9BLTMxNzYz/NS0xMzMzMTE4NjEy/LmpwZWc.jpeg",
   "Mick Wills": "https://i.discogs.com/K2xwvqGTX4KcK4BnHDce8d31tROb2w43wU6paWVoPdg/rs:fit/g:sm/q:90/h:233/w:195/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9BLTIwODgw/LTE2MjkyNzk0MDEt/OTI5MC5qcGVn.jpeg",
   "Miss Jools": "https://i.discogs.com/_I6A_vZxH2nNaRb0gGE9mJyRtYmk8wRrKySQThdn7OE/rs:fit/g:sm/q:90/h:461/w:308/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9BLTYwNDkw/OS0xMzQ5NzQzNzMw/LTM3NjEucG5n.jpeg",
-  "Norman Nodge": "https://i.discogs.com/FuyST-s3dQF5a6DxjVUzyyUp9fySSBFqK5zOUP0nuLA/rs:fit/g:sm/q:90/h:600/w:600/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9BLTg0NTM0/NC0xNDU2MDA3ODA2/LTg2MjUuanBlZw.jpeg"
+  "Norman Nodge": "https://i.discogs.com/FuyST-s3dQF5a6DxjVUzyyUp9fySSBFqK5zOUP0nuLA/rs:fit/g:sm/q:90/h:600/w:600/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9BLTg0NTM0/NC0xNDU2MDA3ODA2/LTg2MjUuanBlZw.jpeg",
+  "Vera": "https://i.discogs.com/Hu9V2zlUEVyIvX9ftEoefPX1VyMfziIwFUH88AwRtjA/rs:fit/g:sm/q:90/h:399/w:600/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9BLTk5NTQx/OS0xNTA1Mjc1OTk3/LTU1MjMuanBlZw.jpeg",
+  "Julietta": "https://i.discogs.com/qYsrpLoz1A15scZOW11tnKn8zfYrbcAI-Mtqetp70Io/rs:fit/g:sm/q:90/h:700/w:468/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9BLTIyMzE3/My0xMjMxMTQyODUw/LmpwZWc.jpeg",
+  "RAHA": "https://i.discogs.com/S-D82ckjzMEtJQyil5KAIMVWibY5KxILh88U4ZFjyRE/rs:fit/g:sm/q:90/h:900/w:600/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9BLTUyMjQy/MzQtMTQ3Mzg0NTg0/OS02MDI5LmpwZWc.jpeg"
 }

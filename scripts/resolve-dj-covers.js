@@ -16,12 +16,22 @@
 // just re-run it and it will pick up where it left off. Pass --force to
 // re-resolve every DJ (e.g. after raising DISCOGS_TOKEN rate limits or fixing
 // a bug in the matching logic).
+//
+// Some DJs can't be found (or can't be found correctly) by an exact name
+// search alone — a stage name that collides with an unrelated, better
+// documented Discogs entry, or one that's only catalogued under a fuller
+// name. For those, add an entry to dj-cover-overrides.json keyed by the
+// exact name as it appears in the sheet:
+//   { "Vera": { "searchAlias": "Vera Heindel" } }   — search under a different name
+//   { "RAHA": { "discogsArtistId": 5224234 } }      — skip search, use this artist directly
+// Overridden DJs are always re-resolved on the next run, even without --force.
 
 const fs = require('fs');
 const path = require('path');
 
 const SHEET_ID = '1_zpDBFlpW2ZWTVsXQHoW6Y4FbGw8Vi53nMYpZiOypbg';
 const OUTPUT_FILE = path.join(__dirname, '..', 'lib', 'data', 'dj-covers.json');
+const OVERRIDES_FILE = path.join(__dirname, 'dj-cover-overrides.json');
 const USER_AGENT = 'WorldOfWinfieldCoverResolver/1.0 (jamesthemonkeh@hotmail.com)';
 const FORCE = process.argv.includes('--force');
 
@@ -76,13 +86,22 @@ async function discogsFetch(url, token) {
 async function findArtistId(name, token) {
   const params = new URLSearchParams({ q: name, type: 'artist' });
   const json = await discogsFetch(`https://api.discogs.com/database/search?${params}`, token);
+  const results = json.results || [];
+
+  // Discogs disambiguates duplicate artist names with a trailing " (2)",
+  // " (3)" etc, and search relevance ranking doesn't reliably put the
+  // canonical (un-suffixed) entry first — a duplicate can outrank it. Prefer
+  // an exact, un-suffixed title match; only fall back to a suffixed one
+  // (via normalizeName's suffix-stripping) if no canonical entry exists.
+  const rawMatch = results.find((result) => (result.title || '').trim() === name.trim());
+  if (rawMatch) return rawMatch.id;
 
   const normalizedQuery = normalizeName(name);
-  const match = (json.results || []).find(
+  const fuzzyMatch = results.find(
     (result) => normalizeName(result.title || '') === normalizedQuery,
   );
 
-  return match ? match.id : null;
+  return fuzzyMatch ? fuzzyMatch.id : null;
 }
 
 async function fetchArtistImageUrl(artistId, token) {
@@ -135,6 +154,17 @@ async function main() {
     console.log(`Starting fresh — ${dataRows.length} DJs to resolve.\n`);
   }
 
+  const overrides = fs.existsSync(OVERRIDES_FILE)
+    ? JSON.parse(fs.readFileSync(OVERRIDES_FILE, 'utf8'))
+    : {};
+  const overriddenNames = Object.keys(overrides).filter((name) => covers[name] !== undefined);
+  if (overriddenNames.length > 0) {
+    console.log(
+      `Re-resolving ${overriddenNames.length} overridden DJ(s): ${overriddenNames.join(', ')}\n`,
+    );
+    for (const name of overriddenNames) delete covers[name];
+  }
+
   let resolved = 0;
   let notFound = 0;
   let skipped = 0;
@@ -149,9 +179,16 @@ async function main() {
       continue;
     }
 
+    const override = overrides[name];
+
     try {
-      const artistId = await findArtistId(name, token);
-      await sleep(rateLimitMs);
+      let artistId;
+      if (override?.discogsArtistId) {
+        artistId = override.discogsArtistId;
+      } else {
+        artistId = await findArtistId(override?.searchAlias || name, token);
+        await sleep(rateLimitMs);
+      }
 
       if (!artistId) {
         covers[name] = null;

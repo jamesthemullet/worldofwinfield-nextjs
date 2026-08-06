@@ -46,6 +46,10 @@ export default function FavouritesPage({ data, coverArtByTitle }: FavouritesPage
                 />
               </StyledPostHeader>
 
+              <CoverArtDisclaimer>
+                Photos are matched automatically against Discogs — a couple might be the wrong
+                person.
+              </CoverArtDisclaimer>
               <FavouriteResults data={data} coverArtByTitle={coverArtByTitle} />
               <ShareBar title={title} url={`https://worldofwinfield.co.uk${router.asPath}`} />
               <FavouritesHubLink />
@@ -66,6 +70,13 @@ const PostContainer = styled.article`
 
 const StyledPostHeader = styled.div`
   margin: 0 auto;
+`;
+
+const CoverArtDisclaimer = styled.p`
+  margin: 1rem 20px 0;
+  font-size: 0.85rem;
+  opacity: 0.7;
+  text-align: center;
 `;
 
 // Cover art is resolved offline by scripts/resolve-dj-covers.js (against
