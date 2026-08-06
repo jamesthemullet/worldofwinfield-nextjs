@@ -337,7 +337,9 @@ const StyledTable = styled.table`
     &.data-artist-track-name,
     &.data-about,
     &.data-link {
-      width: 100%;
+      overflow-wrap: anywhere;
+      word-break: break-word;
+
       @media screen and (min-width: 768px) {
         width: 500px;
       }
