@@ -5,7 +5,7 @@ Drop a photo in here named after the city on the Favourite Cities sheet, slugifi
 
 - `London` → `london.jpg`
 - `Ibiza Town` → `ibiza-town.jpg`
-- `Den Haag` → `den-haag.jpg`
+- `Den  Haag` → `den-haag.jpg`
 
 Supported extensions: `.jpg`, `.jpeg`, `.png`, `.webp`.
 
