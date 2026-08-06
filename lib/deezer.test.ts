@@ -8,10 +8,14 @@ describe('resolveArtistCoverUrlByTitle', () => {
     jest.restoreAllMocks();
   });
 
-  it('returns a picture_medium URL when an artist is found', async () => {
+  it('returns a picture_medium URL when the top match name equals the query', async () => {
     global.fetch = jest.fn().mockResolvedValue({
       ok: true,
-      json: async () => ({ data: [{ picture_medium: 'https://cdn-images.dzcdn.net/abc.jpg' }] }),
+      json: async () => ({
+        data: [
+          { name: 'Ricardo Villalobos', picture_medium: 'https://cdn-images.dzcdn.net/abc.jpg' },
+        ],
+      }),
     }) as unknown as typeof fetch;
 
     const url = await resolveArtistCoverUrlByTitle({ title: 'Ricardo Villalobos' });
@@ -19,10 +23,54 @@ describe('resolveArtistCoverUrlByTitle', () => {
     expect(url).toBe('https://cdn-images.dzcdn.net/abc.jpg');
   });
 
+  it('matches ignoring case, diacritics and punctuation', async () => {
+    global.fetch = jest.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        data: [{ name: 'babyschon', picture_medium: 'https://cdn-images.dzcdn.net/abc.jpg' }],
+      }),
+    }) as unknown as typeof fetch;
+
+    const url = await resolveArtistCoverUrlByTitle({ title: 'babyschön' });
+
+    expect(url).toBe('https://cdn-images.dzcdn.net/abc.jpg');
+  });
+
+  it('skips a top result whose name does not match the query, even if lower candidates would', async () => {
+    global.fetch = jest.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        data: [
+          { name: 'Babyshambles', picture_medium: 'https://cdn-images.dzcdn.net/wrong.jpg' },
+          { name: 'Some Other Artist', picture_medium: 'https://cdn-images.dzcdn.net/other.jpg' },
+        ],
+      }),
+    }) as unknown as typeof fetch;
+
+    const url = await resolveArtistCoverUrlByTitle({ title: 'babyschön' });
+
+    expect(url).toBeNull();
+  });
+
+  it('rejects a near-miss name like "Herodote" for a query of "Herodot"', async () => {
+    global.fetch = jest.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        data: [{ name: 'Herodote', picture_medium: 'https://cdn-images.dzcdn.net/wrong.jpg' }],
+      }),
+    }) as unknown as typeof fetch;
+
+    const url = await resolveArtistCoverUrlByTitle({ title: 'Herodot' });
+
+    expect(url).toBeNull();
+  });
+
   it('sends the title as the search query', async () => {
     const fetchMock = jest.fn().mockResolvedValue({
       ok: true,
-      json: async () => ({ data: [{ picture_medium: 'https://cdn-images.dzcdn.net/abc.jpg' }] }),
+      json: async () => ({
+        data: [{ name: 'Mr G', picture_medium: 'https://cdn-images.dzcdn.net/abc.jpg' }],
+      }),
     });
     global.fetch = fetchMock as unknown as typeof fetch;
 
@@ -86,7 +134,7 @@ describe('resolveArtistCovers', () => {
         return {
           ok: true,
           json: async () => ({
-            data: [{ picture_medium: 'https://cdn-images.dzcdn.net/mrg.jpg' }],
+            data: [{ name: 'Mr G', picture_medium: 'https://cdn-images.dzcdn.net/mrg.jpg' }],
           }),
         };
       }
@@ -97,5 +145,22 @@ describe('resolveArtistCovers', () => {
 
     expect(covers['Mr G']).toBe('https://cdn-images.dzcdn.net/mrg.jpg');
     expect(covers['Unknown DJ']).toBeNull();
+  });
+
+  it('paces requests so a large batch does not fire faster than the rate limit allows', async () => {
+    const callTimes: number[] = [];
+    global.fetch = jest.fn().mockImplementation(async () => {
+      callTimes.push(Date.now());
+      return { ok: true, json: async () => ({ data: [] }) };
+    }) as unknown as typeof fetch;
+
+    const artists = Array.from({ length: 10 }, (_, i) => ({ title: `DJ ${i}` }));
+    await resolveArtistCovers(artists);
+
+    expect(callTimes).toHaveLength(10);
+    const span = callTimes[callTimes.length - 1] - callTimes[0];
+    // 10 requests across 4 workers means the busiest worker makes 3 calls,
+    // each spaced >=120ms apart, so the batch can't finish near-instantly.
+    expect(span).toBeGreaterThanOrEqual(100);
   });
 });
