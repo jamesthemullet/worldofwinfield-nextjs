@@ -10,3 +10,8 @@ Supported extensions: `.jpg`, `.jpeg`, `.png`, `.webp`.
 
 Any cheese without a matching file falls back to the initials placeholder,
 so this can be filled in gradually — no need to source all of them at once.
+
+Current images are sourced from Wikimedia Commons (representative photos
+per cheese style, not the exact named product) — see `CREDITS.md` for
+attribution. Feel free to replace any of them with an actual photo of the
+specific cheese.
