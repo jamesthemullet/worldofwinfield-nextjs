@@ -58,6 +58,7 @@ function BookCover({ title, coverUrl }: { title: string; coverUrl?: string | nul
       sizes="(max-width: 768px) 40vw, 200px"
       quality={75}
       fill
+      style={{ objectFit: 'cover' }}
       onError={() => setHasErrored(true)}
     />
   );
