@@ -52,7 +52,7 @@ export default function Post({ posts, tag }: TagsPostProps) {
   const seo = {
     opengraphImage: undefined,
     opengraphTitle: `Posts tagged with ${tag} - World Of Winfield`,
-    opengraphDescription: `Posts tagged with ${tag} - World Of Winfield`,
+    opengraphDescription: `Browse all posts tagged with "${tag}" on World Of Winfield.`,
     opengraphSiteName: `World Of Winfield`,
   };
 

@@ -51,8 +51,16 @@ export default function WantsPage({ wantToVisitData, wantToEatData }: WantsPageP
                 />
               </StyledPostHeader>
               <RowOfButtons>
-                <StyledButton onClick={() => handleTypeClick('visit')}>Want To Visit</StyledButton>
-                <StyledButton onClick={() => handleTypeClick('eat')}>Want To Eat Here</StyledButton>
+                <StyledButton
+                  onClick={() => handleTypeClick('visit')}
+                  aria-pressed={selectedType === 'visit'}>
+                  Want To Visit
+                </StyledButton>
+                <StyledButton
+                  onClick={() => handleTypeClick('eat')}
+                  aria-pressed={selectedType === 'eat'}>
+                  Want To Eat Here
+                </StyledButton>
               </RowOfButtons>
               {selectedType === 'visit' && <FavouriteResults data={wantToVisitData} />}
               {selectedType === 'eat' && <FavouriteResults data={wantToEatData} />}
