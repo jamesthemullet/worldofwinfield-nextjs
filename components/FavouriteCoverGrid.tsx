@@ -1,6 +1,7 @@
 import styled from '@emotion/styled';
 import Image from 'next/image';
 import type { JSX } from 'react';
+import { useState } from 'react';
 import { colours } from '../pages/_app';
 
 type Props = {
@@ -35,6 +36,33 @@ const initialsFor = (title: string): string => {
     .join('');
 };
 
+// covers.openlibrary.org and the WordPress image proxy both sometimes return an
+// error (or a broken "not found" image) for a URL that Open Library reported as
+// valid, so we can't trust coverUrl alone — a broken <img> reads worse than the
+// placeholder, so fall back to it as soon as the browser fails to load the image.
+function BookCover({ title, coverUrl }: { title: string; coverUrl?: string | null }): JSX.Element {
+  const [hasErrored, setHasErrored] = useState(false);
+
+  if (!coverUrl || hasErrored) {
+    return (
+      <Placeholder style={{ backgroundColor: placeholderColourFor(title || 'book') }}>
+        {initialsFor(title || '?')}
+      </Placeholder>
+    );
+  }
+
+  return (
+    <Image
+      alt={`Cover of ${title}`}
+      src={coverUrl}
+      sizes="(max-width: 768px) 40vw, 200px"
+      quality={75}
+      fill
+      onError={() => setHasErrored(true)}
+    />
+  );
+}
+
 function FavouriteCoverGrid({
   headerRow,
   rows,
@@ -58,19 +86,7 @@ function FavouriteCoverGrid({
           <Card key={`${title}-${rowIndex}`}>
             <CoverWrapper>
               {indexRequired && <RankBadge>{rowIndex + 1}</RankBadge>}
-              {coverUrl ? (
-                <Image
-                  alt={`Cover of ${title}`}
-                  src={coverUrl}
-                  sizes="(max-width: 768px) 40vw, 200px"
-                  quality={75}
-                  fill
-                />
-              ) : (
-                <Placeholder style={{ backgroundColor: placeholderColourFor(title || 'book') }}>
-                  {initialsFor(title || '?')}
-                </Placeholder>
-              )}
+              <BookCover title={title} coverUrl={coverUrl} />
             </CoverWrapper>
             <CardBody>
               <CardTitle>{title}</CardTitle>
