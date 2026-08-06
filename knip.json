@@ -5,6 +5,7 @@
     "next-sitemap.config.js",
     "realtime/server.js",
     "scripts/enrich-tracks.js",
+    "scripts/resolve-dj-covers.js",
     "lib/imageLoader.ts"
   ],
   "ignoreBinaries": ["wait-on", "axe", "dev", "start"],
