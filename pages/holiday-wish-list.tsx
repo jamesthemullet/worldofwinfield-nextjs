@@ -8,11 +8,17 @@ import PostHeader from '../components/post-header';
 import PostTitle from '../components/post-title';
 import SortDropdown from '../components/SortDropdown';
 import { fetchDataFromGoogleSheets } from '../lib/sheets';
+import { resolveWishListCovers } from '../lib/wish-list-covers';
 import FavouriteResults from './favourites-results';
 
 const sheetId = '1GX6KF20f3Nrb3m8T9th7UIV_uuePj4Ivlc_yLgo-4Bo';
 
-export default function WishListPage({ data }: { data: string[][] | null }) {
+type WishListPageProps = {
+  data: string[][] | null;
+  coverArtByTitle: Record<string, string | null>;
+};
+
+export default function WishListPage({ data, coverArtByTitle }: WishListPageProps) {
   const title = 'Holiday Wish List';
   const seo = {
     opengraphTitle: 'Holiday Wish List | World Of Winfield',
@@ -49,7 +55,12 @@ export default function WishListPage({ data }: { data: string[][] | null }) {
                   onChange={setSelectedSort}
                 />
               </DropdownContainer>
-              <FavouriteResults data={data} indexRequired={false} sortBy={selectedSort} />
+              <FavouriteResults
+                data={data}
+                indexRequired={false}
+                sortBy={selectedSort}
+                coverArtByTitle={coverArtByTitle}
+              />
             </PostContainer>
           </>
         )}
@@ -78,8 +89,18 @@ const DropdownContainer = styled.div`
 export const getStaticProps: GetStaticProps = async () => {
   const data = await fetchDataFromGoogleSheets(sheetId);
 
+  let coverArtByTitle: Record<string, string | null> = {};
+  if (data && data.length > 1) {
+    const headerRow = data[0];
+    const nameIndex = headerRow.indexOf('Name');
+
+    if (nameIndex !== -1) {
+      coverArtByTitle = resolveWishListCovers(data.slice(1).map((row) => row[nameIndex]));
+    }
+  }
+
   return {
-    props: { data },
+    props: { data, coverArtByTitle },
     revalidate: 3600,
   };
 };
