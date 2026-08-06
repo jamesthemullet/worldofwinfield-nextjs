@@ -71,16 +71,26 @@ function FavouriteCoverGrid({
   indexRequired,
 }: Props): JSX.Element {
   const titleIndex =
-    headerRow.indexOf('Title') !== -1 ? headerRow.indexOf('Title') : headerRow.indexOf('Name');
-  const authorIndex = headerRow.indexOf('Author');
+    ['Title', 'Name', 'Beer Name']
+      .map((header) => headerRow.indexOf(header))
+      .find((index) => index !== -1) ?? -1;
+  const subtitleIndex =
+    ['Author', 'Brewery', 'Country']
+      .map((header) => headerRow.indexOf(header))
+      .find((index) => index !== -1) ?? -1;
   const scoreIndex = headerRow.indexOf('Score');
+  const styleIndex = headerRow.indexOf('Style');
+  const abvIndex = headerRow.indexOf('ABV');
 
   return (
     <Grid>
       {rows.map((row, rowIndex) => {
         const title = row[titleIndex] || '';
-        const author = authorIndex !== -1 ? row[authorIndex] : undefined;
+        const author = subtitleIndex !== -1 ? row[subtitleIndex] : undefined;
         const score = scoreIndex !== -1 ? row[scoreIndex] : undefined;
+        const style = styleIndex !== -1 ? row[styleIndex] : undefined;
+        const abv = abvIndex !== -1 ? row[abvIndex] : undefined;
+        const meta = [style, abv].filter(Boolean).join(' · ');
         const coverUrl = coverArtByTitle[title];
 
         return (
@@ -92,6 +102,7 @@ function FavouriteCoverGrid({
             <CardBody>
               <CardTitle>{title}</CardTitle>
               {author && <CardAuthor>{author}</CardAuthor>}
+              {meta && <CardMeta>{meta}</CardMeta>}
               {score && <CardScore>{score}</CardScore>}
             </CardBody>
           </Card>
@@ -165,6 +176,12 @@ const CardTitle = styled.p`
 `;
 
 const CardAuthor = styled.p`
+  margin: 0.15rem 0 0;
+  font-size: 0.75rem;
+  opacity: 0.8;
+`;
+
+const CardMeta = styled.p`
   margin: 0.15rem 0 0;
   font-size: 0.75rem;
   opacity: 0.8;
