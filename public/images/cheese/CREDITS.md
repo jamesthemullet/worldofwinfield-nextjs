@@ -5,8 +5,7 @@ attribution; public domain files are listed for completeness.
 
 | File | Source | Author | License |
 |---|---|---|---|
-| truffle-cheddar.jpg, cornish-cruncher-extra-mature-cheddar-cheese.jpg | [PC Aged 1 Year Canadian Cheddar Cheese.jpg](https://commons.wikimedia.org/wiki/File:PC_Aged_1_Year_Canadian_Cheddar_Cheese.jpg) | Dillan Payne | CC BY-SA 4.0 |
-| ayrshire.jpg, sussex-charmer.jpg, ford-farm-dorset-red.jpg | [Somerset-Cheddar.jpg](https://commons.wikimedia.org/wiki/File:Somerset-Cheddar.jpg) | J.P.Lon | CC BY-SA 3.0 |
+| truffle-cheddar.jpg, cornish-cruncher-extra-mature-cheddar-cheese.jpg, ayrshire.jpg, sussex-charmer.jpg, ford-farm-dorset-red.jpg | [Somerset-Cheddar.jpg](https://commons.wikimedia.org/wiki/File:Somerset-Cheddar.jpg) | J.P.Lon | CC BY-SA 3.0 |
 | mature-blue-stilton.jpg | [Blue Stilton 08.jpg](https://commons.wikimedia.org/wiki/File:Blue_Stilton_08.jpg) | Coyau | CC BY-SA 3.0 |
 | red-leicester.jpg, vintage-red-fox.jpg | [Red Leicester.jpg](https://commons.wikimedia.org/wiki/File:Red_Leicester.jpg) | Jon Sullivan | Public domain |
 | doux-de-montagne.jpg | [Mimolette vieille etuvee.jpg](https://commons.wikimedia.org/wiki/File:Mimolette_vieille_etuvee.jpg) | Jastrow | Public domain |
