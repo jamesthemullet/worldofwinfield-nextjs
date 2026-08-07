@@ -75,7 +75,7 @@ function FavouriteCoverGrid({
       .map((header) => headerRow.indexOf(header))
       .find((index) => index !== -1) ?? -1;
   const subtitleIndex =
-    ['Author', 'Brewery', 'Country']
+    ['Author', 'Brewery', 'Country', 'Bought From']
       .map((header) => headerRow.indexOf(header))
       .find((index) => index !== -1) ?? -1;
   const scoreIndex = headerRow.indexOf('Score');
@@ -116,10 +116,20 @@ const Grid = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
   gap: 1.5rem 1rem;
-  margin: 1rem 0;
+  box-sizing: border-box;
+  max-width: 2000px;
+  margin: 1rem auto;
 
   @media (min-width: 768px) {
     grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  }
+
+  @media (min-width: 1200px) {
+    padding: 0 2rem;
+  }
+
+  @media (min-width: 1600px) {
+    padding: 0 3rem;
   }
 `;
 
