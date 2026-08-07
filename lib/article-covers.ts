@@ -24,7 +24,7 @@ const isHttpUrl = (value: string | undefined): value is string => {
 // The sheet's Link column is sometimes just the article title again (data-entry
 // slip), so links that don't parse as an http(s) URL are skipped rather than
 // fetched.
-export const resolveArticleCoverUrl = async (link: string | undefined): Promise<string | null> => {
+const resolveArticleCoverUrl = async (link: string | undefined): Promise<string | null> => {
   if (!isHttpUrl(link)) return null;
 
   try {
