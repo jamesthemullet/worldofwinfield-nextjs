@@ -71,7 +71,7 @@ function FavouriteCoverGrid({
   indexRequired,
 }: Props): JSX.Element {
   const titleIndex =
-    ['Title', 'Name', 'Beer Name']
+    ['Title', 'Name', 'Beer Name', 'About']
       .map((header) => headerRow.indexOf(header))
       .find((index) => index !== -1) ?? -1;
   const subtitleIndex =
