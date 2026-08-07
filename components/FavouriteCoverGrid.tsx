@@ -85,6 +85,7 @@ function FavouriteCoverGrid({
     ['Date', 'Date Read']
       .map((header) => headerRow.indexOf(header))
       .find((index) => index !== -1) ?? -1;
+  const linkIndex = headerRow.indexOf('Link');
 
   return (
     <Grid>
@@ -97,6 +98,8 @@ function FavouriteCoverGrid({
         const date = dateIndex !== -1 ? row[dateIndex] : undefined;
         const meta = [style, abv].filter(Boolean).join(' · ');
         const coverUrl = coverArtByTitle[title];
+        const rawLink = linkIndex !== -1 ? row[linkIndex] : undefined;
+        const link = /^https?:\/\//i.test(rawLink || '') ? rawLink : undefined;
 
         return (
           <Card key={`${title}-${rowIndex}`}>
@@ -110,6 +113,11 @@ function FavouriteCoverGrid({
               {meta && <CardMeta>{meta}</CardMeta>}
               {score && <CardScore>{score}</CardScore>}
               {date && <CardDate>{date}</CardDate>}
+              {link && (
+                <CardLink href={link} target="_blank" rel="noopener noreferrer">
+                  Read article →
+                </CardLink>
+              )}
             </CardBody>
           </Card>
         );
@@ -213,6 +221,14 @@ const CardDate = styled.p`
   margin: 0.15rem 0 0;
   font-size: 0.75rem;
   opacity: 0.8;
+`;
+
+const CardLink = styled.a`
+  display: inline-block;
+  margin: 0.15rem 0 0;
+  font-size: 0.75rem;
+  font-weight: bold;
+  color: ${colours.azure};
 `;
 
 export default FavouriteCoverGrid;
