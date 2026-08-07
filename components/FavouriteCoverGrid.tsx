@@ -81,7 +81,10 @@ function FavouriteCoverGrid({
   const scoreIndex = headerRow.indexOf('Score');
   const styleIndex = headerRow.indexOf('Style');
   const abvIndex = headerRow.indexOf('ABV');
-  const dateIndex = headerRow.indexOf('Date');
+  const dateIndex =
+    ['Date', 'Date Read']
+      .map((header) => headerRow.indexOf(header))
+      .find((index) => index !== -1) ?? -1;
 
   return (
     <Grid>
