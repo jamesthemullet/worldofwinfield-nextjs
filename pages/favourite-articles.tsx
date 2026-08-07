@@ -7,12 +7,18 @@ import Layout from '../components/layout';
 import PostHeader from '../components/post-header';
 import PostTitle from '../components/post-title';
 import ShareBar from '../components/share-bar';
+import { resolveArticleCovers } from '../lib/article-covers';
 import { fetchDataFromGoogleSheets } from '../lib/sheets';
 import FavouriteResults from './favourites-results';
 
 const sheetId = '1R928oTM4hiTFXZ6Ww9-2pMKLAWy2Wjf3Z9xrXC6GTa0';
 
-export default function FavouritesPage({ data }: { data: string[][] | null }) {
+type FavouritesPageProps = {
+  data: string[][] | null;
+  coverArtByTitle: Record<string, string | null>;
+};
+
+export default function FavouritesPage({ data, coverArtByTitle }: FavouritesPageProps) {
   const title = 'Favourite Articles Read';
   const seo = {
     opengraphTitle: 'Favourite Articles | World Of Winfield',
@@ -40,7 +46,7 @@ export default function FavouritesPage({ data }: { data: string[][] | null }) {
                 />
               </StyledPostHeader>
 
-              <FavouriteResults data={data} />
+              <FavouriteResults data={data} coverArtByTitle={coverArtByTitle} />
               <ShareBar title={title} url={`https://worldofwinfield.co.uk${router.asPath}`} />
               <FavouritesHubLink />
             </PostContainer>
@@ -65,8 +71,24 @@ const StyledPostHeader = styled.div`
 export const getStaticProps: GetStaticProps = async () => {
   const data = await fetchDataFromGoogleSheets(sheetId);
 
+  let coverArtByTitle: Record<string, string | null> = {};
+  if (data && data.length > 1) {
+    const headerRow = data[0];
+    const titleIndex = headerRow.indexOf('About');
+    const linkIndex = headerRow.indexOf('Link');
+
+    if (titleIndex !== -1) {
+      coverArtByTitle = await resolveArticleCovers(
+        data.slice(1).map((row) => ({
+          title: row[titleIndex],
+          link: linkIndex !== -1 ? row[linkIndex] : undefined,
+        })),
+      );
+    }
+  }
+
   return {
-    props: { data },
+    props: { data, coverArtByTitle },
     revalidate: 3600,
   };
 };
