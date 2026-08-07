@@ -81,6 +81,7 @@ function FavouriteCoverGrid({
   const scoreIndex = headerRow.indexOf('Score');
   const styleIndex = headerRow.indexOf('Style');
   const abvIndex = headerRow.indexOf('ABV');
+  const dateIndex = headerRow.indexOf('Date');
 
   return (
     <Grid>
@@ -90,6 +91,7 @@ function FavouriteCoverGrid({
         const score = scoreIndex !== -1 ? row[scoreIndex] : undefined;
         const style = styleIndex !== -1 ? row[styleIndex] : undefined;
         const abv = abvIndex !== -1 ? row[abvIndex] : undefined;
+        const date = dateIndex !== -1 ? row[dateIndex] : undefined;
         const meta = [style, abv].filter(Boolean).join(' · ');
         const coverUrl = coverArtByTitle[title];
 
@@ -104,6 +106,7 @@ function FavouriteCoverGrid({
               {author && <CardAuthor>{author}</CardAuthor>}
               {meta && <CardMeta>{meta}</CardMeta>}
               {score && <CardScore>{score}</CardScore>}
+              {date && <CardDate>{date}</CardDate>}
             </CardBody>
           </Card>
         );
@@ -198,6 +201,12 @@ const CardMeta = styled.p`
 `;
 
 const CardScore = styled.p`
+  margin: 0.15rem 0 0;
+  font-size: 0.75rem;
+  opacity: 0.8;
+`;
+
+const CardDate = styled.p`
   margin: 0.15rem 0 0;
   font-size: 0.75rem;
   opacity: 0.8;
