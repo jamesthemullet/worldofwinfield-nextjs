@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import type { GetStaticProps } from 'next';
 import { useRouter } from 'next/router';
 import Container from '../components/container';
 import FavouritesHubLink from '../components/favourites-hub-link';
@@ -6,10 +7,19 @@ import Layout from '../components/layout';
 import PostHeader from '../components/post-header';
 import PostTitle from '../components/post-title';
 import ShareBar from '../components/share-bar';
+import { resolveCityCovers } from '../lib/city-covers';
+import { fetchDataFromGoogleSheets } from '../lib/sheets';
 import FavouriteResults from './favourites-results';
-export default function FavouritesPage() {
+
+const sheetId = '1WBfOTfhC70AygxrTcIIgvigzlvOD65WfI9Ysrd3aF5o';
+
+type FavouritesPageProps = {
+  data: string[][] | null;
+  coverArtByTitle: Record<string, string | null>;
+};
+
+export default function FavouritesPage({ data, coverArtByTitle }: FavouritesPageProps) {
   const title = 'Favourite Cities Visited';
-  const sheetId = '1WBfOTfhC70AygxrTcIIgvigzlvOD65WfI9Ysrd3aF5o';
   const seo = {
     opengraphTitle: 'Favourite Cities Visited | World Of Winfield',
     opengraphDescription: "A ranked list of James Winfield's favourite cities visited.",
@@ -36,7 +46,7 @@ export default function FavouritesPage() {
                 />
               </StyledPostHeader>
 
-              <FavouriteResults sheetId={sheetId} />
+              <FavouriteResults data={data} coverArtByTitle={coverArtByTitle} />
               <ShareBar title={title} url={`https://worldofwinfield.co.uk${router.asPath}`} />
               <FavouritesHubLink />
             </PostContainer>
@@ -57,3 +67,22 @@ const PostContainer = styled.article`
 const StyledPostHeader = styled.div`
   margin: 0 auto;
 `;
+
+export const getStaticProps: GetStaticProps = async () => {
+  const data = await fetchDataFromGoogleSheets(sheetId);
+
+  let coverArtByTitle: Record<string, string | null> = {};
+  if (data && data.length > 1) {
+    const headerRow = data[0];
+    const nameIndex = headerRow.indexOf('Name');
+
+    if (nameIndex !== -1) {
+      coverArtByTitle = resolveCityCovers(data.slice(1).map((row) => row[nameIndex]));
+    }
+  }
+
+  return {
+    props: { data, coverArtByTitle },
+    revalidate: 3600,
+  };
+};

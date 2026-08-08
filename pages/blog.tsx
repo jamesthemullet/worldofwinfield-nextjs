@@ -9,7 +9,7 @@ import MoreStories from '../components/more-stories';
 import SearchBar from '../components/search-bar';
 import SearchResults from '../components/search-results';
 import { getAllPostsForHome } from '../lib/api';
-import type { IndexPageProps, SearchResult } from '../lib/types';
+import type { GlobalSearchResults, IndexPageProps } from '../lib/types';
 
 export default function Index({ allPosts, preview }: IndexPageProps) {
   const [searchResults, setSearchResults] = useState<SearchResult[] | null>(null);
@@ -18,7 +18,7 @@ export default function Index({ allPosts, preview }: IndexPageProps) {
   const [endCursor, setEndCursor] = useState(allPosts.pageInfo.endCursor);
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleSearch = (results: SearchResult[]) => {
+  const handleSearch = (results: GlobalSearchResults) => {
     setSearchResults(results);
   };
 
@@ -64,12 +64,21 @@ export default function Index({ allPosts, preview }: IndexPageProps) {
           </LoadMoreContainer>
         )}
       </Container>
-      <BrowseTopicsBar>
-        <Link href="/tags">Browse all topics →</Link>
-        <Link href="/year-in-review">Year in Review →</Link>
+      <BrowseTopicsBar aria-label="Blog navigation">
+        <Link href="/tags">
+          Browse all topics <span aria-hidden="true">→</span>
+        </Link>
+        <Link href="/year-in-review">
+          Year in Review <span aria-hidden="true">→</span>
+        </Link>
         <RssLink href="/api/feed">Subscribe via RSS</RssLink>
       </BrowseTopicsBar>
-      <SearchBar onSearch={handleSearch} />
+      <SearchBar<GlobalSearchResults>
+        onSearch={handleSearch}
+        endpoint="/api/global-search"
+        label="Search everything"
+        placeholder="Search blog, favourites, wish lists..."
+      />
       <SearchResults searchResults={searchResults} />
     </Layout>
   );
@@ -84,7 +93,7 @@ export const getStaticProps: GetStaticProps = async ({ preview = false }) => {
   };
 };
 
-const BrowseTopicsBar = styled.div`
+const BrowseTopicsBar = styled.nav`
   text-align: center;
   padding: 1rem 0;
 
@@ -135,5 +144,10 @@ const LoadMoreButton = styled.button`
   &:disabled {
     opacity: 0.6;
     cursor: default;
+  }
+
+  &:focus-visible {
+    outline: 2px solid #000;
+    outline-offset: 2px;
   }
 `;

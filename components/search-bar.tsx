@@ -4,7 +4,12 @@ import type { SearchBarProps, SearchResult } from '../lib/types';
 import { colours } from '../pages/_app';
 import { StyledButton, StyledInput } from './core-components';
 
-const SearchBar = ({ onSearch }: SearchBarProps): JSX.Element => {
+const SearchBar = <T = SearchResult[]>({
+  onSearch,
+  endpoint = '/api/search',
+  label = 'Search blog',
+  placeholder = 'Search blog...',
+}: SearchBarProps<T>): JSX.Element => {
   const [query, setQuery] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -16,19 +21,19 @@ const SearchBar = ({ onSearch }: SearchBarProps): JSX.Element => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
     setLoading(true);
-    const res = await fetch(`/api/search?q=${encodeURIComponent(query)}`);
-    const searchResults = (await res.json()) as SearchResult[];
+    const res = await fetch(`${endpoint}?q=${encodeURIComponent(query)}`);
+    const searchResults = (await res.json()) as T;
     setLoading(false);
     onSearch(searchResults);
   };
 
   return (
     <StyledForm onSubmit={handleSubmit}>
-      <label htmlFor="blog-search-input">Search blog</label>
+      <label htmlFor="blog-search-input">{label}</label>
       <StyledInput
         id="blog-search-input"
         type="text"
-        placeholder="Search blog..."
+        placeholder={placeholder}
         value={query}
         onChange={handleChange}
       />

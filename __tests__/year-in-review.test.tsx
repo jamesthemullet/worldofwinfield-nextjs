@@ -89,8 +89,8 @@ describe('YearInReview', () => {
 
   it('links to the previous and next year, but not beyond the first year or the current year', () => {
     render(<YearInReview {...makeProps([mockPost], 2018)} />);
-    expect(screen.queryByRole('link', { name: /← 2017/ })).not.toBeInTheDocument();
-    expect(screen.getByRole('link', { name: /2019 →/ })).toBeInTheDocument();
+    expect(screen.queryByRole('link', { name: /Previous year: 2017/ })).not.toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /Next year: 2019/ })).toBeInTheDocument();
   });
 
   it('renders a link back to all years', () => {

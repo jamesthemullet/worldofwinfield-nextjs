@@ -26,17 +26,19 @@ describe('PostNavigation', () => {
     const previousPost = { title: 'Older Post Title', slug: 'older-post' };
     render(<PostNavigation previousPost={previousPost} nextPost={null} />);
 
-    expect(screen.getByText('← Older')).toBeInTheDocument();
+    const link = screen.getByRole('link');
+    expect(link).toHaveTextContent('← Older');
     expect(screen.getByText('Older Post Title')).toBeInTheDocument();
-    expect(screen.getByRole('link')).toHaveAttribute('href', '/older-post');
+    expect(link).toHaveAttribute('href', '/older-post');
   });
 
   it('renders the next post link with direction label and title', () => {
     const nextPost = { title: 'Newer Post Title', slug: 'newer-post' };
     render(<PostNavigation previousPost={null} nextPost={nextPost} />);
 
-    expect(screen.getByText('Newer →')).toBeInTheDocument();
+    const link = screen.getByRole('link');
+    expect(link).toHaveTextContent('Newer →');
     expect(screen.getByText('Newer Post Title')).toBeInTheDocument();
-    expect(screen.getByRole('link')).toHaveAttribute('href', '/newer-post');
+    expect(link).toHaveAttribute('href', '/newer-post');
   });
 });

@@ -14,7 +14,7 @@ import {
   getPostDisplayInfo,
   getRandomImage,
 } from '../lib/api';
-import type { IndexPageProps, SearchResult } from '../lib/types';
+import type { GlobalSearchResults, IndexPageProps } from '../lib/types';
 
 export default function Index({
   preview,
@@ -24,7 +24,7 @@ export default function Index({
   randomImageSet,
   archivePost,
 }: IndexPageProps) {
-  const [searchResults, setSearchResults] = useState<SearchResult[] | null>(null);
+  const [searchResults, setSearchResults] = useState<GlobalSearchResults | null>(null);
   const [randomImage, setRandomImage] = useState<
     | IndexPageProps['jamesImages']['edges'][0]['node']['featuredImage']
     | NonNullable<IndexPageProps['randomImageSet']['images']>[number]
@@ -40,7 +40,7 @@ export default function Index({
     }
   }, [randomImageSet]);
 
-  const handleSearch = (results: SearchResult[]) => {
+  const handleSearch = (results: GlobalSearchResults) => {
     setSearchResults(results);
   };
 
@@ -366,7 +366,12 @@ export default function Index({
           />
         ))}
       </HomepageBlocksContainer>
-      <SearchBar onSearch={handleSearch} />
+      <SearchBar<GlobalSearchResults>
+        onSearch={handleSearch}
+        endpoint="/api/global-search"
+        label="Search everything"
+        placeholder="Search blog, favourites, wish lists..."
+      />
       <SearchResults searchResults={searchResults} />
     </Layout>
   );

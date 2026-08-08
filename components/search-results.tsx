@@ -3,6 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React, { type JSX } from 'react';
 import { sanitize } from '../lib/sanitize';
+import { searchableSheets } from '../lib/search-sheets';
 import type { SearchResultsProps } from '../lib/types';
 import { colours } from '../pages/_app';
 
@@ -16,6 +17,8 @@ const blockColours = [
   colours.blueish,
 ];
 
+const lightBackgrounds = new Set([colours.purple, colours.green, colours.blueish, colours.azure]);
+
 const getColourFromTitle = (title: string): string => {
   let hash = 0;
   for (let i = 0; i < title.length; i++) {
@@ -24,56 +27,90 @@ const getColourFromTitle = (title: string): string => {
   return blockColours[Math.abs(hash) % blockColours.length];
 };
 
+const getTextColour = (bg: string): string =>
+  lightBackgrounds.has(bg) ? colours.dark : colours.white;
+
 const stripReadMoreParagraph = (excerpt: string): string => {
   return excerpt.replace(/\s*<a\b[^>]*>.*?<\/a>/gi, '').trim();
 };
 
 const SearchResults = ({ searchResults }: SearchResultsProps): JSX.Element => {
+  if (searchResults === null) {
+    return <SearchResultsContainer aria-live="polite" aria-atomic="false" role="status" />;
+  }
+
+  const categoryEntries = searchableSheets
+    .map((sheet) => ({ sheet, items: searchResults[sheet.key] ?? [] }))
+    .filter((entry) => entry.items.length > 0);
+
+  const totalCount =
+    searchResults.posts.length +
+    categoryEntries.reduce((sum, entry) => sum + entry.items.length, 0);
+
   return (
-    <SearchResultsContainer>
-      {searchResults !== null && searchResults.length === 0 && (
-        <p className="center">No results found.</p>
-      )}
-      {(searchResults?.length ?? 0) > 0 && (
+    <SearchResultsContainer aria-live="polite" aria-atomic="false" role="status">
+      {totalCount === 0 && <p className="center">No results found.</p>}
+      {totalCount > 0 && (
         <>
           <ResultCount>
-            {searchResults!.length} result{searchResults!.length !== 1 ? 's' : ''}
+            {totalCount} result{totalCount !== 1 ? 's' : ''}
           </ResultCount>
-          {searchResults!.map((post) => (
-            <SearchCard key={post.slug}>
-              {post.featuredImage?.node.sourceUrl && (
-                <SearchCardImageWrapper>
-                  <Link href={`/${post.slug}`} aria-label={post.title}>
-                    <Image
-                      alt=""
-                      src={post.featuredImage.node.sourceUrl}
-                      sizes="(max-width: 768px) 100vw, 240px"
-                      quality={75}
-                      fill
-                    />
-                  </Link>
-                </SearchCardImageWrapper>
-              )}
-              <SearchCardContent>
-                <SearchCardTitle>
-                  <Link href={`/${post.slug}`}>{post.title}</Link>
-                </SearchCardTitle>
-                <SearchCardDate>{formatDate(post.date)}</SearchCardDate>
-                {post.excerpt && (
-                  <SearchCardExcerpt
-                    dangerouslySetInnerHTML={{
-                      __html: sanitize(stripReadMoreParagraph(post.excerpt)),
-                    }}
-                  />
-                )}
-                <ContinueReadingLink
-                  href={`/${post.slug}`}
-                  colour={getColourFromTitle(post.title)}
-                  aria-label={`Continue reading about ${post.title}`}>
-                  Continue reading
-                </ContinueReadingLink>
-              </SearchCardContent>
-            </SearchCard>
+          {searchResults.posts.length > 0 && (
+            <ResultSection>
+              <SectionTitle>Blog posts</SectionTitle>
+              {searchResults.posts.map((post) => (
+                <SearchCard key={post.slug}>
+                  {post.featuredImage?.node.sourceUrl && (
+                    <SearchCardImageWrapper>
+                      <Link href={`/${post.slug}`} aria-label={post.title}>
+                        <Image
+                          alt=""
+                          src={post.featuredImage.node.sourceUrl}
+                          sizes="(max-width: 768px) 100vw, 240px"
+                          quality={75}
+                          fill
+                        />
+                      </Link>
+                    </SearchCardImageWrapper>
+                  )}
+                  <SearchCardContent>
+                    <SearchCardTitle>
+                      <Link href={`/${post.slug}`}>{post.title}</Link>
+                    </SearchCardTitle>
+                    <SearchCardDate>{formatDate(post.date)}</SearchCardDate>
+                    {post.excerpt && (
+                      <SearchCardExcerpt
+                        dangerouslySetInnerHTML={{
+                          __html: sanitize(stripReadMoreParagraph(post.excerpt)),
+                        }}
+                      />
+                    )}
+                    <ContinueReadingLink
+                      href={`/${post.slug}`}
+                      colour={getColourFromTitle(post.title)}
+                      textcolour={getTextColour(getColourFromTitle(post.title))}
+                      aria-label={`Continue reading about ${post.title}`}>
+                      Continue reading
+                    </ContinueReadingLink>
+                  </SearchCardContent>
+                </SearchCard>
+              ))}
+            </ResultSection>
+          )}
+          {categoryEntries.map(({ sheet, items }) => (
+            <ResultSection key={sheet.key}>
+              <SectionTitle>{sheet.label}</SectionTitle>
+              <CategoryList>
+                {items.map((item, index) => (
+                  <li key={`${sheet.key}-${index}`}>
+                    <Link href={sheet.path}>{item.title}</Link>
+                    {item.subtitle && (
+                      <CategoryItemSubtitle> — {item.subtitle}</CategoryItemSubtitle>
+                    )}
+                  </li>
+                ))}
+              </CategoryList>
+            </ResultSection>
           ))}
         </>
       )}
@@ -135,6 +172,46 @@ const ResultCount = styled.p`
   color: #666;
   margin-bottom: 1.5rem;
   text-align: center;
+`;
+
+const ResultSection = styled.section`
+  margin-bottom: 2rem;
+`;
+
+const SectionTitle = styled.h2`
+  font-size: 1.25rem;
+  margin-bottom: 0.75rem;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 0.5rem;
+`;
+
+const CategoryList = styled.ul`
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  li {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #eee;
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+
+  a {
+    color: inherit;
+    font-weight: bold;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+`;
+
+const CategoryItemSubtitle = styled.span`
+  color: #666;
 `;
 
 const SearchCardImageWrapper = styled.div`
@@ -213,13 +290,13 @@ const SearchCardExcerpt = styled.div`
   }
 `;
 
-const ContinueReadingLink = styled(Link)<{ colour: string }>`
+const ContinueReadingLink = styled(Link)<{ colour: string; textcolour: string }>`
   display: inline-block;
   padding: 10px;
   font-size: 1rem;
   min-width: 100px;
   background-color: ${(props) => props.colour};
-  color: ${colours.white};
+  color: ${(props) => props.textcolour};
   font-weight: bold;
   text-decoration: none;
   text-align: center;

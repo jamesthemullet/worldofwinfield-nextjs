@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import type { GetStaticProps } from 'next';
 import { useRouter } from 'next/router';
 import Container from '../components/container';
 import FavouritesHubLink from '../components/favourites-hub-link';
@@ -6,10 +7,19 @@ import Layout from '../components/layout';
 import PostHeader from '../components/post-header';
 import PostTitle from '../components/post-title';
 import ShareBar from '../components/share-bar';
+import djCovers from '../lib/data/dj-covers.json';
+import { fetchDataFromGoogleSheets } from '../lib/sheets';
 import FavouriteResults from './favourites-results';
-export default function FavouritesPage() {
+
+const sheetId = '1_zpDBFlpW2ZWTVsXQHoW6Y4FbGw8Vi53nMYpZiOypbg';
+
+type FavouritesPageProps = {
+  data: string[][] | null;
+  coverArtByTitle: Record<string, string | null>;
+};
+
+export default function FavouritesPage({ data, coverArtByTitle }: FavouritesPageProps) {
   const title = 'Favourite DJs';
-  const sheetId = '1_zpDBFlpW2ZWTVsXQHoW6Y4FbGw8Vi53nMYpZiOypbg';
   const seo = {
     opengraphTitle: 'Favourite DJs | World Of Winfield',
     opengraphDescription: "A ranked list of James Winfield's favourite DJs.",
@@ -36,7 +46,11 @@ export default function FavouritesPage() {
                 />
               </StyledPostHeader>
 
-              <FavouriteResults sheetId={sheetId} />
+              <CoverArtDisclaimer>
+                Photos are matched automatically against Discogs — a couple might be the wrong
+                person.
+              </CoverArtDisclaimer>
+              <FavouriteResults data={data} coverArtByTitle={coverArtByTitle} />
               <ShareBar title={title} url={`https://worldofwinfield.co.uk${router.asPath}`} />
               <FavouritesHubLink />
             </PostContainer>
@@ -57,3 +71,24 @@ const PostContainer = styled.article`
 const StyledPostHeader = styled.div`
   margin: 0 auto;
 `;
+
+const CoverArtDisclaimer = styled.p`
+  margin: 1rem 20px 0;
+  font-size: 0.85rem;
+  opacity: 0.7;
+  text-align: center;
+`;
+
+// Cover art is resolved offline by scripts/resolve-dj-covers.js (against
+// Discogs) and committed to lib/data/dj-covers.json, rather than looked up
+// live here — Discogs' rate limit is too slow for ~200 DJs within an ISR
+// revalidation. Re-run that script and commit the updated JSON when the DJ
+// list changes.
+export const getStaticProps: GetStaticProps = async () => {
+  const data = await fetchDataFromGoogleSheets(sheetId);
+
+  return {
+    props: { data, coverArtByTitle: djCovers },
+    revalidate: 3600,
+  };
+};

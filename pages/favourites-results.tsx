@@ -1,15 +1,17 @@
 import styled from '@emotion/styled';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
+import { StyledInput } from '../components/core-components';
+import FavouriteCoverGrid from '../components/FavouriteCoverGrid';
 import SortDropdown from '../components/SortDropdown';
-import { fetchDataFromGoogleSheets } from '../lib/sheets';
 
 type TypeProps = {
-  sheetId: string;
+  data: string[][] | null;
   columnsToHide?: string[];
   indexRequired?: boolean;
   sortBy?: string;
   genreFilter?: string;
   labelFilter?: string;
+  coverArtByTitle?: Record<string, string | null>;
 };
 
 const normalize = (s: string): string =>
@@ -22,66 +24,49 @@ const normalize = (s: string): string =>
     .replace(/[^a-z0-9 ]/g, '');
 
 const FavouriteResults = ({
-  sheetId,
+  data: sheetData,
   columnsToHide = [],
   indexRequired = true,
   sortBy,
   genreFilter,
   labelFilter,
+  coverArtByTitle,
 }: TypeProps) => {
-  const [rawData, setRawData] = useState<string[][] | null>(null);
-  const [loading, setLoading] = useState(false);
   const [internalSortBy, setInternalSortBy] = useState('');
-  const [sortColumns, setSortColumns] = useState<string[]>([]);
+  const [searchQuery, setSearchQuery] = useState('');
 
   const effectiveSortBy = sortBy !== undefined ? sortBy : internalSortBy;
   const showInternalDropdown = sortBy === undefined;
 
-  // Stable primitive key so the effect dependency compares by value, not array identity.
+  // Stable primitive key so the memo dependency compares by value, not array identity.
   const columnsToHideKey = columnsToHide.join('\x00');
 
-  // Fetch and apply column-hiding once per sheetId/columnsToHide change.
-  // Filter and sort are derived in-memory below — no re-fetch on filter/sort changes.
-  useEffect(() => {
-    const fetchFavouriteData = async (): Promise<void> => {
-      if (sheetId && !loading) {
-        setLoading(true);
-        try {
-          const response = await fetchDataFromGoogleSheets(sheetId);
+  // Apply column-hiding to the server-fetched data once per data/columnsToHide change.
+  // Filter and sort are derived in-memory below.
+  const rawData = useMemo(() => {
+    if (!sheetData || !sheetData.length) return null;
 
-          if (!response || !response.length) {
-            console.error('No data received from Google Sheets');
-            return;
-          }
+    const headerRow = [...sheetData[0]];
+    const dataRows = sheetData.slice(1).map((row) => [...row]);
 
-          const headerRow = [...response[0]];
-          const dataRows = response.slice(1).map((row) => [...row]);
-
-          columnsToHide.forEach((columnName) => {
-            const columnIndex = headerRow.indexOf(columnName);
-            if (columnIndex !== -1) {
-              for (const row of dataRows) {
-                row.splice(columnIndex, 1);
-              }
-              headerRow.splice(columnIndex, 1);
-            }
-          });
-
-          if (sortBy === undefined) {
-            setSortColumns([...headerRow]);
-          }
-
-          setRawData([headerRow, ...dataRows]);
-        } catch (error) {
-          console.error('Error processing sheet data:', error);
-        } finally {
-          setLoading(false);
+    columnsToHide.forEach((columnName) => {
+      const columnIndex = headerRow.indexOf(columnName);
+      if (columnIndex !== -1) {
+        for (const row of dataRows) {
+          row.splice(columnIndex, 1);
         }
+        headerRow.splice(columnIndex, 1);
       }
-    };
+    });
 
-    fetchFavouriteData();
-  }, [sheetId, columnsToHideKey]);
+    return [headerRow, ...dataRows];
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sheetData, columnsToHideKey]);
+
+  const sortColumns = useMemo(
+    () => (rawData && sortBy === undefined ? rawData[0] : []),
+    [rawData, sortBy],
+  );
 
   const data = useMemo(() => {
     if (!rawData || rawData.length === 0) return [];
@@ -96,6 +81,13 @@ const FavouriteResults = ({
     if (labelFilter && headerRow.includes('Label')) {
       const labelIndex = headerRow.indexOf('Label');
       filteredRows = filteredRows.filter((row: string[]) => row[labelIndex] === labelFilter);
+    }
+
+    if (searchQuery.trim()) {
+      const lowerQuery = searchQuery.trim().toLowerCase();
+      filteredRows = filteredRows.filter((row: string[]) =>
+        row.some((cell) => (cell ?? '').toString().toLowerCase().includes(lowerQuery)),
+      );
     }
 
     const normalizedHeaders = headerRow.map((h: string) => normalize(h));
@@ -148,10 +140,23 @@ const FavouriteResults = ({
     }
 
     return [headerRow, ...filteredRows];
-  }, [rawData, genreFilter, labelFilter, effectiveSortBy]);
+  }, [rawData, genreFilter, labelFilter, searchQuery, effectiveSortBy]);
+
+  const hasRows = rawData !== null && rawData.length > 1;
+  const noSearchResults = hasRows && searchQuery.trim() !== '' && data.length <= 1;
 
   return (
     <FavouritesContainer>
+      <SearchWrapper>
+        <SearchLabel htmlFor="favourites-search">Search:</SearchLabel>
+        <StyledInput
+          id="favourites-search"
+          type="text"
+          placeholder="Search…"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
+      </SearchWrapper>
       {showInternalDropdown && sortColumns.length > 0 && (
         <SortDropdown
           options={sortColumns}
@@ -159,68 +164,82 @@ const FavouriteResults = ({
           onChange={setInternalSortBy}
         />
       )}
-      <StyledTable>
-        {data.length > 0 && (
-          <>
-            <thead>
-              <tr>
-                {indexRequired && <th className="index" scope="col"></th>}
-                {data[0].map((header, cellIndex) => {
-                  const className = `heading-${header.toString().toLowerCase().replace(/\s+/g, '-').replace(/\//g, '-')}`;
-                  return (
-                    <th key={cellIndex} className={className} scope="col">
-                      {header}
-                    </th>
-                  );
-                })}
-              </tr>
-            </thead>
-            <tbody>
-              {data.slice(1).map((row, rowIndex) => (
-                <tr key={rowIndex}>
-                  {indexRequired && <td className="index">{rowIndex + 1}.</td>}
-                  {row.map((cellData, cellIndex) => {
-                    const rawHeader = data[0][cellIndex] || '';
-                    const className = `data-${rawHeader.toString().toLowerCase().replace(/\s+/g, '-').replace(/\//g, '-')}`;
+      {noSearchResults && (
+        <EmptyState>No results for &ldquo;{searchQuery.trim()}&rdquo;</EmptyState>
+      )}
+      {coverArtByTitle ? (
+        data.length > 0 && (
+          <FavouriteCoverGrid
+            headerRow={data[0]}
+            rows={data.slice(1)}
+            coverArtByTitle={coverArtByTitle}
+            indexRequired={indexRequired}
+          />
+        )
+      ) : (
+        <StyledTable>
+          {data.length > 0 && (
+            <>
+              <thead>
+                <tr>
+                  {indexRequired && <th className="index" scope="col"></th>}
+                  {data[0].map((header, cellIndex) => {
+                    const className = `heading-${header.toString().toLowerCase().replace(/\s+/g, '-').replace(/\//g, '-')}`;
+                    return (
+                      <th key={cellIndex} className={className} scope="col">
+                        {header}
+                      </th>
+                    );
+                  })}
+                </tr>
+              </thead>
+              <tbody>
+                {data.slice(1).map((row, rowIndex) => (
+                  <tr key={rowIndex}>
+                    {indexRequired && <td className="index">{rowIndex + 1}.</td>}
+                    {row.map((cellData, cellIndex) => {
+                      const rawHeader = data[0][cellIndex] || '';
+                      const className = `data-${rawHeader.toString().toLowerCase().replace(/\s+/g, '-').replace(/\//g, '-')}`;
 
-                    if (/link/.test(rawHeader.toString().toLowerCase())) {
-                      const text = (cellData ?? '').toString();
-                      const urlMatch =
-                        text.match(/(https?:\/\/[^")\s]+)/i) || text.match(/(www\.[^\s]+)/i);
-                      const mailtoMatch = text.match(/mailto:[^\s]+/i);
-                      let href = '';
-                      if (urlMatch) {
-                        href = urlMatch[0];
-                        if (!/^https?:\/\//i.test(href)) href = `http://${href}`;
-                      } else if (mailtoMatch) {
-                        href = mailtoMatch[0];
+                      if (/link/.test(rawHeader.toString().toLowerCase())) {
+                        const text = (cellData ?? '').toString();
+                        const urlMatch =
+                          text.match(/(https?:\/\/[^")\s]+)/i) || text.match(/(www\.[^\s]+)/i);
+                        const mailtoMatch = text.match(/mailto:[^\s]+/i);
+                        let href = '';
+                        if (urlMatch) {
+                          href = urlMatch[0];
+                          if (!/^https?:\/\//i.test(href)) href = `http://${href}`;
+                        } else if (mailtoMatch) {
+                          href = mailtoMatch[0];
+                        }
+
+                        return (
+                          <td key={cellIndex} className={className}>
+                            {href ? (
+                              <a href={href} target="_blank" rel="noopener noreferrer">
+                                {text}
+                              </a>
+                            ) : (
+                              text
+                            )}
+                          </td>
+                        );
                       }
 
                       return (
                         <td key={cellIndex} className={className}>
-                          {href ? (
-                            <a href={href} target="_blank" rel="noopener noreferrer">
-                              {text}
-                            </a>
-                          ) : (
-                            text
-                          )}
+                          {cellData}
                         </td>
                       );
-                    }
-
-                    return (
-                      <td key={cellIndex} className={className}>
-                        {cellData}
-                      </td>
-                    );
-                  })}
-                </tr>
-              ))}
-            </tbody>
-          </>
-        )}
-      </StyledTable>
+                    })}
+                  </tr>
+                ))}
+              </tbody>
+            </>
+          )}
+        </StyledTable>
+      )}
     </FavouritesContainer>
   );
 };
@@ -230,6 +249,19 @@ export default FavouriteResults;
 const FavouritesContainer = styled.div`
   margin: 20px;
   overflow-x: auto;
+`;
+
+const SearchWrapper = styled.div`
+  margin: 1rem 0;
+  text-align: center;
+`;
+
+const SearchLabel = styled.label`
+  margin-right: 0.5rem;
+`;
+
+const EmptyState = styled.p`
+  text-align: center;
 `;
 
 const StyledTable = styled.table`
@@ -305,7 +337,9 @@ const StyledTable = styled.table`
     &.data-artist-track-name,
     &.data-about,
     &.data-link {
-      width: 100%;
+      overflow-wrap: anywhere;
+      word-break: break-word;
+
       @media screen and (min-width: 768px) {
         width: 500px;
       }
@@ -359,6 +393,47 @@ const StyledTable = styled.table`
       @media (max-width: 767px) {
         display: none;
       }
+    }
+
+    @media (max-width: 767px) {
+      display: none;
+    }
+  }
+
+  /* Below 768px, drop table semantics in favour of a stacked "card" per row:
+     title on its own line, then genre/year/etc. flowing together on the next
+     line, then label on its own line - instead of one wide row that scrolls. */
+  @media (max-width: 767px) {
+    tbody tr {
+      display: block;
+      padding: 0.75rem 0.25rem;
+      border-bottom: 1px solid rgba(128, 128, 128, 0.25);
+    }
+
+    tbody td {
+      display: block;
+      max-width: 100%;
+    }
+
+    tbody td.data-genre,
+    tbody td.data-year-released,
+    tbody td.data-year-read,
+    tbody td.data-score,
+    tbody td.data-abv,
+    tbody td.data-style,
+    tbody td.data-country,
+    tbody td.data-date-read,
+    tbody td.data-date,
+    tbody td.data-language,
+    tbody td.data-bought-from,
+    tbody td.data-order-added {
+      display: inline-block;
+      margin-right: 0.6rem;
+      font-size: 0.8rem;
+    }
+
+    tbody td.data-label {
+      font-size: 0.8rem;
     }
   }
 `;

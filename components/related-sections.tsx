@@ -15,7 +15,7 @@ type RelatedSectionsProps = {
 
 export default function RelatedSections({ sections }: RelatedSectionsProps): JSX.Element {
   return (
-    <Wrapper>
+    <Wrapper aria-label="Explore more">
       <Heading>Explore more</Heading>
       <TileRow>
         {sections.map(({ label, href, colour }) => (

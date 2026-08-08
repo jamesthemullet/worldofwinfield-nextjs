@@ -26,8 +26,8 @@ export default function ShareBar({ title, url }: ShareBarProps): JSX.Element {
 
   return (
     <ShareBarWrapper>
-      <ShareLabel>Share this post:</ShareLabel>
-      <Buttons>
+      <ShareLabel id="share-bar-label">Share this post:</ShareLabel>
+      <Buttons role="group" aria-labelledby="share-bar-label">
         <ShareButton
           href={threadsUrl}
           target="_blank"

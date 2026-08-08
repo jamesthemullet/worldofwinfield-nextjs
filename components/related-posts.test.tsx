@@ -83,13 +83,17 @@ describe('RelatedPosts', () => {
   });
 
   it('renders an image for posts that have a featured image', () => {
-    render(<RelatedPosts posts={mockPosts} />);
-    expect(screen.getByAltText('Related Post One')).toBeInTheDocument();
+    const { container } = render(<RelatedPosts posts={mockPosts} />);
+    // The image is decorative (its title is already conveyed by the adjacent text link),
+    // so it uses alt="" and is intentionally removed from the accessibility tree.
+    const image = container.querySelector('img');
+    expect(image).toBeInTheDocument();
+    expect(image).toHaveAttribute('alt', '');
   });
 
   it('does not crash when a post has no featured image', () => {
-    render(<RelatedPosts posts={[mockPosts[1]]} />);
+    const { container } = render(<RelatedPosts posts={[mockPosts[1]]} />);
     expect(screen.getByText('Related Post Two')).toBeInTheDocument();
-    expect(screen.queryByRole('img')).not.toBeInTheDocument();
+    expect(container.querySelector('img')).not.toBeInTheDocument();
   });
 });
