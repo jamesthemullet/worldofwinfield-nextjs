@@ -1,12 +1,22 @@
 import styled from '@emotion/styled';
 import Image from 'next/image';
-import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
+import {
+  type FocusEvent,
+  type JSX,
+  type KeyboardEvent,
+  type MouseEvent,
+  type ReactNode,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import type { IntroProps, JamesImagesProps } from '../lib/types';
 import { colours } from '../pages/_app';
 
 type FlipperProps = {
   flipped: boolean;
-  children: React.ReactNode;
+  children: ReactNode;
 };
 
 const blockColours = [
@@ -32,7 +42,7 @@ export default function Intro({ jamesImages }: IntroProps): JSX.Element {
     [shuffledImages],
   );
 
-  const handleMouseEnter = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+  const handleMouseEnter = useCallback((e: MouseEvent<HTMLDivElement>) => {
     setHoveredIndex(Number(e.currentTarget.dataset.index));
   }, []);
 
@@ -40,7 +50,7 @@ export default function Intro({ jamesImages }: IntroProps): JSX.Element {
     setHoveredIndex(-1);
   }, []);
 
-  const handleFocus = useCallback((e: React.FocusEvent<HTMLDivElement>) => {
+  const handleFocus = useCallback((e: FocusEvent<HTMLDivElement>) => {
     setHoveredIndex(Number(e.currentTarget.dataset.index));
   }, []);
 
@@ -48,7 +58,7 @@ export default function Intro({ jamesImages }: IntroProps): JSX.Element {
     setHoveredIndex(-1);
   }, []);
 
-  const handleKeyDown = useCallback((e: React.KeyboardEvent<HTMLDivElement>) => {
+  const handleKeyDown = useCallback((e: KeyboardEvent<HTMLDivElement>) => {
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
       setHoveredIndex(Number(e.currentTarget.dataset.index));
