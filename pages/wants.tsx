@@ -1,6 +1,7 @@
 import styled from '@emotion/styled';
 import type { GetStaticProps } from 'next';
 import { useRouter } from 'next/router';
+import type { JSX } from 'react';
 import { useState } from 'react';
 import Container from '../components/container';
 import { StyledButton } from '../components/core-components';
@@ -18,7 +19,7 @@ type WantsPageProps = {
   wantToEatData: string[][] | null;
 };
 
-export default function WantsPage({ wantToVisitData, wantToEatData }: WantsPageProps) {
+export default function WantsPage({ wantToVisitData, wantToEatData }: WantsPageProps): JSX.Element {
   const [selectedType, setSelectedType] = useState<'visit' | 'eat' | null>(null);
 
   const handleTypeClick = (type: 'visit' | 'eat') => {
@@ -89,7 +90,7 @@ const RowOfButtons = styled.div`
   }
 `;
 
-export const getStaticProps: GetStaticProps = async () => {
+export const getStaticProps: GetStaticProps<WantsPageProps> = async () => {
   const [wantToVisitData, wantToEatData] = await Promise.all([
     fetchDataFromGoogleSheets(holidayWishListSheetId),
     fetchDataFromGoogleSheets(restaurantWishListSheetId),

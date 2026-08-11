@@ -381,7 +381,7 @@ export const getStaticProps: GetStaticProps = async ({ preview = false }) => {
   const getRandomPostId = () =>
     hardCodedListOfPostIds[Math.floor(Math.random() * hardCodedListOfPostIds.length)];
 
-  const years = Array.from(new Array(new Date().getFullYear() - 2017), (x, i) => i + 2018);
+  const years = Array.from({ length: new Date().getFullYear() - 2017 }, (_, i) => i + 2018);
   const randomYear = years[Math.floor(Math.random() * years.length)];
   const randomMonth = Math.floor(Math.random() * 12) + 1;
 
