@@ -46,7 +46,7 @@ const MonthNavBar = ({ month, year }: { month: number; year: number }): JSX.Elem
   );
 };
 
-const ArchivePage = ({ posts: { posts }, month, year }: ArchivePageProps) => {
+const ArchivePage = ({ posts: { posts }, month, year }: ArchivePageProps): JSX.Element => {
   const router = useRouter();
   const wordyMonth = getMonthName(month);
   const title = `Archives Posts from ${wordyMonth} ${year}`;

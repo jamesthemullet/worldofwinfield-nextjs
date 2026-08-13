@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import Link from 'next/link';
+import type { JSX } from 'react';
 import { useEffect, useState } from 'react';
 import Container from '../components/container';
 import Layout from '../components/layout';
@@ -28,7 +29,7 @@ function shuffleArray(array: string[]): string[] {
   return copy;
 }
 
-export default function Custom404() {
+export default function Custom404(): JSX.Element {
   const words = ['Why', 'are', 'you', 'here?'];
   const [shuffledColours, setShuffledColours] = useState(baseColours);
 

@@ -1,6 +1,7 @@
 import styled from '@emotion/styled';
 import type { GetStaticProps } from 'next';
 import Link from 'next/link';
+import type { JSX } from 'react';
 import Container from '../../components/container';
 import Layout from '../../components/layout';
 import PostHeader from '../../components/post-header';
@@ -9,7 +10,7 @@ import { colours } from '../_app';
 
 const FIRST_YEAR = 2018;
 
-export default function YearInReviewIndex({ years }: YearInReviewIndexPageProps) {
+export default function YearInReviewIndex({ years }: YearInReviewIndexPageProps): JSX.Element {
   const seo = {
     opengraphTitle: 'Year in Review - World Of Winfield',
     opengraphDescription: 'Annual retrospectives of everything written on World Of Winfield.',
@@ -33,7 +34,7 @@ export default function YearInReviewIndex({ years }: YearInReviewIndexPageProps)
   );
 }
 
-export const getStaticProps: GetStaticProps = async () => {
+export const getStaticProps: GetStaticProps<YearInReviewIndexPageProps> = async () => {
   const currentYear = new Date().getFullYear();
   const years = Array.from({ length: currentYear - FIRST_YEAR + 1 }, (_, i) => currentYear - i);
 

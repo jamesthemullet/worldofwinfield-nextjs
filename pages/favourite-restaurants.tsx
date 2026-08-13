@@ -1,6 +1,7 @@
 import styled from '@emotion/styled';
 import type { GetStaticProps } from 'next';
 import { useRouter } from 'next/router';
+import type { JSX } from 'react';
 import Container from '../components/container';
 import FavouritesHubLink from '../components/favourites-hub-link';
 import Layout from '../components/layout';
@@ -18,7 +19,10 @@ type FavouritesPageProps = {
   coverArtByTitle: Record<string, string | null>;
 };
 
-export default function FavouritesPage({ data, coverArtByTitle }: FavouritesPageProps) {
+export default function FavouritesPage({
+  data,
+  coverArtByTitle,
+}: FavouritesPageProps): JSX.Element {
   const title = 'Favourite Restaurants';
   const seo = {
     opengraphTitle: 'Favourite Restaurants | World Of Winfield',
@@ -68,7 +72,7 @@ const StyledPostHeader = styled.div`
   margin: 0 auto;
 `;
 
-export const getStaticProps: GetStaticProps = async () => {
+export const getStaticProps: GetStaticProps<FavouritesPageProps> = async () => {
   const data = await fetchDataFromGoogleSheets(sheetId);
 
   let coverArtByTitle: Record<string, string | null> = {};
