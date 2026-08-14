@@ -9,7 +9,7 @@ type FetchAPIOptions = {
 const MAX_FETCH_ATTEMPTS = 3;
 const RETRY_DELAY_MS = 500;
 
-function wait(ms: number) {
+function wait(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 

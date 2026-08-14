@@ -1,6 +1,7 @@
 import styled from '@emotion/styled';
 import type { GetStaticProps } from 'next';
 import { useRouter } from 'next/router';
+import type { JSX } from 'react';
 import { useMemo, useState } from 'react';
 import Container from '../components/container';
 import FavouritesHubLink from '../components/favourites-hub-link';
@@ -13,6 +14,10 @@ import { fetchDataFromGoogleSheets } from '../lib/sheets';
 import FavouriteResults from './favourites-results';
 
 const sheetId = '1ifEAiSgIMKrtTJ6fSHNGmQ-kMzR_MyAa-PjvBWOsBRA';
+
+type FavouriteTracksProps = {
+  data: string[][] | null;
+};
 
 const uniqueSortedColumn = (data: string[][] | null, columnName: string): string[] => {
   if (!data || data.length === 0) return [];
@@ -28,7 +33,7 @@ const uniqueSortedColumn = (data: string[][] | null, columnName: string): string
   return Array.from(values).sort();
 };
 
-export default function FavouritesPage({ data }: { data: string[][] | null }) {
+export default function FavouritesPage({ data }: FavouriteTracksProps): JSX.Element {
   const title = 'Favourite Tracks';
   const columnsToHide = ['Date Added'];
   const indexRequired = false;
@@ -125,7 +130,7 @@ const DropdownContainer = styled.div`
   gap: 1rem 2rem;
 `;
 
-export const getStaticProps: GetStaticProps = async () => {
+export const getStaticProps: GetStaticProps<FavouriteTracksProps> = async () => {
   const data = await fetchDataFromGoogleSheets(sheetId);
 
   return {

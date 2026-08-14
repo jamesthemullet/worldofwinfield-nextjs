@@ -54,7 +54,7 @@ const MonthNavBar = ({
   );
 };
 
-const ArchivePage = ({ posts: { posts }, month, year }: ArchivePageProps) => {
+const ArchivePage = ({ posts: { posts }, month, year }: ArchivePageProps): JSX.Element => {
   const router = useRouter();
   const wordyMonth = getMonthName(month);
   const title = `Archives Posts from ${wordyMonth} ${year}`;
@@ -87,7 +87,7 @@ const ArchivePage = ({ posts: { posts }, month, year }: ArchivePageProps) => {
           <SearchResultsContainer>
             <ul>
               {posts.map((post) => (
-                <li key={post.id}>
+                <li key={post.slug}>
                   <Link href={`/${post.slug}`}>{post.title}</Link>
                 </li>
               ))}

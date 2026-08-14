@@ -1,10 +1,11 @@
 import styled from '@emotion/styled';
+import type { JSX } from 'react';
 import { useMemo, useState } from 'react';
 import { StyledInput } from '../components/core-components';
 import FavouriteCoverGrid from '../components/FavouriteCoverGrid';
 import SortDropdown from '../components/SortDropdown';
 
-type TypeProps = {
+type FavouriteResultsProps = {
   data: string[][] | null;
   columnsToHide?: string[];
   indexRequired?: boolean;
@@ -31,7 +32,7 @@ const FavouriteResults = ({
   genreFilter,
   labelFilter,
   coverArtByTitle,
-}: TypeProps) => {
+}: FavouriteResultsProps): JSX.Element => {
   const [internalSortBy, setInternalSortBy] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
 

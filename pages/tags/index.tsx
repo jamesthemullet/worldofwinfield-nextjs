@@ -1,6 +1,7 @@
 import styled from '@emotion/styled';
 import type { GetStaticProps } from 'next';
 import Link from 'next/link';
+import type { JSX } from 'react';
 import Container from '../../components/container';
 import Layout from '../../components/layout';
 import PostHeader from '../../components/post-header';
@@ -31,7 +32,7 @@ const getColourFromName = (name: string): string => {
 const getTextColour = (bg: string): string =>
   lightBackgrounds.has(bg) ? colours.dark : colours.white;
 
-export default function TagsIndex({ tags }: TagIndexPageProps) {
+export default function TagsIndex({ tags }: TagIndexPageProps): JSX.Element {
   const seo = {
     opengraphTitle: 'Browse All Topics - World Of Winfield',
     opengraphDescription: 'Browse all topics covered on World Of Winfield',
@@ -65,7 +66,7 @@ export default function TagsIndex({ tags }: TagIndexPageProps) {
   );
 }
 
-export const getStaticProps: GetStaticProps = async () => {
+export const getStaticProps: GetStaticProps<TagIndexPageProps> = async () => {
   const tags = await getAllTags();
 
   return {

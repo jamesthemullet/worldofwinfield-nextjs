@@ -24,7 +24,7 @@ jest.mock('dompurify', () => ({
   },
 }));
 
-describe('PostBody', () => {
+describe('PostBody ', () => {
   it('renders provided HTML content', () => {
     render(<PostBody content="<p>Hello world</p>" />);
     expect(screen.getByText('Hello world')).toBeInTheDocument();

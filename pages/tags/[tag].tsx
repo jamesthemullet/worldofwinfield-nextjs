@@ -3,6 +3,7 @@ import type { GetStaticPaths, GetStaticProps } from 'next';
 import ErrorPage from 'next/error';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import type { JSX } from 'react';
 import Container from '../../components/container';
 import CoverImage from '../../components/cover-image';
 import Date from '../../components/date';
@@ -42,7 +43,7 @@ export const stripReadMoreParagraph = (excerpt: string): string => {
   return excerpt.replace(/\s*<a\b[^>]*>.*?<\/a>/gi, '').trim();
 };
 
-export default function Post({ posts, tag }: TagsPostProps) {
+export default function Post({ posts, tag }: TagsPostProps): JSX.Element {
   const router = useRouter();
 
   if (!router.isFallback && !posts) {
@@ -205,7 +206,7 @@ const ContinueReadingLink = styled(Link)<{ colour: string; textcolour: string }>
   }
 `;
 
-export const getStaticProps: GetStaticProps = async ({ params }) => {
+export const getStaticProps: GetStaticProps<TagsPostProps> = async ({ params }) => {
   const tag = (Array.isArray(params?.tag) ? params.tag[0] : params?.tag) ?? '';
   const data = await getPostsByTag(tag);
 

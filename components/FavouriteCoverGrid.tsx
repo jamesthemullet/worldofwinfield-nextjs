@@ -71,17 +71,35 @@ function FavouriteCoverGrid({
   indexRequired,
 }: Props): JSX.Element {
   const titleIndex =
-    headerRow.indexOf('Title') !== -1 ? headerRow.indexOf('Title') : headerRow.indexOf('Name');
-  const authorIndex = headerRow.indexOf('Author');
+    ['Title', 'Name', 'Beer Name', 'About']
+      .map((header) => headerRow.indexOf(header))
+      .find((index) => index !== -1) ?? -1;
+  const subtitleIndex =
+    ['Author', 'Brewery', 'Country', 'Bought From']
+      .map((header) => headerRow.indexOf(header))
+      .find((index) => index !== -1) ?? -1;
   const scoreIndex = headerRow.indexOf('Score');
+  const styleIndex = headerRow.indexOf('Style');
+  const abvIndex = headerRow.indexOf('ABV');
+  const dateIndex =
+    ['Date', 'Date Read']
+      .map((header) => headerRow.indexOf(header))
+      .find((index) => index !== -1) ?? -1;
+  const linkIndex = headerRow.indexOf('Link');
 
   return (
     <Grid>
       {rows.map((row, rowIndex) => {
         const title = row[titleIndex] || '';
-        const author = authorIndex !== -1 ? row[authorIndex] : undefined;
+        const author = subtitleIndex !== -1 ? row[subtitleIndex] : undefined;
         const score = scoreIndex !== -1 ? row[scoreIndex] : undefined;
+        const style = styleIndex !== -1 ? row[styleIndex] : undefined;
+        const abv = abvIndex !== -1 ? row[abvIndex] : undefined;
+        const date = dateIndex !== -1 ? row[dateIndex] : undefined;
+        const meta = [style, abv].filter(Boolean).join(' · ');
         const coverUrl = coverArtByTitle[title];
+        const rawLink = linkIndex !== -1 ? row[linkIndex] : undefined;
+        const link = /^https?:\/\//i.test(rawLink || '') ? rawLink : undefined;
 
         return (
           <Card key={`${title}-${rowIndex}`}>
@@ -92,7 +110,14 @@ function FavouriteCoverGrid({
             <CardBody>
               <CardTitle>{title}</CardTitle>
               {author && <CardAuthor>{author}</CardAuthor>}
+              {meta && <CardMeta>{meta}</CardMeta>}
               {score && <CardScore>{score}</CardScore>}
+              {date && <CardDate>{date}</CardDate>}
+              {link && (
+                <CardLink href={link} target="_blank" rel="noopener noreferrer">
+                  Read article →
+                </CardLink>
+              )}
             </CardBody>
           </Card>
         );
@@ -105,10 +130,20 @@ const Grid = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
   gap: 1.5rem 1rem;
-  margin: 1rem 0;
+  box-sizing: border-box;
+  max-width: 2000px;
+  margin: 1rem auto;
 
   @media (min-width: 768px) {
     grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  }
+
+  @media (min-width: 1200px) {
+    padding: 0 2rem;
+  }
+
+  @media (min-width: 1600px) {
+    padding: 0 3rem;
   }
 `;
 
@@ -170,10 +205,30 @@ const CardAuthor = styled.p`
   opacity: 0.8;
 `;
 
+const CardMeta = styled.p`
+  margin: 0.15rem 0 0;
+  font-size: 0.75rem;
+  opacity: 0.8;
+`;
+
 const CardScore = styled.p`
   margin: 0.15rem 0 0;
   font-size: 0.75rem;
   opacity: 0.8;
+`;
+
+const CardDate = styled.p`
+  margin: 0.15rem 0 0;
+  font-size: 0.75rem;
+  opacity: 0.8;
+`;
+
+const CardLink = styled.a`
+  display: inline-block;
+  margin: 0.15rem 0 0;
+  font-size: 0.75rem;
+  font-weight: bold;
+  color: ${colours.azure};
 `;
 
 export default FavouriteCoverGrid;

@@ -1,18 +1,28 @@
 import styled from '@emotion/styled';
 import type { GetStaticProps } from 'next';
 import { useRouter } from 'next/router';
+import type { JSX } from 'react';
 import Container from '../components/container';
 import FavouritesHubLink from '../components/favourites-hub-link';
 import Layout from '../components/layout';
 import PostHeader from '../components/post-header';
 import PostTitle from '../components/post-title';
 import ShareBar from '../components/share-bar';
+import { resolveBeerCovers } from '../lib/beer-covers';
 import { fetchDataFromGoogleSheets } from '../lib/sheets';
 import FavouriteResults from './favourites-results';
 
 const sheetId = '1pNNIw849xWrQHtDptwInGs6Un0AZh-fgXUssC3XIrHM';
 
-export default function FavouritesPage({ data }: { data: string[][] | null }) {
+type FavouritesPageProps = {
+  data: string[][] | null;
+  coverArtByTitle: Record<string, string | null>;
+};
+
+export default function FavouritesPage({
+  data,
+  coverArtByTitle,
+}: FavouritesPageProps): JSX.Element {
   const title = 'Favourite Beer';
   const seo = {
     opengraphTitle: 'Favourite Beers | World Of Winfield',
@@ -40,7 +50,7 @@ export default function FavouritesPage({ data }: { data: string[][] | null }) {
                 />
               </StyledPostHeader>
 
-              <FavouriteResults data={data} />
+              <FavouriteResults data={data} coverArtByTitle={coverArtByTitle} />
               <ShareBar title={title} url={`https://worldofwinfield.co.uk${router.asPath}`} />
               <FavouritesHubLink />
             </PostContainer>
@@ -62,11 +72,24 @@ const StyledPostHeader = styled.div`
   margin: 0 auto;
 `;
 
-export const getStaticProps: GetStaticProps = async () => {
+export const getStaticProps: GetStaticProps<FavouritesPageProps> = async () => {
   const data = await fetchDataFromGoogleSheets(sheetId);
 
+  let coverArtByTitle: Record<string, string | null> = {};
+  if (data && data.length > 1) {
+    const headerRow = data[0];
+    const breweryIndex = headerRow.indexOf('Brewery');
+    const beerNameIndex = headerRow.indexOf('Beer Name');
+
+    if (breweryIndex !== -1 && beerNameIndex !== -1) {
+      coverArtByTitle = resolveBeerCovers(
+        data.slice(1).map((row) => ({ beerName: row[beerNameIndex], brewery: row[breweryIndex] })),
+      );
+    }
+  }
+
   return {
-    props: { data },
+    props: { data, coverArtByTitle },
     revalidate: 3600,
   };
 };
