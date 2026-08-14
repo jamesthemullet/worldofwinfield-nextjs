@@ -23,13 +23,21 @@ const isFuture = (month: number, year: number): boolean => {
   return year > now.getFullYear() || (year === now.getFullYear() && month > now.getMonth() + 1);
 };
 
-const MonthNavBar = ({ month, year }: { month: number; year: number }): JSX.Element => {
+const MonthNavBar = ({
+  month,
+  year,
+  label = 'Archive navigation',
+}: {
+  month: number;
+  year: number;
+  label?: string;
+}): JSX.Element => {
   const prev = getPrevMonth(month, year);
   const next = getNextMonth(month, year);
   const nextIsFuture = isFuture(next.month, next.year);
 
   return (
-    <MonthNav aria-label="Archive navigation">
+    <MonthNav aria-label={label}>
       <Link
         href={{ pathname: '/archive-page', query: prev }}
         aria-label={`Previous month: ${getMonthName(prev.month)} ${prev.year}`}>
@@ -74,7 +82,7 @@ const ArchivePage = ({ posts: { posts }, month, year }: ArchivePageProps): JSX.E
           coverImage={hasPosts ? posts[0].featuredImage : undefined}
           date={hasPosts ? posts[0].date : undefined}
         />
-        <MonthNavBar month={month} year={year} />
+        <MonthNavBar month={month} year={year} label="Archive navigation, top" />
         {hasPosts ? (
           <SearchResultsContainer>
             <ul>
@@ -90,7 +98,7 @@ const ArchivePage = ({ posts: { posts }, month, year }: ArchivePageProps): JSX.E
             No posts found for {wordyMonth} {year}
           </NoPostsMessage>
         )}
-        <MonthNavBar month={month} year={year} />
+        <MonthNavBar month={month} year={year} label="Archive navigation, bottom" />
       </Container>
     </Layout>
   );
