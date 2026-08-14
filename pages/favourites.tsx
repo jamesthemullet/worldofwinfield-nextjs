@@ -2,6 +2,7 @@ import styled from '@emotion/styled';
 import type { GetStaticProps } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
+import type { JSX } from 'react';
 import Container from '../components/container';
 import Layout from '../components/layout';
 import PostHeader from '../components/post-header';
@@ -80,7 +81,7 @@ type Props = {
   counts: Record<string, number | null>;
 };
 
-export default function FavouritesHubPage({ counts }: Props) {
+export default function FavouritesHubPage({ counts }: Props): JSX.Element {
   return (
     <Layout preview={null} title="Favourites" seo={seo}>
       <Container>
