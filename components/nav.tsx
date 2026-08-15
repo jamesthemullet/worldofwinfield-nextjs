@@ -123,7 +123,6 @@ export default function Nav(): JSX.Element {
                 }}
                 aria-label="Toggle Favourites submenu"
                 aria-expanded={isFavouritesDropdownOpen}
-                aria-haspopup="true"
                 aria-controls="favourites-menu">
                 ▼
               </DropdownArrow>
@@ -205,7 +204,6 @@ export default function Nav(): JSX.Element {
               <DropdownButton
                 ref={wishListButtonRef}
                 aria-expanded={isWishListDropdownOpen}
-                aria-haspopup="true"
                 aria-controls="wishlist-menu"
                 onClick={() => toggleWishListDropdown()}>
                 Wish Lists
@@ -224,7 +222,6 @@ export default function Nav(): JSX.Element {
                 }}
                 aria-label="Toggle Wish Lists submenu"
                 aria-expanded={isWishListDropdownOpen}
-                aria-haspopup="true"
                 aria-controls="wishlist-menu">
                 ▼
               </DropdownArrow>
@@ -281,7 +278,6 @@ export default function Nav(): JSX.Element {
                 }}
                 aria-label="Toggle Travel submenu"
                 aria-expanded={isTravelDropdownOpen}
-                aria-haspopup="true"
                 aria-controls="travel-menu">
                 ▼
               </DropdownArrow>
