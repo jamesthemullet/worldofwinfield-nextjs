@@ -13,6 +13,8 @@ const SearchBar = <T = SearchResult[]>({
   const [query, setQuery] = useState('');
   const [loading, setLoading] = useState(false);
 
+  const inputId = `search-input-${label.toLowerCase().replace(/\s+/g, '-')}`;
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     setQuery(e.target.value);
@@ -29,9 +31,9 @@ const SearchBar = <T = SearchResult[]>({
 
   return (
     <StyledForm onSubmit={handleSubmit}>
-      <label htmlFor="blog-search-input">{label}</label>
+      <label htmlFor={inputId}>{label}</label>
       <StyledInput
-        id="blog-search-input"
+        id={inputId}
         type="text"
         placeholder={placeholder}
         value={query}

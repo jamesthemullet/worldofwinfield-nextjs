@@ -111,6 +111,11 @@ const StyledCardTitle = styled.h3`
     &:hover {
       color: ${colours.pink};
     }
+
+    &:focus-visible {
+      outline: 2px solid ${colours.dark};
+      outline-offset: 2px;
+    }
   }
 `;
 

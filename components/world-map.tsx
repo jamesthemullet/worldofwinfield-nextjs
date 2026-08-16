@@ -143,7 +143,6 @@ export default function WorldMap({
                         fill: defaultFill,
                         stroke: '#ffffff',
                         strokeWidth: 0.5,
-                        outline: 'none',
                       },
                       hover: {
                         fill: hoverFill,
