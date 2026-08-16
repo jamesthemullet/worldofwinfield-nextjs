@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import type { GetStaticProps } from 'next';
 import Link from 'next/link';
-import { useState } from 'react';
+import { type JSX, useState } from 'react';
 import Container from '../components/container';
 import HeroPost from '../components/hero-post';
 import Layout from '../components/layout';
@@ -11,7 +11,7 @@ import SearchResults from '../components/search-results';
 import { getAllPostsForHome } from '../lib/api';
 import type { GlobalSearchResults, IndexPageProps } from '../lib/types';
 
-export default function Index({ allPosts, preview }: IndexPageProps) {
+export default function Index({ allPosts, preview }: IndexPageProps): JSX.Element {
   const [searchResults, setSearchResults] = useState<GlobalSearchResults | null>(null);
   const [posts, setPosts] = useState(allPosts.edges);
   const [hasNextPage, setHasNextPage] = useState(allPosts.pageInfo.hasNextPage);
