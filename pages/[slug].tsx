@@ -1,5 +1,6 @@
 import type { GetStaticPaths, GetStaticProps } from 'next';
 import { useRouter } from 'next/router';
+import type { JSX } from 'react';
 import Container from '../components/container';
 import Layout from '../components/layout';
 import PostBody from '../components/post-body';
@@ -17,7 +18,12 @@ import Custom404 from './404';
 
 const SITE_URL = 'https://www.worldofwinfield.co.uk';
 
-export default function Post({ post, preview, relatedPosts, adjacentPosts }: PostProps) {
+export default function Post({
+  post,
+  preview,
+  relatedPosts,
+  adjacentPosts,
+}: PostProps): JSX.Element {
   const router = useRouter();
 
   if (!router.isFallback && !post?.slug) {

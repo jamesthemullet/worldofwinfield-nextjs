@@ -51,7 +51,7 @@ export const processData = (
 
   let columnIndex = 0;
   continents.forEach((continent) => {
-    const continentCountries = [];
+    const continentCountries: { country: string; visited: string }[] = [];
     for (let i = 1; i < rawData.length; i++) {
       const country = rawData[i][columnIndex];
       const visited = rawData[i][columnIndex + 1];
