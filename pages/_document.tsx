@@ -3,7 +3,7 @@ import createEmotionServer from '@emotion/server/create-instance';
 import type { AppProps } from 'next/app';
 import type { AppType } from 'next/dist/shared/lib/utils';
 import Document, { DocumentContext, Head, Html, Main, NextScript } from 'next/document';
-import type { ComponentType } from 'react';
+import type { ComponentType, JSX } from 'react';
 
 const EMOTION_KEY = 'css';
 
@@ -11,7 +11,11 @@ function createEmotionCache() {
   return createCache({ key: EMOTION_KEY });
 }
 
-export default function MyDocument({ emotionStyleTags }: { emotionStyleTags: React.ReactNode }) {
+export default function MyDocument({
+  emotionStyleTags,
+}: {
+  emotionStyleTags: React.ReactNode;
+}): JSX.Element {
   return (
     <Html lang="en">
       <Head>
