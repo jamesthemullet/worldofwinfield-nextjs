@@ -23,6 +23,11 @@ const goalsSeo = {
   opengraphSiteName: 'World Of Winfield',
 };
 
+const GOALS_RELATED_SECTIONS = [
+  { label: 'Now', href: '/now', colour: colours.azure },
+  { label: 'Wants', href: '/wants', colour: colours.green },
+];
+
 export default function Post({ posts }: PostsProps) {
   const router = useRouter();
 
@@ -67,12 +72,7 @@ export default function Post({ posts }: PostsProps) {
             ))}
           </>
         )}
-        <RelatedSections
-          sections={[
-            { label: 'Now', href: '/now', colour: colours.azure },
-            { label: 'Wants', href: '/wants', colour: colours.green },
-          ]}
-        />
+        <RelatedSections sections={GOALS_RELATED_SECTIONS} />
       </Container>
     </Layout>
   );

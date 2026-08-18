@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import type { Feature, Geometry } from 'geojson';
-import { type JSX, useMemo, useState } from 'react';
+import { type JSX, useCallback, useMemo, useState } from 'react';
 import { ComposableMap, Geographies, Geography, ZoomableGroup } from 'react-simple-maps';
 import countries110m from 'world-atlas/countries-110m.json';
 import { colours } from '../pages/_app';
@@ -33,6 +33,9 @@ const NAME_ALIASES: Record<string, string> = {
 };
 
 const normalise = (name: string): string => (NAME_ALIASES[name] ?? name).toLowerCase();
+
+const PROJECTION_CONFIG = { scale: 147 } as const;
+const MAP_STYLE = { width: '100%', height: 'auto' } as const;
 
 // The Natural Earth data bundles France's mainland/Corsica together with
 // French Guiana as a single multipolygon, so visiting France would
@@ -70,12 +73,12 @@ export default function WorldMap({
     [wishListCountries, visitedSet],
   );
 
-  const zoomIn = () => setZoom((current) => Math.min(current * 1.5, MAX_ZOOM));
-  const zoomOut = () => setZoom((current) => Math.max(current / 1.5, MIN_ZOOM));
-  const resetZoom = () => {
+  const zoomIn = useCallback(() => setZoom((current) => Math.min(current * 1.5, MAX_ZOOM)), []);
+  const zoomOut = useCallback(() => setZoom((current) => Math.max(current / 1.5, MIN_ZOOM)), []);
+  const resetZoom = useCallback(() => {
     setZoom(MIN_ZOOM);
     setCenter(DEFAULT_CENTER);
-  };
+  }, []);
 
   return (
     <MapWrapper aria-label="World map with countries James has visited highlighted in purple and holiday wish list countries highlighted in blue">
@@ -98,7 +101,7 @@ export default function WorldMap({
           <LegendSwatch colour={colours.azure} /> Wish list
         </LegendItem>
       </Legend>
-      <ComposableMap projectionConfig={{ scale: 147 }} style={{ width: '100%', height: 'auto' }}>
+      <ComposableMap projectionConfig={PROJECTION_CONFIG} style={MAP_STYLE}>
         <title>Map of countries visited</title>
         <ZoomableGroup
           center={center}
