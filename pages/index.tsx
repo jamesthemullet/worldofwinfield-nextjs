@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import type { GetStaticProps } from 'next';
+import type { JSX } from 'react';
 import { useEffect, useState } from 'react';
 import HomepageBlock from '../components/homepage-block';
 import Intro from '../components/intro';
@@ -23,7 +24,7 @@ export default function Index({
   randomPosts,
   randomImageSet,
   archivePost,
-}: IndexPageProps) {
+}: IndexPageProps): JSX.Element {
   const [searchResults, setSearchResults] = useState<GlobalSearchResults | null>(null);
   const [randomImage, setRandomImage] = useState<
     | IndexPageProps['jamesImages']['edges'][0]['node']['featuredImage']
