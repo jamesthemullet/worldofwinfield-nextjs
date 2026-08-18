@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import Link from 'next/link';
+import type { JSX } from 'react';
 import Container from '../components/container';
 import Layout from '../components/layout';
 import PostHeader from '../components/post-header';
@@ -7,7 +8,7 @@ import ShareBar from '../components/share-bar';
 import { NOW_LAST_UPDATED } from '../data/now-meta';
 import { colours } from './_app';
 
-export default function NowPage() {
+export default function NowPage(): JSX.Element {
   const seo = {
     opengraphTitle: 'Now | World Of Winfield',
     opengraphDescription:

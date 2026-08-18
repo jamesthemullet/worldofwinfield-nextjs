@@ -1,6 +1,7 @@
 import styled from '@emotion/styled';
 import type { GetStaticProps } from 'next';
 import { useRouter } from 'next/router';
+import type { JSX } from 'react';
 import Container from '../components/container';
 import Layout from '../components/layout';
 import PostHeader from '../components/post-header';
@@ -10,7 +11,11 @@ import FavouriteResults from './favourites-results';
 
 const sheetId = '13gz7lPQ61f_WKQ_xio_QBlUcFB9Dl0yVBynwEadVO_4';
 
-export default function WishListPage({ data }: { data: string[][] | null }) {
+type RestaurantWishListProps = {
+  data: string[][] | null;
+};
+
+export default function WishListPage({ data }: RestaurantWishListProps): JSX.Element {
   const title = 'Restaurant Wish List';
   const seo = {
     opengraphTitle: 'Restaurant Wish List | World Of Winfield',
@@ -59,7 +64,7 @@ const StyledPostHeader = styled.div`
   margin: 0 auto;
 `;
 
-export const getStaticProps: GetStaticProps = async () => {
+export const getStaticProps: GetStaticProps<RestaurantWishListProps> = async () => {
   const data = await fetchDataFromGoogleSheets(sheetId);
 
   return {

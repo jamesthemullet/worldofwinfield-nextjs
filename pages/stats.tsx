@@ -2,6 +2,7 @@ import styled from '@emotion/styled';
 import type { GetStaticProps } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import type { JSX } from 'react';
 import Container from '../components/container';
 import Layout from '../components/layout';
 import PostHeader from '../components/post-header';
@@ -86,7 +87,7 @@ export default function Stats({
   cities,
   favouriteCountries,
   totalPosts,
-}: StatsProps) {
+}: StatsProps): JSX.Element {
   const router = useRouter();
   const yearsActive = new Date().getFullYear() - 2017;
   const worldPercent =

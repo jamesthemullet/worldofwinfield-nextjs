@@ -23,13 +23,21 @@ const isFuture = (month: number, year: number): boolean => {
   return year > now.getFullYear() || (year === now.getFullYear() && month > now.getMonth() + 1);
 };
 
-const MonthNavBar = ({ month, year }: { month: number; year: number }): JSX.Element => {
+const MonthNavBar = ({
+  month,
+  year,
+  label = 'Archive navigation',
+}: {
+  month: number;
+  year: number;
+  label?: string;
+}): JSX.Element => {
   const prev = getPrevMonth(month, year);
   const next = getNextMonth(month, year);
   const nextIsFuture = isFuture(next.month, next.year);
 
   return (
-    <MonthNav aria-label="Archive navigation">
+    <MonthNav aria-label={label}>
       <Link
         href={{ pathname: '/archive-page', query: prev }}
         aria-label={`Previous month: ${getMonthName(prev.month)} ${prev.year}`}>
@@ -46,7 +54,7 @@ const MonthNavBar = ({ month, year }: { month: number; year: number }): JSX.Elem
   );
 };
 
-const ArchivePage = ({ posts: { posts }, month, year }: ArchivePageProps) => {
+const ArchivePage = ({ posts: { posts }, month, year }: ArchivePageProps): JSX.Element => {
   const router = useRouter();
   const wordyMonth = getMonthName(month);
   const title = `Archives Posts from ${wordyMonth} ${year}`;
@@ -74,12 +82,12 @@ const ArchivePage = ({ posts: { posts }, month, year }: ArchivePageProps) => {
           coverImage={hasPosts ? posts[0].featuredImage : undefined}
           date={hasPosts ? posts[0].date : undefined}
         />
-        <MonthNavBar month={month} year={year} />
+        <MonthNavBar month={month} year={year} label="Archive navigation, top" />
         {hasPosts ? (
           <SearchResultsContainer>
             <ul>
               {posts.map((post) => (
-                <li key={post.id}>
+                <li key={post.slug}>
                   <Link href={`/${post.slug}`}>{post.title}</Link>
                 </li>
               ))}
@@ -90,7 +98,7 @@ const ArchivePage = ({ posts: { posts }, month, year }: ArchivePageProps) => {
             No posts found for {wordyMonth} {year}
           </NoPostsMessage>
         )}
-        <MonthNavBar month={month} year={year} />
+        <MonthNavBar month={month} year={year} label="Archive navigation, bottom" />
       </Container>
     </Layout>
   );

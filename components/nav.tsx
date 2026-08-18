@@ -71,6 +71,7 @@ export default function Nav(): JSX.Element {
       </BurgerButton>
       <NavList
         id="main-nav-list"
+        role="list"
         className={isDropdownOpen ? 'open' : ''}
         aria-hidden={isMobile && !isDropdownOpen}>
         <li>
@@ -129,6 +130,7 @@ export default function Nav(): JSX.Element {
             </SplitButtonContainer>
             <DropdownMenu
               id="favourites-menu"
+              role="list"
               isDropdownOpen={isFavouritesDropdownOpen}
               aria-hidden={!isFavouritesDropdownOpen}>
               <li>
@@ -229,6 +231,7 @@ export default function Nav(): JSX.Element {
             </SplitButtonContainer>
             <DropdownMenu
               id="wishlist-menu"
+              role="list"
               isDropdownOpen={isWishListDropdownOpen}
               aria-hidden={!isWishListDropdownOpen}>
               <li>
@@ -285,6 +288,7 @@ export default function Nav(): JSX.Element {
             </SplitButtonContainer>
             <DropdownMenu
               id="travel-menu"
+              role="list"
               isDropdownOpen={isTravelDropdownOpen}
               aria-hidden={!isTravelDropdownOpen}>
               <li>
