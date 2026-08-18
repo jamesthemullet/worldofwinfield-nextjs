@@ -3,6 +3,7 @@ import type { GetStaticProps } from 'next';
 import ErrorPage from 'next/error';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import type { JSX } from 'react';
 import Container from '../components/container';
 import Layout from '../components/layout';
 import PostHeader from '../components/post-header';
@@ -23,7 +24,7 @@ const politicsSeo = {
   opengraphSiteName: 'World Of Winfield',
 };
 
-export default function Post({ posts }: PostsProps) {
+export default function Post({ posts }: PostsProps): JSX.Element {
   const router = useRouter();
 
   if (!router.isFallback && !posts?.length) {
