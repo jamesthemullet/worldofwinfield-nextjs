@@ -1,6 +1,7 @@
 import styled from '@emotion/styled';
 import type { GetStaticProps } from 'next';
 import { useRouter } from 'next/router';
+import type { JSX } from 'react';
 import { useState } from 'react';
 import Container from '../components/container';
 import Layout from '../components/layout';
@@ -18,7 +19,7 @@ type WishListPageProps = {
   coverArtByTitle: Record<string, string | null>;
 };
 
-export default function WishListPage({ data, coverArtByTitle }: WishListPageProps) {
+export default function WishListPage({ data, coverArtByTitle }: WishListPageProps): JSX.Element {
   const title = 'Holiday Wish List';
   const seo = {
     opengraphTitle: 'Holiday Wish List | World Of Winfield',
@@ -86,7 +87,7 @@ const DropdownContainer = styled.div`
   justify-content: center;
 `;
 
-export const getStaticProps: GetStaticProps = async () => {
+export const getStaticProps: GetStaticProps<WishListPageProps> = async () => {
   const data = await fetchDataFromGoogleSheets(sheetId);
 
   let coverArtByTitle: Record<string, string | null> = {};

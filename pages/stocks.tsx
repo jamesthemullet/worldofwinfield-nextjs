@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import type { JSX } from 'react';
 import { useEffect, useMemo, useState } from 'react';
 import Container from '../components/container';
 import Layout from '../components/layout';
@@ -395,7 +396,7 @@ export const sortByPercentChange = (
   });
 };
 
-export default function StocksPage() {
+export default function StocksPage(): JSX.Element {
   const [stocks, setStocks] = useState<StockRow[]>([]);
   const [status, setStatus] = useState<'connecting' | 'connected' | 'disconnected' | 'error'>(
     'connecting',
