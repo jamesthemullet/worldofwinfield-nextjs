@@ -1,8 +1,11 @@
 import {
+  filterPostsByTag,
   getAdjacentPosts,
+  getAllTags,
   getArchivePost,
   getPostsByDate,
   getRelatedPosts,
+  getTotalPostCount,
   searchBlogPosts,
 } from './api';
 
@@ -175,5 +178,59 @@ describe('getArchivePost', () => {
 
     const result = await getArchivePost();
     expect(result).toBeNull();
+  });
+});
+
+describe('filterPostsByTag', () => {
+  it('sends the tag as a GraphQL variable and returns the nodes array', async () => {
+    const nodes = [
+      { id: '1', title: 'Tagged Post', slug: 'tagged', date: '2024-01-01', excerpt: '' },
+    ];
+    mockFetch.mockResolvedValue(gqlSuccess({ posts: { nodes } }));
+
+    const result = await filterPostsByTag('travel');
+
+    expect(result).toEqual(nodes);
+    const body = JSON.parse((mockFetch.mock.calls[0][1] as RequestInit).body as string);
+    expect(body.variables).toEqual({ tag: 'travel' });
+  });
+});
+
+describe('getAllTags', () => {
+  it('filters out tags with no count and returns the rest sorted by count descending', async () => {
+    const nodes = [
+      { name: 'food', slug: 'food', count: 5 },
+      { name: 'travel', slug: 'travel', count: 20 },
+      { name: 'unused', slug: 'unused', count: null },
+      { name: 'music', slug: 'music', count: 12 },
+    ];
+    mockFetch.mockResolvedValue(gqlSuccess({ tags: { nodes } }));
+
+    const result = await getAllTags();
+
+    expect(result).toEqual([
+      { name: 'travel', slug: 'travel', count: 20 },
+      { name: 'music', slug: 'music', count: 12 },
+      { name: 'food', slug: 'food', count: 5 },
+    ]);
+    expect(result.find((t) => t.name === 'unused')).toBeUndefined();
+  });
+});
+
+describe('getTotalPostCount', () => {
+  it('returns the integer parsed from the X-WP-Total response header', async () => {
+    mockFetch.mockResolvedValueOnce({
+      headers: { get: (h: string) => (h === 'X-WP-Total' ? '42' : null) },
+    });
+
+    const count = await getTotalPostCount();
+    expect(count).toBe(42);
+  });
+
+  it('returns 0 when the fetch request throws a network error', async () => {
+    mockFetch.mockRejectedValueOnce(new Error('Network error'));
+
+    const count = await getTotalPostCount();
+    expect(count).toBe(0);
   });
 });

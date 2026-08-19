@@ -23,6 +23,11 @@ const politicsSeo = {
   opengraphSiteName: 'World Of Winfield',
 };
 
+const POLITICS_RELATED_SECTIONS = [
+  { label: 'Browse by Tag', href: '/tags', colour: colours.burgandy },
+  { label: 'All Posts', href: '/blog', colour: colours.dark },
+];
+
 export default function Post({ posts }: PostsProps) {
   const router = useRouter();
 
@@ -67,12 +72,7 @@ export default function Post({ posts }: PostsProps) {
             ))}
           </>
         )}
-        <RelatedSections
-          sections={[
-            { label: 'Browse by Tag', href: '/tags', colour: colours.burgandy },
-            { label: 'All Posts', href: '/blog', colour: colours.dark },
-          ]}
-        />
+        <RelatedSections sections={POLITICS_RELATED_SECTIONS} />
       </Container>
     </Layout>
   );

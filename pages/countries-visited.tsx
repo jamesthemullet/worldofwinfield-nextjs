@@ -1,6 +1,7 @@
 import styled from '@emotion/styled';
 import type { GetStaticProps } from 'next';
 import { useRouter } from 'next/router';
+import type { JSX } from 'react';
 import Container from '../components/container';
 import Layout from '../components/layout';
 import PostHeader from '../components/post-header';
@@ -15,6 +16,7 @@ type CountriesVisitedProps = {
 };
 
 const WISH_LIST_SHEET_ID = '1GX6KF20f3Nrb3m8T9th7UIV_uuePj4Ivlc_yLgo-4Bo';
+const COUNTRIES_SHEET_ID = '1OBRmcLtmwbb8AjoUj8F9wUe5j7AERFlI-iG2iYkA3Jg';
 
 // Pulls the "Country" column out of the holiday wish list sheet, which is
 // shaped differently to the continents sheet (one row per place, not
@@ -68,27 +70,11 @@ export const processData = (
   return result;
 };
 
-const fetchDataFromGoogleSheets = async (): Promise<string[][] | null> => {
-  try {
-    const API_KEY = process.env.NEXT_PUBLIC_GOOGLE_SHEETS_API_KEY;
-    const sheetID = '1OBRmcLtmwbb8AjoUj8F9wUe5j7AERFlI-iG2iYkA3Jg';
-    const SHEET_NAME = 'Sheet1';
-    const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetID}/values/${SHEET_NAME}?alt=json&key=${API_KEY}`;
-
-    const response = await fetch(url);
-    const data = (await response.json()) as { values?: string[][] };
-    return data.values ?? null;
-  } catch (error) {
-    console.error('Error fetching data from Google Sheets:', error);
-    return null;
-  }
-};
-
 type CountryListProps = {
   transformedData: Record<string, { country: string; visited: string }[]>;
 };
 
-const CountryList = ({ transformedData }: CountryListProps) => {
+const CountryList = ({ transformedData }: CountryListProps): JSX.Element => {
   return (
     <ContentContainer>
       {Object.keys(transformedData).map((continent) => (
@@ -115,7 +101,7 @@ const CountryList = ({ transformedData }: CountryListProps) => {
 export default function CountriesVisited({
   transformedData,
   wishListCountries,
-}: CountriesVisitedProps) {
+}: CountriesVisitedProps): JSX.Element {
   const router = useRouter();
 
   const allCountries = Object.values(transformedData).flat();
@@ -234,7 +220,7 @@ const ContentContainer = styled.section`
 
 export const getStaticProps: GetStaticProps<CountriesVisitedProps> = async () => {
   const [rawData, wishListRawData] = await Promise.all([
-    fetchDataFromGoogleSheets(),
+    fetchSheetById(COUNTRIES_SHEET_ID),
     fetchSheetById(WISH_LIST_SHEET_ID),
   ]);
   const transformedData = rawData ? processData(rawData) : {};

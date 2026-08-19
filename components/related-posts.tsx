@@ -1,10 +1,12 @@
 import styled from '@emotion/styled';
 import Image from 'next/image';
 import Link from 'next/link';
-import type { JSX } from 'react';
+import type { CSSProperties, JSX } from 'react';
 import type { RelatedPostsProps } from '../lib/types';
 import { colours } from '../pages/_app';
 import DateFormatter from './date';
+
+const postImageStyle: CSSProperties = { objectFit: 'cover', width: '100%', height: '180px' };
 
 export default function RelatedPosts({ posts }: RelatedPostsProps): JSX.Element | null {
   if (posts.length === 0) return null;
@@ -24,7 +26,7 @@ export default function RelatedPosts({ posts }: RelatedPostsProps): JSX.Element 
                     width={400}
                     height={250}
                     sizes="(max-width: 768px) 100vw, (max-width: 960px) 33vw, 320px"
-                    style={{ objectFit: 'cover', width: '100%', height: '180px' }}
+                    style={postImageStyle}
                   />
                 </Link>
               </StyledImageWrapper>

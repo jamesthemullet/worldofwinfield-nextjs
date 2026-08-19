@@ -1,10 +1,11 @@
 import styled from '@emotion/styled';
+import type { JSX } from 'react';
 import { useMemo, useState } from 'react';
 import { StyledInput } from '../components/core-components';
 import FavouriteCoverGrid from '../components/FavouriteCoverGrid';
 import SortDropdown from '../components/SortDropdown';
 
-type TypeProps = {
+type FavouriteResultsProps = {
   data: string[][] | null;
   columnsToHide?: string[];
   indexRequired?: boolean;
@@ -31,7 +32,7 @@ const FavouriteResults = ({
   genreFilter,
   labelFilter,
   coverArtByTitle,
-}: TypeProps) => {
+}: FavouriteResultsProps): JSX.Element => {
   const [internalSortBy, setInternalSortBy] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -182,7 +183,11 @@ const FavouriteResults = ({
             <>
               <thead>
                 <tr>
-                  {indexRequired && <th className="index" scope="col"></th>}
+                  {indexRequired && (
+                    <th className="index" scope="col">
+                      <VisuallyHidden>Rank</VisuallyHidden>
+                    </th>
+                  )}
                   {data[0].map((header, cellIndex) => {
                     const className = `heading-${header.toString().toLowerCase().replace(/\s+/g, '-').replace(/\//g, '-')}`;
                     return (
@@ -436,4 +441,16 @@ const StyledTable = styled.table`
       font-size: 0.8rem;
     }
   }
+`;
+
+const VisuallyHidden = styled.span`
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
 `;

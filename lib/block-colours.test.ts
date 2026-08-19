@@ -33,8 +33,11 @@ describe('getColoursFromTitle', () => {
   });
 
   it('returns two distinct colours', () => {
-    const { colour1, colour2 } = getColoursFromTitle('Another Title');
-    expect(colour1).not.toBe(colour2);
+    const titles = ['Alpha', 'Beta', 'Gamma', 'Delta', 'Epsilon', 'Zeta', 'Eta', 'Theta'];
+    for (const title of titles) {
+      const { colour1, colour2 } = getColoursFromTitle(title);
+      expect(colour1).not.toBe(colour2);
+    }
   });
 
   it('is deterministic — same title always returns the same pair', () => {
