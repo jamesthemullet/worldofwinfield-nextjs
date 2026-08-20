@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import Link from 'next/link';
-import { type JSX, useEffect, useRef, useState } from 'react';
+import { type JSX, useCallback, useEffect, useRef, useState } from 'react';
 
 export default function Nav(): JSX.Element {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -21,42 +21,42 @@ export default function Nav(): JSX.Element {
   const wishListButtonRef = useRef<HTMLButtonElement>(null);
   const travelArrowRef = useRef<HTMLButtonElement>(null);
 
-  const toggleDropdown = () => {
+  const toggleDropdown = useCallback(() => {
     setIsDropdownOpen((prev) => !prev);
-  };
+  }, []);
 
-  const toggleFavouritesDropdown = (open?: boolean) => {
+  const toggleFavouritesDropdown = useCallback((open?: boolean) => {
     if (open === undefined) {
       setIsFavouritesDropdownOpen((prev) => !prev);
     } else {
       setIsFavouritesDropdownOpen(open);
     }
-  };
+  }, []);
 
-  const toggleTravelDropdown = (open?: boolean) => {
+  const toggleTravelDropdown = useCallback((open?: boolean) => {
     if (open === undefined) {
       setIsTravelDropdownOpen((prev) => !prev);
     } else {
       setIsTravelDropdownOpen(open);
     }
-  };
+  }, []);
 
-  const toggleWishListDropdown = (open?: boolean) => {
+  const toggleWishListDropdown = useCallback((open?: boolean) => {
     if (open === undefined) {
       setIsWishListDropdownOpen((prev) => !prev);
     } else {
       setIsWishListDropdownOpen(open);
     }
-  };
+  }, []);
 
-  const closeNavOnMobile = () => {
+  const closeNavOnMobile = useCallback(() => {
     if (isMobile) {
       setIsDropdownOpen(false);
       setIsFavouritesDropdownOpen(false);
       setIsTravelDropdownOpen(false);
       setIsWishListDropdownOpen(false);
     }
-  };
+  }, [isMobile]);
 
   return (
     <StyledNav aria-label="Main">
