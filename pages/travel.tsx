@@ -23,6 +23,12 @@ const travelSeo = {
   opengraphSiteName: 'World Of Winfield',
 };
 
+const TRAVEL_RELATED_SECTIONS = [
+  { label: 'Countries Visited', href: '/countries-visited', colour: colours.green },
+  { label: 'Favourite Cities', href: '/favourite-cities', colour: colours.blueish },
+  { label: 'Holiday Wish List', href: '/holiday-wish-list', colour: colours.azure },
+];
+
 export default function Post({ posts }: PostsProps) {
   const router = useRouter();
 
@@ -68,13 +74,7 @@ export default function Post({ posts }: PostsProps) {
             ))}
           </>
         )}
-        <RelatedSections
-          sections={[
-            { label: 'Countries Visited', href: '/countries-visited', colour: colours.green },
-            { label: 'Favourite Cities', href: '/favourite-cities', colour: colours.blueish },
-            { label: 'Holiday Wish List', href: '/holiday-wish-list', colour: colours.azure },
-          ]}
-        />
+        <RelatedSections sections={TRAVEL_RELATED_SECTIONS} />
       </Container>
     </Layout>
   );

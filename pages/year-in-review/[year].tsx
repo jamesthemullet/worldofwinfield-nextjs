@@ -3,6 +3,7 @@ import type { GetStaticPaths, GetStaticProps } from 'next';
 import ErrorPage from 'next/error';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import type { JSX } from 'react';
 import Container from '../../components/container';
 import CoverImage from '../../components/cover-image';
 import PostDate from '../../components/date';
@@ -20,7 +21,7 @@ const stripReadMoreParagraph = (excerpt: string): string => {
   return excerpt.replace(/\s*<a\b[^>]*>.*?<\/a>/gi, '').trim();
 };
 
-export default function YearInReview({ posts, year }: YearInReviewProps) {
+export default function YearInReview({ posts, year }: YearInReviewProps): JSX.Element {
   const router = useRouter();
 
   if (!router.isFallback && !posts) {
@@ -202,7 +203,7 @@ const YearPostExcerpt = styled.div`
   }
 `;
 
-export const getStaticProps: GetStaticProps = async ({ params }) => {
+export const getStaticProps: GetStaticProps<YearInReviewProps> = async ({ params }) => {
   const yearParam = Array.isArray(params?.year) ? params.year[0] : params?.year;
   const year = parseInt(yearParam ?? '', 10);
   const posts = await getPostsByYear(year);

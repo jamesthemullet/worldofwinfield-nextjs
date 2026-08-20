@@ -7,8 +7,12 @@ type ImageLightboxProps = {
   onClose: () => void;
 };
 
+const FOCUSABLE_SELECTORS =
+  'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
+
 export default function ImageLightbox({ src, alt, onClose }: ImageLightboxProps): JSX.Element {
   const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const dialogRef = useRef<HTMLDivElement>(null);
   const [isZoomedIn, setIsZoomedIn] = useState(false);
   const [zoomOrigin, setZoomOrigin] = useState('center');
 
@@ -16,14 +20,44 @@ export default function ImageLightbox({ src, alt, onClose }: ImageLightboxProps)
     closeButtonRef.current?.focus();
 
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') onClose();
+      if (event.key === 'Escape') {
+        onClose();
+        return;
+      }
+      if (event.key === 'Tab' && dialogRef.current) {
+        const focusable = Array.from(
+          dialogRef.current.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTORS),
+        );
+        if (focusable.length === 0) {
+          event.preventDefault();
+          return;
+        }
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (event.shiftKey) {
+          if (document.activeElement === first) {
+            event.preventDefault();
+            last.focus();
+          }
+        } else {
+          if (document.activeElement === last) {
+            event.preventDefault();
+            first.focus();
+          }
+        }
+      }
     };
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [onClose]);
 
   return (
-    <Overlay role="dialog" aria-modal="true" aria-label={alt || 'Zoomed image'} onClick={onClose}>
+    <Overlay
+      ref={dialogRef}
+      role="dialog"
+      aria-modal="true"
+      aria-label={alt || 'Zoomed image'}
+      onClick={onClose}>
       <CloseButton
         ref={closeButtonRef}
         type="button"
