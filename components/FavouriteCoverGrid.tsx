@@ -45,7 +45,9 @@ function BookCover({ title, coverUrl }: { title: string; coverUrl?: string | nul
 
   if (!coverUrl || hasErrored) {
     return (
-      <Placeholder style={{ backgroundColor: placeholderColourFor(title || 'book') }}>
+      <Placeholder
+        aria-hidden="true"
+        style={{ backgroundColor: placeholderColourFor(title || 'book') }}>
         {initialsFor(title || '?')}
       </Placeholder>
     );
@@ -104,7 +106,9 @@ function FavouriteCoverGrid({
         return (
           <Card key={`${title}-${rowIndex}`}>
             <CoverWrapper>
-              {indexRequired && <RankBadge>{rowIndex + 1}</RankBadge>}
+              {indexRequired && (
+                <RankBadge aria-label={`Rank ${rowIndex + 1}`}>{rowIndex + 1}</RankBadge>
+              )}
               <BookCover title={title} coverUrl={coverUrl} />
             </CoverWrapper>
             <CardBody>
@@ -114,7 +118,11 @@ function FavouriteCoverGrid({
               {score && <CardScore>{score}</CardScore>}
               {date && <CardDate>{date}</CardDate>}
               {link && (
-                <CardLink href={link} target="_blank" rel="noopener noreferrer">
+                <CardLink
+                  href={link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`Read article: ${title}`}>
                   Read article →
                 </CardLink>
               )}
