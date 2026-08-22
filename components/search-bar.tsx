@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import React, { type JSX, useState } from 'react';
+import { type JSX, useState } from 'react';
 import type { SearchBarProps, SearchResult } from '../lib/types';
 import { colours } from '../pages/_app';
 import { StyledButton, StyledInput } from './core-components';

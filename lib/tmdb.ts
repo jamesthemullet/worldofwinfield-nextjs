@@ -1,6 +1,11 @@
 const TMDB_SEARCH_URL = 'https://api.themoviedb.org/3/search/movie';
 const TMDB_IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w342';
 const REQUEST_TIMEOUT_MS = 8000;
+
+type TmdbSearchResponse = {
+  results?: Array<{ poster_path?: string }>;
+};
+
 // TMDB starts returning 429s once too many lookups are in flight at once
 // (observed failures past ~100 concurrent requests against a 236-movie sheet).
 const MAX_CONCURRENT_REQUESTS = 15;
@@ -28,7 +33,7 @@ export const resolveMovieCoverUrlByTitle = async ({
     });
     if (!response.ok) return null;
 
-    const json = await response.json();
+    const json = (await response.json()) as TmdbSearchResponse;
     const posterPath = json?.results?.[0]?.poster_path;
 
     return typeof posterPath === 'string' ? `${TMDB_IMAGE_BASE_URL}${posterPath}` : null;
