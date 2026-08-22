@@ -99,6 +99,11 @@ const PostedContainer = styled.div<{ backgroundColour: string; colour: string }>
 
 const StyledLink = styled(Link)`
   text-decoration: none;
+
+  &:focus-visible {
+    outline: 2px solid ${colours.dark};
+    outline-offset: 2px;
+  }
 `;
 
 const CaptionOverlay = styled.div`

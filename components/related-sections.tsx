@@ -61,6 +61,11 @@ const Tile = styled(Link)<{ colour: string }>`
     opacity: 0.85;
   }
 
+  &:focus-visible {
+    outline: 3px solid ${colours.white};
+    outline-offset: -3px;
+  }
+
   @media screen and (max-width: 768px) {
     flex: 1 1 calc(50% - 0.5rem);
     min-width: 0;

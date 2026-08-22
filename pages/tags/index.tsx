@@ -102,6 +102,11 @@ const TagTile = styled(Link)<{ colour: string; textcolour: string }>`
   &:hover {
     opacity: 0.85;
   }
+
+  &:focus-visible {
+    outline: 3px solid currentColor;
+    outline-offset: -3px;
+  }
 `;
 
 const TagName = styled.span`

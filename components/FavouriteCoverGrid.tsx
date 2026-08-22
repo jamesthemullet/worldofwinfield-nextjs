@@ -237,6 +237,11 @@ const CardLink = styled.a`
   font-size: 0.75rem;
   font-weight: bold;
   color: ${colours.azure};
+
+  &:focus-visible {
+    outline: 2px solid ${colours.azure};
+    outline-offset: 2px;
+  }
 `;
 
 export default FavouriteCoverGrid;
