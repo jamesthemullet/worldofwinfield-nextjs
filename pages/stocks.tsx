@@ -407,7 +407,7 @@ export default function StocksPage(): JSX.Element {
   const [sortMode, setSortMode] = useState<SortMode>('default');
   const [changeWindow, setChangeWindow] = useState<ChangeWindow>('1d');
 
-  const handleSortChange = (nextMode: SortMode) => {
+  const handleSortChange = (nextMode: SortMode): void => {
     setSortMode(nextMode);
 
     const sortConfig = getSortConfig(nextMode, changeWindow);
