@@ -11,6 +11,7 @@ type FeedPostNode = {
 export default async function handler(req: NextApiRequest, res: NextApiResponse): Promise<void> {
   if (req.method !== 'GET') return res.status(405).json({ message: 'Method Not Allowed' });
   const data = await getAllPostsForHome(false);
+  if (!data) return res.status(503).json({ message: 'Service Unavailable' });
   const posts = data.edges.map(({ node }: { node: FeedPostNode }) => node);
 
   const siteUrl = 'https://www.worldofwinfield.com';

@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import React, { type JSX, useState } from 'react';
+import { type JSX, useState } from 'react';
 import type { SearchBarProps, SearchResult } from '../lib/types';
 import { colours } from '../pages/_app';
 import { StyledButton, StyledInput } from './core-components';
@@ -12,6 +12,8 @@ const SearchBar = <T = SearchResult[]>({
 }: SearchBarProps<T>): JSX.Element => {
   const [query, setQuery] = useState('');
   const [loading, setLoading] = useState(false);
+
+  const inputId = `search-input-${label.toLowerCase().replace(/\s+/g, '-')}`;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
@@ -29,9 +31,9 @@ const SearchBar = <T = SearchResult[]>({
 
   return (
     <StyledForm onSubmit={handleSubmit}>
-      <label htmlFor="blog-search-input">{label}</label>
+      <label htmlFor={inputId}>{label}</label>
       <StyledInput
-        id="blog-search-input"
+        id={inputId}
         type="text"
         placeholder={placeholder}
         value={query}

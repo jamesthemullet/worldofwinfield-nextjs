@@ -1,4 +1,13 @@
-import type { AdjacentPost, RelatedPost } from './types';
+import type {
+  AdjacentPost,
+  IndexPageProps,
+  JamesImagesProps,
+  RelatedPost,
+  SearchResult,
+  SinglePostProps,
+  TagsPostProps,
+  YearInReviewProps,
+} from './types';
 
 const API_URL = process.env.NEXT_PUBLIC_WORDPRESS_API_URL;
 
@@ -155,7 +164,7 @@ export async function getJamesImages({
 }: {
   first?: number;
   after?: string | null;
-} = {}) {
+} = {}): Promise<JamesImagesProps> {
   const data = await fetchAPI(
     `
     query JamesImages($first: Int, $after: String) {
@@ -196,7 +205,10 @@ export async function getJamesImages({
   return data.jamesImages;
 }
 
-export async function getAllPostsForHome(preview: boolean, after: string | null = null) {
+export async function getAllPostsForHome(
+  preview: boolean,
+  after: string | null = null,
+): Promise<IndexPageProps['allPosts'] | undefined> {
   const data = await fetchAPI(
     `
     query AllPosts($after: String) {
@@ -265,7 +277,7 @@ export async function getAllPostsForHome(preview: boolean, after: string | null 
   return data?.posts;
 }
 
-export async function getPost(id: string, idType = 'SLUG') {
+export async function getPost(id: string, idType = 'SLUG'): Promise<SinglePostProps | null> {
   const data = await fetchAPI(
     `
     query Post($id: ID!, $idType: PostIdType!) {
@@ -338,7 +350,7 @@ export async function getPost(id: string, idType = 'SLUG') {
   return data.post;
 }
 
-export async function getPostDisplayInfo(ids: string[]) {
+export async function getPostDisplayInfo(ids: string[]): Promise<IndexPageProps['randomPosts']> {
   const posts = await Promise.all(
     ids.map((id) =>
       fetchAPI(
@@ -374,7 +386,7 @@ export async function getPostDisplayInfo(ids: string[]) {
   return posts;
 }
 
-export async function searchBlogPosts(searchTerm: string) {
+export async function searchBlogPosts(searchTerm: string): Promise<SearchResult[]> {
   const data = await fetchAPI(
     `
     query SearchBlogPosts($searchTerm: String!) {
@@ -479,7 +491,7 @@ export async function getPostsByDate(month: number, year: number) {
   };
 }
 
-export async function getArchivePost() {
+export async function getArchivePost(): Promise<IndexPageProps['archivePost']> {
   const now = new Date();
   const month = now.getMonth() + 1;
 
@@ -498,7 +510,7 @@ export async function getArchivePost() {
   return null;
 }
 
-export async function getPostsByTag(tag: string) {
+export async function getPostsByTag(tag: string): Promise<TagsPostProps['posts']> {
   const data = await fetchAPI(
     `
     query getPostsByTag($tag: String!) {
@@ -529,7 +541,7 @@ export async function getPostsByTag(tag: string) {
   return data.posts.nodes;
 }
 
-export async function getPostsByYear(year: number) {
+export async function getPostsByYear(year: number): Promise<YearInReviewProps['posts']> {
   const data = await fetchAPI(
     `
     query getPostsByYear($year: Int!) {
@@ -560,8 +572,12 @@ export async function getPostsByYear(year: number) {
   return data.posts.nodes;
 }
 
+type GetRelatedPostsResponse = {
+  posts: { nodes: RelatedPost[] };
+};
+
 export async function getRelatedPosts(tag: string, excludeSlug: string): Promise<RelatedPost[]> {
-  const data = await fetchAPI(
+  const data = await fetchAPI<GetRelatedPostsResponse>(
     `
     query GetRelatedPosts($tag: String!) {
       posts(where: { tag: $tag }, first: 4) {
@@ -587,10 +603,13 @@ export async function getRelatedPosts(tag: string, excludeSlug: string): Promise
       variables: { tag },
     },
   );
-  return (data.posts.nodes as RelatedPost[])
-    .filter((post) => post.slug !== excludeSlug)
-    .slice(0, 3);
+  return data.posts.nodes.filter((post) => post.slug !== excludeSlug).slice(0, 3);
 }
+
+type GetAdjacentPostsResponse = {
+  previousPost: { nodes: AdjacentPost[] } | null;
+  nextPost: { nodes: AdjacentPost[] } | null;
+};
 
 export async function getAdjacentPosts(date: string): Promise<{
   previousPost: AdjacentPost | null;
@@ -601,7 +620,7 @@ export async function getAdjacentPosts(date: string): Promise<{
   const month = parsedDate.getMonth() + 1;
   const day = parsedDate.getDate();
 
-  const data = await fetchAPI(
+  const data = await fetchAPI<GetAdjacentPostsResponse>(
     `
     query GetAdjacentPosts($year: Int!, $month: Int!, $day: Int!) {
       previousPost: posts(
@@ -635,12 +654,15 @@ export async function getAdjacentPosts(date: string): Promise<{
   );
 
   return {
-    previousPost: (data.previousPost?.nodes?.[0] as AdjacentPost) ?? null,
-    nextPost: (data.nextPost?.nodes?.[0] as AdjacentPost) ?? null,
+    previousPost: data.previousPost?.nodes?.[0] ?? null,
+    nextPost: data.nextPost?.nodes?.[0] ?? null,
   };
 }
 
-export async function getRandomImage(randomMonth: number, randomYear: number) {
+export async function getRandomImage(
+  randomMonth: number,
+  randomYear: number,
+): Promise<IndexPageProps['randomImageSet']> {
   const data = await fetchAPI(
     `
     query GetRandomImage($randomMonth: Int!, $randomYear: Int!) {
@@ -674,9 +696,10 @@ export async function getRandomImage(randomMonth: number, randomYear: number) {
 }
 
 type TagNode = { name: string; slug: string; count: number | null };
+type GetAllTagsResponse = { tags?: { nodes?: TagNode[] } | null };
 
 export async function getAllTags(): Promise<{ name: string; slug: string; count: number }[]> {
-  const data = await fetchAPI(`
+  const data = await fetchAPI<GetAllTagsResponse>(`
     {
       tags(first: 100) {
         nodes {
@@ -688,8 +711,11 @@ export async function getAllTags(): Promise<{ name: string; slug: string; count:
     }
   `);
   return (data?.tags?.nodes ?? [])
-    .filter((tag: TagNode) => tag.count && tag.count > 0)
-    .sort((a: TagNode, b: TagNode) => (b.count ?? 0) - (a.count ?? 0));
+    .filter(
+      (tag): tag is { name: string; slug: string; count: number } =>
+        typeof tag.count === 'number' && tag.count > 0,
+    )
+    .sort((a, b) => b.count - a.count);
 }
 
 export async function getTotalPostCount(): Promise<number> {

@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import Link from 'next/link';
-import { type JSX, useEffect, useRef, useState } from 'react';
+import { type JSX, useCallback, useEffect, useRef, useState } from 'react';
 
 export default function Nav(): JSX.Element {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -21,42 +21,42 @@ export default function Nav(): JSX.Element {
   const wishListButtonRef = useRef<HTMLButtonElement>(null);
   const travelArrowRef = useRef<HTMLButtonElement>(null);
 
-  const toggleDropdown = () => {
+  const toggleDropdown = useCallback(() => {
     setIsDropdownOpen((prev) => !prev);
-  };
+  }, []);
 
-  const toggleFavouritesDropdown = (open?: boolean) => {
+  const toggleFavouritesDropdown = useCallback((open?: boolean) => {
     if (open === undefined) {
       setIsFavouritesDropdownOpen((prev) => !prev);
     } else {
       setIsFavouritesDropdownOpen(open);
     }
-  };
+  }, []);
 
-  const toggleTravelDropdown = (open?: boolean) => {
+  const toggleTravelDropdown = useCallback((open?: boolean) => {
     if (open === undefined) {
       setIsTravelDropdownOpen((prev) => !prev);
     } else {
       setIsTravelDropdownOpen(open);
     }
-  };
+  }, []);
 
-  const toggleWishListDropdown = (open?: boolean) => {
+  const toggleWishListDropdown = useCallback((open?: boolean) => {
     if (open === undefined) {
       setIsWishListDropdownOpen((prev) => !prev);
     } else {
       setIsWishListDropdownOpen(open);
     }
-  };
+  }, []);
 
-  const closeNavOnMobile = () => {
+  const closeNavOnMobile = useCallback(() => {
     if (isMobile) {
       setIsDropdownOpen(false);
       setIsFavouritesDropdownOpen(false);
       setIsTravelDropdownOpen(false);
       setIsWishListDropdownOpen(false);
     }
-  };
+  }, [isMobile]);
 
   return (
     <StyledNav aria-label="Main">
@@ -73,7 +73,7 @@ export default function Nav(): JSX.Element {
         id="main-nav-list"
         role="list"
         className={isDropdownOpen ? 'open' : ''}
-        aria-hidden={isMobile && !isDropdownOpen}>
+        aria-hidden={isMobile && !isDropdownOpen ? true : undefined}>
         <li>
           <Link href="/" onClick={closeNavOnMobile}>
             Home
@@ -122,8 +122,8 @@ export default function Nav(): JSX.Element {
                   toggleFavouritesDropdown();
                 }}
                 aria-label="Toggle Favourites submenu"
-                aria-expanded={isFavouritesDropdownOpen}
                 aria-haspopup="true"
+                aria-expanded={isFavouritesDropdownOpen}
                 aria-controls="favourites-menu">
                 ▼
               </DropdownArrow>
@@ -204,8 +204,8 @@ export default function Nav(): JSX.Element {
             <SplitButtonContainer role="group" aria-label="Wish Lists navigation">
               <DropdownButton
                 ref={wishListButtonRef}
-                aria-expanded={isWishListDropdownOpen}
                 aria-haspopup="true"
+                aria-expanded={isWishListDropdownOpen}
                 aria-controls="wishlist-menu"
                 onClick={() => toggleWishListDropdown()}>
                 Wish Lists
@@ -223,8 +223,8 @@ export default function Nav(): JSX.Element {
                   toggleWishListDropdown();
                 }}
                 aria-label="Toggle Wish Lists submenu"
-                aria-expanded={isWishListDropdownOpen}
                 aria-haspopup="true"
+                aria-expanded={isWishListDropdownOpen}
                 aria-controls="wishlist-menu">
                 ▼
               </DropdownArrow>
@@ -280,8 +280,8 @@ export default function Nav(): JSX.Element {
                   toggleTravelDropdown();
                 }}
                 aria-label="Toggle Travel submenu"
-                aria-expanded={isTravelDropdownOpen}
                 aria-haspopup="true"
+                aria-expanded={isTravelDropdownOpen}
                 aria-controls="travel-menu">
                 ▼
               </DropdownArrow>

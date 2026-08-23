@@ -38,6 +38,12 @@ jest.mock('../pages/favourites-results', () => ({
   ),
 }));
 
+jest.mock('../components/core-components', () => ({
+  StyledButton: ({ children, onClick }: { children: React.ReactNode; onClick: () => void }) => (
+    <button onClick={onClick}>{children}</button>
+  ),
+}));
+
 const visitData: string[][] = [
   ['Name', 'Country'],
   ['Iceland', 'Iceland'],
@@ -54,10 +60,16 @@ describe('Wants page (wants.tsx)', () => {
     mockRouter.isFallback = false;
   });
 
+  it('renders the "I want..." heading', () => {
+    render(<WantsPage wantToVisitData={visitData} wantToEatData={eatData} />);
+    expect(screen.getByTestId('post-header')).toHaveTextContent('I want...');
+  });
+
   it('renders the loading state when router is in fallback', () => {
     mockRouter.isFallback = true;
     render(<WantsPage wantToVisitData={visitData} wantToEatData={eatData} />);
     expect(screen.getByTestId('post-title')).toHaveTextContent('Loading…');
+    expect(screen.queryByTestId('post-header')).not.toBeInTheDocument();
     expect(screen.queryByRole('button')).not.toBeInTheDocument();
   });
 

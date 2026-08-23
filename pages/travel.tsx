@@ -3,6 +3,7 @@ import type { GetStaticProps } from 'next';
 import ErrorPage from 'next/error';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import type { JSX } from 'react';
 import Container from '../components/container';
 import Layout from '../components/layout';
 import PostHeader from '../components/post-header';
@@ -23,7 +24,12 @@ const travelSeo = {
   opengraphSiteName: 'World Of Winfield',
 };
 
-export default function Post({ posts }: PostsProps) {
+const TRAVEL_RELATED_SECTIONS = [
+  { label: 'Countries Visited', href: '/countries-visited', colour: colours.green },
+  { label: 'Favourite Cities', href: '/favourite-cities', colour: colours.blueish },
+  { label: 'Holiday Wish List', href: '/holiday-wish-list', colour: colours.azure },
+];
+export default function Post({ posts }: PostsProps): JSX.Element {
   const router = useRouter();
 
   if (!router.isFallback && !posts?.length) {
@@ -68,13 +74,7 @@ export default function Post({ posts }: PostsProps) {
             ))}
           </>
         )}
-        <RelatedSections
-          sections={[
-            { label: 'Countries Visited', href: '/countries-visited', colour: colours.green },
-            { label: 'Favourite Cities', href: '/favourite-cities', colour: colours.blueish },
-            { label: 'Holiday Wish List', href: '/holiday-wish-list', colour: colours.azure },
-          ]}
-        />
+        <RelatedSections sections={TRAVEL_RELATED_SECTIONS} />
       </Container>
     </Layout>
   );
@@ -129,6 +129,11 @@ const ReadMoreLink = styled(Link)`
 
   &:hover {
     opacity: 0.85;
+  }
+
+  &:focus-visible {
+    outline: 2px solid ${colours.white};
+    outline-offset: 2px;
   }
 `;
 

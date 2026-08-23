@@ -1,6 +1,7 @@
 import styled from '@emotion/styled';
 import type { GetStaticProps } from 'next';
 import Link from 'next/link';
+import type { JSX } from 'react';
 import { useState } from 'react';
 import Container from '../components/container';
 import HeroPost from '../components/hero-post';
@@ -11,7 +12,7 @@ import SearchResults from '../components/search-results';
 import { getAllPostsForHome } from '../lib/api';
 import type { GlobalSearchResults, IndexPageProps } from '../lib/types';
 
-export default function Index({ allPosts, preview }: IndexPageProps) {
+export default function Index({ allPosts, preview }: IndexPageProps): JSX.Element {
   const [searchResults, setSearchResults] = useState<GlobalSearchResults | null>(null);
   const [posts, setPosts] = useState(allPosts.edges);
   const [hasNextPage, setHasNextPage] = useState(allPosts.pageInfo.hasNextPage);
@@ -119,6 +120,11 @@ const BrowseTopicsBar = styled.nav`
     &:hover {
       text-decoration: underline;
     }
+
+    &:focus-visible {
+      outline: 2px solid #000;
+      outline-offset: 2px;
+    }
   }
 `;
 
@@ -131,6 +137,11 @@ const RssLink = styled.a`
 
   &:hover {
     text-decoration: underline;
+  }
+
+  &:focus-visible {
+    outline: 2px solid #000;
+    outline-offset: 2px;
   }
 `;
 
