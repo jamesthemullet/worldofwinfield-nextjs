@@ -24,6 +24,11 @@ const musicSeo = {
   opengraphSiteName: 'World Of Winfield',
 };
 
+const MUSIC_RELATED_SECTIONS = [
+  { label: 'Favourite Tracks', href: '/favourite-tracks', colour: colours.purple },
+  { label: 'Favourite DJs', href: '/favourite-djs', colour: colours.pink },
+];
+
 export default function Post({ posts }: PostsProps): JSX.Element {
   const router = useRouter();
 
@@ -68,12 +73,7 @@ export default function Post({ posts }: PostsProps): JSX.Element {
             ))}
           </>
         )}
-        <RelatedSections
-          sections={[
-            { label: 'Favourite Tracks', href: '/favourite-tracks', colour: colours.purple },
-            { label: 'Favourite DJs', href: '/favourite-djs', colour: colours.pink },
-          ]}
-        />
+        <RelatedSections sections={MUSIC_RELATED_SECTIONS} />
       </Container>
     </Layout>
   );
@@ -128,6 +128,11 @@ const ReadMoreLink = styled(Link)`
 
   &:hover {
     opacity: 0.85;
+  }
+
+  &:focus-visible {
+    outline: 2px solid ${colours.white};
+    outline-offset: 2px;
   }
 `;
 
