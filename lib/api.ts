@@ -1,4 +1,4 @@
-import type { AdjacentPost, RelatedPost } from './types';
+import type { AdjacentPost, RelatedPost, SearchResult } from './types';
 
 const API_URL = process.env.NEXT_PUBLIC_WORDPRESS_API_URL;
 
@@ -374,7 +374,7 @@ export async function getPostDisplayInfo(ids: string[]) {
   return posts;
 }
 
-export async function searchBlogPosts(searchTerm: string) {
+export async function searchBlogPosts(searchTerm: string): Promise<SearchResult[]> {
   const data = await fetchAPI(
     `
     query SearchBlogPosts($searchTerm: String!) {

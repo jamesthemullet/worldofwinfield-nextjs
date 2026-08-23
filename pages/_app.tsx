@@ -4,9 +4,10 @@ import styled from '@emotion/styled';
 import { GoogleAnalytics } from '@next/third-parties/google';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
+import type { JSX } from 'react';
 import Nav from '../components/nav';
 
-function createEmotionCache() {
+function createEmotionCache(): EmotionCache {
   return createCache({ key: 'css' });
 }
 
@@ -58,7 +59,7 @@ function MyApp({
   Component,
   pageProps,
   emotionCache = clientSideEmotionCache,
-}: AppProps & { emotionCache?: EmotionCache }) {
+}: AppProps & { emotionCache?: EmotionCache }): JSX.Element {
   return (
     <CacheProvider value={emotionCache}>
       <Head>

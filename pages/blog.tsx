@@ -1,7 +1,8 @@
 import styled from '@emotion/styled';
 import type { GetStaticProps } from 'next';
 import Link from 'next/link';
-import { type JSX, useState } from 'react';
+import type { JSX } from 'react';
+import { useState } from 'react';
 import Container from '../components/container';
 import HeroPost from '../components/hero-post';
 import Layout from '../components/layout';
@@ -119,6 +120,11 @@ const BrowseTopicsBar = styled.nav`
     &:hover {
       text-decoration: underline;
     }
+
+    &:focus-visible {
+      outline: 2px solid #000;
+      outline-offset: 2px;
+    }
   }
 `;
 
@@ -131,6 +137,11 @@ const RssLink = styled.a`
 
   &:hover {
     text-decoration: underline;
+  }
+
+  &:focus-visible {
+    outline: 2px solid #000;
+    outline-offset: 2px;
   }
 `;
 
