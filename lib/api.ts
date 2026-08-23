@@ -1,4 +1,13 @@
-import type { AdjacentPost, RelatedPost, SearchResult } from './types';
+import type {
+  AdjacentPost,
+  IndexPageProps,
+  JamesImagesProps,
+  RelatedPost,
+  SearchResult,
+  SinglePostProps,
+  TagsPostProps,
+  YearInReviewProps,
+} from './types';
 
 const API_URL = process.env.NEXT_PUBLIC_WORDPRESS_API_URL;
 
@@ -155,7 +164,7 @@ export async function getJamesImages({
 }: {
   first?: number;
   after?: string | null;
-} = {}) {
+} = {}): Promise<JamesImagesProps> {
   const data = await fetchAPI(
     `
     query JamesImages($first: Int, $after: String) {
@@ -196,7 +205,10 @@ export async function getJamesImages({
   return data.jamesImages;
 }
 
-export async function getAllPostsForHome(preview: boolean, after: string | null = null) {
+export async function getAllPostsForHome(
+  preview: boolean,
+  after: string | null = null,
+): Promise<IndexPageProps['allPosts'] | undefined> {
   const data = await fetchAPI(
     `
     query AllPosts($after: String) {
@@ -265,7 +277,7 @@ export async function getAllPostsForHome(preview: boolean, after: string | null 
   return data?.posts;
 }
 
-export async function getPost(id: string, idType = 'SLUG') {
+export async function getPost(id: string, idType = 'SLUG'): Promise<SinglePostProps | null> {
   const data = await fetchAPI(
     `
     query Post($id: ID!, $idType: PostIdType!) {
@@ -338,7 +350,7 @@ export async function getPost(id: string, idType = 'SLUG') {
   return data.post;
 }
 
-export async function getPostDisplayInfo(ids: string[]) {
+export async function getPostDisplayInfo(ids: string[]): Promise<IndexPageProps['randomPosts']> {
   const posts = await Promise.all(
     ids.map((id) =>
       fetchAPI(
@@ -479,7 +491,7 @@ export async function getPostsByDate(month: number, year: number) {
   };
 }
 
-export async function getArchivePost() {
+export async function getArchivePost(): Promise<IndexPageProps['archivePost']> {
   const now = new Date();
   const month = now.getMonth() + 1;
 
@@ -498,7 +510,7 @@ export async function getArchivePost() {
   return null;
 }
 
-export async function getPostsByTag(tag: string) {
+export async function getPostsByTag(tag: string): Promise<TagsPostProps['posts']> {
   const data = await fetchAPI(
     `
     query getPostsByTag($tag: String!) {
@@ -529,7 +541,7 @@ export async function getPostsByTag(tag: string) {
   return data.posts.nodes;
 }
 
-export async function getPostsByYear(year: number) {
+export async function getPostsByYear(year: number): Promise<YearInReviewProps['posts']> {
   const data = await fetchAPI(
     `
     query getPostsByYear($year: Int!) {
@@ -647,7 +659,10 @@ export async function getAdjacentPosts(date: string): Promise<{
   };
 }
 
-export async function getRandomImage(randomMonth: number, randomYear: number) {
+export async function getRandomImage(
+  randomMonth: number,
+  randomYear: number,
+): Promise<IndexPageProps['randomImageSet']> {
   const data = await fetchAPI(
     `
     query GetRandomImage($randomMonth: Int!, $randomYear: Int!) {

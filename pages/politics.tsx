@@ -28,7 +28,6 @@ const POLITICS_RELATED_SECTIONS = [
   { label: 'Browse by Tag', href: '/tags', colour: colours.burgandy },
   { label: 'All Posts', href: '/blog', colour: colours.dark },
 ];
-
 export default function Post({ posts }: PostsProps): JSX.Element {
   const router = useRouter();
 

@@ -29,7 +29,6 @@ const TRAVEL_RELATED_SECTIONS = [
   { label: 'Favourite Cities', href: '/favourite-cities', colour: colours.blueish },
   { label: 'Holiday Wish List', href: '/holiday-wish-list', colour: colours.azure },
 ];
-
 export default function Post({ posts }: PostsProps): JSX.Element {
   const router = useRouter();
 

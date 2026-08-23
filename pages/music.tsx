@@ -28,7 +28,6 @@ const MUSIC_RELATED_SECTIONS = [
   { label: 'Favourite Tracks', href: '/favourite-tracks', colour: colours.purple },
   { label: 'Favourite DJs', href: '/favourite-djs', colour: colours.pink },
 ];
-
 export default function Post({ posts }: PostsProps): JSX.Element {
   const router = useRouter();
 
