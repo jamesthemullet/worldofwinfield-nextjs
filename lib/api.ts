@@ -77,8 +77,13 @@ async function fetchAPI<T = any>(query = '', { variables }: FetchAPIOptions = {}
   throw lastError;
 }
 
-export async function getPreviewPost(id: string, idType = 'DATABASE_ID') {
-  const data = await fetchAPI(
+type PreviewPostResponse = { post: { databaseId: number; slug: string; status: string } | null };
+
+export async function getPreviewPost(
+  id: string,
+  idType = 'DATABASE_ID',
+): Promise<{ databaseId: number; slug: string; status: string } | null> {
+  const data = await fetchAPI<PreviewPostResponse>(
     `
     query PreviewPost($id: ID!, $idType: PostIdType!) {
       post(id: $id, idType: $idType) {
@@ -94,8 +99,10 @@ export async function getPreviewPost(id: string, idType = 'DATABASE_ID') {
   return data.post;
 }
 
-export async function getAllPostsWithSlug() {
-  const data = await fetchAPI(`
+type AllPostsWithSlugResponse = { posts: { edges: { node: { slug: string } }[] } };
+
+export async function getAllPostsWithSlug(): Promise<{ edges: { node: { slug: string } }[] }> {
+  const data = await fetchAPI<AllPostsWithSlugResponse>(`
     {
       posts(first: 10000) {
         edges {
@@ -106,7 +113,7 @@ export async function getAllPostsWithSlug() {
       }
     }
   `);
-  return data?.posts;
+  return data.posts;
 }
 
 export async function getFirstPost() {

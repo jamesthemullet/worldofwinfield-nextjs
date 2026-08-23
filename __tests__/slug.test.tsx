@@ -108,7 +108,7 @@ const mockPost = {
       description: 'Writer',
     },
   },
-  categories: { edges: { node: { name: 'Travel' } } },
+  categories: { edges: [{ node: { name: 'Travel' } }] },
   tags: { edges: [] },
   seo: {
     opengraphDescription: 'Post description',

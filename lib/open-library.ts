@@ -78,7 +78,11 @@ export const resolveBookCovers = async (
   books: BookCoverLookup[],
 ): Promise<Record<string, string | null>> => {
   const isbnsToLookup = Array.from(
-    new Set(books.filter((book) => book.isbn).map((book) => normalizeIsbn(book.isbn as string))),
+    new Set(
+      books
+        .filter((book): book is BookCoverLookup & { isbn: string } => book.isbn !== undefined)
+        .map((book) => normalizeIsbn(book.isbn)),
+    ),
   );
   const coversByIsbn = await fetchCoversByIsbn(isbnsToLookup);
 
