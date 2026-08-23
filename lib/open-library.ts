@@ -2,6 +2,9 @@ const OPEN_LIBRARY_SEARCH_URL = 'https://openlibrary.org/search.json';
 const OPEN_LIBRARY_BOOKS_URL = 'https://openlibrary.org/api/books';
 const REQUEST_TIMEOUT_MS = 8000;
 
+type OpenLibraryBooksResponse = Record<string, { cover?: { medium?: string } } | undefined>;
+type OpenLibrarySearchResponse = { docs?: Array<{ cover_i?: number }> };
+
 export type BookCoverLookup = {
   title: string;
   author?: string;
@@ -25,7 +28,7 @@ const fetchCoversByIsbn = async (isbns: string[]): Promise<Record<string, string
     });
     if (!response.ok) return {};
 
-    const json = await response.json();
+    const json = (await response.json()) as OpenLibraryBooksResponse;
     const coversByIsbn: Record<string, string | null> = {};
 
     for (const isbn of isbns) {
@@ -55,7 +58,7 @@ export const resolveBookCoverUrlByTitle = async ({
     });
     if (!response.ok) return null;
 
-    const json = await response.json();
+    const json = (await response.json()) as OpenLibrarySearchResponse;
     const coverId = json?.docs?.[0]?.cover_i;
 
     return typeof coverId === 'number'

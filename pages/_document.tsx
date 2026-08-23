@@ -7,7 +7,7 @@ import type { ComponentType, JSX } from 'react';
 
 const EMOTION_KEY = 'css';
 
-function createEmotionCache() {
+function createEmotionCache(): EmotionCache {
   return createCache({ key: EMOTION_KEY });
 }
 

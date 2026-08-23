@@ -572,8 +572,12 @@ export async function getPostsByYear(year: number): Promise<YearInReviewProps['p
   return data.posts.nodes;
 }
 
+type GetRelatedPostsResponse = {
+  posts: { nodes: RelatedPost[] };
+};
+
 export async function getRelatedPosts(tag: string, excludeSlug: string): Promise<RelatedPost[]> {
-  const data = await fetchAPI(
+  const data = await fetchAPI<GetRelatedPostsResponse>(
     `
     query GetRelatedPosts($tag: String!) {
       posts(where: { tag: $tag }, first: 4) {
@@ -599,10 +603,13 @@ export async function getRelatedPosts(tag: string, excludeSlug: string): Promise
       variables: { tag },
     },
   );
-  return (data.posts.nodes as RelatedPost[])
-    .filter((post) => post.slug !== excludeSlug)
-    .slice(0, 3);
+  return data.posts.nodes.filter((post) => post.slug !== excludeSlug).slice(0, 3);
 }
+
+type GetAdjacentPostsResponse = {
+  previousPost: { nodes: AdjacentPost[] } | null;
+  nextPost: { nodes: AdjacentPost[] } | null;
+};
 
 export async function getAdjacentPosts(date: string): Promise<{
   previousPost: AdjacentPost | null;
@@ -613,7 +620,7 @@ export async function getAdjacentPosts(date: string): Promise<{
   const month = parsedDate.getMonth() + 1;
   const day = parsedDate.getDate();
 
-  const data = await fetchAPI(
+  const data = await fetchAPI<GetAdjacentPostsResponse>(
     `
     query GetAdjacentPosts($year: Int!, $month: Int!, $day: Int!) {
       previousPost: posts(
@@ -647,8 +654,8 @@ export async function getAdjacentPosts(date: string): Promise<{
   );
 
   return {
-    previousPost: (data.previousPost?.nodes?.[0] as AdjacentPost) ?? null,
-    nextPost: (data.nextPost?.nodes?.[0] as AdjacentPost) ?? null,
+    previousPost: data.previousPost?.nodes?.[0] ?? null,
+    nextPost: data.nextPost?.nodes?.[0] ?? null,
   };
 }
 
@@ -689,9 +696,10 @@ export async function getRandomImage(
 }
 
 type TagNode = { name: string; slug: string; count: number | null };
+type GetAllTagsResponse = { tags?: { nodes?: TagNode[] } | null };
 
 export async function getAllTags(): Promise<{ name: string; slug: string; count: number }[]> {
-  const data = await fetchAPI(`
+  const data = await fetchAPI<GetAllTagsResponse>(`
     {
       tags(first: 100) {
         nodes {
@@ -703,8 +711,11 @@ export async function getAllTags(): Promise<{ name: string; slug: string; count:
     }
   `);
   return (data?.tags?.nodes ?? [])
-    .filter((tag: TagNode) => tag.count && tag.count > 0)
-    .sort((a: TagNode, b: TagNode) => (b.count ?? 0) - (a.count ?? 0));
+    .filter(
+      (tag): tag is { name: string; slug: string; count: number } =>
+        typeof tag.count === 'number' && tag.count > 0,
+    )
+    .sort((a, b) => b.count - a.count);
 }
 
 export async function getTotalPostCount(): Promise<number> {

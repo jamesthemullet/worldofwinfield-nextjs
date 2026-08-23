@@ -24,6 +24,10 @@ const politicsSeo = {
   opengraphSiteName: 'World Of Winfield',
 };
 
+const POLITICS_RELATED_SECTIONS = [
+  { label: 'Browse by Tag', href: '/tags', colour: colours.burgandy },
+  { label: 'All Posts', href: '/blog', colour: colours.dark },
+];
 export default function Post({ posts }: PostsProps): JSX.Element {
   const router = useRouter();
 
@@ -68,12 +72,7 @@ export default function Post({ posts }: PostsProps): JSX.Element {
             ))}
           </>
         )}
-        <RelatedSections
-          sections={[
-            { label: 'Browse by Tag', href: '/tags', colour: colours.burgandy },
-            { label: 'All Posts', href: '/blog', colour: colours.dark },
-          ]}
-        />
+        <RelatedSections sections={POLITICS_RELATED_SECTIONS} />
       </Container>
     </Layout>
   );
@@ -128,6 +127,11 @@ const ReadMoreLink = styled(Link)`
 
   &:hover {
     opacity: 0.85;
+  }
+
+  &:focus-visible {
+    outline: 2px solid ${colours.white};
+    outline-offset: 2px;
   }
 `;
 

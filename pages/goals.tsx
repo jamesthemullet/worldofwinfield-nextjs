@@ -24,6 +24,11 @@ const goalsSeo = {
   opengraphSiteName: 'World Of Winfield',
 };
 
+const GOALS_RELATED_SECTIONS = [
+  { label: 'Now', href: '/now', colour: colours.azure },
+  { label: 'Wants', href: '/wants', colour: colours.green },
+];
+
 export default function Post({ posts }: PostsProps): JSX.Element {
   const router = useRouter();
 
@@ -68,12 +73,7 @@ export default function Post({ posts }: PostsProps): JSX.Element {
             ))}
           </>
         )}
-        <RelatedSections
-          sections={[
-            { label: 'Now', href: '/now', colour: colours.azure },
-            { label: 'Wants', href: '/wants', colour: colours.green },
-          ]}
-        />
+        <RelatedSections sections={GOALS_RELATED_SECTIONS} />
       </Container>
     </Layout>
   );
@@ -128,6 +128,11 @@ const ReadMoreLink = styled(Link)`
 
   &:hover {
     opacity: 0.85;
+  }
+
+  &:focus-visible {
+    outline: 2px solid ${colours.white};
+    outline-offset: 2px;
   }
 `;
 

@@ -204,6 +204,11 @@ const ContinueReadingLink = styled(Link)<{ colour: string; textcolour: string }>
   &:hover {
     opacity: 0.85;
   }
+
+  &:focus-visible {
+    outline: 3px solid currentColor;
+    outline-offset: 2px;
+  }
 `;
 
 export const getStaticProps: GetStaticProps<TagsPostProps> = async ({ params }) => {

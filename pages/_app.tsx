@@ -7,7 +7,7 @@ import Head from 'next/head';
 import type { JSX } from 'react';
 import Nav from '../components/nav';
 
-function createEmotionCache() {
+function createEmotionCache(): EmotionCache {
   return createCache({ key: 'css' });
 }
 
