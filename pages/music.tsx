@@ -128,6 +128,11 @@ const ReadMoreLink = styled(Link)`
   &:hover {
     opacity: 0.85;
   }
+
+  &:focus-visible {
+    outline: 2px solid ${colours.white};
+    outline-offset: 2px;
+  }
 `;
 
 const PostContainer = styled.article<{ isEven: boolean }>`

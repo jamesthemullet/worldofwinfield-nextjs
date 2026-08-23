@@ -73,7 +73,7 @@ export default function Nav(): JSX.Element {
         id="main-nav-list"
         role="list"
         className={isDropdownOpen ? 'open' : ''}
-        aria-hidden={isMobile && !isDropdownOpen}>
+        aria-hidden={isMobile && !isDropdownOpen ? true : undefined}>
         <li>
           <Link href="/" onClick={closeNavOnMobile}>
             Home
@@ -122,6 +122,7 @@ export default function Nav(): JSX.Element {
                   toggleFavouritesDropdown();
                 }}
                 aria-label="Toggle Favourites submenu"
+                aria-haspopup="true"
                 aria-expanded={isFavouritesDropdownOpen}
                 aria-controls="favourites-menu">
                 ▼
@@ -203,6 +204,7 @@ export default function Nav(): JSX.Element {
             <SplitButtonContainer role="group" aria-label="Wish Lists navigation">
               <DropdownButton
                 ref={wishListButtonRef}
+                aria-haspopup="true"
                 aria-expanded={isWishListDropdownOpen}
                 aria-controls="wishlist-menu"
                 onClick={() => toggleWishListDropdown()}>
@@ -221,6 +223,7 @@ export default function Nav(): JSX.Element {
                   toggleWishListDropdown();
                 }}
                 aria-label="Toggle Wish Lists submenu"
+                aria-haspopup="true"
                 aria-expanded={isWishListDropdownOpen}
                 aria-controls="wishlist-menu">
                 ▼
@@ -277,6 +280,7 @@ export default function Nav(): JSX.Element {
                   toggleTravelDropdown();
                 }}
                 aria-label="Toggle Travel submenu"
+                aria-haspopup="true"
                 aria-expanded={isTravelDropdownOpen}
                 aria-controls="travel-menu">
                 ▼

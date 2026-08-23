@@ -236,10 +236,10 @@ const CardLink = styled.a`
   margin: 0.15rem 0 0;
   font-size: 0.75rem;
   font-weight: bold;
-  color: ${colours.azure};
+  color: #1967c6;
 
   &:focus-visible {
-    outline: 2px solid ${colours.azure};
+    outline: 2px solid #1967c6;
     outline-offset: 2px;
   }
 `;
