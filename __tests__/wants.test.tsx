@@ -46,14 +46,16 @@ jest.mock('../components/core-components', () => ({
 
 const visitData: string[][] = [
   ['Name', 'Country'],
-  ['Kyoto', 'Japan'],
-];
-const eatData: string[][] = [
-  ['Restaurant Name', 'Cuisine'],
-  ['Nobu', 'Japanese'],
+  ['Iceland', 'Iceland'],
+  ['Japan', 'Japan'],
 ];
 
-describe('WantsPage', () => {
+const eatData: string[][] = [
+  ['Name', 'City'],
+  ['Noma', 'Copenhagen'],
+];
+
+describe('Wants page (wants.tsx)', () => {
   beforeEach(() => {
     mockRouter.isFallback = false;
   });
@@ -63,23 +65,31 @@ describe('WantsPage', () => {
     expect(screen.getByTestId('post-header')).toHaveTextContent('I want...');
   });
 
-  it('shows the loading state when router is falling back', () => {
+  it('renders the loading state when router is in fallback', () => {
     mockRouter.isFallback = true;
     render(<WantsPage wantToVisitData={visitData} wantToEatData={eatData} />);
     expect(screen.getByTestId('post-title')).toHaveTextContent('Loading…');
     expect(screen.queryByTestId('post-header')).not.toBeInTheDocument();
+    expect(screen.queryByRole('button')).not.toBeInTheDocument();
   });
 
-  it('shows visit data when "Want To Visit" is clicked', () => {
+  it('renders "Want To Visit" and "Want To Eat Here" buttons', () => {
+    render(<WantsPage wantToVisitData={visitData} wantToEatData={eatData} />);
+    expect(screen.getByRole('button', { name: 'Want To Visit' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Want To Eat Here' })).toBeInTheDocument();
+  });
+
+  it('shows visit results when "Want To Visit" is clicked', () => {
     render(<WantsPage wantToVisitData={visitData} wantToEatData={eatData} />);
     expect(screen.queryByTestId('favourite-results')).not.toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: 'Want To Visit' }));
     expect(screen.getByTestId('favourite-results')).toBeInTheDocument();
+    expect(screen.getByTestId('favourite-results')).toHaveTextContent('3 rows');
   });
 
-  it('switches to eat data when "Want To Eat Here" is clicked', () => {
+  it('shows eat results when "Want To Eat Here" is clicked', () => {
     render(<WantsPage wantToVisitData={visitData} wantToEatData={eatData} />);
     fireEvent.click(screen.getByRole('button', { name: 'Want To Eat Here' }));
-    expect(screen.getByTestId('favourite-results')).toBeInTheDocument();
+    expect(screen.getByTestId('favourite-results')).toHaveTextContent('2 rows');
   });
 });
