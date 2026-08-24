@@ -265,17 +265,14 @@ export type IndexPageProps = {
       slug: string;
       featuredImage: {
         node: {
+          sourceUrl: string;
           mediaDetails: {
-            sizes: {
-              height: string;
-              width: string;
-              sourceUrl: string;
-            }[];
             height: number;
             width: number;
+            sizes: string;
+            srcset: string;
           };
-          srcSet: string;
-          sourceUrl: string;
+          caption: string;
         };
       } | null;
     };
@@ -352,12 +349,13 @@ export type PostHeaderProps = {
       mediaDetails: {
         height: number;
         width: number;
-        sizes: string;
-        srcset: string;
+        sizes?: string;
+        srcset?: string;
       };
-      caption: string;
+      caption?: string;
+      srcSet?: string;
     };
-  };
+  } | null;
   date?: string;
   author?: AuthorProps;
   categories?: {
