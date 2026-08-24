@@ -11,11 +11,13 @@ type Props = {
       mediaDetails: {
         width: number;
         height: number;
-        sizes: string;
-        srcset: string;
+        sizes?: string;
+        srcset?: string;
       };
+      caption?: string;
+      srcSet?: string;
     };
-  };
+  } | null;
   imageSize?: string;
   slug?: string;
   heroPost?: boolean;
