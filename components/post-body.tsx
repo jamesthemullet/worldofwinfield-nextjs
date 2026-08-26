@@ -1,5 +1,13 @@
 import styled from '@emotion/styled';
-import { type JSX, type MouseEvent, useEffect, useMemo, useRef, useState } from 'react';
+import {
+  type JSX,
+  type MouseEvent,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { sanitize } from '../lib/sanitize';
 import type { PostBodyProps } from '../lib/types';
 import { colours } from '../pages/_app';
@@ -66,6 +74,8 @@ export default function PostBody({ content }: PostBodyProps): JSX.Element {
     setZoomedImage({ src: getHighestResSrc(img), alt: img.alt });
   };
 
+  const handleLightboxClose = useCallback(() => setZoomedImage(null), []);
+
   // Browsers don't execute <script> tags inserted via innerHTML, so any script
   // that survived sanitizing (e.g. Getty's embed widget) has to be re-created here.
   // The `data-recreated` marker stops React 18 Strict Mode's double effect
@@ -91,11 +101,7 @@ export default function PostBody({ content }: PostBodyProps): JSX.Element {
     <ContentContainer ref={containerRef}>
       <div onClick={handleContentClick} dangerouslySetInnerHTML={{ __html: sanitizedContent }} />
       {zoomedImage && (
-        <ImageLightbox
-          src={zoomedImage.src}
-          alt={zoomedImage.alt}
-          onClose={() => setZoomedImage(null)}
-        />
+        <ImageLightbox src={zoomedImage.src} alt={zoomedImage.alt} onClose={handleLightboxClose} />
       )}
     </ContentContainer>
   );

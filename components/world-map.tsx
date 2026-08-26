@@ -5,7 +5,7 @@ import { ComposableMap, Geographies, Geography, ZoomableGroup } from 'react-simp
 import countries110m from 'world-atlas/countries-110m.json';
 import { colours } from '../pages/_app';
 
-type WorldMapProps = {
+export type WorldMapProps = {
   visitedCountries: string[];
   wishListCountries?: string[];
 };
@@ -80,6 +80,14 @@ export default function WorldMap({
     setCenter(DEFAULT_CENTER);
   }, []);
 
+  const handleMoveEnd = useCallback(
+    ({ coordinates, zoom: nextZoom }: { coordinates: [number, number]; zoom: number }) => {
+      setCenter(coordinates);
+      setZoom(nextZoom);
+    },
+    [],
+  );
+
   return (
     <MapWrapper aria-label="World map with countries James has visited highlighted in purple and holiday wish list countries highlighted in blue">
       <Controls>
@@ -108,10 +116,7 @@ export default function WorldMap({
           zoom={zoom}
           minZoom={MIN_ZOOM}
           maxZoom={MAX_ZOOM}
-          onMoveEnd={({ coordinates, zoom: nextZoom }) => {
-            setCenter(coordinates);
-            setZoom(nextZoom);
-          }}
+          onMoveEnd={handleMoveEnd}
           filterZoomEvent={(event: unknown) => {
             const wheelEvent = event as WheelEvent;
             return wheelEvent.type !== 'wheel' || wheelEvent.ctrlKey;
