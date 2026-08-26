@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import type { GetStaticProps } from 'next';
+import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import type { JSX } from 'react';
 import Container from '../components/container';
@@ -7,8 +8,16 @@ import Layout from '../components/layout';
 import PostHeader from '../components/post-header';
 import PostTitle from '../components/post-title';
 import ShareBar from '../components/share-bar';
-import WorldMap from '../components/world-map';
+import type { WorldMapProps } from '../components/world-map';
 import { fetchDataFromGoogleSheets as fetchSheetById } from '../lib/sheets';
+
+// Lazy-load the world map: react-simple-maps pulls in multiple D3 sub-packages
+// and world-atlas/countries-110m.json (~96 KB), which would bloat the initial
+// JS bundle. Deferring to the client (ssr: false) keeps them out of the page
+// payload entirely and loads them only when the browser is idle.
+// @ts-expect-error -- nodenext requires explicit .js extensions on dynamic
+// import() expressions, but Next.js's bundler resolves .tsx at build time.
+const WorldMap = dynamic<WorldMapProps>(() => import('../components/world-map'), { ssr: false });
 
 type CountriesVisitedProps = {
   transformedData: Record<string, { country: string; visited: string }[]>;
