@@ -62,7 +62,7 @@ const SearchResults = ({ searchResults }: SearchResultsProps): JSX.Element => {
                 <SearchCard key={post.slug}>
                   {post.featuredImage?.node.sourceUrl && (
                     <SearchCardImageWrapper>
-                      <Link href={`/${post.slug}`} aria-label={post.title}>
+                      <Link href={`/${post.slug}`} aria-hidden="true" tabIndex={-1}>
                         <Image
                           alt=""
                           src={post.featuredImage.node.sourceUrl}

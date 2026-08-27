@@ -550,10 +550,12 @@ export default function StocksPage(): JSX.Element {
 
         <PageContainer>
           <StatusRow>
-            <span>Connection: {status}</span>
+            <span role="status">Connection: {status}</span>
             <span>Server: {wsUrl}</span>
             {lastUpdated ? (
-              <span>Last update: {new Date(lastUpdated).toLocaleTimeString()}</span>
+              <span aria-live="polite">
+                Last update: {new Date(lastUpdated).toLocaleTimeString()}
+              </span>
             ) : null}
           </StatusRow>
 
@@ -869,6 +871,15 @@ const TableWrapper = styled.div`
     }
     100% {
       background: transparent;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    tr.pulse-up-a,
+    tr.pulse-up-b,
+    tr.pulse-down-a,
+    tr.pulse-down-b {
+      animation: none;
     }
   }
 `;

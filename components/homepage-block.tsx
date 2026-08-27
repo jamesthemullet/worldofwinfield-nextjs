@@ -67,7 +67,11 @@ export default function HomepageBlock({
       style={{ backgroundColor: randomColour }}>
       {label && <LabelBadge>{label}</LabelBadge>}
       {url && title !== RANDOM_PHOTO ? (
-        <StyledLinkImage href={url} aria-label={title}>
+        <StyledLinkImage
+          href={url}
+          aria-label={date ? undefined : title}
+          aria-hidden={date ? true : undefined}
+          tabIndex={date ? -1 : undefined}>
           {imageSrc?.node && size === 1 && (
             <Image
               src={imageSrc.node.sourceUrl}
