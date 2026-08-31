@@ -19,6 +19,8 @@ const config = {
     'pages/**/*.ts',
     'components/**/*.tsx',
     'components/**/*.ts',
+    'lib/**/*.ts',
+    '!lib/types.ts',
     '!**/node_modules/**',
   ],
 };
