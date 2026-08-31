@@ -1,0 +1,100 @@
+# Site Audit
+
+Living checklist maintained by the `/full-audit` skill. Findings are appended, never rewritten;
+check an item off (`- [x]`) once you've fixed it and it won't be touched again. Re-running the
+audit adds new findings to the bottom of each section and leaves checked items alone.
+
+## Run log
+
+- 2026-08-31 — initial audit: 51 new findings (33 test coverage/e2e, 3 a11y, 5 SEO, 2 responsive/UX, 4 security, 1 README alignment, 3 code quality)
+- 2026-08-31 — merged findings from parallel security/code-quality/README/browser passes: 8 new findings (1 security, 1 code quality, 1 README, 2 a11y, 1 performance, 2 SEO, 1 responsive/UX), 1 existing a11y item strengthened from unconfirmed to confirmed
+
+## 1. Test coverage — unit gaps and e2e
+
+- [ ] `jest.config.js` `collectCoverageFrom` only lists `pages/**` and `components/**` — `lib/` is completely excluded from coverage reporting, so `yarn test --coverage` silently under-reports true coverage and can't be used to spot untested `lib/` branches. Add `'lib/**/*.ts'` (and `!lib/types.ts`) to `collectCoverageFrom`. (found: 2026-08-31)
+- [ ] `pages/index.tsx` has no `*.test.tsx` file (0% statement coverage). Add a test for the homepage. (found: 2026-08-31)
+- [ ] `pages/travel.tsx` has no `*.test.tsx` file (0% statement coverage). Add a test. (found: 2026-08-31)
+- [ ] `pages/politics.tsx` has no `*.test.tsx` file (0% statement coverage). Add a test. (found: 2026-08-31)
+- [ ] `pages/holiday-wish-list.tsx` has no `*.test.tsx` file (0% statement coverage). Add a test. (found: 2026-08-31)
+- [ ] `pages/restaurant-wish-list.tsx` has no `*.test.tsx` file (0% statement coverage). Add a test. (found: 2026-08-31)
+- [ ] `pages/favourite-articles.tsx` has no `*.test.tsx` file (0% statement coverage) despite `pages/favourites-results.tsx`, the shared results component it renders, being well tested. Add a getStaticProps/render smoke test. (found: 2026-08-31)
+- [ ] `pages/favourite-beers.tsx` has no `*.test.tsx` file (0% statement coverage). Add a getStaticProps/render smoke test. (found: 2026-08-31)
+- [ ] `pages/favourite-books.tsx` has no `*.test.tsx` file (0% statement coverage). Add a getStaticProps/render smoke test. (found: 2026-08-31)
+- [ ] `pages/favourite-cheese.tsx` has no `*.test.tsx` file (0% statement coverage). Add a getStaticProps/render smoke test. (found: 2026-08-31)
+- [ ] `pages/favourite-cities.tsx` has no `*.test.tsx` file (0% statement coverage). Add a getStaticProps/render smoke test. (found: 2026-08-31)
+- [ ] `pages/favourite-countries.tsx` has no `*.test.tsx` file (0% statement coverage). Add a getStaticProps/render smoke test. (found: 2026-08-31)
+- [ ] `pages/favourite-djs.tsx` has no `*.test.tsx` file (0% statement coverage). Add a getStaticProps/render smoke test. (found: 2026-08-31)
+- [ ] `pages/favourite-movies.tsx` has no `*.test.tsx` file (0% statement coverage). Add a getStaticProps/render smoke test. (found: 2026-08-31)
+- [ ] `pages/favourite-restaurants.tsx` has no `*.test.tsx` file (0% statement coverage). Add a getStaticProps/render smoke test. (found: 2026-08-31)
+- [ ] `pages/favourite-tracks.tsx` has no `*.test.tsx` file (0% statement coverage). Add a getStaticProps/render smoke test. (found: 2026-08-31)
+- [ ] `lib/api.ts` exported function `getAllPostsForHome` has zero references in `lib/api.test.ts` and isn't covered by any other test file. Add a unit test, including its WordPress GraphQL fetch-failure path. (found: 2026-08-31)
+- [ ] `lib/api.ts` exported function `getAllPostsWithSlug` has zero references in `lib/api.test.ts`. Add a unit test, including its fetch-failure path. (found: 2026-08-31)
+- [ ] `lib/api.ts` exported function `getFirstPost` has zero references in `lib/api.test.ts`. Add a unit test, including its fetch-failure path. (found: 2026-08-31)
+- [ ] `lib/api.ts` exported function `getJamesImages` has zero references in `lib/api.test.ts`. Add a unit test, including its fetch-failure path. (found: 2026-08-31)
+- [ ] `lib/api.ts` exported function `getPostDisplayInfo` has zero references in `lib/api.test.ts`. Add a unit test, including its fetch-failure path. (found: 2026-08-31)
+- [ ] `lib/api.ts` exported function `getPostsByTag` has zero references in `lib/api.test.ts`. Add a unit test, including its fetch-failure path. (found: 2026-08-31)
+- [ ] `lib/api.ts` exported function `getPostsByYear` has zero references in `lib/api.test.ts`. Add a unit test, including its fetch-failure path. (found: 2026-08-31)
+- [ ] `lib/api.ts` exported function `getPreviewPost` has zero references in `lib/api.test.ts`. Add a unit test, including its fetch-failure path. (found: 2026-08-31)
+- [ ] `lib/api.ts` exported function `getRandomImage` has zero references in `lib/api.test.ts`. Add a unit test, including its fetch-failure path. (found: 2026-08-31)
+- [ ] `pages/stocks.tsx` sits at 54.1% statement coverage, the lowest of any tested page — the WebSocket connect/reconnect/error state logic (lines ~431-538) is largely unexercised by `pages/stocks.test.tsx`. Add tests for connect, disconnect, and reconnect-after-error states (mocking the WebSocket). (found: 2026-08-31)
+- [ ] `pages/countries-visited.tsx` (61.4%) and `pages/tags/[tag].tsx` (61.0%) have below-average branch coverage — add tests for their error/empty-data branches. (found: 2026-08-31)
+- [ ] `yarn test:e2e` (Playwright) is installed and has 3 specs (`e2e/home.spec.ts`, `e2e/navigation.spec.ts`, `e2e/favourites.spec.ts`) but is not run in either `.github/workflows/lint.yml` or `.github/workflows/pull_request_audit.yml` — re-verified against current workflow files, still true. Wire `yarn test:e2e` into a CI workflow (e.g. a new job in `pull_request_audit.yml`). (found: 2026-08-31)
+- [ ] No e2e coverage for the homepage → blog post → back-navigation flow (`navigation.spec.ts` only asserts arrival at `/blog`, never opens a post). Add `e2e/blog-post.spec.ts`: navigate `/blog` → click a post → assert content renders → `page.goBack()` → assert back on `/blog`. (found: 2026-08-31)
+- [ ] No e2e coverage for the favourite-page sort/genre dropdown pattern (`SortDropdown`, `GenreDropdown`). Add `e2e/favourites-filtering.spec.ts`: on `/favourite-tracks` select a genre and assert rows filter; on `/favourite-books` change sort and assert row order changes. (found: 2026-08-31)
+- [ ] No e2e coverage for global search (`pages/api/global-search.ts`). Add `e2e/global-search.spec.ts`: type a known query into the `/blog` search bar, submit, assert results render. (found: 2026-08-31)
+- [ ] No e2e coverage for the stocks WebSocket connect/reconnect UI (`pages/stocks.tsx`). Lower priority — needs a mock WS server in CI. Add `e2e/stocks-websocket.spec.ts` once a mock WS approach is picked. (found: 2026-08-31)
+- [ ] No e2e coverage for preview mode (`pages/api/preview.ts` / `exit-preview.ts`) — only unit tests exist (`pages/api/preview.test.ts`, `pages/api/exit-preview.test.ts`). Needs real/mocked WP draft content to exercise end-to-end; flagging as a gap for future scoping. (found: 2026-08-31)
+
+## 2. Accessibility
+
+- [ ] `components/world-map.tsx:141-149` — each highlighted `<Geography>` `<path>` gets `tabIndex={0}` and `aria-label` but no `role`, so axe flags `aria-prohibited-attr` (serious, 55 nodes) on `/countries-visited` — a keyboard user can Tab through ~34 highlighted countries but screen readers announce nothing. Add `role="img"` (or `role="button"` since focus triggers a tooltip) to each highlighted `<Geography>`. (found: 2026-08-31)
+- [ ] `pages/stocks.tsx` `ToggleButton.active` styles reference `var(--colour-light)`, which is never defined in the `:root` CSS variables in `pages/_app.tsx` — the declaration is dropped and text falls back to the browser default colour on a dark background, giving axe-measured contrast of 1.34:1 (needs 4.5:1) on `/stocks`. Use an existing variable such as `var(--colour-white)`. (found: 2026-08-31)
+- [ ] No `<main>` landmark exists anywhere in the shared layout — confirmed via the site's own installed `accented` a11y tool, which logs `Document does not have a main landmark` in the console on every route (stocks, favourite-books, favourite-movies, etc). A prior pass's manual accessibility-tree check suggested this might be an axe timing false-positive, but `accented`'s independent runtime check confirms it's real. Add a `<main>` landmark to the shared layout component. (found: 2026-08-31, confirmed via second check 2026-08-31)
+- [ ] WordPress-sourced images in rendered post content render with empty `alt=""` — verified on `/james-went-to-osaka-japan`, 31 of 32 `<img>` elements have no alt text. This is the same image-rendering path used on the homepage. Fix alt-text handling in `components/post-body.tsx`'s image rendering (populate from WordPress media `altText` field where available). (found: 2026-08-31)
+
+## 3. Performance
+
+- [ ] `/stocks` triggers a Next.js dev-overlay LCP warning: the largest-contentful-paint image (a `https://image.tmdb.org/t/p/w342/...jpg` poster) is not marked `loading="eager"`/priority, so it isn't prioritized for the LCP paint. Add `priority` to the above-the-fold image component on `pages/stocks.tsx`. (found: 2026-08-31)
+
+## 4. SEO / metadata
+
+- [ ] `pages/favourites-results.tsx` is a real file in `pages/`, making `/favourites-results` a crawlable route with no `<Layout>`/`<Meta>` (falls back to the generic `<title>World Of Winfield</title>`) and no data when visited directly — it's meant only as a shared component the `favourite-*.tsx` pages import, not a standalone page. It also appears in a previously-committed `public/sitemap-0.xml:17`. Move it out of `pages/` (e.g. into `components/`) so it stops being an accidental indexable route. (found: 2026-08-31)
+- [ ] `components/meta.tsx:31` — `canonicalUrl` is built from `router.asPath` verbatim, so query strings (e.g. `?utm_source=`, `archive-page`'s `?month=&year=`) get baked into the canonical URL instead of being stripped, risking self-canonicalizing to tracking/duplicate URLs. Strip the query string when building `canonicalUrl`. (found: 2026-08-31)
+- [ ] `public/sitemap-0.xml` (committed to git) is out of sync with `next-sitemap.config.js`'s current `additionalPaths` — it's missing `/favourites`, `/stats`, and the `/tags` index (which are in the current config) while including `/archive-page` and `/favourites-results` (which aren't). Either regenerate before the next deploy or gitignore the generated sitemap files so they can't drift from config between builds. (found: 2026-08-31)
+- [ ] `next-sitemap.config.js` `additionalPaths` is a hand-maintained static list missing `/year-in-review` and the dynamic `/year-in-review/[year]` routes, and `/archive-page` — `/year-in-review` has full SEO/canonical/OG metadata set up but isn't discoverable via sitemap. Add the missing paths. (found: 2026-08-31)
+- [ ] `components/post-body.tsx` applies `.wp-block-heading` styling uniformly regardless of heading level, and nothing prevents a WordPress author from choosing "Heading 1" in Gutenberg for in-body content — since `pages/[slug].tsx` already renders one `<h1>` via `PostTitle`, this could produce a duplicate `<h1>` on a post page. Low risk for a single-author site; noted for awareness rather than a code fix. (found: 2026-08-31)
+- [ ] `pages/wants.tsx`'s `<title>` is `"Posts About Wants"` with no site-name suffix, while every sibling archive page (`goals.tsx`, `travel.tsx`, `politics.tsx`, `music.tsx`) renders `"... | World Of Winfield"`. Add the suffix for consistency. (found: 2026-08-31)
+- [ ] Every `favourite-*.tsx` page (books, movies, restaurants, cities, cheese, beers, djs, tracks, articles, countries) and the `/favourites` hub render bare titles (`"Favourite Books"`, `"Favourites"`, etc.) with no site-name suffix, unlike every other route (`"Home - World Of Winfield"`, `"The Blog - World Of Winfield"`). Since these share a layout/Head component, add the site-name suffix in the shared title logic for favourites pages. (found: 2026-08-31)
+
+## 5. Responsive / UX
+
+- [ ] Every page rendering `SectionSeparator`, `PostTitle`, `PostedContainer` (via `PostHeader`), or the `/favourites` hub tiles logs a React console warning: `React does not recognize the backgroundColour prop on a DOM element`. Root cause: several Emotion `styled()` components accept a `backgroundColour` prop and forward it straight to the DOM instead of using a transient `$`-prefixed prop (the correct pattern is already used elsewhere, e.g. `image-lightbox.tsx`'s `$isZoomedIn`). Affected: `components/section-separator.tsx:7-16`, `components/post-title.tsx:8-24`, `components/post-header.tsx:48,53,58,81`, `pages/favourites.tsx:93,140`. Rename to `$backgroundColour` at all 4 call sites (and `lib/types.ts` `PostTitleProps` if typed there). (found: 2026-08-31)
+- [ ] True mobile-viewport (≈375px) screenshots could not be captured this run — the browser automation's `resize_window` did not actually change the viewport in the shared session (stayed at 2560×1215). Source-level review of `pages/favourites.tsx` and `pages/favourites-results.tsx` found explicit mobile breakpoints already in place, so no defect found, but this should be re-verified with real mobile-width screenshots (e.g. Chrome DevTools device emulation) on a future run. (found: 2026-08-31)
+- [ ] `/stocks` shows `Connection: Error` and every price row as `N/A` even with the `realtime` WebSocket server confirmed running (`curl localhost:8081` returns HTTP 426, server is up) and `NEXT_PUBLIC_STOCKS_WS_URL` correctly resolving to it in `pages/stocks.tsx`. The client-side WebSocket never reaches a connected state. Root cause unconfirmed (no CSP violation seen in console) — needs reproduction and debugging of the connect path in `pages/stocks.tsx`. (found: 2026-08-31)
+
+Also checked, no issues found: `/stocks` degrades gracefully with a clear "Unable to connect to realtime server" message when the WebSocket backend is unreachable; `accented` (the a11y focus-outline dev dependency) is confirmed wired up in `pages/_app.tsx:54-56`, not dead weight as initially suspected (its dev-only overlay elements can trip axe's `color-contrast` rule during automated scans — filter `[data-accented]` out in future scans).
+
+## 6. Security
+
+- [ ] `lib/sanitize.ts:21` — `sanitize()` returns the raw, unsanitized HTML unchanged whenever `typeof window === 'undefined'`. Since WordPress post/excerpt pages (`pages/[slug].tsx`, `pages/travel.tsx`, `pages/tags/[tag].tsx`, `pages/year-in-review/[year].tsx`, and the components that call `sanitize()`) are rendered via `getStaticProps` (SSG, no `window`), the actual static HTML output ships un-sanitized — DOMPurify only runs client-side after hydration as a patch-up. Anyone viewing page source, a crawler, or a JS-disabled visitor sees unsanitized HTML, and any injected payload has a window to execute before hydration re-sanitizes. Needs a server-safe DOMPurify (e.g. via `jsdom` on the server) so sanitization actually applies at generation time. This is the highest-priority finding in this audit. (found: 2026-08-31)
+- [ ] `realtime/package.json` pins `ws` to `^8.18.0` (resolving to 8.19.0), vulnerable to `GHSA-96hv-2xvq-fx4p` (high, memory-exhaustion DoS) and `GHSA-58qx-3vcg-4xpx` (moderate, uninitialized memory disclosure); fixed in `ws@8.21.0+`. The root `package.json` already pins `^8.21.0` for its own `ws` dependency — bump `realtime/package.json` to match. (found: 2026-08-31)
+- [ ] `next.config.js` CSP `frame-src https:` allows framing from any HTTPS origin — very broad. Combined with `frame-ancestors 'none'` (which correctly stops others framing this site), risk is low, but worth narrowing to the specific origins actually needed (e.g. Getty embeds) instead of a wildcard. (found: 2026-08-31)
+- [ ] `next.config.js` CSP `script-src` includes `'unsafe-inline'`, weakening CSP's XSS mitigation value (an injected inline `<script>` would still execute). Required today for GA/GTM inline snippets; consider migrating to nonce- or hash-based `script-src` if the inline script set is small and stable. Proportionate to flag, not urgent given project size. (found: 2026-08-31)
+- [ ] `curl -sI http://localhost:3000/` in dev mode returns a CSP that's missing the explicit allowlist entries declared in `next.config.js:50-63` (`googletagmanager.com`, `google-analytics.com`, `vercel.live`, `embed-cdn.gettyimages.com`, the `wss://...railway.app` connect-src, `frame-ancestors 'none'`) — this looks like Next.js dev-mode's own default CSP taking precedence over `headers()`, with no `middleware.ts` to explain it. Other headers (`X-Frame-Options`, `X-Content-Type-Options`, `Referrer-Policy`) do match. Needs verification against a production build (`yarn build && yarn start`) to confirm the declared CSP is actually what ships in prod. (found: 2026-08-31)
+Also checked, no issues found: root `yarn audit` reports 55 high / 9 moderate / 11 low findings, but all trace through build/test-time-only transitive deps (`jest`, `ts-node`, `@emotion/babel-plugin` → `brace-expansion`, `js-yaml`, `@babel/core`, `yaml`, `diff`) that never ship to the client bundle or run in production; `.env`/`.env.local` are correctly gitignored and not committed (re-verified via `git ls-files`).
+
+## 7. README / feature alignment
+
+- [ ] `README.md:23-30` scripts table is missing 5 scripts that exist in `package.json`: `dev:realtime`, `start:realtime`, `knip`, `test:e2e`, `postbuild`. Add rows for these so the table matches `package.json`. (found: 2026-08-31)
+- [ ] `README.md`'s Tech Stack section (README.md:5-10) omits real architectural dependencies that a new contributor would need to know about: WordPress GraphQL as the content source, Google Sheets as the favourites data source, TMDB for film data, and the standalone `realtime/` Node WebSocket service. `@playwright/test` and the e2e tooling are also entirely undocumented despite being a real devDependency with a script. Add these to the Tech Stack section. (found: 2026-08-31)
+
+Also checked, no issues found: `README.md:34`'s "The site includes a blog, favourites (books, movies, music, cities, etc.), goals, travel, and more" is intentionally loose ("and more") and does cover the additional pages found in `pages/` (stats, stocks, now, holiday-wish-list, restaurant-wish-list, countries-visited, year-in-review, archive-page, etc.) — no misleading claims found.
+
+## 8. Code quality
+
+- [ ] `lib/cheese-covers.ts:15-23`, `lib/city-covers.ts:12-19`, `lib/country-covers.ts:12-19`, `lib/restaurant-covers.ts:15-24`, `lib/wish-list-covers.ts:12-19`, and `lib/beer-covers.ts` all share an identical `slugify` function and a near-identical `find*ImagePath`/`resolve*Covers` pair (only the image directory name, and for restaurants two extra `.replace()` rules, differ). Extract a single parameterised helper (e.g. `resolveStaticCovers(items, { dir, slugify? })` in a shared `lib/static-covers.ts`). (found: 2026-08-31)
+- [ ] `lib/api.ts` — the `featuredImage { node { mediaDetails { ... } } }` GraphQL selection is repeated near-verbatim across at least 6 query string literals (~lines 203-217, 258-271, 409-424, 446-460, 514-528, 551-565). Extract a shared GraphQL fragment constant (e.g. `FEATURED_IMAGE_FRAGMENT`) and interpolate it into each query template string. (found: 2026-08-31)
+- [ ] `pages/stocks.tsx:516` — the WebSocket reconnect delay is a bare magic number (`setTimeout(connect, 2000)`). Pull it into a named constant (e.g. `RECONNECT_DELAY_MS`) for consistency with the retry-constant pattern already used in `lib/api.ts:19-20`. (found: 2026-08-31)
+- [ ] `components/FavouriteCoverGrid.tsx:63` and `components/post-preview.tsx:32` both use an inline `style={{ objectFit: 'cover' }}` prop for a static value that could live in each component's existing Emotion `css`/`styled` image element instead. Low-value but a quick single combined fix across both files. (found: 2026-08-31)
+
+Also checked, no issues found: no `any`/unsafe `as Type` casts, no problematic non-null assertions, and `yarn knip` reports zero dead-code findings — codebase is well-typed and clean on these axes.
