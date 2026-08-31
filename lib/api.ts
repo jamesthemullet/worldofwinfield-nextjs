@@ -536,7 +536,10 @@ export async function filterPostsByTag(tag: string): Promise<FilterPostsByTagNod
   return data.posts.nodes;
 }
 
-export async function getPostsByDate(month: number, year: number) {
+export async function getPostsByDate(
+  month: number,
+  year: number,
+): Promise<{ posts: PostsProps['posts']; month: number; year: number }> {
   const data = await fetchAPI<GetPostsByDateResponse>(
     `
     query GetPostsByDate($month: Int!, $year: Int!) {
