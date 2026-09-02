@@ -8,13 +8,14 @@ audit adds new findings to the bottom of each section and leaves checked items a
 
 - 2026-08-31 — initial audit: 51 new findings (33 test coverage/e2e, 3 a11y, 5 SEO, 2 responsive/UX, 4 security, 1 README alignment, 3 code quality)
 - 2026-08-31 — merged findings from parallel security/code-quality/README/browser passes: 8 new findings (1 security, 1 code quality, 1 README, 2 a11y, 1 performance, 2 SEO, 1 responsive/UX), 1 existing a11y item strengthened from unconfirmed to confirmed
+- 2026-09-02 — scheduled maintenance run: resolved `pages/politics.tsx` missing unit test coverage (Test coverage section)
 
 ## 1. Test coverage — unit gaps and e2e
 
 - [ ] `jest.config.js` `collectCoverageFrom` only lists `pages/**` and `components/**` — `lib/` is completely excluded from coverage reporting, so `yarn test --coverage` silently under-reports true coverage and can't be used to spot untested `lib/` branches. Add `'lib/**/*.ts'` (and `!lib/types.ts`) to `collectCoverageFrom`. (found: 2026-08-31)
 - [ ] `pages/index.tsx` has no `*.test.tsx` file (0% statement coverage). Add a test for the homepage. (found: 2026-08-31)
 - [ ] `pages/travel.tsx` has no `*.test.tsx` file (0% statement coverage). Add a test. (found: 2026-08-31)
-- [ ] `pages/politics.tsx` has no `*.test.tsx` file (0% statement coverage). Add a test. (found: 2026-08-31)
+- [x] `pages/politics.tsx` has no `*.test.tsx` file (0% statement coverage). Add a test. (found: 2026-08-31) (resolved: 2026-09-02, PR #TBD)
 - [ ] `pages/holiday-wish-list.tsx` has no `*.test.tsx` file (0% statement coverage). Add a test. (found: 2026-08-31)
 - [ ] `pages/restaurant-wish-list.tsx` has no `*.test.tsx` file (0% statement coverage). Add a test. (found: 2026-08-31)
 - [ ] `pages/favourite-articles.tsx` has no `*.test.tsx` file (0% statement coverage) despite `pages/favourites-results.tsx`, the shared results component it renders, being well tested. Add a getStaticProps/render smoke test. (found: 2026-08-31)
