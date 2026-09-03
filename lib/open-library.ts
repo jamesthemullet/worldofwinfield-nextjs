@@ -80,7 +80,7 @@ export const resolveBookCovers = async (
   const isbnsToLookup = Array.from(
     new Set(
       books
-        .filter((book): book is BookCoverLookup & { isbn: string } => book.isbn !== undefined)
+        .filter((book): book is BookCoverLookup & { isbn: string } => !!book.isbn)
         .map((book) => normalizeIsbn(book.isbn)),
     ),
   );

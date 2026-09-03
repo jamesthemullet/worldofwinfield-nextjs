@@ -41,7 +41,8 @@ export default function NowPage(): JSX.Element {
               <p>
                 On the side I've started making a site called <strong>Croydon Chicken Mile</strong>{' '}
                 just for a laugh — to celebrate the best chicken shops in the country. There's a
-                serious amount of talent out there and someone has to document it.
+                serious amount of talent out there and someone has to document it. Currently
+                expanding it to Croydon Tourist Board.
               </p>
               <p>
                 Also have created my first ever API -{' '}
@@ -69,16 +70,8 @@ export default function NowPage(): JSX.Element {
                 <span aria-hidden="true">📖 </span>What I'm reading
               </SectionHeading>
               <p>
-                Just finished reading Hitler, Stalin, Mum & Dad by Daniel Finkelstein - amazingly
-                written but haunting too. My favourite blog at the moment is{' '}
-                <a href="https://jmarriott.substack.com/" target="_blank" rel="noopener noreferrer">
-                  Cultural Capital by James Marriott
-                </a>
-                .
-              </p>
-              <p>
-                And I've just started the second volume of the official Margaret Thatcher biography
-                by Charles Moore.
+                Now reading the second volume of the official Margaret Thatcher biography by Charles
+                Moore .
               </p>
             </Section>
 
@@ -87,9 +80,9 @@ export default function NowPage(): JSX.Element {
                 <span aria-hidden="true">✈️ </span>What's next
               </SectionHeading>
               <p>
-                Well I've just got back from Japan so there's a need to book another holiday. Maybe
-                Montenegro (new country) and then Athens? Loving all the hot sunshine this year in
-                London but also could do with some cooler nights.
+                I've booked two holidays - one is a week off, and gosh I need a week off after all
+                the heatwaves, to Kotor in Montenegro (country 35) then getting the ferry to
+                Dubrovnik. The next is a long weekend in Florence. Can I fit a final new country in?
               </p>
             </Section>
 

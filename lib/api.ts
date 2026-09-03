@@ -2,6 +2,7 @@ import type {
   AdjacentPost,
   IndexPageProps,
   JamesImagesProps,
+  PostsProps,
   RelatedPost,
   SearchResult,
   SinglePostProps,
@@ -18,13 +19,90 @@ type FetchAPIOptions = {
 const MAX_FETCH_ATTEMPTS = 3;
 const RETRY_DELAY_MS = 500;
 
+// Private response wrapper types — one per fetchAPI call site, matching only
+// the fields each GraphQL query actually selects.
+type PreviewPostResponse = {
+  post: { databaseId: number; slug: string; status: string } | null;
+};
+
+type AllPostsWithSlugResponse = {
+  posts: { edges: { node: { slug: string } }[] };
+};
+
+type FirstPostResponse = {
+  posts: IndexPageProps['firstPost'];
+};
+
+type GetJamesImagesResponse = {
+  jamesImages: JamesImagesProps;
+};
+
+type GetAllPostsForHomeResponse = {
+  posts: IndexPageProps['allPosts'];
+};
+
+type GetPostResponse = {
+  post: SinglePostProps | null;
+};
+
+type GetPostDisplayInfoSingleResponse = {
+  post: IndexPageProps['randomPosts'][number];
+};
+
+type SearchBlogPostsResponse = {
+  posts: { nodes: SearchResult[] };
+};
+
+type FilterPostsByTagNode = {
+  id: string;
+  title: string;
+  excerpt: string;
+  slug: string;
+  date: string;
+  tags: { nodes: { name: string }[] };
+  featuredImage: {
+    node: {
+      mediaDetails: {
+        sizes: { height: string; width: string; sourceUrl: string }[];
+        height: number;
+        width: number;
+      };
+      srcSet: string;
+      sourceUrl: string;
+    };
+  };
+};
+
+type FilterPostsByTagResponse = {
+  posts: { nodes: FilterPostsByTagNode[] };
+};
+
+type GetPostsByTagResponse = {
+  posts: { nodes: TagsPostProps['posts'] };
+};
+
+// getPostsByDate only fetches a subset of PostsProps fields at runtime; the
+// full PostsProps type is used here so the return value is assignable to
+// ArchivePageProps.posts without requiring a broader type refactor.
+type GetPostsByDateResponse = {
+  posts: { nodes: PostsProps['posts'] };
+};
+
+type GetPostsByYearResponse = {
+  posts: { nodes: YearInReviewProps['posts'] };
+};
+
+type GetRandomImageResponse = {
+  mediaItems: {
+    edges: NonNullable<IndexPageProps['randomImageSet']['images']>;
+  };
+};
+
 function wait(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-// T defaults to `any` so existing call sites without a type argument are unaffected;
-// typed callers can pass fetchAPI<ExpectedShape>(...) to get a checked return.
-async function fetchAPI<T = any>(query = '', { variables }: FetchAPIOptions = {}): Promise<T> {
+async function fetchAPI<T>(query = '', { variables }: FetchAPIOptions = {}): Promise<T> {
   const headers: Record<string, string> = { 'Content-Type': 'application/json' };
 
   if (process.env.WORDPRESS_AUTH_REFRESH_TOKEN) {
@@ -77,8 +155,6 @@ async function fetchAPI<T = any>(query = '', { variables }: FetchAPIOptions = {}
   throw lastError;
 }
 
-type PreviewPostResponse = { post: { databaseId: number; slug: string; status: string } | null };
-
 export async function getPreviewPost(
   id: string,
   idType = 'DATABASE_ID',
@@ -99,9 +175,9 @@ export async function getPreviewPost(
   return data.post;
 }
 
-type AllPostsWithSlugResponse = { posts: { edges: { node: { slug: string } }[] } };
-
-export async function getAllPostsWithSlug(): Promise<{ edges: { node: { slug: string } }[] }> {
+export async function getAllPostsWithSlug(): Promise<
+  AllPostsWithSlugResponse['posts'] | undefined
+> {
   const data = await fetchAPI<AllPostsWithSlugResponse>(`
     {
       posts(first: 10000) {
@@ -116,8 +192,8 @@ export async function getAllPostsWithSlug(): Promise<{ edges: { node: { slug: st
   return data.posts;
 }
 
-export async function getFirstPost() {
-  const data = await fetchAPI(`
+export async function getFirstPost(): Promise<FirstPostResponse['posts'] | undefined> {
+  const data = await fetchAPI<FirstPostResponse>(`
     {
       posts(first: 1) {
         edges {
@@ -172,7 +248,7 @@ export async function getJamesImages({
   first?: number;
   after?: string | null;
 } = {}): Promise<JamesImagesProps> {
-  const data = await fetchAPI(
+  const data = await fetchAPI<GetJamesImagesResponse>(
     `
     query JamesImages($first: Int, $after: String) {
       jamesImages(first: $first, after: $after) {
@@ -216,7 +292,7 @@ export async function getAllPostsForHome(
   preview: boolean,
   after: string | null = null,
 ): Promise<IndexPageProps['allPosts'] | undefined> {
-  const data = await fetchAPI(
+  const data = await fetchAPI<GetAllPostsForHomeResponse>(
     `
     query AllPosts($after: String) {
       posts(first: 20, after: $after, where: { orderby: { field: DATE, order: DESC } }) {
@@ -285,7 +361,7 @@ export async function getAllPostsForHome(
 }
 
 export async function getPost(id: string, idType = 'SLUG'): Promise<SinglePostProps | null> {
-  const data = await fetchAPI(
+  const data = await fetchAPI<GetPostResponse>(
     `
     query Post($id: ID!, $idType: PostIdType!) {
       post(id: $id, idType: $idType) {
@@ -360,7 +436,7 @@ export async function getPost(id: string, idType = 'SLUG'): Promise<SinglePostPr
 export async function getPostDisplayInfo(ids: string[]): Promise<IndexPageProps['randomPosts']> {
   const posts = await Promise.all(
     ids.map((id) =>
-      fetchAPI(
+      fetchAPI<GetPostDisplayInfoSingleResponse>(
         `
       query Post($id: ID!, $idType: PostIdType!) {
         post(id: $id, idType: $idType) {
@@ -394,7 +470,7 @@ export async function getPostDisplayInfo(ids: string[]): Promise<IndexPageProps[
 }
 
 export async function searchBlogPosts(searchTerm: string): Promise<SearchResult[]> {
-  const data = await fetchAPI(
+  const data = await fetchAPI<SearchBlogPostsResponse>(
     `
     query SearchBlogPosts($searchTerm: String!) {
       posts(where: { search: $searchTerm }, first: 100) {
@@ -419,8 +495,8 @@ export async function searchBlogPosts(searchTerm: string): Promise<SearchResult[
   return data.posts.nodes;
 }
 
-export async function filterPostsByTag(tag: string) {
-  const data = await fetchAPI(
+export async function filterPostsByTag(tag: string): Promise<FilterPostsByTagNode[]> {
+  const data = await fetchAPI<FilterPostsByTagResponse>(
     `
     query filterPostsByTag($tag: String!) {
       posts(where: { tag: $tag }, first: 100) {
@@ -460,8 +536,11 @@ export async function filterPostsByTag(tag: string) {
   return data.posts.nodes;
 }
 
-export async function getPostsByDate(month: number, year: number) {
-  const data = await fetchAPI(
+export async function getPostsByDate(
+  month: number,
+  year: number,
+): Promise<{ posts: PostsProps['posts']; month: number; year: number }> {
+  const data = await fetchAPI<GetPostsByDateResponse>(
     `
     query GetPostsByDate($month: Int!, $year: Int!) {
       posts(where: { dateQuery: { month: $month, year: $year } }, first: 100) {
@@ -518,7 +597,7 @@ export async function getArchivePost(): Promise<IndexPageProps['archivePost']> {
 }
 
 export async function getPostsByTag(tag: string): Promise<TagsPostProps['posts']> {
-  const data = await fetchAPI(
+  const data = await fetchAPI<GetPostsByTagResponse>(
     `
     query getPostsByTag($tag: String!) {
       posts(where: {tag: $tag}, first: 100) {
@@ -549,7 +628,7 @@ export async function getPostsByTag(tag: string): Promise<TagsPostProps['posts']
 }
 
 export async function getPostsByYear(year: number): Promise<YearInReviewProps['posts']> {
-  const data = await fetchAPI(
+  const data = await fetchAPI<GetPostsByYearResponse>(
     `
     query getPostsByYear($year: Int!) {
       posts(where: { dateQuery: { year: $year } }, first: 100) {
@@ -670,7 +749,7 @@ export async function getRandomImage(
   randomMonth: number,
   randomYear: number,
 ): Promise<IndexPageProps['randomImageSet']> {
-  const data = await fetchAPI(
+  const data = await fetchAPI<GetRandomImageResponse>(
     `
     query GetRandomImage($randomMonth: Int!, $randomYear: Int!) {
       mediaItems(where: {dateQuery: {month: $randomMonth, year: $randomYear}}, first: 100) {
