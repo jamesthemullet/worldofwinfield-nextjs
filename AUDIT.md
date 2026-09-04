@@ -19,7 +19,7 @@ audit adds new findings to the bottom of each section and leaves checked items a
 - [ ] `pages/travel.tsx` has no `*.test.tsx` file (0% statement coverage). Add a test. (found: 2026-08-31)
 - [ ] `pages/politics.tsx` has no `*.test.tsx` file (0% statement coverage). Add a test. (found: 2026-08-31)
 - [x] `pages/holiday-wish-list.tsx` has no `*.test.tsx` file (0% statement coverage). Add a test. (found: 2026-08-31) (resolved: 2026-09-03, PR #636)
-- [x] `pages/restaurant-wish-list.tsx` has no `*.test.tsx` file (0% statement coverage). Add a test. (found: 2026-08-31) (resolved: 2026-09-04, PR #TBD)
+- [x] `pages/restaurant-wish-list.tsx` has no `*.test.tsx` file (0% statement coverage). Add a test. (found: 2026-08-31) (resolved: 2026-09-04, PR #638)
 - [ ] `pages/favourite-articles.tsx` has no `*.test.tsx` file (0% statement coverage) despite `pages/favourites-results.tsx`, the shared results component it renders, being well tested. Add a getStaticProps/render smoke test. (found: 2026-08-31)
 - [ ] `pages/favourite-beers.tsx` has no `*.test.tsx` file (0% statement coverage). Add a getStaticProps/render smoke test. (found: 2026-08-31)
 - [ ] `pages/favourite-books.tsx` has no `*.test.tsx` file (0% statement coverage). Add a getStaticProps/render smoke test. (found: 2026-08-31)
