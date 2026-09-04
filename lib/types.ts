@@ -22,7 +22,7 @@ export type SinglePostProps = {
       node: {
         name: string;
       };
-    };
+    }[];
   };
   tags: {
     edges: {
@@ -129,7 +129,7 @@ export type PostsProps = {
         node: {
           name: string;
         };
-      };
+      }[];
     };
   }[];
 };
@@ -233,11 +233,7 @@ export type IndexPageProps = {
     featuredImage: {
       node: {
         mediaDetails: {
-          sizes: {
-            height: number;
-            width: number;
-            sizes: string;
-          };
+          sizes: string;
           height: number;
           width: number;
         };
@@ -363,7 +359,7 @@ export type PostHeaderProps = {
       node: {
         name: string;
       };
-    };
+    }[];
   };
   slug?: string;
   heroPost?: boolean;
@@ -435,7 +431,7 @@ export type HeroPostProps = {
       node: {
         name: string;
       };
-    };
+    }[];
   };
 };
 
