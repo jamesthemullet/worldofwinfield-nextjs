@@ -10,6 +10,7 @@ audit adds new findings to the bottom of each section and leaves checked items a
 - 2026-08-31 — merged findings from parallel security/code-quality/README/browser passes: 8 new findings (1 security, 1 code quality, 1 README, 2 a11y, 1 performance, 2 SEO, 1 responsive/UX), 1 existing a11y item strengthened from unconfirmed to confirmed
 - 2026-08-31 — automated maintenance run: resolved test coverage item 1 (`jest.config.js` `collectCoverageFrom` missing `lib/**`)
 - 2026-09-03 — automated maintenance run: resolved test coverage item for `pages/holiday-wish-list.tsx` (no `*.test.tsx` file)
+- 2026-09-04 — automated maintenance run: resolved test coverage item for `pages/restaurant-wish-list.tsx` (no `*.test.tsx` file)
 
 ## 1. Test coverage — unit gaps and e2e
 
@@ -18,7 +19,7 @@ audit adds new findings to the bottom of each section and leaves checked items a
 - [ ] `pages/travel.tsx` has no `*.test.tsx` file (0% statement coverage). Add a test. (found: 2026-08-31)
 - [ ] `pages/politics.tsx` has no `*.test.tsx` file (0% statement coverage). Add a test. (found: 2026-08-31)
 - [x] `pages/holiday-wish-list.tsx` has no `*.test.tsx` file (0% statement coverage). Add a test. (found: 2026-08-31) (resolved: 2026-09-03, PR #636)
-- [ ] `pages/restaurant-wish-list.tsx` has no `*.test.tsx` file (0% statement coverage). Add a test. (found: 2026-08-31)
+- [x] `pages/restaurant-wish-list.tsx` has no `*.test.tsx` file (0% statement coverage). Add a test. (found: 2026-08-31) (resolved: 2026-09-04, PR #638)
 - [ ] `pages/favourite-articles.tsx` has no `*.test.tsx` file (0% statement coverage) despite `pages/favourites-results.tsx`, the shared results component it renders, being well tested. Add a getStaticProps/render smoke test. (found: 2026-08-31)
 - [ ] `pages/favourite-beers.tsx` has no `*.test.tsx` file (0% statement coverage). Add a getStaticProps/render smoke test. (found: 2026-08-31)
 - [ ] `pages/favourite-books.tsx` has no `*.test.tsx` file (0% statement coverage). Add a getStaticProps/render smoke test. (found: 2026-08-31)
