@@ -18,10 +18,11 @@ test.describe('Favourites', () => {
     await page.goto('/favourite-books');
 
     // Guards against the CSP connect-src regression that silently blocked
-    // the client-side fetch to sheets.googleapis.com and left the table empty.
-    const rows = page.locator('table tbody tr');
-    await expect(rows.first()).toBeVisible({ timeout: 15000 });
-    expect(await rows.count()).toBeGreaterThan(0);
+    // the client-side fetch to sheets.googleapis.com and left the grid empty.
+    // Books render as a cover grid rather than a table.
+    const cards = page.getByTestId('favourite-card');
+    await expect(cards.first()).toBeVisible({ timeout: 15000 });
+    expect(await cards.count()).toBeGreaterThan(0);
 
     const cspErrors = consoleErrors.filter((e) =>
       /Content Security Policy|Refused to connect/i.test(e),
