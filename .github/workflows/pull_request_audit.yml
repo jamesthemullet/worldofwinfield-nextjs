@@ -42,6 +42,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       WORDPRESS_API_URL: https://blog.worldofwinfield.co.uk/graphql
+      NEXT_PUBLIC_GOOGLE_SHEETS_API_KEY: ${{ secrets.GOOGLE_SHEETS_API_KEY }}
     steps:
       - uses: actions/checkout@v7
       - name: Use Node.js 24.x
