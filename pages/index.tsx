@@ -1,12 +1,11 @@
 import styled from '@emotion/styled';
 import type { GetStaticProps } from 'next';
 import type { JSX } from 'react';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import HomepageBlock from '../components/homepage-block';
 import Intro from '../components/intro';
 import Layout from '../components/layout';
 import SearchBar from '../components/search-bar';
-import SearchResults from '../components/search-results';
 import { hardCodedListOfPostIds } from '../data/allIds';
 import {
   getArchivePost,
@@ -25,7 +24,6 @@ export default function Index({
   randomImageSet,
   archivePost,
 }: IndexPageProps): JSX.Element {
-  const [searchResults, setSearchResults] = useState<GlobalSearchResults | null>(null);
   const [randomImage, setRandomImage] = useState<
     | IndexPageProps['jamesImages']['edges'][0]['node']['featuredImage']
     | NonNullable<IndexPageProps['randomImageSet']['images']>[number]
@@ -40,10 +38,6 @@ export default function Index({
       setRandomImage(randomImageSet.images[randomIndex]);
     }
   }, [randomImageSet]);
-
-  const handleSearch = useCallback((results: GlobalSearchResults) => {
-    setSearchResults(results);
-  }, []);
 
   const blocks = useMemo(
     () => [
@@ -371,12 +365,10 @@ export default function Index({
         ))}
       </HomepageBlocksContainer>
       <SearchBar<GlobalSearchResults>
-        onSearch={handleSearch}
-        endpoint="/api/global-search"
+        navigateTo="/search"
         label="Search everything"
         placeholder="Search blog, favourites, wish lists..."
       />
-      <SearchResults searchResults={searchResults} />
     </Layout>
   );
 }
