@@ -3,7 +3,7 @@ import type { GetServerSidePropsContext } from 'next';
 import React from 'react';
 import '@testing-library/jest-dom';
 import { performGlobalSearch } from '../lib/global-search';
-import SearchPage, { getServerSideProps } from './search';
+import SearchPage, { getServerSideProps } from '../pages/search';
 
 jest.mock('next/router', () => ({
   useRouter: () => ({ push: jest.fn(), asPath: '/search' }),
