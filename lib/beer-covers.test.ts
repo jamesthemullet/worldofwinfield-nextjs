@@ -45,7 +45,8 @@ describe('resolveBeerCovers', () => {
   it('prefers a beer-specific image over the brewery image when both exist', () => {
     mockedExistsSync.mockImplementation(
       (filePath) =>
-        String(filePath).endsWith('shine.jpg') || String(filePath).endsWith('moor-beer-company.jpg'),
+        String(filePath).endsWith('shine.jpg') ||
+        String(filePath).endsWith('moor-beer-company.jpg'),
     );
 
     const result = resolveBeerCovers([{ beerName: 'Shine', brewery: 'Moor Beer Company' }]);
@@ -58,7 +59,9 @@ describe('resolveBeerCovers', () => {
       String(filePath).endsWith('moor-beer-company.jpg'),
     );
 
-    const result = resolveBeerCovers([{ beerName: 'Some Other Beer', brewery: 'Moor Beer Company' }]);
+    const result = resolveBeerCovers([
+      { beerName: 'Some Other Beer', brewery: 'Moor Beer Company' },
+    ]);
 
     expect(result['Some Other Beer']).toBe('/images/beers/moor-beer-company.jpg');
   });
