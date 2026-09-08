@@ -41,4 +41,25 @@ describe('resolveBeerCovers', () => {
 
     expect(result['Saison Dupont']).toBe('/images/beers/brasserie-dupont.jpg');
   });
+
+  it('prefers a beer-specific image over the brewery image when both exist', () => {
+    mockedExistsSync.mockImplementation(
+      (filePath) =>
+        String(filePath).endsWith('shine.jpg') || String(filePath).endsWith('moor-beer-company.jpg'),
+    );
+
+    const result = resolveBeerCovers([{ beerName: 'Shine', brewery: 'Moor Beer Company' }]);
+
+    expect(result.Shine).toBe('/images/beers/shine.jpg');
+  });
+
+  it('falls back to the brewery image when no beer-specific image exists', () => {
+    mockedExistsSync.mockImplementation((filePath) =>
+      String(filePath).endsWith('moor-beer-company.jpg'),
+    );
+
+    const result = resolveBeerCovers([{ beerName: 'Some Other Beer', brewery: 'Moor Beer Company' }]);
+
+    expect(result['Some Other Beer']).toBe('/images/beers/moor-beer-company.jpg');
+  });
 });
