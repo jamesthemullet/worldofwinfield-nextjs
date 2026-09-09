@@ -36,7 +36,7 @@
     "prop-types": "^15.8.1",
     "react": "19.2.8",
     "react-dom": "19.2.8",
-    "react-simple-maps": "^3.0.0",
+    "react-simple-maps": "^5.0.0",
     "tsc-files": "1.1.4",
     "typescript": "6.0.3",
     "world-atlas": "^2.0.2"
