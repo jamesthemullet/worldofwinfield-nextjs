@@ -121,7 +121,9 @@ export default function WorldMap({
             const wheelEvent = event as WheelEvent;
             return wheelEvent.type !== 'wheel' || wheelEvent.ctrlKey;
           }}>
-          <Geographies geography={countries110m as unknown as GeoJsonObject} parseGeographies={dropFrenchGuiana}>
+          <Geographies
+            geography={countries110m as unknown as GeoJsonObject}
+            parseGeographies={dropFrenchGuiana}>
             {({ geographies }) =>
               geographies.map((geo) => {
                 const name = (geo.properties?.name as string | undefined) ?? '';
