@@ -104,7 +104,7 @@ function FavouriteCoverGrid({
         const link = /^https?:\/\//i.test(rawLink || '') ? rawLink : undefined;
 
         return (
-          <Card key={`${title}-${rowIndex}`}>
+          <Card key={`${title}-${rowIndex}`} data-testid="favourite-card">
             <CoverWrapper>
               {indexRequired && (
                 <RankBadge aria-label={`Rank ${rowIndex + 1}`}>{rowIndex + 1}</RankBadge>

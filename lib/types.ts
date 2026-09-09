@@ -22,7 +22,7 @@ export type SinglePostProps = {
       node: {
         name: string;
       };
-    };
+    }[];
   };
   tags: {
     edges: {
@@ -129,7 +129,7 @@ export type PostsProps = {
         node: {
           name: string;
         };
-      };
+      }[];
     };
   }[];
 };
@@ -233,11 +233,7 @@ export type IndexPageProps = {
     featuredImage: {
       node: {
         mediaDetails: {
-          sizes: {
-            height: number;
-            width: number;
-            sizes: string;
-          };
+          sizes: string;
           height: number;
           width: number;
         };
@@ -363,7 +359,7 @@ export type PostHeaderProps = {
       node: {
         name: string;
       };
-    };
+    }[];
   };
   slug?: string;
   heroPost?: boolean;
@@ -410,6 +406,7 @@ export type LayoutProps = {
   articleModified?: string;
   articleAuthor?: string;
   jsonLd?: Record<string, unknown>;
+  noindex?: boolean;
 };
 
 export type HeroPostProps = {
@@ -435,7 +432,7 @@ export type HeroPostProps = {
       node: {
         name: string;
       };
-    };
+    }[];
   };
 };
 
@@ -522,10 +519,12 @@ export type GlobalSearchResults = {
 } & Partial<Record<GlobalSearchCategoryKey, GlobalSearchItem[]>>;
 
 export type SearchBarProps<T = SearchResult[]> = {
-  onSearch: (results: T) => void;
+  onSearch?: (results: T) => void;
   endpoint?: string;
   label?: string;
   placeholder?: string;
+  navigateTo?: string;
+  initialQuery?: string;
 };
 
 export type SearchResultsProps = {
