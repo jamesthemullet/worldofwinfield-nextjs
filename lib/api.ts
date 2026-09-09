@@ -189,7 +189,7 @@ export async function getAllPostsWithSlug(): Promise<
       }
     }
   `);
-  return data?.posts;
+  return data.posts;
 }
 
 export async function getFirstPost(): Promise<FirstPostResponse['posts'] | undefined> {
