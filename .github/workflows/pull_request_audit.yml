@@ -38,6 +38,39 @@ jobs:
           CHROMIUM_VERSION=$(google-chrome --version | cut -d' ' -f3 | cut -d'.' -f1)
           yarn add chromedriver@$CHROMIUM_VERSION
           npx axe --chromedriver-path $(yarn bin)/chromedriver http://localhost:3000/ --load-delay=1500 --exit
+  e2e:
+    runs-on: ubuntu-latest
+    env:
+      WORDPRESS_API_URL: https://blog.worldofwinfield.co.uk/graphql
+      NEXT_PUBLIC_GOOGLE_SHEETS_API_KEY: ${{ secrets.GOOGLE_SHEETS_API_KEY }}
+    steps:
+      - uses: actions/checkout@v7
+      - name: Use Node.js 24.x
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24.x
+      - run: yarn install
+      - name: Cache Playwright browsers
+        uses: actions/cache@v6
+        id: playwright-cache
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
+      - name: Install Playwright browsers
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+        run: npx playwright install --with-deps chromium
+      - name: Install Playwright OS dependencies
+        if: steps.playwright-cache.outputs.cache-hit == 'true'
+        run: npx playwright install-deps chromium
+      - name: Run e2e tests
+        run: yarn test:e2e
+      - name: Upload Playwright report
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7
   unit_tests:
     runs-on: ubuntu-latest
     env:

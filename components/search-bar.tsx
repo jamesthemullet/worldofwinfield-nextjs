@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import { useRouter } from 'next/router';
 import { type JSX, useState } from 'react';
 import type { SearchBarProps, SearchResult } from '../lib/types';
 import { colours } from '../pages/_app';
@@ -9,8 +10,11 @@ const SearchBar = <T = SearchResult[]>({
   endpoint = '/api/search',
   label = 'Search blog',
   placeholder = 'Search blog...',
+  navigateTo,
+  initialQuery = '',
 }: SearchBarProps<T>): JSX.Element => {
-  const [query, setQuery] = useState('');
+  const router = useRouter();
+  const [query, setQuery] = useState(initialQuery);
   const [loading, setLoading] = useState(false);
 
   const inputId = `search-input-${label.toLowerCase().replace(/\s+/g, '-')}`;
@@ -22,11 +26,17 @@ const SearchBar = <T = SearchResult[]>({
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
+
+    if (navigateTo) {
+      await router.push(`${navigateTo}?q=${encodeURIComponent(query)}`);
+      return;
+    }
+
     setLoading(true);
     const res = await fetch(`${endpoint}?q=${encodeURIComponent(query)}`);
     const searchResults = (await res.json()) as T;
     setLoading(false);
-    onSearch(searchResults);
+    onSearch?.(searchResults);
   };
 
   return (
