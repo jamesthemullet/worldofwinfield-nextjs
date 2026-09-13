@@ -39,11 +39,6 @@ jest.mock('../components/search-bar', () => ({
   default: () => <div data-testid="search-bar" />,
 }));
 
-jest.mock('../components/search-results', () => ({
-  __esModule: true,
-  default: () => <div data-testid="search-results" />,
-}));
-
 const mockAuthor = {
   node: {
     name: 'James Winfield',
@@ -157,9 +152,8 @@ describe('Blog page (blog.tsx)', () => {
     );
   });
 
-  it('renders the search bar and search results', () => {
+  it('renders the search bar', () => {
     render(<BlogPage {...makeProps(1)} />);
     expect(screen.getByTestId('search-bar')).toBeInTheDocument();
-    expect(screen.getByTestId('search-results')).toBeInTheDocument();
   });
 });

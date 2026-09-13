@@ -11,6 +11,7 @@ type MetaProps = {
   articleModified?: string;
   articleAuthor?: string;
   jsonLd?: Record<string, unknown>;
+  noindex?: boolean;
 };
 
 export default function Meta({
@@ -21,6 +22,7 @@ export default function Meta({
   articleModified,
   articleAuthor,
   jsonLd,
+  noindex,
 }: MetaProps): JSX.Element {
   const router = useRouter();
   const siteAddress = 'https://www.worldofwinfield.co.uk';
@@ -33,6 +35,7 @@ export default function Meta({
   return (
     <Head>
       <title>{title || opengraphTitle || 'World Of Winfield'}</title>
+      {noindex && <meta name="robots" content="noindex" />}
       <link rel="canonical" href={canonicalUrl} />
       <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png" />
       <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png" />

@@ -406,6 +406,7 @@ export type LayoutProps = {
   articleModified?: string;
   articleAuthor?: string;
   jsonLd?: Record<string, unknown>;
+  noindex?: boolean;
 };
 
 export type HeroPostProps = {
@@ -518,10 +519,12 @@ export type GlobalSearchResults = {
 } & Partial<Record<GlobalSearchCategoryKey, GlobalSearchItem[]>>;
 
 export type SearchBarProps<T = SearchResult[]> = {
-  onSearch: (results: T) => void;
+  onSearch?: (results: T) => void;
   endpoint?: string;
   label?: string;
   placeholder?: string;
+  navigateTo?: string;
+  initialQuery?: string;
 };
 
 export type SearchResultsProps = {

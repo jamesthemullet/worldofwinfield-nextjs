@@ -8,20 +8,14 @@ import HeroPost from '../components/hero-post';
 import Layout from '../components/layout';
 import MoreStories from '../components/more-stories';
 import SearchBar from '../components/search-bar';
-import SearchResults from '../components/search-results';
 import { getAllPostsForHome } from '../lib/api';
 import type { GlobalSearchResults, IndexPageProps } from '../lib/types';
 
 export default function Index({ allPosts, preview }: IndexPageProps): JSX.Element {
-  const [searchResults, setSearchResults] = useState<GlobalSearchResults | null>(null);
   const [posts, setPosts] = useState(allPosts.edges);
   const [hasNextPage, setHasNextPage] = useState(allPosts.pageInfo.hasNextPage);
   const [endCursor, setEndCursor] = useState(allPosts.pageInfo.endCursor);
   const [isLoading, setIsLoading] = useState(false);
-
-  const handleSearch = (results: GlobalSearchResults) => {
-    setSearchResults(results);
-  };
 
   const loadMorePosts = async (): Promise<void> => {
     setIsLoading(true);
@@ -76,12 +70,10 @@ export default function Index({ allPosts, preview }: IndexPageProps): JSX.Elemen
         <RssLink href="/api/feed">Subscribe via RSS</RssLink>
       </BrowseTopicsBar>
       <SearchBar<GlobalSearchResults>
-        onSearch={handleSearch}
-        endpoint="/api/global-search"
+        navigateTo="/search"
         label="Search everything"
         placeholder="Search blog, favourites, wish lists..."
       />
-      <SearchResults searchResults={searchResults} />
     </Layout>
   );
 }

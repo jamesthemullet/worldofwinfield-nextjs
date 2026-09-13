@@ -3,6 +3,12 @@ import React from 'react';
 import '@testing-library/jest-dom';
 import SearchBar from './search-bar';
 
+const mockPush = jest.fn();
+
+jest.mock('next/router', () => ({
+  useRouter: () => ({ push: mockPush }),
+}));
+
 jest.mock('../pages/_app', () => ({
   colours: {
     dark: '#291720',
@@ -21,6 +27,7 @@ const mockFetch = jest.fn();
 describe('SearchBar', () => {
   beforeEach(() => {
     mockFetch.mockReset();
+    mockPush.mockReset();
     global.fetch = mockFetch;
   });
 
@@ -126,5 +133,25 @@ describe('SearchBar', () => {
     render(<SearchBar onSearch={() => {}} label="Search everything" placeholder="Search all..." />);
     expect(screen.getByText('Search everything')).toBeInTheDocument();
     expect(screen.getByPlaceholderText('Search all...')).toBeInTheDocument();
+  });
+
+  it('navigates to the given page with the query string when navigateTo is set', async () => {
+    render(<SearchBar navigateTo="/search" />);
+
+    const input = screen.getByPlaceholderText('Search blog...');
+    fireEvent.change(input, { target: { value: 'barcelona' } });
+
+    const form = input.closest('form')!;
+    fireEvent.submit(form);
+
+    await waitFor(() => {
+      expect(mockPush).toHaveBeenCalledWith('/search?q=barcelona');
+    });
+    expect(mockFetch).not.toHaveBeenCalled();
+  });
+
+  it('pre-fills the query from initialQuery', () => {
+    render(<SearchBar navigateTo="/search" initialQuery="paris" />);
+    expect(screen.getByPlaceholderText('Search blog...')).toHaveValue('paris');
   });
 });

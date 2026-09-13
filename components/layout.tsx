@@ -15,6 +15,7 @@ export default function Layout({
   articleModified,
   articleAuthor,
   jsonLd,
+  noindex,
 }: LayoutProps): JSX.Element {
   return (
     <>
@@ -26,6 +27,7 @@ export default function Layout({
         articleModified={articleModified}
         articleAuthor={articleAuthor}
         jsonLd={jsonLd}
+        noindex={noindex}
       />
       <PageWrapper>
         <StyledDiv>

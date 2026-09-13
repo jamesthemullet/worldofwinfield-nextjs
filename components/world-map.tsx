@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
-import type { Feature, Geometry } from 'geojson';
-import { type JSX, useCallback, useMemo, useState } from 'react';
+import type { Feature, GeoJsonObject, Geometry } from 'geojson';
+import { type CSSProperties, type JSX, useCallback, useMemo, useState } from 'react';
 import { ComposableMap, Geographies, Geography, ZoomableGroup } from 'react-simple-maps';
 import countries110m from 'world-atlas/countries-110m.json';
 import { colours } from '../pages/_app';
@@ -81,9 +81,9 @@ export default function WorldMap({
   }, []);
 
   const handleMoveEnd = useCallback(
-    ({ coordinates, zoom: nextZoom }: { coordinates: [number, number]; zoom: number }) => {
-      setCenter(coordinates);
-      setZoom(nextZoom);
+    ({ coordinates, zoom: nextZoom }: { coordinates?: [number, number]; zoom?: number }) => {
+      if (coordinates) setCenter(coordinates);
+      if (nextZoom) setZoom(nextZoom);
     },
     [],
   );
@@ -121,10 +121,12 @@ export default function WorldMap({
             const wheelEvent = event as WheelEvent;
             return wheelEvent.type !== 'wheel' || wheelEvent.ctrlKey;
           }}>
-          <Geographies geography={countries110m} parseGeographies={dropFrenchGuiana}>
+          <Geographies
+            geography={countries110m as unknown as GeoJsonObject}
+            parseGeographies={dropFrenchGuiana}>
             {({ geographies }) =>
               geographies.map((geo) => {
-                const name = geo.properties.name as string;
+                const name = (geo.properties?.name as string | undefined) ?? '';
                 const visited = visitedSet.has(name.toLowerCase());
                 const wishListed = !visited && wishListSet.has(name.toLowerCase());
                 const highlighted = visited || wishListed;
@@ -138,7 +140,7 @@ export default function WorldMap({
                 const hoverFill = visited ? colours.pink : wishListed ? colours.blueish : '#cccccc';
 
                 return (
-                  <Geography
+                  <CountryPath
                     key={geo.rsmKey}
                     geography={geo}
                     tabIndex={highlighted ? 0 : -1}
@@ -147,25 +149,12 @@ export default function WorldMap({
                     onMouseLeave={() => setHovered(null)}
                     onFocus={() => setHovered(label)}
                     onBlur={() => setHovered(null)}
-                    style={{
-                      default: {
-                        fill: defaultFill,
-                        stroke: '#ffffff',
-                        strokeWidth: 0.5,
-                      },
-                      hover: {
-                        fill: hoverFill,
-                        stroke: '#ffffff',
-                        strokeWidth: 0.5,
-                        outline: 'none',
-                      },
-                      pressed: {
-                        fill: hoverFill,
-                        stroke: '#ffffff',
-                        strokeWidth: 0.5,
-                        outline: 'none',
-                      },
-                    }}
+                    style={
+                      {
+                        '--default-fill': defaultFill,
+                        '--hover-fill': hoverFill,
+                      } as CSSProperties
+                    }
                   />
                 );
               })
@@ -238,6 +227,19 @@ const LegendSwatch = styled.span<{ colour: string }>`
   height: 0.7rem;
   border-radius: 2px;
   background: ${(props) => props.colour};
+`;
+
+const CountryPath = styled(Geography)`
+  fill: var(--default-fill);
+  stroke: #ffffff;
+  stroke-width: 0.5;
+
+  &:hover,
+  &:focus,
+  &:active {
+    fill: var(--hover-fill);
+    outline: none;
+  }
 `;
 
 const Tooltip = styled.div`
