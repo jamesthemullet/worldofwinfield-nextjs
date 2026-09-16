@@ -15,6 +15,7 @@ audit adds new findings to the bottom of each section and leaves checked items a
 - 2026-09-04 — automated maintenance run: resolved test coverage item for `pages/restaurant-wish-list.tsx` (no `*.test.tsx` file)
 - 2026-09-11 — automated maintenance run: resolved test coverage item for `pages/favourite-articles.tsx` (no `*.test.tsx` file)
 - 2026-09-15 — automated maintenance run: resolved test coverage item for `pages/favourite-cheese.tsx` (no `*.test.tsx` file)
+- 2026-09-14 — automated maintenance run: resolved test coverage item for `pages/favourite-beers.tsx` (no `*.test.tsx` file)
 
 ## 1. Test coverage — unit gaps and e2e
 
@@ -25,7 +26,7 @@ audit adds new findings to the bottom of each section and leaves checked items a
 - [x] `pages/holiday-wish-list.tsx` has no `*.test.tsx` file (0% statement coverage). Add a test. (found: 2026-08-31) (resolved: 2026-09-03, PR #636)
 - [x] `pages/restaurant-wish-list.tsx` has no `*.test.tsx` file (0% statement coverage). Add a test. (found: 2026-08-31) (resolved: 2026-09-04, PR #638)
 - [x] `pages/favourite-articles.tsx` has no `*.test.tsx` file (0% statement coverage) despite `pages/favourites-results.tsx`, the shared results component it renders, being well tested. Add a getStaticProps/render smoke test. (found: 2026-08-31) (resolved: 2026-09-11, PR #647)
-- [ ] `pages/favourite-beers.tsx` has no `*.test.tsx` file (0% statement coverage). Add a getStaticProps/render smoke test. (found: 2026-08-31)
+- [x] `pages/favourite-beers.tsx` has no `*.test.tsx` file (0% statement coverage). Add a getStaticProps/render smoke test. (found: 2026-08-31) (resolved: 2026-09-14, PR #652)
 - [ ] `pages/favourite-books.tsx` has no `*.test.tsx` file (0% statement coverage). Add a getStaticProps/render smoke test. (found: 2026-08-31)
 - [x] `pages/favourite-cheese.tsx` has no `*.test.tsx` file (0% statement coverage). Add a getStaticProps/render smoke test. (found: 2026-08-31) (resolved: 2026-09-15, PR #653)
 - [ ] `pages/favourite-cities.tsx` has no `*.test.tsx` file (0% statement coverage). Add a getStaticProps/render smoke test. (found: 2026-08-31)
