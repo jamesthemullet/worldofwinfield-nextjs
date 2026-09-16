@@ -32,11 +32,6 @@ jest.mock('../components/search-bar', () => ({
   default: () => <div data-testid="search-bar" />,
 }));
 
-jest.mock('../components/search-results', () => ({
-  __esModule: true,
-  default: () => <div data-testid="search-results" />,
-}));
-
 const mockJamesImages = {
   edges: [
     {
@@ -114,11 +109,10 @@ describe('Index (homepage)', () => {
     );
   });
 
-  it('renders the search bar and search results placeholder', () => {
+  it('renders the search bar', () => {
     render(<Index {...makeProps()} />);
 
     expect(screen.getByTestId('search-bar')).toBeInTheDocument();
-    expect(screen.getByTestId('search-results')).toBeInTheDocument();
   });
 
   it('renders the archive post block with a "years ago" label', () => {
