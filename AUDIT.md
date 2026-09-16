@@ -30,7 +30,7 @@ audit adds new findings to the bottom of each section and leaves checked items a
 - [x] `pages/favourite-beers.tsx` has no `*.test.tsx` file (0% statement coverage). Add a getStaticProps/render smoke test. (found: 2026-08-31) (resolved: 2026-09-14, PR #652)
 - [ ] `pages/favourite-books.tsx` has no `*.test.tsx` file (0% statement coverage). Add a getStaticProps/render smoke test. (found: 2026-08-31)
 - [x] `pages/favourite-cheese.tsx` has no `*.test.tsx` file (0% statement coverage). Add a getStaticProps/render smoke test. (found: 2026-08-31) (resolved: 2026-09-15, PR #653)
-- [x] `pages/favourite-cities.tsx` has no `*.test.tsx` file (0% statement coverage). Add a getStaticProps/render smoke test. (found: 2026-08-31) (resolved: 2026-09-16, PR #TBD)
+- [x] `pages/favourite-cities.tsx` has no `*.test.tsx` file (0% statement coverage). Add a getStaticProps/render smoke test. (found: 2026-08-31) (resolved: 2026-09-16, PR #655)
 - [ ] `pages/favourite-countries.tsx` has no `*.test.tsx` file (0% statement coverage). Add a getStaticProps/render smoke test. (found: 2026-08-31)
 - [ ] `pages/favourite-djs.tsx` has no `*.test.tsx` file (0% statement coverage). Add a getStaticProps/render smoke test. (found: 2026-08-31)
 - [ ] `pages/favourite-movies.tsx` has no `*.test.tsx` file (0% statement coverage). Add a getStaticProps/render smoke test. (found: 2026-08-31)
