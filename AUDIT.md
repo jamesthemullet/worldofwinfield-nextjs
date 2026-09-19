@@ -35,7 +35,7 @@ audit adds new findings to the bottom of each section and leaves checked items a
 - [x] `pages/favourite-cities.tsx` has no `*.test.tsx` file (0% statement coverage). Add a getStaticProps/render smoke test. (found: 2026-08-31) (resolved: 2026-09-16, PR #655)
 - [x] `pages/favourite-countries.tsx` has no `*.test.tsx` file (0% statement coverage). Add a getStaticProps/render smoke test. (found: 2026-08-31) (resolved: 2026-09-17, PR #658)
 - [ ] `pages/favourite-djs.tsx` has no `*.test.tsx` file (0% statement coverage). Add a getStaticProps/render smoke test. (found: 2026-08-31)
-- [x] `pages/favourite-movies.tsx` has no `*.test.tsx` file (0% statement coverage). Add a getStaticProps/render smoke test. (found: 2026-08-31) (resolved: 2026-09-19, PR #TBD)
+- [x] `pages/favourite-movies.tsx` has no `*.test.tsx` file (0% statement coverage). Add a getStaticProps/render smoke test. (found: 2026-08-31) (resolved: 2026-09-19, PR #663)
 - [ ] `pages/favourite-restaurants.tsx` has no `*.test.tsx` file (0% statement coverage). Add a getStaticProps/render smoke test. (found: 2026-08-31)
 - [ ] `pages/favourite-tracks.tsx` has no `*.test.tsx` file (0% statement coverage). Add a getStaticProps/render smoke test. (found: 2026-08-31)
 - [ ] `lib/api.ts` exported function `getAllPostsForHome` has zero references in `lib/api.test.ts` and isn't covered by any other test file. Add a unit test, including its WordPress GraphQL fetch-failure path. (found: 2026-08-31)
