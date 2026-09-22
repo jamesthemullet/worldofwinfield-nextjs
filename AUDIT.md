@@ -20,18 +20,19 @@ audit adds new findings to the bottom of each section and leaves checked items a
 - 2026-09-17 — automated maintenance run: resolved test coverage item for `pages/favourite-countries.tsx` (no `*.test.tsx` file). Also noted during this run: the `pages/index.tsx` and `pages/favourite-books.tsx` test-coverage items were already resolved by prior merged commits but left unchecked; skipped as duplicates rather than re-done, left for a future run to correct the checklist.
 - 2026-09-19 — automated maintenance run: resolved test coverage item for `pages/favourite-movies.tsx` (no `*.test.tsx` file). Also noted: `pages/index.tsx` and `pages/favourite-books.tsx` items remain stale-unchecked (already resolved by prior merged commits, `__tests__/index.test.tsx` and `__tests__/favourite-books.test.tsx` exist) and `pages/favourite-djs.tsx` is already covered by open PR #661 — both skipped as before.
 - 2026-09-21 — automated maintenance run: resolved test coverage item for `pages/favourite-restaurants.tsx` (no `*.test.tsx` file). Also noted: `pages/index.tsx` and `pages/favourite-books.tsx` items remain stale-unchecked (already resolved by prior merged commits) and `pages/favourite-djs.tsx` is still covered by open PR #661 — both skipped as before.
+- 2026-09-22 — automated maintenance run: corrected two stale-unchecked test coverage checkboxes for `pages/index.tsx` and `pages/favourite-books.tsx`, both already resolved by PR #630 (2026-09-01) but never checked off in a prior run — flagged as stale in the 2026-09-17, 2026-09-19, and 2026-09-21 run-log notes. No production code changed; verified `__tests__/index.test.tsx` (94.34% statement coverage) and `__tests__/favourite-books.test.tsx` (75% statement coverage) already exist and pass.
 
 ## 1. Test coverage — unit gaps and e2e
 
 - [x] `jest.config.js` `collectCoverageFrom` only lists `pages/**` and `components/**` — `lib/` is completely excluded from coverage reporting, so `yarn test --coverage` silently under-reports true coverage and can't be used to spot untested `lib/` branches. Add `'lib/**/*.ts'` (and `!lib/types.ts`) to `collectCoverageFrom`. (found: 2026-08-31) (resolved: 2026-08-31, PR #628)
-- [ ] `pages/index.tsx` has no `*.test.tsx` file (0% statement coverage). Add a test for the homepage. (found: 2026-08-31)
+- [x] `pages/index.tsx` has no `*.test.tsx` file (0% statement coverage). Add a test for the homepage. (found: 2026-08-31) (resolved: 2026-09-01, PR #630)
 - [x] `pages/politics.tsx` has no `*.test.tsx` file (0% statement coverage). Add a test. (found: 2026-08-31) (resolved: 2026-09-02, PR #635)
 - [x] `pages/travel.tsx` has no `*.test.tsx` file (0% statement coverage). Add a test. (found: 2026-08-31) (resolved: 2026-09-01, PR #631)
 - [x] `pages/holiday-wish-list.tsx` has no `*.test.tsx` file (0% statement coverage). Add a test. (found: 2026-08-31) (resolved: 2026-09-03, PR #636)
 - [x] `pages/restaurant-wish-list.tsx` has no `*.test.tsx` file (0% statement coverage). Add a test. (found: 2026-08-31) (resolved: 2026-09-04, PR #638)
 - [x] `pages/favourite-articles.tsx` has no `*.test.tsx` file (0% statement coverage) despite `pages/favourites-results.tsx`, the shared results component it renders, being well tested. Add a getStaticProps/render smoke test. (found: 2026-08-31) (resolved: 2026-09-11, PR #647)
 - [x] `pages/favourite-beers.tsx` has no `*.test.tsx` file (0% statement coverage). Add a getStaticProps/render smoke test. (found: 2026-08-31) (resolved: 2026-09-14, PR #652)
-- [ ] `pages/favourite-books.tsx` has no `*.test.tsx` file (0% statement coverage). Add a getStaticProps/render smoke test. (found: 2026-08-31)
+- [x] `pages/favourite-books.tsx` has no `*.test.tsx` file (0% statement coverage). Add a getStaticProps/render smoke test. (found: 2026-08-31) (resolved: 2026-09-01, PR #630)
 - [x] `pages/favourite-cheese.tsx` has no `*.test.tsx` file (0% statement coverage). Add a getStaticProps/render smoke test. (found: 2026-08-31) (resolved: 2026-09-15, PR #653)
 - [x] `pages/favourite-cities.tsx` has no `*.test.tsx` file (0% statement coverage). Add a getStaticProps/render smoke test. (found: 2026-08-31) (resolved: 2026-09-16, PR #655)
 - [x] `pages/favourite-countries.tsx` has no `*.test.tsx` file (0% statement coverage). Add a getStaticProps/render smoke test. (found: 2026-08-31) (resolved: 2026-09-17, PR #658)
