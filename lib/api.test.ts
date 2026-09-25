@@ -1,6 +1,7 @@
 import {
   filterPostsByTag,
   getAdjacentPosts,
+  getAllPostsWithSlug,
   getAllTags,
   getArchivePost,
   getPostsByDate,
@@ -145,6 +146,30 @@ describe('getAdjacentPosts', () => {
 
     const result = await getAdjacentPosts('2023-07-14T12:00:00.000Z');
     expect(result).toEqual({ previousPost: null, nextPost: null });
+  });
+});
+
+describe('getAllPostsWithSlug', () => {
+  it('returns the posts edges from the API response', async () => {
+    const edges = [{ node: { slug: 'a' } }, { node: { slug: 'b' } }];
+    mockFetch.mockResolvedValue(gqlSuccess({ posts: { edges } }));
+
+    const result = await getAllPostsWithSlug();
+
+    expect(result).toEqual({ edges });
+  });
+
+  it('propagates the error after exhausting retries when the API is unreachable', async () => {
+    mockFetch.mockResolvedValue({
+      ok: false,
+      status: 502,
+      statusText: 'Bad Gateway',
+      headers: { get: () => 'text/html' },
+      json: () => Promise.reject(new Error('should not be called')),
+    });
+
+    await expect(getAllPostsWithSlug()).rejects.toThrow(/502/);
+    expect(mockFetch).toHaveBeenCalledTimes(3);
   });
 });
 

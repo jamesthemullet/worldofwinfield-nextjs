@@ -20,6 +20,7 @@ audit adds new findings to the bottom of each section and leaves checked items a
 - 2026-09-17 — automated maintenance run: resolved test coverage item for `pages/favourite-countries.tsx` (no `*.test.tsx` file). Also noted during this run: the `pages/index.tsx` and `pages/favourite-books.tsx` test-coverage items were already resolved by prior merged commits but left unchecked; skipped as duplicates rather than re-done, left for a future run to correct the checklist.
 - 2026-09-19 — automated maintenance run: resolved test coverage item for `pages/favourite-movies.tsx` (no `*.test.tsx` file). Also noted: `pages/index.tsx` and `pages/favourite-books.tsx` items remain stale-unchecked (already resolved by prior merged commits, `__tests__/index.test.tsx` and `__tests__/favourite-books.test.tsx` exist) and `pages/favourite-djs.tsx` is already covered by open PR #661 — both skipped as before.
 - 2026-09-21 — automated maintenance run: resolved test coverage item for `pages/favourite-restaurants.tsx` (no `*.test.tsx` file). Also noted: `pages/index.tsx` and `pages/favourite-books.tsx` items remain stale-unchecked (already resolved by prior merged commits) and `pages/favourite-djs.tsx` is still covered by open PR #661 — both skipped as before.
+- 2026-09-25 — automated maintenance run: resolved test coverage item for `lib/api.ts`'s `getAllPostsWithSlug` (no references in `lib/api.test.ts`). Skipped as duplicates (already covered by open PRs): `pages/index.tsx`/`pages/favourite-books.tsx` (PR #667), `pages/favourite-djs.tsx` (PR #661), `pages/favourite-tracks.tsx` (PR #668), and `lib/api.ts`'s `getAllPostsForHome` (PR #669).
 
 ## 1. Test coverage — unit gaps and e2e
 
@@ -40,7 +41,7 @@ audit adds new findings to the bottom of each section and leaves checked items a
 - [x] `pages/favourite-restaurants.tsx` has no `*.test.tsx` file (0% statement coverage). Add a getStaticProps/render smoke test. (found: 2026-08-31) (resolved: 2026-09-21, PR #665)
 - [ ] `pages/favourite-tracks.tsx` has no `*.test.tsx` file (0% statement coverage). Add a getStaticProps/render smoke test. (found: 2026-08-31)
 - [ ] `lib/api.ts` exported function `getAllPostsForHome` has zero references in `lib/api.test.ts` and isn't covered by any other test file. Add a unit test, including its WordPress GraphQL fetch-failure path. (found: 2026-08-31)
-- [ ] `lib/api.ts` exported function `getAllPostsWithSlug` has zero references in `lib/api.test.ts`. Add a unit test, including its fetch-failure path. (found: 2026-08-31)
+- [x] `lib/api.ts` exported function `getAllPostsWithSlug` has zero references in `lib/api.test.ts`. Add a unit test, including its fetch-failure path. (found: 2026-08-31) (resolved: 2026-09-25, PR #670)
 - [ ] `lib/api.ts` exported function `getFirstPost` has zero references in `lib/api.test.ts`. Add a unit test, including its fetch-failure path. (found: 2026-08-31)
 - [ ] `lib/api.ts` exported function `getJamesImages` has zero references in `lib/api.test.ts`. Add a unit test, including its fetch-failure path. (found: 2026-08-31)
 - [ ] `lib/api.ts` exported function `getPostDisplayInfo` has zero references in `lib/api.test.ts`. Add a unit test, including its fetch-failure path. (found: 2026-08-31)
