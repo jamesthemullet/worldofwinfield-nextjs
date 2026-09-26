@@ -3,6 +3,7 @@ import {
   getAdjacentPosts,
   getAllTags,
   getArchivePost,
+  getFirstPost,
   getPostsByDate,
   getRelatedPosts,
   getTotalPostCount,
@@ -232,5 +233,29 @@ describe('getTotalPostCount', () => {
 
     const count = await getTotalPostCount();
     expect(count).toBe(0);
+  });
+});
+
+describe('getFirstPost', () => {
+  it('returns the posts edges from the API response', async () => {
+    const edges = [{ node: { slug: 'a', title: 'A', date: '2024-01-01' } }];
+    mockFetch.mockResolvedValue(gqlSuccess({ posts: { edges } }));
+
+    const result = await getFirstPost();
+
+    expect(result).toEqual({ edges });
+  });
+
+  it('propagates the error after exhausting retries when the API is unreachable', async () => {
+    mockFetch.mockResolvedValue({
+      ok: false,
+      status: 503,
+      statusText: 'Service Unavailable',
+      headers: { get: () => 'text/html' },
+      json: () => Promise.reject(new Error('should not be called')),
+    });
+
+    await expect(getFirstPost()).rejects.toThrow(/503/);
+    expect(mockFetch).toHaveBeenCalledTimes(3);
   });
 });
