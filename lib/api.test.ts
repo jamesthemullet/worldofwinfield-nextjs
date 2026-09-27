@@ -3,6 +3,7 @@ import {
   getAdjacentPosts,
   getAllTags,
   getArchivePost,
+  getJamesImages,
   getPostsByDate,
   getRelatedPosts,
   getTotalPostCount,
@@ -214,6 +215,58 @@ describe('getAllTags', () => {
       { name: 'food', slug: 'food', count: 5 },
     ]);
     expect(result.find((t) => t.name === 'unused')).toBeUndefined();
+  });
+});
+
+describe('getJamesImages', () => {
+  it('sends first/after as GraphQL variables and returns the edges', async () => {
+    const edges = [
+      {
+        node: {
+          title: 'A photo',
+          featuredImage: {
+            node: {
+              mediaDetails: { height: 100, width: 200, sizes: [] },
+              sourceUrl: 'https://example.com/a.jpg',
+              srcSet: '',
+            },
+          },
+        },
+      },
+    ];
+    mockFetch.mockResolvedValue(
+      gqlSuccess({ jamesImages: { edges, pageInfo: { hasNextPage: false, endCursor: null } } }),
+    );
+
+    const result = await getJamesImages({ first: 5, after: 'cursor-1' });
+
+    expect(result).toEqual({ edges, pageInfo: { hasNextPage: false, endCursor: null } });
+    const body = JSON.parse((mockFetch.mock.calls[0][1] as RequestInit).body as string);
+    expect(body.variables).toEqual({ first: 5, after: 'cursor-1' });
+  });
+
+  it('defaults first to 10 and after to null when called with no arguments', async () => {
+    mockFetch.mockResolvedValue(
+      gqlSuccess({ jamesImages: { edges: [], pageInfo: { hasNextPage: false, endCursor: null } } }),
+    );
+
+    await getJamesImages();
+
+    const body = JSON.parse((mockFetch.mock.calls[0][1] as RequestInit).body as string);
+    expect(body.variables).toEqual({ first: 10, after: null });
+  });
+
+  it('throws after exhausting retries when the WordPress GraphQL fetch keeps failing', async () => {
+    mockFetch.mockResolvedValue({
+      ok: false,
+      status: 502,
+      statusText: 'Bad Gateway',
+      headers: { get: () => 'text/html' },
+      json: () => Promise.reject(new Error('should not be called')),
+    });
+
+    await expect(getJamesImages()).rejects.toThrow(/502/);
+    expect(mockFetch).toHaveBeenCalledTimes(3);
   });
 });
 
