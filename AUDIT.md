@@ -43,7 +43,7 @@ audit adds new findings to the bottom of each section and leaves checked items a
 - [ ] `lib/api.ts` exported function `getAllPostsForHome` has zero references in `lib/api.test.ts` and isn't covered by any other test file. Add a unit test, including its WordPress GraphQL fetch-failure path. (found: 2026-08-31)
 - [ ] `lib/api.ts` exported function `getAllPostsWithSlug` has zero references in `lib/api.test.ts`. Add a unit test, including its fetch-failure path. (found: 2026-08-31)
 - [ ] `lib/api.ts` exported function `getFirstPost` has zero references in `lib/api.test.ts`. Add a unit test, including its fetch-failure path. (found: 2026-08-31)
-- [x] `lib/api.ts` exported function `getJamesImages` has zero references in `lib/api.test.ts`. Add a unit test, including its fetch-failure path. (found: 2026-08-31) (resolved: 2026-09-27, PR #TBD)
+- [x] `lib/api.ts` exported function `getJamesImages` has zero references in `lib/api.test.ts`. Add a unit test, including its fetch-failure path. (found: 2026-08-31) (resolved: 2026-09-27, PR #673)
 - [ ] `lib/api.ts` exported function `getPostDisplayInfo` has zero references in `lib/api.test.ts`. Add a unit test, including its fetch-failure path. (found: 2026-08-31)
 - [ ] `lib/api.ts` exported function `getPostsByTag` has zero references in `lib/api.test.ts`. Add a unit test, including its fetch-failure path. (found: 2026-08-31)
 - [ ] `lib/api.ts` exported function `getPostsByYear` has zero references in `lib/api.test.ts`. Add a unit test, including its fetch-failure path. (found: 2026-08-31)
