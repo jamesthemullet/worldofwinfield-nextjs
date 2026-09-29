@@ -139,7 +139,9 @@ async function main() {
   const sheetApiKey =
     process.env.NEXT_PUBLIC_GOOGLE_SHEETS_API_KEY || process.env.GOOGLE_SHEETS_API_KEY;
   if (!sheetApiKey) {
-    console.error('Error: NEXT_PUBLIC_GOOGLE_SHEETS_API_KEY or GOOGLE_SHEETS_API_KEY not found in .env');
+    console.error(
+      'Error: NEXT_PUBLIC_GOOGLE_SHEETS_API_KEY or GOOGLE_SHEETS_API_KEY not found in .env',
+    );
     process.exit(1);
   }
 
