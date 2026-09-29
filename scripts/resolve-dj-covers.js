@@ -33,6 +33,7 @@ const path = require('path');
 const SHEET_ID = '1_zpDBFlpW2ZWTVsXQHoW6Y4FbGw8Vi53nMYpZiOypbg';
 const OUTPUT_FILE = path.join(__dirname, '..', 'lib', 'data', 'dj-covers.json');
 const USER_AGENT = 'WorldOfWinfieldCoverResolver/1.0 (jamesthemonkeh@hotmail.com)';
+const SITE_URL = 'https://www.worldofwinfield.co.uk/';
 const FORCE = process.argv.includes('--force');
 
 // Accepts a full Discogs artist URL or a bare numeric ID; returns null for
@@ -124,7 +125,8 @@ async function fetchArtistImageUrl(artistId, token) {
 
 async function fetchSheet(apiKey) {
   const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/Sheet1?alt=json&key=${apiKey}`;
-  const res = await fetch(url);
+  // The API key is referrer-restricted to the site, so identify as it.
+  const res = await fetch(url, { headers: { Referer: SITE_URL } });
   if (!res.ok) throw new Error(`Sheet API returned ${res.status}: ${await res.text()}`);
   const json = await res.json();
   if (!json.values) throw new Error('No values returned from sheet');
@@ -134,9 +136,10 @@ async function fetchSheet(apiKey) {
 async function main() {
   loadEnvLocal();
 
-  const sheetApiKey = process.env.NEXT_PUBLIC_GOOGLE_SHEETS_API_KEY;
+  const sheetApiKey =
+    process.env.NEXT_PUBLIC_GOOGLE_SHEETS_API_KEY || process.env.GOOGLE_SHEETS_API_KEY;
   if (!sheetApiKey) {
-    console.error('Error: NEXT_PUBLIC_GOOGLE_SHEETS_API_KEY not found in .env');
+    console.error('Error: NEXT_PUBLIC_GOOGLE_SHEETS_API_KEY or GOOGLE_SHEETS_API_KEY not found in .env');
     process.exit(1);
   }
 
