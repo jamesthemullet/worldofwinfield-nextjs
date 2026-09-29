@@ -4,6 +4,7 @@ import {
   getAllTags,
   getArchivePost,
   getPostsByDate,
+  getPostsByTag,
   getRelatedPosts,
   getTotalPostCount,
   searchBlogPosts,
@@ -193,6 +194,34 @@ describe('filterPostsByTag', () => {
     expect(result).toEqual(nodes);
     const body = JSON.parse((mockFetch.mock.calls[0][1] as RequestInit).body as string);
     expect(body.variables).toEqual({ tag: 'travel' });
+  });
+});
+
+describe('getPostsByTag', () => {
+  it('sends the tag as a GraphQL variable and returns the nodes array', async () => {
+    const nodes = [
+      { id: '1', title: 'Tagged Post', slug: 'tagged', date: '2024-01-01', excerpt: '' },
+    ];
+    mockFetch.mockResolvedValue(gqlSuccess({ posts: { nodes } }));
+
+    const result = await getPostsByTag('travel');
+
+    expect(result).toEqual(nodes);
+    const body = JSON.parse((mockFetch.mock.calls[0][1] as RequestInit).body as string);
+    expect(body.variables).toEqual({ tag: 'travel' });
+  });
+
+  it('throws after exhausting retries when the WordPress API keeps failing', async () => {
+    mockFetch.mockResolvedValue({
+      ok: false,
+      status: 502,
+      statusText: 'Bad Gateway',
+      headers: { get: () => 'text/html' },
+      json: () => Promise.reject(new Error('should not be called')),
+    });
+
+    await expect(getPostsByTag('travel')).rejects.toThrow(/502/);
+    expect(mockFetch).toHaveBeenCalledTimes(3);
   });
 });
 

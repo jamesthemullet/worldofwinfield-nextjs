@@ -21,6 +21,7 @@ audit adds new findings to the bottom of each section and leaves checked items a
 - 2026-09-19 — automated maintenance run: resolved test coverage item for `pages/favourite-movies.tsx` (no `*.test.tsx` file). Also noted: `pages/index.tsx` and `pages/favourite-books.tsx` items remain stale-unchecked (already resolved by prior merged commits, `__tests__/index.test.tsx` and `__tests__/favourite-books.test.tsx` exist) and `pages/favourite-djs.tsx` is already covered by open PR #661 — both skipped as before.
 - 2026-09-21 — automated maintenance run: resolved test coverage item for `pages/favourite-restaurants.tsx` (no `*.test.tsx` file). Also noted: `pages/index.tsx` and `pages/favourite-books.tsx` items remain stale-unchecked (already resolved by prior merged commits) and `pages/favourite-djs.tsx` is still covered by open PR #661 — both skipped as before.
 - 2026-09-22 — automated maintenance run: corrected two stale-unchecked test coverage checkboxes for `pages/index.tsx` and `pages/favourite-books.tsx`, both already resolved by PR #630 (2026-09-01) but never checked off in a prior run — flagged as stale in the 2026-09-17, 2026-09-19, and 2026-09-21 run-log notes. No production code changed; verified `__tests__/index.test.tsx` (94.34% statement coverage) and `__tests__/favourite-books.test.tsx` (75% statement coverage) already exist and pass.
+- 2026-09-29 — automated maintenance run: resolved test coverage item for `lib/api.ts`'s `getPostsByTag` (added a `describe('getPostsByTag', ...)` block to `lib/api.test.ts`). Also noted: several other unchecked `lib/api.ts`/`pages/favourite-*` items in this section already have open PRs addressing them (#661, #668, #669, #670, #672, #673, #674) — skipped as duplicates rather than re-done.
 
 ## 1. Test coverage — unit gaps and e2e
 
@@ -45,7 +46,7 @@ audit adds new findings to the bottom of each section and leaves checked items a
 - [ ] `lib/api.ts` exported function `getFirstPost` has zero references in `lib/api.test.ts`. Add a unit test, including its fetch-failure path. (found: 2026-08-31)
 - [ ] `lib/api.ts` exported function `getJamesImages` has zero references in `lib/api.test.ts`. Add a unit test, including its fetch-failure path. (found: 2026-08-31)
 - [ ] `lib/api.ts` exported function `getPostDisplayInfo` has zero references in `lib/api.test.ts`. Add a unit test, including its fetch-failure path. (found: 2026-08-31)
-- [ ] `lib/api.ts` exported function `getPostsByTag` has zero references in `lib/api.test.ts`. Add a unit test, including its fetch-failure path. (found: 2026-08-31)
+- [x] `lib/api.ts` exported function `getPostsByTag` has zero references in `lib/api.test.ts`. Add a unit test, including its fetch-failure path. (found: 2026-08-31) (resolved: 2026-09-29, PR #TBD)
 - [ ] `lib/api.ts` exported function `getPostsByYear` has zero references in `lib/api.test.ts`. Add a unit test, including its fetch-failure path. (found: 2026-08-31)
 - [ ] `lib/api.ts` exported function `getPreviewPost` has zero references in `lib/api.test.ts`. Add a unit test, including its fetch-failure path. (found: 2026-08-31)
 - [ ] `lib/api.ts` exported function `getRandomImage` has zero references in `lib/api.test.ts`. Add a unit test, including its fetch-failure path. (found: 2026-08-31)
