@@ -49,7 +49,7 @@ audit adds new findings to the bottom of each section and leaves checked items a
 - [ ] `lib/api.ts` exported function `getJamesImages` has zero references in `lib/api.test.ts`. Add a unit test, including its fetch-failure path. (found: 2026-08-31)
 - [ ] `lib/api.ts` exported function `getPostDisplayInfo` has zero references in `lib/api.test.ts`. Add a unit test, including its fetch-failure path. (found: 2026-08-31)
 - [ ] `lib/api.ts` exported function `getPostsByTag` has zero references in `lib/api.test.ts`. Add a unit test, including its fetch-failure path. (found: 2026-08-31)
-- [x] `lib/api.ts` exported function `getPostsByYear` has zero references in `lib/api.test.ts`. Add a unit test, including its fetch-failure path. (found: 2026-08-31) (resolved: 2026-09-30, PR #TBD)
+- [x] `lib/api.ts` exported function `getPostsByYear` has zero references in `lib/api.test.ts`. Add a unit test, including its fetch-failure path. (found: 2026-08-31) (resolved: 2026-09-30, PR #678)
 - [ ] `lib/api.ts` exported function `getPreviewPost` has zero references in `lib/api.test.ts`. Add a unit test, including its fetch-failure path. (found: 2026-08-31)
 - [ ] `lib/api.ts` exported function `getRandomImage` has zero references in `lib/api.test.ts`. Add a unit test, including its fetch-failure path. (found: 2026-08-31)
 - [ ] `pages/stocks.tsx` sits at 54.1% statement coverage, the lowest of any tested page — the WebSocket connect/reconnect/error state logic (lines ~431-538) is largely unexercised by `pages/stocks.test.tsx`. Add tests for connect, disconnect, and reconnect-after-error states (mocking the WebSocket). (found: 2026-08-31)
