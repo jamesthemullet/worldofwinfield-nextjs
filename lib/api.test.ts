@@ -6,6 +6,7 @@ import {
   getArchivePost,
   getFirstPost,
   getPostsByDate,
+  getPostsByYear,
   getRelatedPosts,
   getTotalPostCount,
   searchBlogPosts,
@@ -291,6 +292,34 @@ describe('getFirstPost', () => {
     });
 
     await expect(getFirstPost()).rejects.toThrow(/503/);
+    expect(mockFetch).toHaveBeenCalledTimes(3);
+  });
+});
+
+describe('getPostsByYear', () => {
+  it('sends the year as a GraphQL variable and returns the posts nodes array', async () => {
+    const nodes = [
+      { id: '1', title: 'Year Post', slug: 'year-post', date: '2021-01-01', excerpt: '' },
+    ];
+    mockFetch.mockResolvedValue(gqlSuccess({ posts: { nodes } }));
+
+    const result = await getPostsByYear(2021);
+
+    expect(result).toEqual(nodes);
+    const body = JSON.parse((mockFetch.mock.calls[0][1] as RequestInit).body as string);
+    expect(body.variables).toEqual({ year: 2021 });
+  });
+
+  it('propagates the error after exhausting retries when the API is unreachable', async () => {
+    mockFetch.mockResolvedValue({
+      ok: false,
+      status: 503,
+      statusText: 'Service Unavailable',
+      headers: { get: () => 'text/html' },
+      json: () => Promise.reject(new Error('should not be called')),
+    });
+
+    await expect(getPostsByYear(2021)).rejects.toThrow(/503/);
     expect(mockFetch).toHaveBeenCalledTimes(3);
   });
 });
