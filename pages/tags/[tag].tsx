@@ -225,7 +225,12 @@ export const getStaticProps: GetStaticProps<TagsPostProps> = async ({ params }) 
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const tags = await getAllTags();
-  const paths = tags.map(({ slug }) => ({ params: { tag: slug } }));
-  return { paths, fallback: 'blocking' };
+  try {
+    const tags = await getAllTags();
+    const paths = tags.map(({ slug }) => ({ params: { tag: slug } }));
+    return { paths, fallback: 'blocking' };
+  } catch (error) {
+    console.error('getStaticPaths: failed to fetch tags from WordPress', error);
+    return { paths: [], fallback: 'blocking' };
+  }
 };
