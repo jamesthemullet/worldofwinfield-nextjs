@@ -2,6 +2,7 @@ import {
   filterPostsByTag,
   getAdjacentPosts,
   getAllPostsForHome,
+  getAllPostsWithSlug,
   getAllTags,
   getArchivePost,
   getFirstPost,
@@ -151,6 +152,30 @@ describe('getAdjacentPosts', () => {
   });
 });
 
+describe('getAllPostsWithSlug', () => {
+  it('returns the posts edges from the API response', async () => {
+    const edges = [{ node: { slug: 'a' } }, { node: { slug: 'b' } }];
+    mockFetch.mockResolvedValue(gqlSuccess({ posts: { edges } }));
+
+    const result = await getAllPostsWithSlug();
+
+    expect(result).toEqual({ edges });
+  });
+
+  it('propagates the error after exhausting retries when the API is unreachable', async () => {
+    mockFetch.mockResolvedValue({
+      ok: false,
+      status: 502,
+      statusText: 'Bad Gateway',
+      headers: { get: () => 'text/html' },
+      json: () => Promise.reject(new Error('should not be called')),
+    });
+
+    await expect(getAllPostsWithSlug()).rejects.toThrow(/502/);
+    expect(mockFetch).toHaveBeenCalledTimes(3);
+  });
+});
+
 describe('getPostsByDate', () => {
   it('returns the queried month and year alongside the posts', async () => {
     const nodes = [{ title: 'Old post', slug: 'old', date: '2021-05-01' }];
@@ -187,7 +212,13 @@ describe('getArchivePost', () => {
 describe('filterPostsByTag', () => {
   it('sends the tag as a GraphQL variable and returns the nodes array', async () => {
     const nodes = [
-      { id: '1', title: 'Tagged Post', slug: 'tagged', date: '2024-01-01', excerpt: '' },
+      {
+        id: '1',
+        title: 'Tagged Post',
+        slug: 'tagged',
+        date: '2024-01-01',
+        excerpt: '',
+      },
     ];
     mockFetch.mockResolvedValue(gqlSuccess({ posts: { nodes } }));
 
@@ -216,7 +247,11 @@ describe('getAllPostsForHome', () => {
     await getAllPostsForHome(true, 'cursor-1');
 
     const body = JSON.parse((mockFetch.mock.calls[0][1] as RequestInit).body as string);
-    expect(body.variables).toEqual({ onlyEnabled: false, preview: true, after: 'cursor-1' });
+    expect(body.variables).toEqual({
+      onlyEnabled: false,
+      preview: true,
+      after: 'cursor-1',
+    });
   });
 
   it('propagates the error when the WordPress API request keeps failing', async () => {
