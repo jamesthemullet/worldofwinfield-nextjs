@@ -1,8 +1,8 @@
 import {
   filterPostsByTag,
   getAdjacentPosts,
-  getAllPostsWithSlug,
   getAllPostsForHome,
+  getAllPostsWithSlug,
   getAllTags,
   getArchivePost,
   getFirstPost,
@@ -11,7 +11,7 @@ import {
   getRelatedPosts,
   getTotalPostCount,
   searchBlogPosts,
-} from "./api";
+} from './api';
 
 const mockFetch = jest.fn();
 global.fetch = mockFetch as typeof fetch;
@@ -20,14 +20,14 @@ function gqlSuccess(data: Record<string, unknown>) {
   return {
     ok: true,
     status: 200,
-    statusText: "OK",
-    headers: { get: () => "application/json" },
+    statusText: 'OK',
+    headers: { get: () => 'application/json' },
     json: () => Promise.resolve({ data }),
   };
 }
 
 beforeAll(() => {
-  process.env.WORDPRESS_API_URL = "https://test.example.com/graphql";
+  process.env.WORDPRESS_API_URL = 'https://test.example.com/graphql';
 });
 
 afterAll(() => {
@@ -39,106 +39,102 @@ beforeEach(() => {
   delete process.env.WORDPRESS_AUTH_REFRESH_TOKEN;
 });
 
-describe("fetchAPI (via exported functions)", () => {
+describe('fetchAPI (via exported functions)', () => {
   it('throws "Failed to fetch API" when the response contains GraphQL errors', async () => {
-    jest.spyOn(console, "error").mockImplementation(() => {});
+    jest.spyOn(console, 'error').mockImplementation(() => {});
     mockFetch.mockResolvedValue({
       ok: true,
       status: 200,
-      statusText: "OK",
-      headers: { get: () => "application/json" },
-      json: () => Promise.resolve({ errors: [{ message: "Not found" }] }),
+      statusText: 'OK',
+      headers: { get: () => 'application/json' },
+      json: () => Promise.resolve({ errors: [{ message: 'Not found' }] }),
     });
-    await expect(searchBlogPosts("x")).rejects.toThrow("Failed to fetch API");
+    await expect(searchBlogPosts('x')).rejects.toThrow('Failed to fetch API');
     expect(mockFetch).toHaveBeenCalledTimes(1);
     jest.restoreAllMocks();
   });
 
-  it("retries when the API returns a non-JSON (e.g. HTML error) response, then succeeds", async () => {
-    const nodes = [{ slug: "a", title: "A", date: "2024-01-01", excerpt: "" }];
+  it('retries when the API returns a non-JSON (e.g. HTML error) response, then succeeds', async () => {
+    const nodes = [{ slug: 'a', title: 'A', date: '2024-01-01', excerpt: '' }];
     mockFetch
       .mockResolvedValueOnce({
         ok: false,
         status: 502,
-        statusText: "Bad Gateway",
-        headers: { get: () => "text/html" },
-        json: () => Promise.reject(new Error("should not be called")),
+        statusText: 'Bad Gateway',
+        headers: { get: () => 'text/html' },
+        json: () => Promise.reject(new Error('should not be called')),
       })
       .mockResolvedValueOnce(gqlSuccess({ posts: { nodes } }));
 
-    const result = await searchBlogPosts("query");
+    const result = await searchBlogPosts('query');
 
     expect(result).toEqual(nodes);
     expect(mockFetch).toHaveBeenCalledTimes(2);
   });
 
-  it("throws after exhausting retries when the API keeps returning non-JSON responses", async () => {
+  it('throws after exhausting retries when the API keeps returning non-JSON responses', async () => {
     mockFetch.mockResolvedValue({
       ok: false,
       status: 502,
-      statusText: "Bad Gateway",
-      headers: { get: () => "text/html" },
-      json: () => Promise.reject(new Error("should not be called")),
+      statusText: 'Bad Gateway',
+      headers: { get: () => 'text/html' },
+      json: () => Promise.reject(new Error('should not be called')),
     });
 
-    await expect(searchBlogPosts("x")).rejects.toThrow(/502/);
+    await expect(searchBlogPosts('x')).rejects.toThrow(/502/);
     expect(mockFetch).toHaveBeenCalledTimes(3);
   });
 
-  it("includes Authorization header when WORDPRESS_AUTH_REFRESH_TOKEN is set", async () => {
-    process.env.WORDPRESS_AUTH_REFRESH_TOKEN = "secret-token";
+  it('includes Authorization header when WORDPRESS_AUTH_REFRESH_TOKEN is set', async () => {
+    process.env.WORDPRESS_AUTH_REFRESH_TOKEN = 'secret-token';
     mockFetch.mockResolvedValue(gqlSuccess({ posts: { nodes: [] } }));
 
-    await searchBlogPosts("hello");
+    await searchBlogPosts('hello');
 
     const [, init] = mockFetch.mock.calls[0] as [string, RequestInit];
-    expect((init.headers as Record<string, string>)["Authorization"]).toBe(
-      "Bearer secret-token"
-    );
+    expect((init.headers as Record<string, string>)['Authorization']).toBe('Bearer secret-token');
   });
 });
 
-describe("searchBlogPosts", () => {
-  it("returns the nodes array from the API response", async () => {
-    const nodes = [{ slug: "a", title: "A", date: "2024-01-01", excerpt: "" }];
+describe('searchBlogPosts', () => {
+  it('returns the nodes array from the API response', async () => {
+    const nodes = [{ slug: 'a', title: 'A', date: '2024-01-01', excerpt: '' }];
     mockFetch.mockResolvedValue(gqlSuccess({ posts: { nodes } }));
 
-    const result = await searchBlogPosts("query");
+    const result = await searchBlogPosts('query');
     expect(result).toEqual(nodes);
   });
 });
 
-describe("getRelatedPosts", () => {
-  it("excludes the current post slug and limits results to 3", async () => {
+describe('getRelatedPosts', () => {
+  it('excludes the current post slug and limits results to 3', async () => {
     const nodes = [
-      { title: "A", slug: "current-post", date: "2024-01-01", excerpt: "" },
-      { title: "B", slug: "related-1", date: "2024-01-02", excerpt: "" },
-      { title: "C", slug: "related-2", date: "2024-01-03", excerpt: "" },
-      { title: "D", slug: "related-3", date: "2024-01-04", excerpt: "" },
-      { title: "E", slug: "related-4", date: "2024-01-05", excerpt: "" },
+      { title: 'A', slug: 'current-post', date: '2024-01-01', excerpt: '' },
+      { title: 'B', slug: 'related-1', date: '2024-01-02', excerpt: '' },
+      { title: 'C', slug: 'related-2', date: '2024-01-03', excerpt: '' },
+      { title: 'D', slug: 'related-3', date: '2024-01-04', excerpt: '' },
+      { title: 'E', slug: 'related-4', date: '2024-01-05', excerpt: '' },
     ];
     mockFetch.mockResolvedValue(gqlSuccess({ posts: { nodes } }));
 
-    const result = await getRelatedPosts("some-tag", "current-post");
+    const result = await getRelatedPosts('some-tag', 'current-post');
 
     expect(result).toHaveLength(3);
-    expect(result.every((p) => p.slug !== "current-post")).toBe(true);
+    expect(result.every((p) => p.slug !== 'current-post')).toBe(true);
   });
 });
 
-describe("getAdjacentPosts", () => {
-  it("parses the date string and sends correct year/month/day variables", async () => {
-    const dateStr = "2023-07-14T12:00:00.000Z";
+describe('getAdjacentPosts', () => {
+  it('parses the date string and sends correct year/month/day variables', async () => {
+    const dateStr = '2023-07-14T12:00:00.000Z';
     const parsed = new Date(dateStr);
     mockFetch.mockResolvedValue(
-      gqlSuccess({ previousPost: { nodes: [] }, nextPost: { nodes: [] } })
+      gqlSuccess({ previousPost: { nodes: [] }, nextPost: { nodes: [] } }),
     );
 
     await getAdjacentPosts(dateStr);
 
-    const body = JSON.parse(
-      (mockFetch.mock.calls[0][1] as RequestInit).body as string
-    );
+    const body = JSON.parse((mockFetch.mock.calls[0][1] as RequestInit).body as string);
     expect(body.variables).toEqual({
       year: parsed.getFullYear(),
       month: parsed.getMonth() + 1,
@@ -146,19 +142,19 @@ describe("getAdjacentPosts", () => {
     });
   });
 
-  it("returns null for both posts when the API returns empty node arrays", async () => {
+  it('returns null for both posts when the API returns empty node arrays', async () => {
     mockFetch.mockResolvedValue(
-      gqlSuccess({ previousPost: { nodes: [] }, nextPost: { nodes: [] } })
+      gqlSuccess({ previousPost: { nodes: [] }, nextPost: { nodes: [] } }),
     );
 
-    const result = await getAdjacentPosts("2023-07-14T12:00:00.000Z");
+    const result = await getAdjacentPosts('2023-07-14T12:00:00.000Z');
     expect(result).toEqual({ previousPost: null, nextPost: null });
   });
 });
 
-describe("getAllPostsWithSlug", () => {
-  it("returns the posts edges from the API response", async () => {
-    const edges = [{ node: { slug: "a" } }, { node: { slug: "b" } }];
+describe('getAllPostsWithSlug', () => {
+  it('returns the posts edges from the API response', async () => {
+    const edges = [{ node: { slug: 'a' } }, { node: { slug: 'b' } }];
     mockFetch.mockResolvedValue(gqlSuccess({ posts: { edges } }));
 
     const result = await getAllPostsWithSlug();
@@ -166,13 +162,13 @@ describe("getAllPostsWithSlug", () => {
     expect(result).toEqual({ edges });
   });
 
-  it("propagates the error after exhausting retries when the API is unreachable", async () => {
+  it('propagates the error after exhausting retries when the API is unreachable', async () => {
     mockFetch.mockResolvedValue({
       ok: false,
       status: 502,
-      statusText: "Bad Gateway",
-      headers: { get: () => "text/html" },
-      json: () => Promise.reject(new Error("should not be called")),
+      statusText: 'Bad Gateway',
+      headers: { get: () => 'text/html' },
+      json: () => Promise.reject(new Error('should not be called')),
     });
 
     await expect(getAllPostsWithSlug()).rejects.toThrow(/502/);
@@ -180,9 +176,9 @@ describe("getAllPostsWithSlug", () => {
   });
 });
 
-describe("getPostsByDate", () => {
-  it("returns the queried month and year alongside the posts", async () => {
-    const nodes = [{ title: "Old post", slug: "old", date: "2021-05-01" }];
+describe('getPostsByDate', () => {
+  it('returns the queried month and year alongside the posts', async () => {
+    const nodes = [{ title: 'Old post', slug: 'old', date: '2021-05-01' }];
     mockFetch.mockResolvedValue(gqlSuccess({ posts: { nodes } }));
 
     const result = await getPostsByDate(5, 2021);
@@ -190,9 +186,9 @@ describe("getPostsByDate", () => {
   });
 });
 
-describe("getArchivePost", () => {
-  it("falls back to the next year offset when the first query returns no posts", async () => {
-    const nodes = [{ title: "Old Post", slug: "old", date: "2022-01-01" }];
+describe('getArchivePost', () => {
+  it('falls back to the next year offset when the first query returns no posts', async () => {
+    const nodes = [{ title: 'Old Post', slug: 'old', date: '2022-01-01' }];
     // offset 3 → empty; offset 2 → has posts
     mockFetch
       .mockResolvedValueOnce(gqlSuccess({ posts: { nodes: [] } }))
@@ -202,10 +198,10 @@ describe("getArchivePost", () => {
 
     expect(result).not.toBeNull();
     expect(result!.yearsAgo).toBe(2);
-    expect(result!.post.slug).toBe("old");
+    expect(result!.post.slug).toBe('old');
   });
 
-  it("returns null when all year offsets return no posts", async () => {
+  it('returns null when all year offsets return no posts', async () => {
     mockFetch.mockResolvedValue(gqlSuccess({ posts: { nodes: [] } }));
 
     const result = await getArchivePost();
@@ -213,35 +209,31 @@ describe("getArchivePost", () => {
   });
 });
 
-describe("filterPostsByTag", () => {
-  it("sends the tag as a GraphQL variable and returns the nodes array", async () => {
+describe('filterPostsByTag', () => {
+  it('sends the tag as a GraphQL variable and returns the nodes array', async () => {
     const nodes = [
       {
-        id: "1",
-        title: "Tagged Post",
-        slug: "tagged",
-        date: "2024-01-01",
-        excerpt: "",
+        id: '1',
+        title: 'Tagged Post',
+        slug: 'tagged',
+        date: '2024-01-01',
+        excerpt: '',
       },
     ];
     mockFetch.mockResolvedValue(gqlSuccess({ posts: { nodes } }));
 
-    const result = await filterPostsByTag("travel");
+    const result = await filterPostsByTag('travel');
 
     expect(result).toEqual(nodes);
-    const body = JSON.parse(
-      (mockFetch.mock.calls[0][1] as RequestInit).body as string
-    );
-    expect(body.variables).toEqual({ tag: "travel" });
+    const body = JSON.parse((mockFetch.mock.calls[0][1] as RequestInit).body as string);
+    expect(body.variables).toEqual({ tag: 'travel' });
   });
 });
 
-describe("getAllPostsForHome", () => {
-  it("returns the posts edges and pageInfo from the API response", async () => {
-    const edges = [
-      { node: { slug: "a", title: "A", excerpt: "", date: "2024-01-01" } },
-    ];
-    const pageInfo = { hasNextPage: true, endCursor: "cursor-1" };
+describe('getAllPostsForHome', () => {
+  it('returns the posts edges and pageInfo from the API response', async () => {
+    const edges = [{ node: { slug: 'a', title: 'A', excerpt: '', date: '2024-01-01' } }];
+    const pageInfo = { hasNextPage: true, endCursor: 'cursor-1' };
     mockFetch.mockResolvedValue(gqlSuccess({ posts: { edges, pageInfo } }));
 
     const result = await getAllPostsForHome(false);
@@ -249,30 +241,26 @@ describe("getAllPostsForHome", () => {
     expect(result).toEqual({ edges, pageInfo });
   });
 
-  it("sends preview, onlyEnabled and after as GraphQL variables", async () => {
-    mockFetch.mockResolvedValue(
-      gqlSuccess({ posts: { edges: [], pageInfo: {} } })
-    );
+  it('sends preview, onlyEnabled and after as GraphQL variables', async () => {
+    mockFetch.mockResolvedValue(gqlSuccess({ posts: { edges: [], pageInfo: {} } }));
 
-    await getAllPostsForHome(true, "cursor-1");
+    await getAllPostsForHome(true, 'cursor-1');
 
-    const body = JSON.parse(
-      (mockFetch.mock.calls[0][1] as RequestInit).body as string
-    );
+    const body = JSON.parse((mockFetch.mock.calls[0][1] as RequestInit).body as string);
     expect(body.variables).toEqual({
       onlyEnabled: false,
       preview: true,
-      after: "cursor-1",
+      after: 'cursor-1',
     });
   });
 
-  it("propagates the error when the WordPress API request keeps failing", async () => {
+  it('propagates the error when the WordPress API request keeps failing', async () => {
     mockFetch.mockResolvedValue({
       ok: false,
       status: 500,
-      statusText: "Internal Server Error",
-      headers: { get: () => "text/html" },
-      json: () => Promise.reject(new Error("should not be called")),
+      statusText: 'Internal Server Error',
+      headers: { get: () => 'text/html' },
+      json: () => Promise.reject(new Error('should not be called')),
     });
 
     await expect(getAllPostsForHome(false)).rejects.toThrow(/500/);
@@ -280,48 +268,48 @@ describe("getAllPostsForHome", () => {
   });
 });
 
-describe("getAllTags", () => {
-  it("filters out tags with no count and returns the rest sorted by count descending", async () => {
+describe('getAllTags', () => {
+  it('filters out tags with no count and returns the rest sorted by count descending', async () => {
     const nodes = [
-      { name: "food", slug: "food", count: 5 },
-      { name: "travel", slug: "travel", count: 20 },
-      { name: "unused", slug: "unused", count: null },
-      { name: "music", slug: "music", count: 12 },
+      { name: 'food', slug: 'food', count: 5 },
+      { name: 'travel', slug: 'travel', count: 20 },
+      { name: 'unused', slug: 'unused', count: null },
+      { name: 'music', slug: 'music', count: 12 },
     ];
     mockFetch.mockResolvedValue(gqlSuccess({ tags: { nodes } }));
 
     const result = await getAllTags();
 
     expect(result).toEqual([
-      { name: "travel", slug: "travel", count: 20 },
-      { name: "music", slug: "music", count: 12 },
-      { name: "food", slug: "food", count: 5 },
+      { name: 'travel', slug: 'travel', count: 20 },
+      { name: 'music', slug: 'music', count: 12 },
+      { name: 'food', slug: 'food', count: 5 },
     ]);
-    expect(result.find((t) => t.name === "unused")).toBeUndefined();
+    expect(result.find((t) => t.name === 'unused')).toBeUndefined();
   });
 });
 
-describe("getTotalPostCount", () => {
-  it("returns the integer parsed from the X-WP-Total response header", async () => {
+describe('getTotalPostCount', () => {
+  it('returns the integer parsed from the X-WP-Total response header', async () => {
     mockFetch.mockResolvedValueOnce({
-      headers: { get: (h: string) => (h === "X-WP-Total" ? "42" : null) },
+      headers: { get: (h: string) => (h === 'X-WP-Total' ? '42' : null) },
     });
 
     const count = await getTotalPostCount();
     expect(count).toBe(42);
   });
 
-  it("returns 0 when the fetch request throws a network error", async () => {
-    mockFetch.mockRejectedValueOnce(new Error("Network error"));
+  it('returns 0 when the fetch request throws a network error', async () => {
+    mockFetch.mockRejectedValueOnce(new Error('Network error'));
 
     const count = await getTotalPostCount();
     expect(count).toBe(0);
   });
 });
 
-describe("getFirstPost", () => {
-  it("returns the posts edges from the API response", async () => {
-    const edges = [{ node: { slug: "a", title: "A", date: "2024-01-01" } }];
+describe('getFirstPost', () => {
+  it('returns the posts edges from the API response', async () => {
+    const edges = [{ node: { slug: 'a', title: 'A', date: '2024-01-01' } }];
     mockFetch.mockResolvedValue(gqlSuccess({ posts: { edges } }));
 
     const result = await getFirstPost();
@@ -329,13 +317,13 @@ describe("getFirstPost", () => {
     expect(result).toEqual({ edges });
   });
 
-  it("propagates the error after exhausting retries when the API is unreachable", async () => {
+  it('propagates the error after exhausting retries when the API is unreachable', async () => {
     mockFetch.mockResolvedValue({
       ok: false,
       status: 503,
-      statusText: "Service Unavailable",
-      headers: { get: () => "text/html" },
-      json: () => Promise.reject(new Error("should not be called")),
+      statusText: 'Service Unavailable',
+      headers: { get: () => 'text/html' },
+      json: () => Promise.reject(new Error('should not be called')),
     });
 
     await expect(getFirstPost()).rejects.toThrow(/503/);
@@ -343,47 +331,47 @@ describe("getFirstPost", () => {
   });
 });
 
-describe("getPreviewPost", () => {
-  it("sends the id and idType GraphQL variables and returns the post", async () => {
-    const post = { databaseId: 42, slug: "a-draft-post", status: "draft" };
+describe('getPreviewPost', () => {
+  it('sends the id and idType GraphQL variables and returns the post', async () => {
+    const post = { databaseId: 42, slug: 'a-draft-post', status: 'draft' };
     mockFetch.mockResolvedValue(gqlSuccess({ post }));
 
-    const result = await getPreviewPost("42");
+    const result = await getPreviewPost('42');
 
     expect(result).toEqual(post);
     const [, init] = mockFetch.mock.calls[0] as [string, RequestInit];
     const body = JSON.parse(init.body as string);
-    expect(body.variables).toEqual({ id: "42", idType: "DATABASE_ID" });
+    expect(body.variables).toEqual({ id: '42', idType: 'DATABASE_ID' });
   });
 
-  it("defaults idType to DATABASE_ID but allows it to be overridden", async () => {
+  it('defaults idType to DATABASE_ID but allows it to be overridden', async () => {
     mockFetch.mockResolvedValue(gqlSuccess({ post: null }));
 
-    await getPreviewPost("a-slug", "SLUG");
+    await getPreviewPost('a-slug', 'SLUG');
 
     const [, init] = mockFetch.mock.calls[0] as [string, RequestInit];
     const body = JSON.parse(init.body as string);
-    expect(body.variables).toEqual({ id: "a-slug", idType: "SLUG" });
+    expect(body.variables).toEqual({ id: 'a-slug', idType: 'SLUG' });
   });
 
-  it("returns null when the API finds no matching post", async () => {
+  it('returns null when the API finds no matching post', async () => {
     mockFetch.mockResolvedValue(gqlSuccess({ post: null }));
 
-    const result = await getPreviewPost("missing");
+    const result = await getPreviewPost('missing');
 
     expect(result).toBeNull();
   });
 
-  it("propagates the error after exhausting retries when the API is unreachable", async () => {
+  it('propagates the error after exhausting retries when the API is unreachable', async () => {
     mockFetch.mockResolvedValue({
       ok: false,
       status: 503,
-      statusText: "Service Unavailable",
-      headers: { get: () => "text/html" },
-      json: () => Promise.reject(new Error("should not be called")),
+      statusText: 'Service Unavailable',
+      headers: { get: () => 'text/html' },
+      json: () => Promise.reject(new Error('should not be called')),
     });
 
-    await expect(getPreviewPost("42")).rejects.toThrow(/503/);
+    await expect(getPreviewPost('42')).rejects.toThrow(/503/);
     expect(mockFetch).toHaveBeenCalledTimes(3);
   });
 });
