@@ -5,7 +5,9 @@ import {
   getAllPostsForHome,
   getAllTags,
   getArchivePost,
+  getFirstPost,
   getPostsByDate,
+  getPreviewPost,
   getRelatedPosts,
   getTotalPostCount,
   searchBlogPosts,
@@ -292,5 +294,74 @@ describe('getTotalPostCount', () => {
 
     const count = await getTotalPostCount();
     expect(count).toBe(0);
+  });
+});
+
+describe('getFirstPost', () => {
+  it('returns the posts edges from the API response', async () => {
+    const edges = [{ node: { slug: 'a', title: 'A', date: '2024-01-01' } }];
+    mockFetch.mockResolvedValue(gqlSuccess({ posts: { edges } }));
+
+    const result = await getFirstPost();
+
+    expect(result).toEqual({ edges });
+  });
+
+  it('propagates the error after exhausting retries when the API is unreachable', async () => {
+    mockFetch.mockResolvedValue({
+      ok: false,
+      status: 503,
+      statusText: 'Service Unavailable',
+      headers: { get: () => 'text/html' },
+      json: () => Promise.reject(new Error('should not be called')),
+    });
+
+    await expect(getFirstPost()).rejects.toThrow(/503/);
+    expect(mockFetch).toHaveBeenCalledTimes(3);
+  });
+});
+
+describe('getPreviewPost', () => {
+  it('sends the id and idType GraphQL variables and returns the post', async () => {
+    const post = { databaseId: 42, slug: 'a-draft-post', status: 'draft' };
+    mockFetch.mockResolvedValue(gqlSuccess({ post }));
+
+    const result = await getPreviewPost('42');
+
+    expect(result).toEqual(post);
+    const [, init] = mockFetch.mock.calls[0] as [string, RequestInit];
+    const body = JSON.parse(init.body as string);
+    expect(body.variables).toEqual({ id: '42', idType: 'DATABASE_ID' });
+  });
+
+  it('defaults idType to DATABASE_ID but allows it to be overridden', async () => {
+    mockFetch.mockResolvedValue(gqlSuccess({ post: null }));
+
+    await getPreviewPost('a-slug', 'SLUG');
+
+    const [, init] = mockFetch.mock.calls[0] as [string, RequestInit];
+    const body = JSON.parse(init.body as string);
+    expect(body.variables).toEqual({ id: 'a-slug', idType: 'SLUG' });
+  });
+
+  it('returns null when the API finds no matching post', async () => {
+    mockFetch.mockResolvedValue(gqlSuccess({ post: null }));
+
+    const result = await getPreviewPost('missing');
+
+    expect(result).toBeNull();
+  });
+
+  it('propagates the error after exhausting retries when the API is unreachable', async () => {
+    mockFetch.mockResolvedValue({
+      ok: false,
+      status: 503,
+      statusText: 'Service Unavailable',
+      headers: { get: () => 'text/html' },
+      json: () => Promise.reject(new Error('should not be called')),
+    });
+
+    await expect(getPreviewPost('42')).rejects.toThrow(/503/);
+    expect(mockFetch).toHaveBeenCalledTimes(3);
   });
 });
