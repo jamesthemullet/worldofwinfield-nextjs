@@ -1,10 +1,14 @@
 import {
   filterPostsByTag,
   getAdjacentPosts,
+  getAllPostsForHome,
+  getAllPostsWithSlug,
   getAllTags,
   getArchivePost,
   getJamesImages,
+  getFirstPost,
   getPostsByDate,
+  getPreviewPost,
   getRelatedPosts,
   getTotalPostCount,
   searchBlogPosts,
@@ -149,6 +153,30 @@ describe('getAdjacentPosts', () => {
   });
 });
 
+describe('getAllPostsWithSlug', () => {
+  it('returns the posts edges from the API response', async () => {
+    const edges = [{ node: { slug: 'a' } }, { node: { slug: 'b' } }];
+    mockFetch.mockResolvedValue(gqlSuccess({ posts: { edges } }));
+
+    const result = await getAllPostsWithSlug();
+
+    expect(result).toEqual({ edges });
+  });
+
+  it('propagates the error after exhausting retries when the API is unreachable', async () => {
+    mockFetch.mockResolvedValue({
+      ok: false,
+      status: 502,
+      statusText: 'Bad Gateway',
+      headers: { get: () => 'text/html' },
+      json: () => Promise.reject(new Error('should not be called')),
+    });
+
+    await expect(getAllPostsWithSlug()).rejects.toThrow(/502/);
+    expect(mockFetch).toHaveBeenCalledTimes(3);
+  });
+});
+
 describe('getPostsByDate', () => {
   it('returns the queried month and year alongside the posts', async () => {
     const nodes = [{ title: 'Old post', slug: 'old', date: '2021-05-01' }];
@@ -185,7 +213,13 @@ describe('getArchivePost', () => {
 describe('filterPostsByTag', () => {
   it('sends the tag as a GraphQL variable and returns the nodes array', async () => {
     const nodes = [
-      { id: '1', title: 'Tagged Post', slug: 'tagged', date: '2024-01-01', excerpt: '' },
+      {
+        id: '1',
+        title: 'Tagged Post',
+        slug: 'tagged',
+        date: '2024-01-01',
+        excerpt: '',
+      },
     ];
     mockFetch.mockResolvedValue(gqlSuccess({ posts: { nodes } }));
 
@@ -194,6 +228,44 @@ describe('filterPostsByTag', () => {
     expect(result).toEqual(nodes);
     const body = JSON.parse((mockFetch.mock.calls[0][1] as RequestInit).body as string);
     expect(body.variables).toEqual({ tag: 'travel' });
+  });
+});
+
+describe('getAllPostsForHome', () => {
+  it('returns the posts edges and pageInfo from the API response', async () => {
+    const edges = [{ node: { slug: 'a', title: 'A', excerpt: '', date: '2024-01-01' } }];
+    const pageInfo = { hasNextPage: true, endCursor: 'cursor-1' };
+    mockFetch.mockResolvedValue(gqlSuccess({ posts: { edges, pageInfo } }));
+
+    const result = await getAllPostsForHome(false);
+
+    expect(result).toEqual({ edges, pageInfo });
+  });
+
+  it('sends preview, onlyEnabled and after as GraphQL variables', async () => {
+    mockFetch.mockResolvedValue(gqlSuccess({ posts: { edges: [], pageInfo: {} } }));
+
+    await getAllPostsForHome(true, 'cursor-1');
+
+    const body = JSON.parse((mockFetch.mock.calls[0][1] as RequestInit).body as string);
+    expect(body.variables).toEqual({
+      onlyEnabled: false,
+      preview: true,
+      after: 'cursor-1',
+    });
+  });
+
+  it('propagates the error when the WordPress API request keeps failing', async () => {
+    mockFetch.mockResolvedValue({
+      ok: false,
+      status: 500,
+      statusText: 'Internal Server Error',
+      headers: { get: () => 'text/html' },
+      json: () => Promise.reject(new Error('should not be called')),
+    });
+
+    await expect(getAllPostsForHome(false)).rejects.toThrow(/500/);
+    expect(mockFetch).toHaveBeenCalledTimes(3);
   });
 });
 
@@ -285,5 +357,74 @@ describe('getTotalPostCount', () => {
 
     const count = await getTotalPostCount();
     expect(count).toBe(0);
+  });
+});
+
+describe('getFirstPost', () => {
+  it('returns the posts edges from the API response', async () => {
+    const edges = [{ node: { slug: 'a', title: 'A', date: '2024-01-01' } }];
+    mockFetch.mockResolvedValue(gqlSuccess({ posts: { edges } }));
+
+    const result = await getFirstPost();
+
+    expect(result).toEqual({ edges });
+  });
+
+  it('propagates the error after exhausting retries when the API is unreachable', async () => {
+    mockFetch.mockResolvedValue({
+      ok: false,
+      status: 503,
+      statusText: 'Service Unavailable',
+      headers: { get: () => 'text/html' },
+      json: () => Promise.reject(new Error('should not be called')),
+    });
+
+    await expect(getFirstPost()).rejects.toThrow(/503/);
+    expect(mockFetch).toHaveBeenCalledTimes(3);
+  });
+});
+
+describe('getPreviewPost', () => {
+  it('sends the id and idType GraphQL variables and returns the post', async () => {
+    const post = { databaseId: 42, slug: 'a-draft-post', status: 'draft' };
+    mockFetch.mockResolvedValue(gqlSuccess({ post }));
+
+    const result = await getPreviewPost('42');
+
+    expect(result).toEqual(post);
+    const [, init] = mockFetch.mock.calls[0] as [string, RequestInit];
+    const body = JSON.parse(init.body as string);
+    expect(body.variables).toEqual({ id: '42', idType: 'DATABASE_ID' });
+  });
+
+  it('defaults idType to DATABASE_ID but allows it to be overridden', async () => {
+    mockFetch.mockResolvedValue(gqlSuccess({ post: null }));
+
+    await getPreviewPost('a-slug', 'SLUG');
+
+    const [, init] = mockFetch.mock.calls[0] as [string, RequestInit];
+    const body = JSON.parse(init.body as string);
+    expect(body.variables).toEqual({ id: 'a-slug', idType: 'SLUG' });
+  });
+
+  it('returns null when the API finds no matching post', async () => {
+    mockFetch.mockResolvedValue(gqlSuccess({ post: null }));
+
+    const result = await getPreviewPost('missing');
+
+    expect(result).toBeNull();
+  });
+
+  it('propagates the error after exhausting retries when the API is unreachable', async () => {
+    mockFetch.mockResolvedValue({
+      ok: false,
+      status: 503,
+      statusText: 'Service Unavailable',
+      headers: { get: () => 'text/html' },
+      json: () => Promise.reject(new Error('should not be called')),
+    });
+
+    await expect(getPreviewPost('42')).rejects.toThrow(/503/);
+    expect(mockFetch).toHaveBeenCalledTimes(3);
   });
 });
