@@ -7,6 +7,7 @@ import {
   getArchivePost,
   getFirstPost,
   getJamesImages,
+  getPostDisplayInfo,
   getPostsByDate,
   getPreviewPost,
   getRelatedPosts,
@@ -425,6 +426,51 @@ describe('getPreviewPost', () => {
     });
 
     await expect(getPreviewPost('42')).rejects.toThrow(/503/);
+    expect(mockFetch).toHaveBeenCalledTimes(3);
+  });
+});
+
+describe('getPostDisplayInfo', () => {
+  const buildPost = (slug: string, title: string) => ({
+    slug,
+    title,
+    date: '2024-01-01',
+    featuredImage: {
+      node: {
+        mediaDetails: { sizes: [], height: 100, width: 100 },
+        srcSet: '',
+        sourceUrl: `https://example.com/${slug}.jpg`,
+      },
+    },
+  });
+
+  it('fetches display info for each id and returns the results in order', async () => {
+    const postA = buildPost('post-a', 'Post A');
+    const postB = buildPost('post-b', 'Post B');
+    mockFetch
+      .mockResolvedValueOnce(gqlSuccess({ post: postA }))
+      .mockResolvedValueOnce(gqlSuccess({ post: postB }));
+
+    const result = await getPostDisplayInfo(['1', '2']);
+
+    expect(result).toEqual([postA, postB]);
+    expect(mockFetch).toHaveBeenCalledTimes(2);
+    const firstBody = JSON.parse((mockFetch.mock.calls[0][1] as RequestInit).body as string);
+    expect(firstBody.variables).toEqual({ id: '1', idType: 'DATABASE_ID' });
+    const secondBody = JSON.parse((mockFetch.mock.calls[1][1] as RequestInit).body as string);
+    expect(secondBody.variables).toEqual({ id: '2', idType: 'DATABASE_ID' });
+  });
+
+  it('propagates the error when the WordPress GraphQL fetch fails after exhausting retries', async () => {
+    mockFetch.mockResolvedValue({
+      ok: false,
+      status: 502,
+      statusText: 'Bad Gateway',
+      headers: { get: () => 'text/html' },
+      json: () => Promise.reject(new Error('should not be called')),
+    });
+
+    await expect(getPostDisplayInfo(['1'])).rejects.toThrow(/502/);
     expect(mockFetch).toHaveBeenCalledTimes(3);
   });
 });
