@@ -144,6 +144,7 @@ export default function WorldMap({
                     key={geo.rsmKey}
                     geography={geo}
                     tabIndex={highlighted ? 0 : -1}
+                    role={highlighted ? 'button' : undefined}
                     aria-label={highlighted ? label : undefined}
                     onMouseEnter={() => setHovered(label)}
                     onMouseLeave={() => setHovered(null)}
