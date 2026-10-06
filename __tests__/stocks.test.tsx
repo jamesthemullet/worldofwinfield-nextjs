@@ -1,9 +1,42 @@
-import {
+import { act, render, screen } from '@testing-library/react';
+import React from 'react';
+import '@testing-library/jest-dom';
+import StocksPage, {
   getChange,
   normalisePrices,
   normaliseSymbolAlias,
   sortByPercentChange,
 } from '../pages/stocks';
+
+jest.mock('../components/layout', () => ({
+  __esModule: true,
+  default: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+}));
+
+jest.mock('../components/container', () => ({
+  __esModule: true,
+  default: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+}));
+
+jest.mock('../components/post-header', () => ({
+  __esModule: true,
+  default: ({ title }: { title: string }) => <div data-testid="post-header">{title}</div>,
+}));
+
+class FakeWebSocket {
+  static instances: FakeWebSocket[] = [];
+  url: string;
+  onopen: (() => void) | null = null;
+  onmessage: ((event: { data: string }) => void) | null = null;
+  onerror: (() => void) | null = null;
+  onclose: (() => void) | null = null;
+  close = jest.fn();
+
+  constructor(url: string) {
+    this.url = url;
+    FakeWebSocket.instances.push(this);
+  }
+}
 
 describe('normaliseSymbolAlias', () => {
   it('normalises exchange aliases to canonical form and strips trailing dots', () => {
@@ -93,5 +126,83 @@ describe('sortByPercentChange', () => {
     expect(result[1].symbol).toBe('A');
     expect(result[2].symbol).toBe('D');
     expect(result[3].symbol).toBe('C');
+  });
+});
+
+describe('StocksPage websocket connection', () => {
+  const originalWebSocket = global.WebSocket;
+
+  beforeEach(() => {
+    FakeWebSocket.instances = [];
+    global.WebSocket = FakeWebSocket as unknown as typeof WebSocket;
+  });
+
+  afterEach(() => {
+    global.WebSocket = originalWebSocket;
+    jest.useRealTimers();
+  });
+
+  it('starts in the connecting state and moves to connected on open', () => {
+    render(<StocksPage />);
+
+    expect(screen.getByRole('status')).toHaveTextContent('Connection: connecting');
+
+    const socket = FakeWebSocket.instances[0];
+    act(() => {
+      socket.onopen?.();
+    });
+
+    expect(screen.getByRole('status')).toHaveTextContent('Connection: connected');
+  });
+
+  it('moves to the error state and surfaces a message when the socket errors', () => {
+    render(<StocksPage />);
+
+    const socket = FakeWebSocket.instances[0];
+    act(() => {
+      socket.onerror?.();
+    });
+
+    expect(screen.getByRole('status')).toHaveTextContent('Connection: error');
+    expect(screen.getByRole('alert')).toHaveTextContent(
+      'Unable to connect to realtime server at ws://localhost:8081.',
+    );
+  });
+
+  it('moves to disconnected on close and reconnects after the retry delay', () => {
+    jest.useFakeTimers();
+    render(<StocksPage />);
+
+    const firstSocket = FakeWebSocket.instances[0];
+    act(() => {
+      firstSocket.onclose?.();
+    });
+
+    expect(screen.getByRole('status')).toHaveTextContent('Connection: disconnected');
+    expect(FakeWebSocket.instances).toHaveLength(1);
+
+    act(() => {
+      jest.advanceTimersByTime(2000);
+    });
+
+    expect(FakeWebSocket.instances).toHaveLength(2);
+    expect(screen.getByRole('status')).toHaveTextContent('Connection: connecting');
+  });
+
+  it('does not reconnect after the component unmounts', () => {
+    jest.useFakeTimers();
+    const { unmount } = render(<StocksPage />);
+
+    const firstSocket = FakeWebSocket.instances[0];
+    unmount();
+
+    expect(firstSocket.close).toHaveBeenCalled();
+
+    act(() => {
+      firstSocket.onclose?.();
+      jest.advanceTimersByTime(2000);
+    });
+
+    expect(FakeWebSocket.instances).toHaveLength(1);
   });
 });
