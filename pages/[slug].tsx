@@ -136,10 +136,15 @@ export const getStaticProps: GetStaticProps = async ({ params, preview = false }
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const allPosts = await getAllPostsWithSlug();
+  try {
+    const allPosts = await getAllPostsWithSlug();
 
-  return {
-    paths: (allPosts?.edges ?? []).map(({ node }) => `/${node.slug}`),
-    fallback: true,
-  };
+    return {
+      paths: (allPosts?.edges ?? []).map(({ node }) => `/${node.slug}`),
+      fallback: true,
+    };
+  } catch (error) {
+    console.error('getStaticPaths: failed to fetch post slugs from WordPress', error);
+    return { paths: [], fallback: true };
+  }
 };
