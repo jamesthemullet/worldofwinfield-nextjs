@@ -799,7 +799,7 @@ const ToggleButton = styled.button`
 
   &.active {
     background: var(--colour-dark);
-    color: var(--colour-light);
+    color: var(--colour-white);
   }
 `;
 
