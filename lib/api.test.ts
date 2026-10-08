@@ -7,8 +7,12 @@ import {
   getArchivePost,
   getFirstPost,
   getJamesImages,
+  getPostDisplayInfo,
   getPostsByDate,
+  getPostsByTag,
+  getPostsByYear,
   getPreviewPost,
+  getRandomImage,
   getRelatedPosts,
   getTotalPostCount,
   searchBlogPosts,
@@ -231,6 +235,34 @@ describe('filterPostsByTag', () => {
   });
 });
 
+describe('getPostsByTag', () => {
+  it('sends the tag as a GraphQL variable and returns the nodes array', async () => {
+    const nodes = [
+      { id: '1', title: 'Tagged Post', slug: 'tagged', date: '2024-01-01', excerpt: '' },
+    ];
+    mockFetch.mockResolvedValue(gqlSuccess({ posts: { nodes } }));
+
+    const result = await getPostsByTag('travel');
+
+    expect(result).toEqual(nodes);
+    const body = JSON.parse((mockFetch.mock.calls[0][1] as RequestInit).body as string);
+    expect(body.variables).toEqual({ tag: 'travel' });
+  });
+
+  it('throws after exhausting retries when the WordPress API keeps failing', async () => {
+    mockFetch.mockResolvedValue({
+      ok: false,
+      status: 502,
+      statusText: 'Bad Gateway',
+      headers: { get: () => 'text/html' },
+      json: () => Promise.reject(new Error('should not be called')),
+    });
+
+    await expect(getPostsByTag('travel')).rejects.toThrow(/502/);
+    expect(mockFetch).toHaveBeenCalledTimes(3);
+  });
+});
+
 describe('getAllPostsForHome', () => {
   it('returns the posts edges and pageInfo from the API response', async () => {
     const edges = [{ node: { slug: 'a', title: 'A', excerpt: '', date: '2024-01-01' } }];
@@ -384,6 +416,34 @@ describe('getFirstPost', () => {
   });
 });
 
+describe('getPostsByYear', () => {
+  it('sends the year as a GraphQL variable and returns the posts nodes array', async () => {
+    const nodes = [
+      { id: '1', title: 'Year Post', slug: 'year-post', date: '2021-01-01', excerpt: '' },
+    ];
+    mockFetch.mockResolvedValue(gqlSuccess({ posts: { nodes } }));
+
+    const result = await getPostsByYear(2021);
+
+    expect(result).toEqual(nodes);
+    const body = JSON.parse((mockFetch.mock.calls[0][1] as RequestInit).body as string);
+    expect(body.variables).toEqual({ year: 2021 });
+  });
+
+  it('propagates the error after exhausting retries when the API is unreachable', async () => {
+    mockFetch.mockResolvedValue({
+      ok: false,
+      status: 503,
+      statusText: 'Service Unavailable',
+      headers: { get: () => 'text/html' },
+      json: () => Promise.reject(new Error('should not be called')),
+    });
+
+    await expect(getPostsByYear(2021)).rejects.toThrow(/503/);
+    expect(mockFetch).toHaveBeenCalledTimes(3);
+  });
+});
+
 describe('getPreviewPost', () => {
   it('sends the id and idType GraphQL variables and returns the post', async () => {
     const post = { databaseId: 42, slug: 'a-draft-post', status: 'draft' };
@@ -425,6 +485,78 @@ describe('getPreviewPost', () => {
     });
 
     await expect(getPreviewPost('42')).rejects.toThrow(/503/);
+    expect(mockFetch).toHaveBeenCalledTimes(3);
+  });
+});
+
+describe('getPostDisplayInfo', () => {
+  const buildPost = (slug: string, title: string) => ({
+    slug,
+    title,
+    date: '2024-01-01',
+    featuredImage: {
+      node: {
+        mediaDetails: { sizes: [], height: 100, width: 100 },
+        srcSet: '',
+        sourceUrl: `https://example.com/${slug}.jpg`,
+      },
+    },
+  });
+
+  it('fetches display info for each id and returns the results in order', async () => {
+    const postA = buildPost('post-a', 'Post A');
+    const postB = buildPost('post-b', 'Post B');
+    mockFetch
+      .mockResolvedValueOnce(gqlSuccess({ post: postA }))
+      .mockResolvedValueOnce(gqlSuccess({ post: postB }));
+
+    const result = await getPostDisplayInfo(['1', '2']);
+
+    expect(result).toEqual([postA, postB]);
+    expect(mockFetch).toHaveBeenCalledTimes(2);
+    const firstBody = JSON.parse((mockFetch.mock.calls[0][1] as RequestInit).body as string);
+    expect(firstBody.variables).toEqual({ id: '1', idType: 'DATABASE_ID' });
+    const secondBody = JSON.parse((mockFetch.mock.calls[1][1] as RequestInit).body as string);
+    expect(secondBody.variables).toEqual({ id: '2', idType: 'DATABASE_ID' });
+  });
+
+  it('propagates the error when the WordPress GraphQL fetch fails after exhausting retries', async () => {
+    mockFetch.mockResolvedValue({
+      ok: false,
+      status: 502,
+      statusText: 'Bad Gateway',
+      headers: { get: () => 'text/html' },
+      json: () => Promise.reject(new Error('should not be called')),
+    });
+
+    await expect(getPostDisplayInfo(['1'])).rejects.toThrow(/502/);
+    expect(mockFetch).toHaveBeenCalledTimes(3);
+  });
+});
+
+describe('getRandomImage', () => {
+  it('sends the randomMonth and randomYear GraphQL variables and returns the image set', async () => {
+    const edges = [{ node: { id: '1', title: 'A', srcSet: '', sourceUrl: 'a.jpg' } }];
+    mockFetch.mockResolvedValue(gqlSuccess({ mediaItems: { edges } }));
+
+    const result = await getRandomImage(6, 2024);
+
+    expect(result).toEqual({ images: edges, randomMonth: 6, randomYear: 2024 });
+    const [, init] = mockFetch.mock.calls[0] as [string, RequestInit];
+    const body = JSON.parse(init.body as string);
+    expect(body.variables).toEqual({ randomMonth: 6, randomYear: 2024 });
+  });
+
+  it('propagates the error after exhausting retries when the API is unreachable', async () => {
+    mockFetch.mockResolvedValue({
+      ok: false,
+      status: 503,
+      statusText: 'Service Unavailable',
+      headers: { get: () => 'text/html' },
+      json: () => Promise.reject(new Error('should not be called')),
+    });
+
+    await expect(getRandomImage(6, 2024)).rejects.toThrow(/503/);
     expect(mockFetch).toHaveBeenCalledTimes(3);
   });
 });
