@@ -13,7 +13,9 @@ have its own image — a photo of each individual beer isn't realistic to
 source for most of the list, but a brewery logo usually is. Add
 beer-specific images as and when you have them.
 
-Supported extensions: `.jpg`, `.jpeg`, `.png`, `.webp`.
+Supported extensions: `.jpg`, `.jpeg`, `.png`, `.webp`. Images saved from the
+browser as `.jfif` are plain JPEGs — rename them to `.jpg` or they will be
+ignored.
 
 Any beer/brewery without a matching file falls back to the initials
 placeholder, so this can be filled in gradually — no need to source all of
