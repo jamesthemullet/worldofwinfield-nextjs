@@ -43,7 +43,7 @@ async function optimize(fileName) {
       height: MAX_HEIGHT,
       fit: 'inside',
       withoutEnlargement: true,
-    })
+    }),
   ).toBuffer();
 
   if (output.length >= input.length) {
