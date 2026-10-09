@@ -12,6 +12,7 @@
     "knip": "knip",
     "test": "jest",
     "test:e2e": "playwright test",
+    "optimize:cities": "node scripts/optimize-city-images.js",
     "postbuild": "next-sitemap"
   },
   "lint-staged": {
@@ -51,6 +52,7 @@
     "jest": "^30.0.0",
     "jest-environment-jsdom": "^30.0.0",
     "knip": "^6.0.0",
+    "sharp": "0.35.4",
     "ts-node": "^10.9.2"
   },
   "resolutions": {
