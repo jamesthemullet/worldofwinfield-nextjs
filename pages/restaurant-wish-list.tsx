@@ -3,11 +3,11 @@ import type { GetStaticProps } from 'next';
 import { useRouter } from 'next/router';
 import type { JSX } from 'react';
 import Container from '../components/container';
+import FavouriteResults from '../components/favourites-results';
 import Layout from '../components/layout';
 import PostHeader from '../components/post-header';
 import PostTitle from '../components/post-title';
 import { fetchDataFromGoogleSheets } from '../lib/sheets';
-import FavouriteResults from './favourites-results';
 
 const sheetId = '13gz7lPQ61f_WKQ_xio_QBlUcFB9Dl0yVBynwEadVO_4';
 

@@ -5,11 +5,11 @@ import type { JSX } from 'react';
 import { useState } from 'react';
 import Container from '../components/container';
 import { StyledButton } from '../components/core-components';
+import FavouriteResults from '../components/favourites-results';
 import Layout from '../components/layout';
 import PostHeader from '../components/post-header';
 import PostTitle from '../components/post-title';
 import { fetchDataFromGoogleSheets } from '../lib/sheets';
-import FavouriteResults from './favourites-results';
 
 const holidayWishListSheetId = '1GX6KF20f3Nrb3m8T9th7UIV_uuePj4Ivlc_yLgo-4Bo';
 const restaurantWishListSheetId = '13gz7lPQ61f_WKQ_xio_QBlUcFB9Dl0yVBynwEadVO_4';

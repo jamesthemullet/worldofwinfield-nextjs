@@ -4,13 +4,13 @@ import { useRouter } from 'next/router';
 import type { JSX } from 'react';
 import { useState } from 'react';
 import Container from '../components/container';
+import FavouriteResults from '../components/favourites-results';
 import Layout from '../components/layout';
 import PostHeader from '../components/post-header';
 import PostTitle from '../components/post-title';
 import SortDropdown from '../components/SortDropdown';
 import { fetchDataFromGoogleSheets } from '../lib/sheets';
 import { resolveWishListCovers } from '../lib/wish-list-covers';
-import FavouriteResults from './favourites-results';
 
 const sheetId = '1GX6KF20f3Nrb3m8T9th7UIV_uuePj4Ivlc_yLgo-4Bo';
 
