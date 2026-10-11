@@ -40,6 +40,22 @@ async function fetchAllPostSlugs(apiUrl) {
   return allPosts;
 }
 
+const FIRST_YEAR_IN_REVIEW = 2018;
+
+function buildYearInReviewPaths() {
+  const currentYear = new Date().getFullYear();
+  const years = Array.from(
+    { length: currentYear - FIRST_YEAR_IN_REVIEW + 1 },
+    (_, i) => FIRST_YEAR_IN_REVIEW + i,
+  );
+
+  return years.map((year) => ({
+    loc: `/year-in-review/${year}`,
+    changefreq: 'yearly',
+    priority: 0.6,
+  }));
+}
+
 module.exports = {
   siteUrl: 'https://worldofwinfield.co.uk',
   generateSitemap: true,
@@ -77,6 +93,9 @@ module.exports = {
       { loc: '/holiday-wish-list', changefreq: 'monthly', priority: 0.6 },
       { loc: '/restaurant-wish-list', changefreq: 'monthly', priority: 0.6 },
       { loc: '/tags', changefreq: 'weekly', priority: 0.7 },
+      { loc: '/archive-page', changefreq: 'monthly', priority: 0.6 },
+      { loc: '/year-in-review', changefreq: 'monthly', priority: 0.6 },
+      ...buildYearInReviewPaths(),
     ];
 
     if (!apiUrl) {
