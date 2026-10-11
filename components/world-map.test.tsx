@@ -22,6 +22,21 @@ describe('WorldMap', () => {
     expect(screen.getByLabelText('France')).toBeInTheDocument();
   });
 
+  it('gives a highlighted country an accessible role', () => {
+    render(<WorldMap visitedCountries={['France']} />);
+    expect(screen.getByLabelText('France')).toHaveAttribute('role', 'button');
+  });
+
+  it('only gives the single visited country a button role', () => {
+    render(<WorldMap visitedCountries={['France']} />);
+    const zoomButtons = screen.getAllByRole('button', { name: /zoom|reset/i });
+    const countryButtons = screen
+      .getAllByRole('button')
+      .filter((element) => !zoomButtons.includes(element));
+    expect(countryButtons).toHaveLength(1);
+    expect(countryButtons[0]).toHaveAttribute('aria-label', 'France');
+  });
+
   it('marks an aliased country name (USA) against the atlas name', () => {
     render(<WorldMap visitedCountries={['USA']} />);
     expect(screen.getByLabelText('United States of America')).toBeInTheDocument();

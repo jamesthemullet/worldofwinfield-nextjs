@@ -12,6 +12,7 @@ import {
   getPostsByTag,
   getPostsByYear,
   getPreviewPost,
+  getRandomImage,
   getRelatedPosts,
   getTotalPostCount,
   searchBlogPosts,
@@ -529,6 +530,33 @@ describe('getPostDisplayInfo', () => {
     });
 
     await expect(getPostDisplayInfo(['1'])).rejects.toThrow(/502/);
+    expect(mockFetch).toHaveBeenCalledTimes(3);
+  });
+});
+
+describe('getRandomImage', () => {
+  it('sends the randomMonth and randomYear GraphQL variables and returns the image set', async () => {
+    const edges = [{ node: { id: '1', title: 'A', srcSet: '', sourceUrl: 'a.jpg' } }];
+    mockFetch.mockResolvedValue(gqlSuccess({ mediaItems: { edges } }));
+
+    const result = await getRandomImage(6, 2024);
+
+    expect(result).toEqual({ images: edges, randomMonth: 6, randomYear: 2024 });
+    const [, init] = mockFetch.mock.calls[0] as [string, RequestInit];
+    const body = JSON.parse(init.body as string);
+    expect(body.variables).toEqual({ randomMonth: 6, randomYear: 2024 });
+  });
+
+  it('propagates the error after exhausting retries when the API is unreachable', async () => {
+    mockFetch.mockResolvedValue({
+      ok: false,
+      status: 503,
+      statusText: 'Service Unavailable',
+      headers: { get: () => 'text/html' },
+      json: () => Promise.reject(new Error('should not be called')),
+    });
+
+    await expect(getRandomImage(6, 2024)).rejects.toThrow(/503/);
     expect(mockFetch).toHaveBeenCalledTimes(3);
   });
 });
