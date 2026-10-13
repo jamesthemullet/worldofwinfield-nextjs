@@ -1,15 +1,18 @@
 #!/usr/bin/env node
-// Shrinks the Favourite Cities cover photos in public/images/cities/ in place.
+// Shrinks the Favourite Cities / Restaurants cover photos in
+// public/images/<folder>/ in place.
 //
 // Usage:
 //   yarn optimize:cities
+//   yarn optimize:restaurants
 //
 // The custom image loader (lib/imageLoader.ts) serves local images untouched,
 // so whatever is in that folder is exactly what every visitor downloads. The
 // covers render at ~200px wide (2:3), so a straight-off-the-camera 8MB photo is
 // pure waste. This caps each image at 800x1200 (enough for 2x/3x screens),
 // fixes EXIF rotation, strips metadata and re-encodes it in its original format,
-// so filenames (and the slug lookup in lib/city-covers.ts) don't change.
+// so filenames (and the lookups in lib/city-covers.ts and
+// lib/restaurant-covers.ts) don't change.
 //
 // Files that are already small enough are left alone, so it's safe to re-run
 // whenever you drop new photos in.
@@ -18,7 +21,12 @@ const fs = require('fs');
 const path = require('path');
 const sharp = require('sharp');
 
-const CITY_IMAGES_DIR = path.join(__dirname, '..', 'public', 'images', 'cities');
+const folder = process.argv[2];
+if (!folder) {
+  console.error('Usage: node scripts/optimize-cover-images.js <cities|restaurants>');
+  process.exit(1);
+}
+const IMAGES_DIR = path.join(__dirname, '..', 'public', 'images', folder);
 const MAX_WIDTH = 800;
 const MAX_HEIGHT = 1200;
 
@@ -32,7 +40,7 @@ const encoders = {
 const formatKb = (bytes) => `${Math.round(bytes / 1024)}KB`;
 
 async function optimize(fileName) {
-  const filePath = path.join(CITY_IMAGES_DIR, fileName);
+  const filePath = path.join(IMAGES_DIR, fileName);
   const encode = encoders[path.extname(fileName).toLowerCase()];
   if (!encode) return;
 
@@ -56,7 +64,7 @@ async function optimize(fileName) {
 }
 
 async function main() {
-  const files = fs.readdirSync(CITY_IMAGES_DIR).sort();
+  const files = fs.readdirSync(IMAGES_DIR).sort();
   for (const fileName of files) {
     await optimize(fileName);
   }
