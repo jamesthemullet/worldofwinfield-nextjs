@@ -41,7 +41,7 @@ jest.mock('../components/favourites-hub-link', () => ({
   default: () => <div data-testid="favourites-hub-link" />,
 }));
 
-jest.mock('../pages/favourites-results', () => ({
+jest.mock('../components/favourites-results', () => ({
   __esModule: true,
   default: ({
     data,

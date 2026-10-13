@@ -31,7 +31,7 @@ jest.mock('../components/post-title', () => ({
   ),
 }));
 
-jest.mock('../pages/favourites-results', () => ({
+jest.mock('../components/favourites-results', () => ({
   __esModule: true,
   default: ({ data }: { data: string[][] | null }) => (
     <div data-testid="favourite-results">{data ? data.length : 0} rows</div>
