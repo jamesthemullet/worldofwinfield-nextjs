@@ -12,7 +12,8 @@
     "knip": "knip",
     "test": "jest",
     "test:e2e": "playwright test",
-    "optimize:cities": "node scripts/optimize-city-images.js",
+    "optimize:cities": "node scripts/optimize-cover-images.js cities",
+    "optimize:restaurants": "node scripts/optimize-cover-images.js restaurants",
     "postbuild": "next-sitemap"
   },
   "lint-staged": {
