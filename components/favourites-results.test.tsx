@@ -1,7 +1,7 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import React from 'react';
 import '@testing-library/jest-dom';
-import FavouriteResults from '../pages/favourites-results';
+import FavouriteResults from './favourites-results';
 
 const sampleData = [
   ['Title', 'Author', 'Score'],

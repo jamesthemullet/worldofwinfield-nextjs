@@ -4,13 +4,13 @@ import { useRouter } from 'next/router';
 import type { JSX } from 'react';
 import Container from '../components/container';
 import FavouritesHubLink from '../components/favourites-hub-link';
+import FavouriteResults from '../components/favourites-results';
 import Layout from '../components/layout';
 import PostHeader from '../components/post-header';
 import PostTitle from '../components/post-title';
 import ShareBar from '../components/share-bar';
 import { resolveArticleCovers } from '../lib/article-covers';
 import { fetchDataFromGoogleSheets } from '../lib/sheets';
-import FavouriteResults from './favourites-results';
 
 const sheetId = '1R928oTM4hiTFXZ6Ww9-2pMKLAWy2Wjf3Z9xrXC6GTa0';
 
