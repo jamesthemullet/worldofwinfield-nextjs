@@ -112,7 +112,7 @@ Before proposing a feature, check this list. Do **not** re-propose anything here
 ## Known project patterns
 
 - **Data fetching:** All content comes from WordPress GraphQL — `lib/api.ts` exports typed fetch functions; new features should reuse these rather than adding new queries unless essential
-- **Pages to know:** `favourites-results.tsx` aggregates all favourites; `now.tsx` and `goals.tsx` are personal/life pages; `tags/[tag].tsx` and `archive-page.tsx` are browsing surfaces most likely to have discoverability gaps
+- **Pages to know:** `components/favourites-results.tsx` aggregates all favourites (shared by the `favourite-*.tsx` pages, not a page itself); `now.tsx` and `goals.tsx` are personal/life pages; `tags/[tag].tsx` and `archive-page.tsx` are browsing surfaces most likely to have discoverability gaps
 - **Components to know:** `search-bar.tsx`, `search-results.tsx`, `related-posts.tsx`, `tags.tsx`, `more-stories.tsx` are the core navigation/discovery components
 - **Styling:** Emotion only — use `styled` components or `css` helper from `@emotion/react`
 - **No client-side routing state** — any new interactive feature should use `useState`/`useEffect` locally or URL query params via Next.js router

@@ -12,30 +12,39 @@ import path from 'path';
 const RESTAURANT_IMAGES_DIR = path.join(process.cwd(), 'public', 'images', 'restaurants');
 const SUPPORTED_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.webp'];
 
-const slugify = (name: string): string =>
+// Matching ignores case, accents and all punctuation/whitespace, so
+// "Chick'n'Sours" matches chick-n-sours.jpg or chicknsours.jpg, and
+// "Fish, Wings And Tings" matches "fish, wings and tings.jpg".
+const toMatchKey = (name: string): string =>
   name
     .normalize('NFKD')
     .replace(/[̀-ͯ]/g, '')
-    .trim()
     .toLowerCase()
-    .replace(/&/g, ' and ')
-    .replace(/'/g, '')
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '');
+    .replace(/&/g, 'and')
+    .replace(/[^a-z0-9]/g, '');
 
-const findRestaurantImagePath = (name: string): string | null => {
-  const slug = slugify(name);
-  if (!slug) return null;
-
-  for (const extension of SUPPORTED_EXTENSIONS) {
-    const filePath = path.join(RESTAURANT_IMAGES_DIR, `${slug}${extension}`);
-    if (fs.existsSync(filePath)) return `/images/restaurants/${slug}${extension}`;
+const buildImageIndex = (): Map<string, string> => {
+  const index = new Map<string, string>();
+  let files: string[];
+  try {
+    files = fs.readdirSync(RESTAURANT_IMAGES_DIR);
+  } catch {
+    return index;
   }
 
-  return null;
+  for (const file of files) {
+    const extension = path.extname(file).toLowerCase();
+    if (!SUPPORTED_EXTENSIONS.includes(extension)) continue;
+    const key = toMatchKey(path.basename(file, path.extname(file)));
+    if (key && !index.has(key)) index.set(key, `/images/restaurants/${encodeURIComponent(file)}`);
+  }
+
+  return index;
 };
 
 // Keyed by name so lookups survive sorting/filtering in the UI without needing
 // the cover art to travel alongside each row.
-export const resolveRestaurantCovers = (names: string[]): Record<string, string | null> =>
-  Object.fromEntries(names.map((name) => [name, findRestaurantImagePath(name)]));
+export const resolveRestaurantCovers = (names: string[]): Record<string, string | null> => {
+  const index = buildImageIndex();
+  return Object.fromEntries(names.map((name) => [name, index.get(toMatchKey(name ?? '')) ?? null]));
+};
