@@ -27,14 +27,17 @@ export default function Meta({
   const router = useRouter();
   const siteAddress = 'https://www.worldofwinfield.co.uk';
   const defaultImageUrl = `${siteAddress}/images/jameswinfieldcover.png`;
+  const siteName = 'World Of Winfield';
 
   const { opengraphImage, opengraphTitle, opengraphDescription, opengraphSiteName, metaKeywords } =
     seo || {};
   const canonicalUrl = `${siteAddress}${router.asPath.split('?')[0]}`;
+  const pageTitle = title || opengraphTitle || siteName;
+  const titleWithSiteName = pageTitle.includes(siteName) ? pageTitle : `${pageTitle} | ${siteName}`;
 
   return (
     <Head>
-      <title>{title || opengraphTitle || 'World Of Winfield'}</title>
+      <title>{titleWithSiteName}</title>
       {noindex && <meta name="robots" content="noindex" />}
       <link rel="canonical" href={canonicalUrl} />
       <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png" />
