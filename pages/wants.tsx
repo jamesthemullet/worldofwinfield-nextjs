@@ -35,7 +35,7 @@ export default function WantsPage({ wantToVisitData, wantToEatData }: WantsPageP
   };
 
   return (
-    <Layout preview={null} title="Posts About Wants" seo={seo}>
+    <Layout preview={null} title="Posts About Wants | World Of Winfield" seo={seo}>
       <Container>
         {router.isFallback ? (
           <PostTitle>Loading…</PostTitle>
