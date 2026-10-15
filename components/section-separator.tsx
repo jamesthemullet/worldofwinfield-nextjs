@@ -10,11 +10,11 @@ export default function SectionSeparator(): JSX.Element {
     setBackgroundColour(blockColours[Math.floor(Math.random() * blockColours.length)]);
   }, []);
 
-  return <StyledHr backgroundColour={backgroundColour} colour={colours.white} />;
+  return <StyledHr $backgroundColour={backgroundColour} colour={colours.white} />;
 }
 
-const StyledHr = styled.hr<{ backgroundColour: string; colour: string }>`
-  background-color: ${(props) => props.backgroundColour};
+const StyledHr = styled.hr<{ $backgroundColour: string; colour: string }>`
+  background-color: ${(props) => props.$backgroundColour};
   color: ${(props) => props.colour};
   height: 5px;
   border: none;

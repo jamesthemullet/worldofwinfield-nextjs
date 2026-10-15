@@ -55,7 +55,7 @@ export default function PostHeader({
         </PostTitle>
       )}
       <div>
-        <PostedContainer backgroundColour={randomColour2} colour={colours.white}>
+        <PostedContainer $backgroundColour={randomColour2} colour={colours.white}>
           {date && (
             <p>
               Posted <Date dateString={date} />
@@ -78,11 +78,11 @@ const ImageContainer = styled.div<{ aspectRatio: number }>`
   }
 `;
 
-const PostedContainer = styled.div<{ backgroundColour: string; colour: string }>`
+const PostedContainer = styled.div<{ $backgroundColour: string; colour: string }>`
   font-size: 1rem;
   line-height: 1.25rem;
   padding: 1rem;
-  background-color: ${(props) => props.backgroundColour};
+  background-color: ${(props) => props.$backgroundColour};
   color: ${(props) => props.colour};
   font-family: 'Oswald', sans-serif;
 
