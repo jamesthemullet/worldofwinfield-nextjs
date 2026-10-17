@@ -37,7 +37,7 @@ describe('Meta', () => {
     mockAsPath = '/test-path';
   });
 
-  it('renders the title from the seo opengraphTitle', () => {
+  it('renders the title from the seo opengraphTitle, suffixed with the site name', () => {
     render(
       <Meta
         seo={{
@@ -50,7 +50,9 @@ describe('Meta', () => {
     const titleEl = React.Children.toArray(capturedChildren).find(
       (child): child is React.ReactElement => React.isValidElement(child) && child.type === 'title',
     );
-    expect((titleEl?.props as { children?: string })?.children).toBe('SEO Page Title');
+    expect((titleEl?.props as { children?: string })?.children).toBe(
+      'SEO Page Title | World Of Winfield',
+    );
   });
 
   it('prefers the title prop over seo opengraphTitle', () => {
@@ -67,7 +69,17 @@ describe('Meta', () => {
     const titleEl = React.Children.toArray(capturedChildren).find(
       (child): child is React.ReactElement => React.isValidElement(child) && child.type === 'title',
     );
-    expect((titleEl?.props as { children?: string })?.children).toBe('Custom Title');
+    expect((titleEl?.props as { children?: string })?.children).toBe(
+      'Custom Title | World Of Winfield',
+    );
+  });
+
+  it('does not double-suffix a title that already includes the site name', () => {
+    render(<Meta title="Home - World Of Winfield" />);
+    const titleEl = React.Children.toArray(capturedChildren).find(
+      (child): child is React.ReactElement => React.isValidElement(child) && child.type === 'title',
+    );
+    expect((titleEl?.props as { children?: string })?.children).toBe('Home - World Of Winfield');
   });
 
   it('renders a canonical link pointing to the current page URL', () => {
