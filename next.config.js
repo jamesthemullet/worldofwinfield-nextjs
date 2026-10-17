@@ -31,6 +31,13 @@ const nextConfig = {
     loaderFile: './lib/imageLoader.ts',
     minimumCacheTTL: 2592000,
   },
+  turbopack: {
+    resolveAlias: {
+      // `lib/sanitize.ts` requires `jsdom` only on the server; keep its Node-only
+      // dependencies (net, tls, …) out of the client bundle.
+      jsdom: { browser: './lib/jsdom-browser-stub.js' },
+    },
+  },
   async headers() {
     return [
       {
