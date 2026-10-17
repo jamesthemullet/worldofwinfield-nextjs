@@ -90,7 +90,7 @@ export default function FavouritesHubPage({ counts }: Props): JSX.Element {
         </StyledPostHeader>
         <Grid>
           {categories.map(({ title, url }, index) => (
-            <Tile key={url} href={url} backgroundColour={tileColours[index]}>
+            <Tile key={url} href={url} $backgroundColour={tileColours[index]}>
               <TileInner>
                 <StyledIcon>
                   <Image src="/icons/007-star.png" alt="" width={64} height={64} unoptimized />
@@ -137,8 +137,8 @@ const Grid = styled.div`
   }
 `;
 
-const Tile = styled(Link)<{ backgroundColour: string }>`
-  background-color: ${(props) => props.backgroundColour};
+const Tile = styled(Link)<{ $backgroundColour: string }>`
+  background-color: ${(props) => props.$backgroundColour};
   color: #fff;
   display: flex;
   align-items: center;
