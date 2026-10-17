@@ -10,7 +10,7 @@ export default function PostTitle({
   headingLevel,
 }: PostTitleProps): JSX.Element {
   return (
-    <StyledTitleContainer backgroundColour={backgroundColour ?? ''}>
+    <StyledTitleContainer $backgroundColour={backgroundColour ?? ''}>
       <Title
         as={headingLevel ?? 'h1'}
         colour={colours.white}
@@ -20,8 +20,8 @@ export default function PostTitle({
   );
 }
 
-const StyledTitleContainer = styled.div<{ backgroundColour: string }>`
-  background-color: ${(props) => props.backgroundColour};
+const StyledTitleContainer = styled.div<{ $backgroundColour: string }>`
+  background-color: ${(props) => props.$backgroundColour};
   padding: 1rem;
   margin: 0;
   box-sizing: border-box;
