@@ -126,7 +126,7 @@ Also checked, no issues found: root `yarn audit` reports 55 high / 9 moderate / 
 
 ## 7. README / feature alignment
 
-- [x] `README.md:23-30` scripts table is missing 5 scripts that exist in `package.json`: `dev:realtime`, `start:realtime`, `knip`, `test:e2e`, `postbuild`. Add rows for these so the table matches `package.json`. (found: 2026-08-31) (resolved: 2026-10-18, PR #TBD)
+- [x] `README.md:23-30` scripts table is missing 5 scripts that exist in `package.json`: `dev:realtime`, `start:realtime`, `knip`, `test:e2e`, `postbuild`. Add rows for these so the table matches `package.json`. (found: 2026-08-31) (resolved: 2026-10-18, PR #711)
 - [ ] `README.md`'s Tech Stack section (README.md:5-10) omits real architectural dependencies that a new contributor would need to know about: WordPress GraphQL as the content source, Google Sheets as the favourites data source, TMDB for film data, and the standalone `realtime/` Node WebSocket service. `@playwright/test` and the e2e tooling are also entirely undocumented despite being a real devDependency with a script. Add these to the Tech Stack section. (found: 2026-08-31)
 
 Also checked, no issues found: `README.md:34`'s "The site includes a blog, favourites (books, movies, music, cities, etc.), goals, travel, and more" is intentionally loose ("and more") and does cover the additional pages found in `pages/` (stats, stocks, now, holiday-wish-list, restaurant-wish-list, countries-visited, year-in-review, archive-page, etc.) — no misleading claims found.
