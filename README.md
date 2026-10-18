@@ -23,11 +23,16 @@ Open [http://localhost:3000](http://localhost:3000).
 | Command | Description |
 |---|---|
 | `yarn dev` | Start development server |
+| `yarn dev:realtime` | Start the realtime WebSocket service in development |
 | `yarn build` | Production build |
 | `yarn start` | Start production server |
+| `yarn start:realtime` | Start the realtime WebSocket service in production |
 | `yarn test` | Run tests |
+| `yarn test:e2e` | Run end-to-end tests with Playwright |
 | `yarn lint` | Type-check and lint |
 | `yarn format` | Format with Prettier |
+| `yarn knip` | Find unused files, dependencies, and exports |
+| `yarn postbuild` | Generate the sitemap after a production build |
 
 ## Pages
 
