@@ -6,7 +6,8 @@
     "realtime/server.js",
     "scripts/enrich-tracks.js",
     "scripts/resolve-dj-covers.js",
-    "lib/imageLoader.ts"
+    "lib/imageLoader.ts",
+    "lib/jsdom-browser-stub.js"
   ],
   "ignoreDependencies": ["tsc-files", "ts-node", "ws", "dotenv", "jest-environment-jsdom"],
   "ignoreExportsUsedInFile": {
