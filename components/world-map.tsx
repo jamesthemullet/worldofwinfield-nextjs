@@ -1,13 +1,17 @@
 import styled from '@emotion/styled';
 import type { Feature, GeoJsonObject, Geometry } from 'geojson';
+import Link from 'next/link';
 import { type CSSProperties, type JSX, useCallback, useMemo, useState } from 'react';
 import { ComposableMap, Geographies, Geography, ZoomableGroup } from 'react-simple-maps';
 import countries110m from 'world-atlas/countries-110m.json';
+import { findPostsForLocation } from '../lib/location-posts';
+import type { LocationPost } from '../lib/types';
 import { colours } from '../pages/_app';
 
 export type WorldMapProps = {
   visitedCountries: string[];
   wishListCountries?: string[];
+  posts?: LocationPost[];
 };
 
 const MIN_ZOOM = 1;
@@ -33,6 +37,16 @@ const NAME_ALIASES: Record<string, string> = {
 };
 
 const normalise = (name: string): string => (NAME_ALIASES[name] ?? name).toLowerCase();
+
+// The inverse of NAME_ALIASES: the atlas's canonical name ("United States of
+// America") to every alias a blog post might actually be tagged with ("USA").
+const ALIASES_BY_CANONICAL_NAME: Record<string, string[]> = Object.entries(NAME_ALIASES).reduce(
+  (acc, [alias, canonical]) => {
+    (acc[canonical] ??= []).push(alias);
+    return acc;
+  },
+  {} as Record<string, string[]>,
+);
 
 const PROJECTION_CONFIG = { scale: 147 } as const;
 const MAP_STYLE = { width: '100%', height: 'auto' } as const;
@@ -61,10 +75,33 @@ const dropFrenchGuiana = (features: Feature[]): Feature[] =>
 export default function WorldMap({
   visitedCountries,
   wishListCountries = [],
+  posts = [],
 }: WorldMapProps): JSX.Element {
   const [hovered, setHovered] = useState<string | null>(null);
+  const [hoveredPosts, setHoveredPosts] = useState<LocationPost[]>([]);
   const [zoom, setZoom] = useState(MIN_ZOOM);
   const [center, setCenter] = useState<[number, number]>(DEFAULT_CENTER);
+
+  const postsForCountry = useCallback(
+    (name: string): LocationPost[] =>
+      posts.length === 0
+        ? []
+        : findPostsForLocation([name, ...(ALIASES_BY_CANONICAL_NAME[name] ?? [])], posts),
+    [posts],
+  );
+
+  const highlight = useCallback(
+    (name: string, label: string) => {
+      setHovered(label);
+      setHoveredPosts(postsForCountry(name));
+    },
+    [postsForCountry],
+  );
+
+  const clearHighlight = useCallback(() => {
+    setHovered(null);
+    setHoveredPosts([]);
+  }, []);
 
   const visitedSet = useMemo(() => new Set(visitedCountries.map(normalise)), [visitedCountries]);
   // A country already visited is shown as visited, not as a wish-list entry.
@@ -146,10 +183,10 @@ export default function WorldMap({
                     tabIndex={highlighted ? 0 : -1}
                     role={highlighted ? 'button' : undefined}
                     aria-label={highlighted ? label : undefined}
-                    onMouseEnter={() => setHovered(label)}
-                    onMouseLeave={() => setHovered(null)}
-                    onFocus={() => setHovered(label)}
-                    onBlur={() => setHovered(null)}
+                    onMouseEnter={() => highlight(name, label)}
+                    onMouseLeave={clearHighlight}
+                    onFocus={() => highlight(name, label)}
+                    onBlur={clearHighlight}
                     style={
                       {
                         '--default-fill': defaultFill,
@@ -163,7 +200,20 @@ export default function WorldMap({
           </Geographies>
         </ZoomableGroup>
       </ComposableMap>
-      {hovered && <Tooltip role="status">{hovered}</Tooltip>}
+      {hovered && (
+        <Tooltip role="status">
+          <span>{hovered}</span>
+          {hoveredPosts.length > 0 && (
+            <TooltipPostList>
+              {hoveredPosts.map((post) => (
+                <li key={post.slug}>
+                  <Link href={`/${post.slug}`}>{post.title}</Link>
+                </li>
+              ))}
+            </TooltipPostList>
+          )}
+        </Tooltip>
+      )}
     </MapWrapper>
   );
 }
@@ -254,4 +304,16 @@ const Tooltip = styled.div`
   font-size: 0.85rem;
   font-weight: 600;
   pointer-events: none;
+`;
+
+const TooltipPostList = styled.ul`
+  list-style: none;
+  margin: 0.4rem 0 0;
+  padding: 0;
+  pointer-events: auto;
+
+  a {
+    color: ${colours.white};
+    text-decoration: underline;
+  }
 `;
