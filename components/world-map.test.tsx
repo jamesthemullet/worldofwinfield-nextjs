@@ -1,6 +1,15 @@
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
+import type { LocationPost } from '../lib/types';
 import WorldMap from './world-map';
+
+function makePost(slug: string, title: string, tagNames: string[]): LocationPost {
+  return {
+    slug,
+    title,
+    tags: { edges: tagNames.map((name) => ({ node: { name } })) },
+  };
+}
 
 describe('WorldMap', () => {
   it('renders an accessible map container', () => {
@@ -66,5 +75,45 @@ describe('WorldMap', () => {
   it('renders with no wish-list countries without crashing', () => {
     render(<WorldMap visitedCountries={['France']} />);
     expect(screen.getByLabelText('France')).toBeInTheDocument();
+  });
+
+  it('shows a link to a post tagged with the hovered country', () => {
+    const posts = [makePost('rome-trip', 'My Rome Trip', ['Italy'])];
+    render(<WorldMap visitedCountries={['Italy']} posts={posts} />);
+
+    fireEvent.mouseEnter(screen.getByLabelText('Italy'));
+
+    const link = screen.getByRole('link', { name: 'My Rome Trip' });
+    expect(link).toHaveAttribute('href', '/rome-trip');
+  });
+
+  it('matches a post tagged with the alias name against the atlas name', () => {
+    const posts = [makePost('road-trip', 'American Road Trip', ['USA'])];
+    render(<WorldMap visitedCountries={['USA']} posts={posts} />);
+
+    fireEvent.mouseEnter(screen.getByLabelText('United States of America'));
+
+    expect(screen.getByRole('link', { name: 'American Road Trip' })).toBeInTheDocument();
+  });
+
+  it('hides the post link again once the country is no longer hovered', () => {
+    const posts = [makePost('rome-trip', 'My Rome Trip', ['Italy'])];
+    render(<WorldMap visitedCountries={['Italy']} posts={posts} />);
+
+    const italy = screen.getByLabelText('Italy');
+    fireEvent.mouseEnter(italy);
+    expect(screen.getByRole('link', { name: 'My Rome Trip' })).toBeInTheDocument();
+
+    fireEvent.mouseLeave(italy);
+    expect(screen.queryByRole('link', { name: 'My Rome Trip' })).not.toBeInTheDocument();
+  });
+
+  it('shows no post links when nothing is tagged with the hovered country', () => {
+    const posts = [makePost('unrelated', 'Unrelated Post', ['Music'])];
+    render(<WorldMap visitedCountries={['Italy']} posts={posts} />);
+
+    fireEvent.mouseEnter(screen.getByLabelText('Italy'));
+
+    expect(screen.queryByRole('link')).not.toBeInTheDocument();
   });
 });
