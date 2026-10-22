@@ -7,7 +7,12 @@ A personal blog and portfolio site built with Next.js, TypeScript, and Emotion.
 - **Next.js** — pages router with ISR
 - **TypeScript**
 - **Emotion** — CSS-in-JS styling
+- **WordPress GraphQL** — headless CMS content source for blog posts
+- **Google Sheets** — data source for the favourites pages
+- **TMDB** — film data for the favourite movies page
+- **`realtime/`** — standalone Node WebSocket service powering the `/stocks` page
 - **Jest + React Testing Library** — unit tests
+- **Playwright** — end-to-end tests
 
 ## Getting Started
 
