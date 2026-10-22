@@ -1,7 +1,7 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { act, fireEvent, render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import type { LocationPost } from '../lib/types';
-import WorldMap from './world-map';
+import WorldMap, { TOOLTIP_HIDE_DELAY_MS } from './world-map';
 
 function makePost(slug: string, title: string, tagNames: string[]): LocationPost {
   return {
@@ -96,16 +96,61 @@ describe('WorldMap', () => {
     expect(screen.getByRole('link', { name: 'American Road Trip' })).toBeInTheDocument();
   });
 
-  it('hides the post link again once the country is no longer hovered', () => {
+  describe('tooltip persistence', () => {
     const posts = [makePost('rome-trip', 'My Rome Trip', ['Italy'])];
-    render(<WorldMap visitedCountries={['Italy']} posts={posts} />);
 
-    const italy = screen.getByLabelText('Italy');
-    fireEvent.mouseEnter(italy);
-    expect(screen.getByRole('link', { name: 'My Rome Trip' })).toBeInTheDocument();
+    beforeEach(() => jest.useFakeTimers());
+    afterEach(() => jest.useRealTimers());
 
-    fireEvent.mouseLeave(italy);
-    expect(screen.queryByRole('link', { name: 'My Rome Trip' })).not.toBeInTheDocument();
+    it('hides the post link once the hide delay passes after leaving the country', () => {
+      render(<WorldMap visitedCountries={['Italy']} posts={posts} />);
+
+      const italy = screen.getByLabelText('Italy');
+      fireEvent.mouseEnter(italy);
+      fireEvent.mouseLeave(italy);
+      expect(screen.getByRole('link', { name: 'My Rome Trip' })).toBeInTheDocument();
+
+      act(() => jest.advanceTimersByTime(TOOLTIP_HIDE_DELAY_MS));
+      expect(screen.queryByRole('link', { name: 'My Rome Trip' })).not.toBeInTheDocument();
+    });
+
+    it('keeps the tooltip open while the pointer is over it', () => {
+      render(<WorldMap visitedCountries={['Italy']} posts={posts} />);
+
+      const italy = screen.getByLabelText('Italy');
+      fireEvent.mouseEnter(italy);
+      fireEvent.mouseLeave(italy);
+      fireEvent.mouseEnter(screen.getByRole('status'));
+
+      act(() => jest.advanceTimersByTime(TOOLTIP_HIDE_DELAY_MS * 2));
+      expect(screen.getByRole('link', { name: 'My Rome Trip' })).toBeInTheDocument();
+    });
+
+    it('pins the tooltip on click so hovering other countries does not replace it', () => {
+      render(<WorldMap visitedCountries={['Italy', 'France']} posts={posts} />);
+
+      const italy = screen.getByLabelText('Italy');
+      fireEvent.click(italy);
+      fireEvent.mouseLeave(italy);
+      fireEvent.mouseEnter(screen.getByLabelText('France'));
+
+      act(() => jest.advanceTimersByTime(TOOLTIP_HIDE_DELAY_MS * 2));
+      expect(screen.getByRole('link', { name: 'My Rome Trip' })).toBeInTheDocument();
+
+      fireEvent.click(screen.getByRole('button', { name: 'Close' }));
+      expect(screen.queryByRole('link', { name: 'My Rome Trip' })).not.toBeInTheDocument();
+    });
+
+    it('pins the tooltip with the Enter key', () => {
+      render(<WorldMap visitedCountries={['Italy']} posts={posts} />);
+
+      const italy = screen.getByLabelText('Italy');
+      fireEvent.keyDown(italy, { key: 'Enter' });
+      fireEvent.blur(italy);
+
+      act(() => jest.advanceTimersByTime(TOOLTIP_HIDE_DELAY_MS * 2));
+      expect(screen.getByRole('link', { name: 'My Rome Trip' })).toBeInTheDocument();
+    });
   });
 
   it('shows no post links when nothing is tagged with the hovered country', () => {

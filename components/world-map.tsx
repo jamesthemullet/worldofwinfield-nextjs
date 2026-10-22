@@ -1,7 +1,16 @@
 import styled from '@emotion/styled';
 import type { Feature, GeoJsonObject, Geometry } from 'geojson';
 import Link from 'next/link';
-import { type CSSProperties, type JSX, useCallback, useMemo, useState } from 'react';
+import {
+  type CSSProperties,
+  type JSX,
+  type KeyboardEvent,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { ComposableMap, Geographies, Geography, ZoomableGroup } from 'react-simple-maps';
 import countries110m from 'world-atlas/countries-110m.json';
 import { findPostsForLocation } from '../lib/location-posts';
@@ -17,6 +26,9 @@ export type WorldMapProps = {
 const MIN_ZOOM = 1;
 const MAX_ZOOM = 8;
 const DEFAULT_CENTER: [number, number] = [0, 20];
+// How long the tooltip lingers after the pointer leaves a country, so there is
+// time to move onto it and click one of the post links.
+export const TOOLTIP_HIDE_DELAY_MS = 400;
 
 // Maps common country names (as used in the Google Sheet) to the
 // Natural Earth names used by the world-atlas TopoJSON data.
@@ -90,18 +102,60 @@ export default function WorldMap({
     [posts],
   );
 
-  const highlight = useCallback(
+  // A pinned tooltip ignores hovering over other countries, so the pointer can
+  // cross them on the way to the post links.
+  const [pinned, setPinned] = useState(false);
+  const hideTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const cancelHide = useCallback(() => {
+    if (hideTimer.current) {
+      clearTimeout(hideTimer.current);
+      hideTimer.current = null;
+    }
+  }, []);
+
+  useEffect(() => cancelHide, [cancelHide]);
+
+  const showCountry = useCallback(
     (name: string, label: string) => {
+      cancelHide();
       setHovered(label);
       setHoveredPosts(postsForCountry(name));
     },
-    [postsForCountry],
+    [cancelHide, postsForCountry],
+  );
+
+  const highlight = useCallback(
+    (name: string, label: string) => {
+      if (!pinned) showCountry(name, label);
+    },
+    [pinned, showCountry],
   );
 
   const clearHighlight = useCallback(() => {
+    cancelHide();
+    setPinned(false);
     setHovered(null);
     setHoveredPosts([]);
-  }, []);
+  }, [cancelHide]);
+
+  const scheduleClear = useCallback(() => {
+    if (pinned) return;
+    cancelHide();
+    hideTimer.current = setTimeout(clearHighlight, TOOLTIP_HIDE_DELAY_MS);
+  }, [pinned, cancelHide, clearHighlight]);
+
+  const togglePin = useCallback(
+    (name: string, label: string) => {
+      if (pinned && hovered === label) {
+        clearHighlight();
+        return;
+      }
+      showCountry(name, label);
+      setPinned(true);
+    },
+    [pinned, hovered, clearHighlight, showCountry],
+  );
 
   const visitedSet = useMemo(() => new Set(visitedCountries.map(normalise)), [visitedCountries]);
   // A country already visited is shown as visited, not as a wish-list entry.
@@ -184,9 +238,20 @@ export default function WorldMap({
                     role={highlighted ? 'button' : undefined}
                     aria-label={highlighted ? label : undefined}
                     onMouseEnter={() => highlight(name, label)}
-                    onMouseLeave={clearHighlight}
+                    onMouseLeave={scheduleClear}
                     onFocus={() => highlight(name, label)}
-                    onBlur={clearHighlight}
+                    onBlur={scheduleClear}
+                    onClick={highlighted ? () => togglePin(name, label) : undefined}
+                    onKeyDown={
+                      highlighted
+                        ? (event: KeyboardEvent) => {
+                            if (event.key === 'Enter' || event.key === ' ') {
+                              event.preventDefault();
+                              togglePin(name, label);
+                            }
+                          }
+                        : undefined
+                    }
                     style={
                       {
                         '--default-fill': defaultFill,
@@ -201,8 +266,21 @@ export default function WorldMap({
         </ZoomableGroup>
       </ComposableMap>
       {hovered && (
-        <Tooltip role="status">
-          <span>{hovered}</span>
+        <Tooltip
+          role="status"
+          onMouseEnter={cancelHide}
+          onMouseLeave={scheduleClear}
+          onFocus={cancelHide}
+          onBlur={scheduleClear}>
+          <TooltipHeader>
+            <span>{hovered}</span>
+            {pinned && (
+              <CloseButton type="button" onClick={clearHighlight} aria-label="Close">
+                ×
+              </CloseButton>
+            )}
+          </TooltipHeader>
+          {hoveredPosts.length > 0 && !pinned && <TooltipHint>Click to pin</TooltipHint>}
           {hoveredPosts.length > 0 && (
             <TooltipPostList>
               {hoveredPosts.map((post) => (
@@ -303,14 +381,41 @@ const Tooltip = styled.div`
   border-radius: 4px;
   font-size: 0.85rem;
   font-weight: 600;
-  pointer-events: none;
+`;
+
+const TooltipHeader = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+`;
+
+const CloseButton = styled.button`
+  background: none;
+  border: none;
+  color: ${colours.white};
+  font-size: 1rem;
+  line-height: 1;
+  padding: 0 0.15rem;
+  cursor: pointer;
+
+  &:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
+  }
+`;
+
+const TooltipHint = styled.span`
+  display: block;
+  font-size: 0.7rem;
+  font-weight: 400;
+  opacity: 0.8;
 `;
 
 const TooltipPostList = styled.ul`
   list-style: none;
   margin: 0.4rem 0 0;
   padding: 0;
-  pointer-events: auto;
 
   a {
     color: ${colours.white};
