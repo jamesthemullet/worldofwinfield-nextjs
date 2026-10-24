@@ -10,6 +10,11 @@
       "groupName": "all non-major dependencies",
       "groupSlug": "all-minor-patch",
       "minimumReleaseAge": "3 days"
+    },
+    {
+      "description": "jsdom 30 pulls in ESM-only @exodus/bytes, which Vercel's function runtime can't require() — breaks lib/sanitize.ts on ISR/fallback renders",
+      "matchPackageNames": ["jsdom"],
+      "allowedVersions": "<27"
     }
   ],
   "rebaseWhen": "conflicted"
