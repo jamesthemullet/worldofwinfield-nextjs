@@ -179,6 +179,8 @@ export const normaliseSymbolAlias = (symbol: string): string => {
   return `${exchange}:${ticker}`;
 };
 
+const RECONNECT_DELAY_MS = 2000;
+
 const getCompanyName = (symbol: string): string => COMPANY_NAMES[symbol] || symbol;
 
 const resolveDefaultWsUrl = (): string => {
@@ -513,7 +515,7 @@ export default function StocksPage(): JSX.Element {
           setStatus('disconnected');
 
           if (shouldReconnect) {
-            reconnectTimer = setTimeout(connect, 2000);
+            reconnectTimer = setTimeout(connect, RECONNECT_DELAY_MS);
           }
         };
       } catch {
