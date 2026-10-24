@@ -1,5 +1,4 @@
-import fs from 'fs';
-import path from 'path';
+import { findStaticImagePath } from './static-covers';
 
 // No API is used for beers — a search-by-name lookup against Open Food Facts or
 // Untappd would be too unreliable for a curated list (mismatched labels, missing
@@ -10,30 +9,6 @@ import path from 'path';
 // beer-specific image exists. Any beer/brewery without a matching file falls
 // back to the initials placeholder, so partial coverage is fine.
 
-const BEER_IMAGES_DIR = path.join(process.cwd(), 'public', 'images', 'beers');
-const SUPPORTED_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.webp'];
-
-const slugify = (name: string): string =>
-  name
-    .normalize('NFKD')
-    .replace(/[̀-ͯ]/g, '')
-    .trim()
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '');
-
-const findImagePath = (name: string): string | null => {
-  const slug = slugify(name);
-  if (!slug) return null;
-
-  for (const extension of SUPPORTED_EXTENSIONS) {
-    const filePath = path.join(BEER_IMAGES_DIR, `${slug}${extension}`);
-    if (fs.existsSync(filePath)) return `/images/beers/${slug}${extension}`;
-  }
-
-  return null;
-};
-
 // Keyed by beer name (what the grid displays as the card title). Each entry
 // prefers an image matching the beer itself, falling back to its brewery's
 // shared image.
@@ -43,6 +18,6 @@ export const resolveBeerCovers = (
   Object.fromEntries(
     entries.map(({ beerName, brewery }) => [
       beerName,
-      findImagePath(beerName) ?? findImagePath(brewery),
+      findStaticImagePath(beerName, 'beers') ?? findStaticImagePath(brewery, 'beers'),
     ]),
   );

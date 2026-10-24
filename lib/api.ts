@@ -2,6 +2,7 @@ import type {
   AdjacentPost,
   IndexPageProps,
   JamesImagesProps,
+  LocationPost,
   PostsProps,
   RelatedPost,
   SearchResult,
@@ -222,6 +223,33 @@ export async function getAllPostsWithSlug(): Promise<
     }
   `);
   return data.posts;
+}
+
+type AllPostsWithTagsResponse = {
+  posts: { nodes: LocationPost[] };
+};
+
+// Fetches every post's title, slug and tags, so the travel map can match
+// visited/wish-listed locations to posts tagged with that place.
+export async function getAllPostsWithTags(): Promise<LocationPost[]> {
+  const data = await fetchAPI<AllPostsWithTagsResponse>(`
+    {
+      posts(first: 10000) {
+        nodes {
+          title
+          slug
+          tags {
+            edges {
+              node {
+                name
+              }
+            }
+          }
+        }
+      }
+    }
+  `);
+  return data?.posts?.nodes ?? [];
 }
 
 export async function getFirstPost(): Promise<FirstPostResponse['posts'] | undefined> {
