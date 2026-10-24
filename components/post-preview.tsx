@@ -23,13 +23,12 @@ export default function PostPreview({
     <CardContainer>
       <ImageLink href={`/${slug}`} aria-label={title}>
         {featuredImage?.node.sourceUrl ? (
-          <Image
+          <FeaturedImage
             src={featuredImage.node.sourceUrl}
             alt=""
             fill
             sizes="(max-width: 768px) 100vw, 40vw"
             quality={75}
-            style={{ objectFit: 'cover' }}
           />
         ) : (
           <ColourFallback colour={fallbackColour} />
@@ -82,6 +81,10 @@ const ImageLink = styled(Link)`
     outline: 2px solid #000;
     outline-offset: 2px;
   }
+`;
+
+const FeaturedImage = styled(Image)`
+  object-fit: cover;
 `;
 
 const ColourFallback = styled.div<{ colour: string }>`
