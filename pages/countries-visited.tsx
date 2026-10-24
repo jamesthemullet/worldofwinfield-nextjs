@@ -9,7 +9,9 @@ import PostHeader from '../components/post-header';
 import PostTitle from '../components/post-title';
 import ShareBar from '../components/share-bar';
 import type { WorldMapProps } from '../components/world-map';
+import { getAllPostsWithTags } from '../lib/api';
 import { fetchDataFromGoogleSheets as fetchSheetById } from '../lib/sheets';
+import type { LocationPost } from '../lib/types';
 
 // Lazy-load the world map: react-simple-maps pulls in multiple D3 sub-packages
 // and world-atlas/countries-110m.json (~96 KB), which would bloat the initial
@@ -22,6 +24,7 @@ const WorldMap = dynamic<WorldMapProps>(() => import('../components/world-map'),
 type CountriesVisitedProps = {
   transformedData: Record<string, { country: string; visited: string }[]>;
   wishListCountries: string[];
+  posts: LocationPost[];
 };
 
 const WISH_LIST_SHEET_ID = '1GX6KF20f3Nrb3m8T9th7UIV_uuePj4Ivlc_yLgo-4Bo';
@@ -117,6 +120,7 @@ const CountryList = ({ transformedData }: CountryListProps): JSX.Element => {
 export default function CountriesVisited({
   transformedData,
   wishListCountries,
+  posts,
 }: CountriesVisitedProps): JSX.Element {
   const router = useRouter();
 
@@ -160,7 +164,11 @@ export default function CountriesVisited({
                   <StatLabel>continents explored</StatLabel>
                 </StatItem>
               </StatBlock>
-              <WorldMap visitedCountries={visitedCountries} wishListCountries={wishListCountries} />
+              <WorldMap
+                visitedCountries={visitedCountries}
+                wishListCountries={wishListCountries}
+                posts={posts}
+              />
               <ShareBar
                 title={`I've visited ${totalVisited} of ${totalCountries} countries across ${continentsExplored} continents! 🌍`}
                 url="https://worldofwinfield.co.uk/countries-visited"
@@ -247,9 +255,10 @@ const ContentContainer = styled.section`
 `;
 
 export const getStaticProps: GetStaticProps<CountriesVisitedProps> = async () => {
-  const [rawData, wishListRawData] = await Promise.all([
+  const [rawData, wishListRawData, posts] = await Promise.all([
     fetchSheetById(COUNTRIES_SHEET_ID),
     fetchSheetById(WISH_LIST_SHEET_ID),
+    getAllPostsWithTags(),
   ]);
   const transformedData = rawData ? processData(rawData) : {};
   const wishListCountries = extractWishListCountries(wishListRawData);
@@ -258,6 +267,7 @@ export const getStaticProps: GetStaticProps<CountriesVisitedProps> = async () =>
     props: {
       transformedData,
       wishListCountries,
+      posts,
     },
     revalidate: 86400,
   };
