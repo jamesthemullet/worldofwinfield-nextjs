@@ -2,6 +2,7 @@ import type {
   AdjacentPost,
   IndexPageProps,
   JamesImagesProps,
+  LocationPost,
   PostsProps,
   RelatedPost,
   SearchResult,
@@ -18,6 +19,38 @@ type FetchAPIOptions = {
 
 const MAX_FETCH_ATTEMPTS = 3;
 const RETRY_DELAY_MS = 500;
+
+// Shared featuredImage GraphQL selections, reused verbatim across several query
+// templates below. Field order/whitespace doesn't affect GraphQL parsing, so these
+// are only extracted where a query's featuredImage selection is byte-identical to
+// another's; queries selecting different fields (id/title/caption/altText/srcSet) are
+// left as their own literals rather than forced into a shared shape.
+const FEATURED_IMAGE_WITH_SIZES_FRAGMENT = `featuredImage {
+            node {
+              mediaDetails {
+                sizes {
+                  height
+                  width
+                  sourceUrl
+                }
+                height
+                width
+              }
+              srcSet
+              sourceUrl
+            }
+          }`;
+
+const FEATURED_IMAGE_WITH_CAPTION_FRAGMENT = `featuredImage {
+            node {
+              sourceUrl
+              mediaDetails {
+                height
+                width
+              }
+              caption
+            }
+          }`;
 
 // Private response wrapper types — one per fetchAPI call site, matching only
 // the fields each GraphQL query actually selects.
@@ -190,6 +223,33 @@ export async function getAllPostsWithSlug(): Promise<
     }
   `);
   return data.posts;
+}
+
+type AllPostsWithTagsResponse = {
+  posts: { nodes: LocationPost[] };
+};
+
+// Fetches every post's title, slug and tags, so the travel map can match
+// visited/wish-listed locations to posts tagged with that place.
+export async function getAllPostsWithTags(): Promise<LocationPost[]> {
+  const data = await fetchAPI<AllPostsWithTagsResponse>(`
+    {
+      posts(first: 10000) {
+        nodes {
+          title
+          slug
+          tags {
+            edges {
+              node {
+                name
+              }
+            }
+          }
+        }
+      }
+    }
+  `);
+  return data?.posts?.nodes ?? [];
 }
 
 export async function getFirstPost(): Promise<FirstPostResponse['posts'] | undefined> {
@@ -443,21 +503,7 @@ export async function getPostDisplayInfo(ids: string[]): Promise<IndexPageProps[
           slug
           title
           date
-          featuredImage {
-            node {
-              mediaDetails {
-                sizes {
-                  height
-                  width
-                  sourceUrl
-                }
-                height
-                width
-              }
-              srcSet
-              sourceUrl
-            }
-          }
+          ${FEATURED_IMAGE_WITH_SIZES_FRAGMENT}
         }
       }`,
         {
@@ -511,21 +557,7 @@ export async function filterPostsByTag(tag: string): Promise<FilterPostsByTagNod
               name
             }
           }
-          featuredImage {
-            node {
-              mediaDetails {
-                sizes {
-                  height
-                  width
-                  sourceUrl
-                }
-                height
-                width
-              }
-              srcSet
-              sourceUrl
-            }
-          }
+          ${FEATURED_IMAGE_WITH_SIZES_FRAGMENT}
         }
       }
     }`,
@@ -548,21 +580,7 @@ export async function getPostsByDate(
           title
           date
           slug
-          featuredImage {
-            node {
-              mediaDetails {
-                sizes {
-                  height
-                  width
-                  sourceUrl
-                }
-                height
-                width
-              }
-              srcSet
-              sourceUrl
-            }
-          }
+          ${FEATURED_IMAGE_WITH_SIZES_FRAGMENT}
         }
       }
     }`,
@@ -607,16 +625,7 @@ export async function getPostsByTag(tag: string): Promise<TagsPostProps['posts']
           date
           id
           excerpt
-          featuredImage {
-            node {
-              sourceUrl
-              mediaDetails {
-                height
-                width
-              }
-              caption
-            }
-          }
+          ${FEATURED_IMAGE_WITH_CAPTION_FRAGMENT}
         }
       }
     }`,
@@ -638,16 +647,7 @@ export async function getPostsByYear(year: number): Promise<YearInReviewProps['p
           date
           id
           excerpt
-          featuredImage {
-            node {
-              sourceUrl
-              mediaDetails {
-                height
-                width
-              }
-              caption
-            }
-          }
+          ${FEATURED_IMAGE_WITH_CAPTION_FRAGMENT}
         }
       }
     }`,
