@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import React from 'react';
 import '@testing-library/jest-dom';
+import { getAllPostsWithTags } from '../lib/api';
 import { fetchDataFromGoogleSheets } from '../lib/sheets';
 import CountriesVisited, {
   extractWishListCountries,
@@ -53,6 +54,10 @@ jest.mock('../components/share-bar', () => ({
 
 jest.mock('../lib/sheets', () => ({
   fetchDataFromGoogleSheets: jest.fn(),
+}));
+
+jest.mock('../lib/api', () => ({
+  getAllPostsWithTags: jest.fn().mockResolvedValue([]),
 }));
 
 describe('processData', () => {
@@ -130,7 +135,11 @@ describe('CountriesVisited component', () => {
 
   it('renders the visited/total stats and country lists', () => {
     render(
-      <CountriesVisited transformedData={sampleTransformedData} wishListCountries={['Japan']} />,
+      <CountriesVisited
+        transformedData={sampleTransformedData}
+        wishListCountries={['Japan']}
+        posts={[]}
+      />,
     );
 
     expect(screen.getByRole('heading', { name: 'Countries Visited' })).toBeInTheDocument();
@@ -141,14 +150,20 @@ describe('CountriesVisited component', () => {
 
   it('shows "Loading…" and hides the page content when the router is falling back', () => {
     mockRouter.isFallback = true;
-    render(<CountriesVisited transformedData={sampleTransformedData} wishListCountries={[]} />);
+    render(
+      <CountriesVisited
+        transformedData={sampleTransformedData}
+        wishListCountries={[]}
+        posts={[]}
+      />,
+    );
 
     expect(screen.getByTestId('post-title')).toHaveTextContent('Loading…');
     expect(screen.queryByRole('heading', { name: 'Countries Visited' })).not.toBeInTheDocument();
   });
 
   it('renders zero stats when transformedData is empty', () => {
-    render(<CountriesVisited transformedData={{}} wishListCountries={[]} />);
+    render(<CountriesVisited transformedData={{}} wishListCountries={[]} posts={[]} />);
 
     expect(screen.getAllByText('0 / 0')).toHaveLength(2);
   });
@@ -158,9 +173,13 @@ describe('getStaticProps', () => {
   const mockedFetch = fetchDataFromGoogleSheets as jest.MockedFunction<
     typeof fetchDataFromGoogleSheets
   >;
+  const mockedGetAllPostsWithTags = getAllPostsWithTags as jest.MockedFunction<
+    typeof getAllPostsWithTags
+  >;
 
   beforeEach(() => {
     mockedFetch.mockReset();
+    mockedGetAllPostsWithTags.mockReset().mockResolvedValue([]);
   });
 
   it('transforms sheet data into continent groups when the fetch succeeds', async () => {
@@ -178,6 +197,7 @@ describe('getStaticProps', () => {
       props: {
         transformedData: { Europe: [{ country: 'France', visited: '✔' }] },
         wishListCountries: ['Japan'],
+        posts: [],
       },
       revalidate: 86400,
     });
@@ -194,5 +214,15 @@ describe('getStaticProps', () => {
         wishListCountries: [],
       },
     });
+  });
+
+  it('includes posts fetched for location matching', async () => {
+    mockedFetch.mockResolvedValueOnce(null).mockResolvedValueOnce(null);
+    const posts = [{ slug: 'rome-trip', title: 'Rome Trip', tags: { edges: [] } }];
+    mockedGetAllPostsWithTags.mockResolvedValueOnce(posts);
+
+    const result = await getStaticProps({});
+
+    expect(result).toMatchObject({ props: { posts } });
   });
 });

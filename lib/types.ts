@@ -481,6 +481,18 @@ export type RelatedPostsProps = {
   posts: RelatedPost[];
 };
 
+export type LocationPost = {
+  slug: string;
+  title: string;
+  tags: {
+    edges: {
+      node: {
+        name: string;
+      };
+    }[];
+  };
+};
+
 export type SearchResult = {
   slug: string;
   title: string;
