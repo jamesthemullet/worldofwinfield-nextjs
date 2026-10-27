@@ -54,13 +54,12 @@ function BookCover({ title, coverUrl }: { title: string; coverUrl?: string | nul
   }
 
   return (
-    <Image
+    <CoverImage
       alt={`Cover of ${title}`}
       src={coverUrl}
       sizes="(max-width: 768px) 40vw, 200px"
       quality={75}
       fill
-      style={{ objectFit: 'cover' }}
       onError={() => setHasErrored(true)}
     />
   );
@@ -182,6 +181,10 @@ const RankBadge = styled.span`
   font-size: 0.75rem;
   font-weight: bold;
   text-align: center;
+`;
+
+const CoverImage = styled(Image)`
+  object-fit: cover;
 `;
 
 const Placeholder = styled.div`
