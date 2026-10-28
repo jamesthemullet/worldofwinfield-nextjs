@@ -15,6 +15,11 @@
       "description": "jsdom 30 pulls in ESM-only @exodus/bytes, which Vercel's function runtime can't require() — breaks lib/sanitize.ts on ISR/fallback renders",
       "matchPackageNames": ["jsdom"],
       "allowedVersions": "<27"
+    },
+    {
+      "description": "Vercel's runtime tops out at Node 24.x — keep CI and @types/node in step with production until Vercel supports a newer major",
+      "matchPackageNames": ["node", "@types/node"],
+      "allowedVersions": "<25"
     }
   ],
   "rebaseWhen": "conflicted"

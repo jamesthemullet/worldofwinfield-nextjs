@@ -1,5 +1,8 @@
 {
   "private": true,
+  "engines": {
+    "node": ">=24 <27"
+  },
   "scripts": {
     "dev": "next",
     "dev:realtime": "yarn --cwd realtime dev",
