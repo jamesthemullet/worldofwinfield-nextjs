@@ -90,6 +90,24 @@ describe('fetchAPI (via exported functions)', () => {
     expect(mockFetch).toHaveBeenCalledTimes(3);
   });
 
+  it('includes the page title and a text snippet of an HTML response in the error', async () => {
+    mockFetch.mockResolvedValue({
+      ok: true,
+      status: 200,
+      statusText: 'OK',
+      headers: { get: () => 'text/html' },
+      text: () =>
+        Promise.resolve(
+          '<html><head><title>Bot Check</title><style>body{color:red}</style></head><body><h1>Please verify</h1><p>you are human</p></body></html>',
+        ),
+      json: () => Promise.reject(new Error('should not be called')),
+    });
+
+    await expect(searchBlogPosts('x')).rejects.toThrow(
+      'body: title="Bot Check" "Bot Check Please verify you are human"',
+    );
+  });
+
   it('includes Authorization header when WORDPRESS_AUTH_REFRESH_TOKEN is set', async () => {
     process.env.WORDPRESS_AUTH_REFRESH_TOKEN = 'secret-token';
     mockFetch.mockResolvedValue(gqlSuccess({ posts: { nodes: [] } }));

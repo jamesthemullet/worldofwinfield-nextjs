@@ -135,6 +135,25 @@ function wait(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+const BODY_SNIPPET_LENGTH = 200;
+
+// Summarise an unexpected (usually HTML) response body so CI logs show which page was served.
+async function readBodySnippet(res: Response): Promise<string> {
+  try {
+    const body = await res.text();
+    const title = body.match(/<title[^>]*>([^<]*)<\/title>/i)?.[1]?.trim();
+    const text = body
+      .replace(/<(script|style)[\s\S]*?<\/\1>/gi, ' ')
+      .replace(/<[^>]+>/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim()
+      .slice(0, BODY_SNIPPET_LENGTH);
+    return [title && `title="${title}"`, text && `"${text}"`].filter(Boolean).join(' ');
+  } catch {
+    return '';
+  }
+}
+
 async function fetchAPI<T>(query = '', { variables }: FetchAPIOptions = {}): Promise<T> {
   const headers: Record<string, string> = { 'Content-Type': 'application/json' };
 
@@ -170,8 +189,9 @@ async function fetchAPI<T>(query = '', { variables }: FetchAPIOptions = {}): Pro
 
     const contentType = res.headers.get('content-type') ?? '';
     if (!res.ok || !contentType.includes('application/json')) {
+      const snippet = await readBodySnippet(res);
       lastError = new Error(
-        `WordPress API request failed: ${res.status} ${res.statusText} (content-type: ${contentType || 'unknown'})`,
+        `WordPress API request failed: ${res.status} ${res.statusText} (content-type: ${contentType || 'unknown'})${snippet ? ` body: ${snippet}` : ''}`,
       );
       if (attempt < MAX_FETCH_ATTEMPTS) await wait(attempt * RETRY_DELAY_MS);
       continue;
